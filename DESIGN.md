@@ -100,3 +100,10 @@ Every page is judged as a piece of graphic design in isolation: deliberate type 
 padding (`--sect-y`), asymmetric compositions, no generic three-column card grids without a reason, no default browser
 form styling, refined hover and focus states (`:focus-visible` is handled by base.css), real content, working controls.
 Check at 1440px and at 390px (phone). No console errors. No horizontal overflow. Every link goes somewhere real.
+
+## Deploying
+
+The repo is https://github.com/ausystems/TruLinq. `npm run deploy` builds with `BASE_PATH=/TruLinq/` and publishes
+`dist/` to the `gh-pages` branch, which serves https://ausystems.github.io/TruLinq/. Every internal link must go through
+`href()` from `src/js/ui.js` in JavaScript, and be written root-relative (`href="/pricing/"`) in HTML: the build rewrites
+them for the base path. QA tooling can drive animations with `window.__gsap.ticker.tick()` when a tab is hidden.
