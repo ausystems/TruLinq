@@ -14,7 +14,7 @@ export const isTouch = matchMedia('(hover: none), (pointer: coarse)').matches;
 if (reduced) html.classList.add('reduced-motion');
 
 gsap.defaults({ ease: 'expo.out', duration: 1 });
-if (location.hostname === 'localhost') window.__gsap = gsap; // dev-only: lets checks drive the ticker when the tab is hidden
+window.__gsap = gsap; // exposed for QA tooling: lets automated checks drive the ticker when a tab is hidden
 ScrollTrigger.config({ ignoreMobileResize: true });
 
 /* ── Smooth scroll ─────────────────────────────────────────────── */
