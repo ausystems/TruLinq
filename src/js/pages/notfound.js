@@ -20,10 +20,10 @@ function hero() {
   gsap.timeline({ onComplete: () => input.focus({ preventScroll: true }) })
     .from(digits, { y: -90, opacity: 0, duration: 1.1, ease: 'elastic.out(1, .55)', stagger: .12 }, .1)
     /* the stamp slams across the record */
-    .fromTo(stamp, { opacity: 0, scale: 2.1, rotate: -26, xPercent: -50, yPercent: -50 }, { opacity: 1, scale: 1, rotate: -12, xPercent: -50, yPercent: -50, duration: .45, ease: 'power4.in' }, .95)
+    .fromTo(stamp, { opacity: 0, scale: 2.1, rotate: -26, x: 0, y: 0, xPercent: -50, yPercent: -50 }, { opacity: 1, scale: 1, rotate: -12, x: 0, y: 0, xPercent: -50, yPercent: -50, duration: .45, ease: 'power4.in' }, .95)
     .to(digits, { y: 7, duration: .12, ease: 'power2.out', stagger: .02 }, 1.38)
     .to(digits, { y: 0, duration: .9, ease: 'elastic.out(1, .4)', stagger: .02 }, 1.5)
-    .to(stamp, { scale: 1.03, rotate: -12, xPercent: -50, yPercent: -50, duration: .8, ease: 'elastic.out(1, .45)' }, 1.4)
+    .to(stamp, { scale: 1.03, rotate: -12, x: 0, y: 0, xPercent: -50, yPercent: -50, duration: .8, ease: 'elastic.out(1, .45)' }, 1.4)
     /* the record fills in */
     .to(rows, { opacity: 1, x: 0, duration: .6, ease: 'expo.out', stagger: .1 }, 1.5);
 }
