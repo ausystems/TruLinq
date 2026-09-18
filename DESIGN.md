@@ -81,6 +81,12 @@ Each page CSS file wraps its rules in `@layer pages { … }` and gives every sec
 
 ## Motion rules
 
+* **Page transitions (the chapter turn).** Clicking any internal link calls `go(url, label)` in `src/js/main.js`: the
+  page recedes (scale .985, opacity .55), a cream panel rises with rounded top corners and the destination's name rises
+  through a mask at its centre, then the browser navigates. An inline script in `partials/nav.html` paints the same
+  label on the new document before its first frame, so the name holds still across the reload; the panel then lifts
+  as the new hero animates in. Prefetch fires on hover/touch. First visit in a session shows the seal preloader;
+  back/forward and typed URLs get a quick lift. `data-label` on a link overrides the derived name.
 * `boot()` handles: Lenis smooth scroll, the curtain (seal preloader on first load, wipe between pages), nav, and generic
   reveals. Attributes: `data-split` (masked line reveal for headlines), `data-reveal` (`up|fade|scale|left|right|stamp`,
   optional `data-delay`), `data-reveal-group` (stagger children, `data-stagger`), `data-counter="812"`, `data-bar`,
