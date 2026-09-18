@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <!--@include(partials/head.html)-->
+  <title>Pricing — One stamp, priced like a stamp — Trulinq</title>
+  <meta name="description" content="Trulinq pricing: a free Member profile, the Verified Business stamp at $19 per month billed yearly, and Enterprise verification for teams and marketplaces.">
+  <script type="module" src="/src/js/pages/pricing.js"></script>
+</head>
+<body>
+  <!--@include(partials/nav.html)-->
+  <main id="main" class="page">
+
+    <section class="panel panel--peach phero-p" data-phero>
+      <div class="phero-p__inner">
+        <div class="phero-p__copy">
+          <p class="eyebrow" data-reveal="fade">Pricing</p>
+          <h1 class="display" data-split>One stamp. Priced like <span class="accent">a stamp</span>.</h1>
+          <p class="lead" data-reveal>A free stamp is a worthless stamp. Paid review funds real human checks on documents and business registries. No tiers of trust, no add-ons.</p>
+          <div class="phero-p__toggle" data-reveal data-delay=".1">
+            <div class="segmented" role="group" aria-label="Billing period" data-billing>
+              <button type="button" class="is-active" data-period="yearly" aria-pressed="true">Yearly</button>
+              <button type="button" data-period="monthly" aria-pressed="false">Monthly</button>
+            </div>
+            <p class="note phero-p__note" data-delay=".6">billed yearly saves $60</p>
+          </div>
+        </div>
+        <div class="phero-p__stage" data-stamp-stage>
+          <canvas class="phero-p__canvas" data-stamp-canvas aria-label="A rubber stamp with the Trulinq Verified seal on its base"></canvas>
+          <div class="phero-p__impression" data-impression aria-hidden="true"><span class="seal seal--lg is-static" data-quiet></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel panel--cream plans" id="plans">
+      <div class="plans__inner">
+        <div class="plans__grid" data-plans>
+          <article class="plan card" data-plan="member">
+            <div class="plan__head">
+              <h2>Member</h2>
+              <p class="plan__for">For anyone who wants to be found.</p>
+            </div>
+            <div class="plan__price"><span class="plan__amount display">Free</span></div>
+            <a class="btn btn--ghost btn--block" href="/auth/?mode=signup"><span>Create account</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
+            <p class="plan__included">What’s included:</p>
+            <ul class="plan__list">
+              <li>Public Trulinq profile</li>
+              <li>Directory listing</li>
+              <li>Basic identity check</li>
+              <li>Report suspicious accounts</li>
+            </ul>
+          </article>
+
+          <article class="plan plan--hero card card--orange" data-plan="verified">
+            <span class="plan__badge">Most chosen</span>
+            <span class="seal seal--md seal--white plan__seal" data-stamp role="img" aria-label="Trulinq Verified"></span>
+            <div class="plan__head">
+              <h2>Verified Business</h2>
+              <p class="plan__for">For owners who close deals with strangers.</p>
+            </div>
+            <div class="plan__price">
+              <span class="plan__currency">$</span><span class="plan__amount display mono" data-price>19</span>
+              <span class="plan__per"><span data-per-line>per month, billed yearly</span><small data-per-sub>$228 a year · about 63¢ a day</small></span>
+            </div>
+            <a class="btn btn--white btn--block" href="/verify/"><span>Start verification</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
+            <p class="plan__included">What’s included:</p>
+            <ul class="plan__list">
+              <li>Everything in Member</li>
+              <li>Trulinq Verified stamp on your photo</li>
+              <li>Business registration + ID review</li>
+              <li>Priority placement in the directory</li>
+              <li>Domain and website confirmation</li>
+              <li>Re-verification every 12 months</li>
+            </ul>
+          </article>
+
+          <article class="plan card" data-plan="enterprise">
+            <div class="plan__head">
+              <h2>Enterprise</h2>
+              <p class="plan__for">For teams and marketplaces.</p>
+            </div>
+            <div class="plan__price"><span class="plan__amount display">Custom</span></div>
+            <a class="btn btn--ink btn--block" href="/contact/?topic=enterprise"><span>Talk to us</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
+            <p class="plan__included">What’s included:</p>
+            <ul class="plan__list">
+              <li>Team-wide verification</li>
+              <li>Bulk onboarding</li>
+              <li>Verification API access</li>
+              <li>Dedicated review manager</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel panel--white pays">
+      <div class="pays__inner">
+        <div class="pays__copy">
+          <h2 class="display" data-split>What the $19 pays for.</h2>
+          <p class="lead" data-reveal>Nothing on this list is automated away. Every stamp has a person behind it, and that is the entire product.</p>
+        </div>
+        <ul class="ledger pays__ledger" data-ledger-draw>
+          <li class="ledger__row"><span>Human document review</span><i></i><b>every application</b></li>
+          <li class="ledger__row"><span>Registry lookups</span><i></i><b>state &amp; federal</b></li>
+          <li class="ledger__row"><span>Domain confirmation</span><i></i><b>DNS + live site</b></li>
+          <li class="ledger__row"><span>Annual re-check</span><i></i><b>every 12 months</b></li>
+          <li class="ledger__row"><span>Fraud response team</span><i></i><b>same-day</b></li>
+          <li class="ledger__row pays__total"><span>Your price</span><i></i><b>$19 / month</b></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="panel panel--cream compare">
+      <div class="compare__inner">
+        <div class="section-head section-head--split">
+          <h2 class="display" data-split>Side by side, line by line.</h2>
+          <p class="lead" data-reveal>The register below is the whole comparison. If a line isn’t here, it isn’t a feature we sell.</p>
+        </div>
+        <div class="register" role="table" aria-label="Plan comparison" data-register>
+          <div class="register__head" role="row"><span role="columnheader">Included</span><span role="columnheader">Member</span><span role="columnheader" class="register__hl">Verified Business</span><span role="columnheader">Enterprise</span></div>
+          <div class="register__row" role="row"><span role="cell">Public profile</span><span role="cell" data-yes></span><span role="cell" class="register__hl" data-yes></span><span role="cell" data-yes></span></div>
+          <div class="register__row" role="row"><span role="cell">Directory listing</span><span role="cell" data-yes></span><span role="cell" class="register__hl" data-yes></span><span role="cell" data-yes></span></div>
+          <div class="register__row" role="row"><span role="cell">Identity check</span><span role="cell" data-yes>Basic</span><span role="cell" class="register__hl" data-yes>Full</span><span role="cell" data-yes>Full</span></div>
+          <div class="register__row" role="row"><span role="cell">Business registration review</span><span role="cell" data-no></span><span role="cell" class="register__hl" data-yes></span><span role="cell" data-yes></span></div>
+          <div class="register__row" role="row"><span role="cell">Verified stamp</span><span role="cell" data-no></span><span role="cell" class="register__hl" data-yes></span><span role="cell" data-yes></span></div>
+          <div class="register__row" role="row"><span role="cell">Priority placement</span><span role="cell" data-no></span><span role="cell" class="register__hl" data-yes></span><span role="cell" data-yes></span></div>
+          <div class="register__row" role="row"><span role="cell">Domain confirmation</span><span role="cell" data-no></span><span role="cell" class="register__hl" data-yes></span><span role="cell" data-yes></span></div>
+          <div class="register__row" role="row"><span role="cell">Re-verification</span><span role="cell" data-no></span><span role="cell" class="register__hl" data-yes>12 months</span><span role="cell" data-yes>12 months</span></div>
+          <div class="register__row" role="row"><span role="cell">Team onboarding</span><span role="cell" data-no></span><span role="cell" class="register__hl" data-no></span><span role="cell" data-yes></span></div>
+          <div class="register__row" role="row"><span role="cell">API access</span><span role="cell" data-no></span><span role="cell" class="register__hl" data-no></span><span role="cell" data-yes></span></div>
+          <div class="register__row" role="row"><span role="cell">Dedicated review manager</span><span role="cell" data-no></span><span role="cell" class="register__hl" data-no></span><span role="cell" data-yes></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel panel--white pfaq">
+      <div class="pfaq__inner">
+        <div class="pfaq__side">
+          <h2 class="display" data-split>Straight answers.</h2>
+          <p class="pfaq__sub" data-reveal>Anything else? <a href="/contact/">Write to a person.</a></p>
+        </div>
+        <div class="acc" data-single>
+          <div class="acc__item is-open">
+            <button class="acc__btn" aria-expanded="true"><span>Why isn't verification free?</span><span class="acc__plus"></span></button>
+            <div class="acc__panel"><div><p class="acc__body">A free stamp is a worthless stamp. Paid review funds real human checks on documents and business registries.</p></div></div>
+          </div>
+          <div class="acc__item">
+            <button class="acc__btn" aria-expanded="false"><span>What if I'm rejected?</span><span class="acc__plus"></span></button>
+            <div class="acc__panel"><div><p class="acc__body">You keep your free profile, get the reason in your dashboard, and can resubmit once the issue is fixed.</p></div></div>
+          </div>
+          <div class="acc__item">
+            <button class="acc__btn" aria-expanded="false"><span>How long does review take?</span><span class="acc__plus"></span></button>
+            <div class="acc__panel"><div><p class="acc__body">Most reviews finish within 2 business days once your documents are readable and complete.</p></div></div>
+          </div>
+          <div class="acc__item">
+            <button class="acc__btn" aria-expanded="false"><span>Can I cancel?</span><span class="acc__plus"></span></button>
+            <div class="acc__panel"><div><p class="acc__body">Your stamp stays active until the end of your billing period, then your profile returns to unverified.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel panel--peach pcta">
+      <div class="pcta__inner">
+        <h2 class="display" data-split>Two business days from now, you’re stamped.</h2>
+        <div class="btn-row" data-reveal>
+          <a class="btn btn--primary btn--lg" href="/verify/" data-magnetic><span>Start verification</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
+          <a class="btn btn--ghost btn--lg" href="/trust/"><span>Read the Trust Centre</span></a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <!--@include(partials/footer.html)-->
+</body>
+</html>

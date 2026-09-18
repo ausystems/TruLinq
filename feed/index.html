@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <!--@include(partials/head.html)-->
+  <title>The feed — Chronological, ad-free — Trulinq</title>
+  <meta name="description" content="A chronological, ad-free feed of updates, opportunities and wins from verified entrepreneurs. No algorithm, no engagement farming.">
+  <script type="module" src="/src/js/pages/feed.js"></script>
+</head>
+<body>
+  <!--@include(partials/nav.html)-->
+  <main id="main" class="page">
+
+    <section class="panel panel--cream fhero">
+      <div class="fhero__inner">
+        <p class="eyebrow" data-reveal="fade">Feed</p>
+        <h1 class="display" data-split>The feed.</h1>
+        <p class="lead" data-reveal>Chronological. Ad-free. No algorithm deciding what you see, just verified founders, newest first.</p>
+        <p class="fhero__gate" data-reveal data-delay=".05">Sign in to post, reply and connect. Reading is open to everyone.</p>
+      </div>
+    </section>
+
+    <section class="panel panel--white feed">
+      <div class="feed__inner">
+        <div class="feed__main">
+          <div class="composer card" data-composer>
+            <div class="composer__row">
+              <span class="composer__avatar" aria-hidden="true"></span>
+              <textarea class="input composer__input" placeholder="Share a win, an ask, or an opportunity…" rows="3" aria-label="New post" disabled></textarea>
+            </div>
+            <div class="composer__foot">
+              <div class="segmented" role="group" aria-label="Post type"><button type="button" class="is-active" disabled>Win</button><button type="button" disabled>Hiring</button><button type="button" disabled>Offer</button><button type="button" disabled>Update</button><button type="button" disabled>Ask</button></div>
+              <button type="button" class="btn btn--ink btn--sm" disabled><span>Post</span></button>
+            </div>
+            <div class="composer__lock">
+              <p>Verified members only</p>
+              <a class="btn btn--primary btn--sm" href="/auth/"><span>Sign in to post</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
+            </div>
+          </div>
+          <div class="feed__filters" role="group" aria-label="Filter posts" data-filters>
+            <button type="button" class="pill pill--sm" data-kind="All" aria-pressed="true">All</button>
+            <button type="button" class="pill pill--sm" data-kind="Win" aria-pressed="false">Wins</button>
+            <button type="button" class="pill pill--sm" data-kind="Hiring" aria-pressed="false">Hiring</button>
+            <button type="button" class="pill pill--sm" data-kind="Offer" aria-pressed="false">Offers</button>
+            <button type="button" class="pill pill--sm" data-kind="Update" aria-pressed="false">Updates</button>
+            <button type="button" class="pill pill--sm" data-kind="Ask" aria-pressed="false">Asks</button>
+          </div>
+          <p class="feed__count mono" data-count aria-live="polite"></p>
+          <div class="feed__list" data-list></div>
+          <div class="feed__end" data-end>
+            <button type="button" class="btn btn--ghost" data-older><span>Load older posts</span></button>
+            <div class="feed__end-note" data-end-note hidden>
+              <span class="seal seal--md is-static" data-quiet role="img" aria-label="Trulinq Verified"></span>
+              <p>That’s everything since Sep 9. We never faked momentum.</p>
+            </div>
+          </div>
+        </div>
+        <aside class="feed__rail">
+          <div class="rail-card card card--ink" data-reveal>
+            <h3>Why there’s no algorithm</h3>
+            <ul class="rail-card__lines"><li>Newest first, always.</li><li>No ads, no boosts, no engagement farming.</li><li>Every poster passed verification.</li></ul>
+          </div>
+          <div class="rail-card card" data-reveal data-delay=".05">
+            <h3>New stamps this month</h3>
+            <div class="rail-card__people" data-new-stamps></div>
+          </div>
+          <div class="rail-card card" data-reveal data-delay=".1">
+            <h3>Rooms live now</h3>
+            <div class="rail-card__rooms" data-live-rooms></div>
+          </div>
+          <div class="rail-card card card--peach" data-reveal data-delay=".15">
+            <h3>Not verified yet?</h3>
+            <p>Two business days from now you could be posting here.</p>
+            <a class="btn btn--primary btn--sm" href="/verify/"><span>Get verified</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+  </main>
+  <!--@include(partials/footer.html)-->
+</body>
+</html>

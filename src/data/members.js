@@ -1,0 +1,115 @@
+/* Demo roster for the redesign. Real member data lives in the Trulinq database; these are fictional. */
+export const MEMBERS = [
+  { id: 'kai-nakamura', name: 'Kai Nakamura', first: 'Kai', role: 'Founder', company: 'Pacific Reef Ventures', city: 'Hilo', region: 'Hawaiʻi', country: 'United States', lat: 19.72, lng: -155.09, industry: 'Technology', factors: [45, 20, 15, 9, 4], verifiedOn: '2025-11-04', joined: '2025-10-20', website: 'pacificreef.ventures', founded: 2021, followers: 41, following: 18, photo: '1531427186611-ecfd6d936c79',
+    bio: 'Building software for island logistics. Hilo born, Hilo based. If you ship between the islands, we should talk.',
+    offers: 'Inter-island freight software, logistics data', looking: 'Distribution partners in Maui and Kauaʻi, engineering partners', endorsements: ['leilani-akana', 'noa-kahale', 'marcus-hale'] },
+  { id: 'amara-cole', name: 'Amara Cole', first: 'Amara', role: 'Founder', company: 'Cole Logistics', city: 'Atlanta', region: 'Georgia', country: 'United States', lat: 33.75, lng: -84.39, industry: 'Logistics', factors: [45, 20, 15, 2, 0], verifiedOn: '2026-07-14', joined: '2026-06-30', website: 'colelogistics.co', founded: 2019, followers: 12, following: 9, photo: '1531123897727-8f129e1688ce',
+    bio: 'Regional freight brokerage across the Southeast. 40 trucks, one dispatch desk, zero fake loads.',
+    offers: 'LTL and FTL capacity, Southeast lanes', looking: 'Customs brokers, verified shippers', endorsements: ['priya-raman'] },
+  { id: 'daniel-reyes', name: 'Daniel Reyes', first: 'Daniel', role: 'CEO', company: 'Northline Studio', city: 'Austin', region: 'Texas', country: 'United States', lat: 30.27, lng: -97.74, industry: 'Marketing', factors: [45, 20, 15, 4, 0], verifiedOn: '2026-05-22', joined: '2026-04-11', website: 'northline.studio', founded: 2017, followers: 27, following: 31, photo: '1500648767791-00dcc994a43e',
+    bio: 'Brand and launch studio for founders who would rather build than pitch. Twelve people, no account managers.',
+    offers: 'Brand identity, launch campaigns, pitch decks', looking: 'Seed-stage founders, hardware startups', endorsements: ['elena-duarte', 'oliver-brandt'] },
+  { id: 'sofia-marin', name: 'Sofia Marin', first: 'Sofia', role: 'Owner', company: 'Marin Coffee Co.', city: 'Miami', region: 'Florida', country: 'United States', lat: 25.76, lng: -80.19, industry: 'Restaurant', factors: [45, 20, 10, 3, 0], verifiedOn: '2026-06-02', joined: '2026-05-05', website: 'marincoffee.com', founded: 2020, followers: 19, following: 22, photo: '1544005313-94ddf0286df2',
+    bio: 'Three cafés, one roastery, and a wholesale line that ships to 60 restaurants. Direct-trade beans from Huila.',
+    offers: 'Wholesale roasted coffee, café consulting', looking: 'Restaurant owners, hospitality groups', endorsements: ['elena-duarte'] },
+  { id: 'marcus-hale', name: 'Marcus Hale', first: 'Marcus', role: 'Founder', company: 'Northwind Studio', city: 'Portland', region: 'Oregon', country: 'United States', lat: 45.52, lng: -122.68, industry: 'Technology', factors: [45, 20, 15, 6, 3], verifiedOn: '2026-01-19', joined: '2025-12-28', website: 'northwind.studio', founded: 2016, followers: 58, following: 44, photo: '1607990281513-2c110a25bd8c',
+    bio: 'Product engineering studio. We build the first version and hand you the keys, with the team trained.',
+    offers: 'MVP engineering, fractional CTO', looking: 'Founders with paying customers who need software shipped', endorsements: ['kai-nakamura', 'grace-okafor', 'daniel-reyes'] },
+  { id: 'priya-raman', name: 'Priya Raman', first: 'Priya', role: 'Owner', company: 'Raman Logistics', city: 'Houston', region: 'Texas', country: 'United States', lat: 29.76, lng: -95.37, industry: 'Logistics', factors: [45, 18, 15, 2, 0], verifiedOn: '2026-07-01', joined: '2026-06-18', website: 'ramanlogistics.com', founded: 2014, followers: 15, following: 8, photo: '1573497019940-1c28c88b4f3e',
+    bio: 'Customs brokerage and drayage out of the Port of Houston. Second-generation, family-run.',
+    offers: 'Customs clearance, port drayage, bonded warehousing', looking: 'Importers, carriers with Southeast capacity', endorsements: ['amara-cole'] },
+  { id: 'elena-duarte', name: 'Elena Duarte', first: 'Elena', role: 'CEO', company: 'Duarte Coffee Co.', city: 'San Diego', region: 'California', country: 'United States', lat: 32.72, lng: -117.16, industry: 'Restaurant', factors: [45, 17, 10, 1, 0], verifiedOn: '2026-08-08', joined: '2026-07-30', website: 'duartecoffee.co', founded: 2022, followers: 9, following: 14, photo: '1489424731084-a5d8b219a5bb',
+    bio: 'Cold brew on tap for offices and hotels. Kegs delivered weekly, no contracts longer than a month.',
+    offers: 'Cold brew kegs, office coffee programs', looking: 'Hotel F&B managers, coworking operators', endorsements: [] },
+  { id: 'leilani-akana', name: 'Leilani Akana', first: 'Leilani', role: 'Broker', company: 'Akana Properties', city: 'Honolulu', region: 'Hawaiʻi', country: 'United States', lat: 21.31, lng: -157.86, industry: 'Real Estate', factors: [45, 15, 5, 5, 0], verifiedOn: '2026-03-12', joined: '2026-02-01', website: 'akanaproperties.com', founded: 2012, followers: 33, following: 20, photo: '1580489944761-15a19d654956',
+    bio: 'Commercial leasing across Oʻahu. If you need a kitchen, a warehouse or a storefront, I know who owns it.',
+    offers: 'Commercial leasing, site selection', looking: 'Restaurant and retail tenants', endorsements: ['kai-nakamura'] },
+  { id: 'noa-kahale', name: 'Noa Kahale', first: 'Noa', role: 'Co-owner', company: 'Kahale Thai Kitchen', city: 'Waikoloa', region: 'Hawaiʻi', country: 'United States', lat: 19.94, lng: -155.79, industry: 'Restaurant', factors: [45, 12, 5, 1, 0], verifiedOn: '2026-08-20', joined: '2026-08-11', website: '', founded: 2009, followers: 7, following: 5, photo: '1595152772835-219674b2a8a6',
+    bio: 'Second-generation Thai kitchen on the Kohala coast. Looking for suppliers who actually answer the phone.',
+    offers: 'Catering for 20 to 200, restaurant partnerships', looking: 'Produce and coffee suppliers, event planners', endorsements: [] },
+  { id: 'jonah-pruitt', name: 'Jonah Pruitt', first: 'Jonah', role: 'Owner', company: 'Pruitt Energy Services', city: 'Richland', region: 'Washington', country: 'United States', lat: 46.29, lng: -119.28, industry: 'Energy', factors: [45, 20, 15, 0, 0], verifiedOn: '2026-09-02', joined: '2026-08-28', website: 'pruittenergy.com', founded: 2008, followers: 4, following: 2, photo: '1472099645785-5658abf4ff4e',
+    bio: 'Electrical contracting for utility-scale solar and substations. Licensed in WA, OR and ID.',
+    offers: 'Substation work, solar interconnection', looking: 'Developers, EPC partners, financing', endorsements: [] },
+  { id: 'grace-okafor', name: 'Grace Okafor', first: 'Grace', role: 'Principal', company: 'Okafor Growth Advisory', city: 'Toronto', region: 'Ontario', country: 'Canada', lat: 43.65, lng: -79.38, industry: 'Consulting', factors: [45, 20, 15, 4, 2], verifiedOn: '2026-02-26', joined: '2026-01-15', website: 'okaforgrowth.ca', founded: 2018, followers: 46, following: 39, photo: '1573496359142-b8d87734a5a2',
+    bio: 'Go-to-market advisory for B2B founders crossing the US–Canada border in either direction.',
+    offers: 'GTM strategy, cross-border expansion', looking: 'Series A founders, channel partners', endorsements: ['marcus-hale', 'hannah-weiss'] },
+  { id: 'tomas-villanueva', name: 'Tomás Villanueva', first: 'Tomás', role: 'Owner', company: 'Villanueva Direct', city: 'Phoenix', region: 'Arizona', country: 'United States', lat: 33.45, lng: -112.07, industry: 'Direct sales/service', factors: [45, 20, 10, 0, 0], verifiedOn: '2026-09-09', joined: '2026-09-01', website: 'villanuevadirect.com', founded: 2015, followers: 3, following: 6, photo: '1507003211169-0a1dd7228f2d',
+    bio: 'Field sales teams for home services companies. We recruit, train and manage the door-to-door side.',
+    offers: 'Outsourced field sales, sales training', looking: 'Solar and roofing companies in the Southwest', endorsements: [] },
+  { id: 'hannah-weiss', name: 'Hannah Weiss', first: 'Hannah', role: 'Founder', company: 'Weiss & Co. Consulting', city: 'Denver', region: 'Colorado', country: 'United States', lat: 39.74, lng: -104.99, industry: 'Consulting', factors: [45, 14, 10, 0, 0], verifiedOn: '2026-09-11', joined: '2026-09-04', website: 'weissco.consulting', founded: 2023, followers: 2, following: 11, photo: '1438761681033-6461ffad8d80',
+    bio: 'Operations consulting for restaurants and small manufacturers. Former plant manager.',
+    offers: 'Ops audits, process design', looking: 'Owner-operators with 10 to 100 staff', endorsements: ['grace-okafor'] },
+  { id: 'samuel-achebe', name: 'Samuel Achebe', first: 'Samuel', role: 'CEO', company: 'Achebe Solar', city: 'Sacramento', region: 'California', country: 'United States', lat: 38.58, lng: -121.49, industry: 'Energy', factors: [45, 20, 10, 3, 0], verifiedOn: '2026-06-17', joined: '2026-05-25', website: 'achebesolar.com', founded: 2019, followers: 21, following: 13, photo: '1558222218-b7b54eede3f3',
+    bio: 'Commercial rooftop solar for warehouses and cold storage. We finance, install and monitor.',
+    offers: 'C&I solar installs, PPA financing', looking: 'Warehouse owners, cold-storage operators', endorsements: ['jonah-pruitt'] },
+  { id: 'mia-chen', name: 'Mia Chen', first: 'Mia', role: 'Founder', company: 'Chen Realty Group', city: 'Seattle', region: 'Washington', country: 'United States', lat: 47.61, lng: -122.33, industry: 'Real Estate', factors: [45, 20, 15, 1, 0], verifiedOn: '2026-08-14', joined: '2026-08-03', website: 'chenrealty.group', founded: 2016, followers: 11, following: 16, photo: '1494790108377-be9c29b29330',
+    bio: 'Multifamily acquisitions in the Pacific Northwest. Buying 12 to 80 unit buildings, off-market preferred.',
+    offers: 'Fast closes on multifamily, property management', looking: 'Off-market sellers, verified lenders', endorsements: [] },
+  { id: 'oliver-brandt', name: 'Oliver Brandt', first: 'Oliver', role: 'Owner', company: 'Brandt Marketing', city: 'Chicago', region: 'Illinois', country: 'United States', lat: 41.88, lng: -87.63, industry: 'Marketing', factors: [45, 8, 0, 0, 0], verifiedOn: '2026-09-15', joined: '2026-09-12', website: '', founded: 2024, followers: 1, following: 3, photo: '1560250097-0b93528c311a',
+    bio: 'Paid media for local service businesses.',
+    offers: 'Google and Meta ads management', looking: 'Plumbers, HVAC and dental practices', endorsements: [] }
+];
+
+export const byId = Object.fromEntries(MEMBERS.map(m => [m.id, m]));
+export const INDUSTRIES = ['Consulting', 'Direct sales/service', 'Energy', 'Logistics', 'Marketing', 'Real Estate', 'Restaurant', 'Technology'];
+
+/* Extra portraits for testimonials, feed avatars and the collage. */
+export const FACES = [
+  '1568602471122-7832951cc4c5', '1556157382-97eda2d62296', '1552058544-f2b08422138a', '1506794778202-cad84cf45f1d',
+  '1502685104226-ee32379fefbe', '1463453091185-61582044d556', '1548142813-c348350df52b', '1519085360753-af0119f7cbe7',
+  '1521119989659-a83eee488004', '1517841905240-472988babdf9'
+];
+
+export const SCENES = {
+  honolulu: '1507876466758-bc54f384809c',
+  coast: '1542259009477-d625272157b7',
+  napali: '1505852679233-d9fd70aff56d',
+  aerial: '1598135753163-6167c1a1ad65',
+  handshake: '1521791136064-7986c2920216',
+  signing: '1450101499163-c8848c66ca85',
+  documents: '1554224155-6726b3ff858f',
+  team: '1600880292203-757bb62b4baf',
+  restaurant: '1556761175-b413da4baf72',
+  office: '1497366216548-37526070297c',
+  desk: '1587560699334-cc4ff634909a'
+};
+
+/* Endorsements: vouches written by other members. One per person, always public. */
+export const VOUCHES = {
+  'kai-nakamura': [
+    { from: 'leilani-akana', date: '2026-02-10', text: 'Kai’s software runs our warehouse hand-offs between Oʻahu and the Big Island. When something breaks he answers the phone himself.' },
+    { from: 'noa-kahale', date: '2026-08-28', text: 'Built us a supplier list in a weekend, no invoice until it worked. That is how people from Hilo do business.' },
+    { from: 'marcus-hale', date: '2026-01-30', text: 'We co-built an integration last winter. Clear specs, paid on the day, no drama.' }
+  ],
+  'amara-cole': [
+    { from: 'priya-raman', date: '2026-07-20', text: 'Paid on time, twice. Loads matched the paperwork. Would ship again.' }
+  ],
+  'daniel-reyes': [
+    { from: 'elena-duarte', date: '2026-08-12', text: 'Northline did our cans and our website. They said six weeks and it was six weeks.' },
+    { from: 'oliver-brandt', date: '2026-09-14', text: 'Referred two clients to Daniel. Both came back to thank me.' }
+  ],
+  'sofia-marin': [
+    { from: 'elena-duarte', date: '2026-08-30', text: 'Sofia taught me wholesale pricing over one very long coffee. Generous with knowledge, precise with invoices.' }
+  ],
+  'marcus-hale': [
+    { from: 'kai-nakamura', date: '2026-02-02', text: 'Marcus shipped our first version in nine weeks and trained our hire before he left. Rare.' },
+    { from: 'grace-okafor', date: '2026-03-04', text: 'I send him founders who need an engineering partner and I never hear complaints.' },
+    { from: 'daniel-reyes', date: '2026-05-25', text: 'Northwind and Northline share three clients. Every hand-off has been clean.' }
+  ],
+  'priya-raman': [
+    { from: 'amara-cole', date: '2026-07-22', text: 'Cleared a stuck container in two days after our previous broker sat on it for two weeks.' }
+  ],
+  'leilani-akana': [
+    { from: 'kai-nakamura', date: '2026-03-15', text: 'Leilani found us a warehouse that was not on any listing. She knows every owner on the island.' }
+  ],
+  'grace-okafor': [
+    { from: 'marcus-hale', date: '2026-03-01', text: 'Grace rewrote our go-to-market for Canada. We closed our first Toronto customer four weeks later.' },
+    { from: 'hannah-weiss', date: '2026-09-12', text: 'She introduced me to Trulinq and to my first two clients. Straight talker.' }
+  ],
+  'samuel-achebe': [
+    { from: 'jonah-pruitt', date: '2026-09-05', text: 'We subcontracted interconnection work on two of Samuel’s sites. Drawings were right the first time.' }
+  ],
+  'hannah-weiss': [
+    { from: 'grace-okafor', date: '2026-09-13', text: 'Hannah ran an ops audit for one of my clients. Found $40k a year in waste in a two-day visit.' }
+  ]
+};

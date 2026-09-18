@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <!--@include(partials/head.html)-->
+  <title>Sign in — Trulinq</title>
+  <meta name="description" content="Sign in to manage your Trulinq profile and verification, or create an account with an invitation code.">
+  <meta name="robots" content="noindex">
+  <script type="module" src="/src/js/pages/auth.js"></script>
+</head>
+<body>
+  <!--@include(partials/nav.html)-->
+  <main id="main" class="page">
+    <section class="auth">
+      <div class="auth__side panel panel--ink">
+        <div class="auth__side-inner">
+          <div class="auth__stack" data-stack></div>
+          <span class="note note--light auth__note">everyone in here is real</span>
+          <ul class="ledger ledger--light auth__ledger">
+            <li class="ledger__row"><span>People on Trulinq</span><i></i><b>17</b></li>
+            <li class="ledger__row"><span>Verified profiles</span><i></i><b>8</b></li>
+            <li class="ledger__row"><span>Fake ones</span><i></i><b>0</b></li>
+          </ul>
+        </div>
+      </div>
+      <div class="auth__main panel panel--cream">
+        <div class="auth__main-inner">
+          <div class="segmented auth__modes" role="group" aria-label="Sign in or create account" data-modes>
+            <button type="button" data-mode="signin" aria-pressed="true" class="is-active">Sign in</button>
+            <button type="button" data-mode="signup" aria-pressed="false">Create account</button>
+          </div>
+
+          <form class="auth__card card" data-form="signin" novalidate>
+            <h1 class="display">Welcome back</h1>
+            <p class="auth__lead">Sign in to manage your profile and verification.</p>
+            <button type="button" class="btn btn--ghost btn--block" data-google><span>Continue with Google</span></button>
+            <p class="auth__or"><span>or</span></p>
+            <div class="field"><label class="field__label" for="si-email">Email</label><input class="input" id="si-email" type="email" autocomplete="email" placeholder="you@yourbusiness.com"><p class="field__err">Enter the email on your account.</p></div>
+            <div class="field"><label class="field__label" for="si-pass">Password <button type="button" class="auth__forgot" data-forgot>Forgot password?</button></label><input class="input" id="si-pass" type="password" autocomplete="current-password" placeholder="••••••••••"><p class="field__err">Enter your password.</p></div>
+            <div class="auth__reset" data-reset hidden>
+              <p>We’ll email a reset link to the address above.</p>
+              <button type="button" class="btn btn--ink btn--sm" data-reset-send><span>Send reset link</span></button>
+            </div>
+            <button type="submit" class="btn btn--primary btn--block"><span>Sign in</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></button>
+            <p class="auth__alt">New to Trulinq? <button type="button" data-switch="signup">Create an account</button></p>
+          </form>
+
+          <form class="auth__card card" data-form="signup" novalidate hidden>
+            <h1 class="display">Join the verified network</h1>
+            <p class="auth__lead">Membership is invite only. Enter your invitation code to request access.</p>
+            <div class="field"><label class="field__label" for="su-code">Invitation code <small>TL-XXXX-XXXX</small></label><input class="input mono" id="su-code" placeholder="TL-" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="12"><p class="field__hint">No code? Ask any verified member or <a href="/contact/?topic=invite">request one</a>.</p><p class="field__err">Enter the full code, like TL-7K2M-Q9RD.</p></div>
+            <div class="field"><label class="field__label" for="su-name">Full name</label><input class="input" id="su-name" autocomplete="name"><p class="field__err">Enter your name as it appears on your ID.</p></div>
+            <div class="field"><label class="field__label" for="su-email">Work email</label><input class="input" id="su-email" type="email" autocomplete="email" placeholder="you@yourbusiness.com"><p class="field__err">Enter a working email.</p></div>
+            <div class="field">
+              <label class="field__label" for="su-pass">Password <small>10+ characters</small></label>
+              <input class="input" id="su-pass" type="password" autocomplete="new-password" data-pass>
+              <div class="strength" aria-hidden="true" data-strength><i></i><i></i><i></i><i></i></div>
+              <p class="field__hint" data-strength-label>Use a long phrase you’ll remember.</p>
+              <p class="field__err">Use at least 10 characters.</p>
+            </div>
+            <div class="field"><label class="check"><input type="checkbox" data-agree><i></i><span>I agree to the <a href="/terms/">Terms</a> and the <a href="/privacy/">Privacy Policy</a>.</span></label><p class="field__err">Please agree to continue.</p></div>
+            <button type="submit" class="btn btn--primary btn--block"><span>Create account</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></button>
+            <p class="auth__alt">Already a member? <button type="button" data-switch="signin">Sign in</button></p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+  <!--@include(partials/footer.html)-->
+</body>
+</html>

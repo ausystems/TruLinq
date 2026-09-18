@@ -1,0 +1,9 @@
+@layer utilities {
+  .hide-mobile { display: none !important; }
+  @media (min-width: 900px) { .hide-mobile { display: revert !important; } .hide-desktop { display: none !important; } }
+  .mt-1 { margin-top: 8px; } .mt-2 { margin-top: 16px; } .mt-3 { margin-top: 24px; } .mt-4 { margin-top: 40px; } .mt-5 { margin-top: 64px; }
+  .flow > * + * { margin-top: var(--flow, 1em); }
+  .lenis.lenis-smooth { scroll-behavior: auto !important; }
+  .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+  .lenis.lenis-stopped { overflow: hidden; }
+}

@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <!--@include(partials/head.html)-->
+  <title>Dashboard — Your verification record — Trulinq</title>
+  <meta name="description" content="Your Trulinq verification record: stamp status, score, documents, billing and endorsements.">
+  <meta name="robots" content="noindex">
+  <script type="module" src="/src/js/pages/dashboard.js"></script>
+</head>
+<body>
+  <!--@include(partials/nav.html)-->
+  <main id="main" class="page" data-dash="kai-nakamura">
+
+    <section class="panel panel--cream dhead">
+      <div class="dhead__inner">
+        <p class="dhead__preview mono" data-reveal="fade">Preview: you’re looking at Kai’s dashboard as a demo</p>
+        <div class="dhead__grid">
+          <div class="dhead__copy">
+            <h1 class="display" data-split><span data-greeting>Good morning</span>, <span class="accent" data-first>Kai</span>.</h1>
+            <div class="dhead__status" data-reveal>
+              <span class="pill pill--mint">Verified · stamp active</span>
+              <span class="verified-line">Re-verification due <b data-renew></b></span>
+            </div>
+            <div class="btn-row dhead__actions" data-reveal data-delay=".1">
+              <a class="btn btn--ink" href="/members/kai-nakamura/"><span>Edit profile</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
+              <button class="btn btn--ghost" type="button" data-letter><span>Download verification letter</span></button>
+              <a class="btn btn--ghost" href="mailto:trust@trulinq.com?subject=Report%20a%20fake%20profile"><span>Report a fake</span></a>
+            </div>
+          </div>
+          <div class="dhead__card" data-idcard-mount></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel panel--white drecord">
+      <div class="drecord__inner">
+        <div class="drecord__main">
+
+          <div class="drec" id="timeline">
+            <div class="drec__head"><h2 class="display" data-split>The application, dated.</h2></div>
+            <ol class="timeline" data-timeline>
+              <li class="timeline__line" aria-hidden="true"><i data-timeline-line></i></li>
+            </ol>
+          </div>
+
+          <div class="drec" id="score">
+            <div class="drec__head"><h2 class="display" data-split>Where the number comes from.</h2></div>
+            <div class="drec__score">
+              <div data-gauge-mount></div>
+              <div>
+                <div data-factors-mount></div>
+                <div class="drec__hints card--peach" data-reveal>
+                  <b>What raises it next</b>
+                  <ul class="ledger">
+                    <li class="ledger__row"><span>Hold the stamp 2 more months</span><i></i><b>+1</b></li>
+                    <li class="ledger__row"><span>Stay on Trulinq through Oct</span><i></i><b>+1</b></li>
+                    <li class="ledger__row"><span>Pass re-verification in Nov</span><i></i><b>+5</b></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="drec" id="documents">
+            <div class="drec__head"><h2 class="display" data-split>On file, reviewed, private.</h2></div>
+            <ul class="docs" data-reveal-group data-stagger=".1">
+              <li class="doc"><div class="doc__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><circle cx="9" cy="12" r="2.2"/><path d="M14 10h4M14 14h3"/></svg></div><div class="doc__body"><b>Government ID</b><span class="mono">Passport · United States</span></div><span class="pill pill--mint pill--sm">Approved</span><span class="doc__date mono">Nov 3, 2025</span><button type="button" class="doc__replace" data-replace="government ID">Replace</button></li>
+              <li class="doc"><div class="doc__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 3h9l5 5v13H6z"/><path d="M14 3v6h6M9 13h7M9 17h7"/></svg></div><div class="doc__body"><b>Business registration</b><span class="mono">Pacific Reef Ventures LLC · HI 274-119-042</span></div><span class="pill pill--mint pill--sm">Approved</span><span class="doc__date mono">Nov 3, 2025</span><button type="button" class="doc__replace" data-replace="registration">Replace</button></li>
+              <li class="doc"><div class="doc__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></div><div class="doc__body"><b>Domain</b><span class="mono">pacificreef.ventures</span></div><span class="pill pill--mint pill--sm">Confirmed</span><span class="doc__date mono">Nov 3, 2025</span><button type="button" class="doc__replace" data-replace="domain">Replace</button></li>
+            </ul>
+            <p class="drec__note">Only you and the Trulinq review team can open these. <a href="/trust/">How your data is handled</a></p>
+          </div>
+
+          <div class="drec" id="activity">
+            <div class="drec__head"><h2 class="display" data-split>Endorsements and posts.</h2></div>
+            <div class="drec__activity">
+              <div><h3 class="drec__sub">Endorsements received <span class="mono" data-vouch-count></span></h3><div class="vouches" data-vouches></div></div>
+              <div><h3 class="drec__sub">Your posts</h3><div class="mposts" data-posts></div></div>
+            </div>
+          </div>
+
+        </div>
+
+        <aside class="drecord__rail">
+          <div class="rail card" data-reveal>
+            <div class="rail__head"><h3>Profile completeness</h3><span class="rail__ring" data-ring><svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="25" fill="none" stroke="var(--sand)" stroke-width="6"/><circle cx="30" cy="30" r="25" fill="none" stroke="var(--mint)" stroke-width="6" stroke-linecap="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100" data-ring-fill/></svg><b class="mono" data-ring-num>0</b></span></div>
+            <ul class="checklist" data-checklist>
+              <li data-done>Photo</li><li data-done>Bio</li><li data-done>Industry</li><li data-done>Location</li><li data-done>Website</li><li data-done>Founded</li><li data-done>Offers</li><li data-done>Looking for</li>
+            </ul>
+          </div>
+          <div class="rail card" data-reveal data-delay=".05">
+            <h3>Billing</h3>
+            <ul class="ledger rail__ledger">
+              <li class="ledger__row"><span>Plan</span><i></i><b>Verified Business</b></li>
+              <li class="ledger__row"><span>Price</span><i></i><b>$228 / year</b></li>
+              <li class="ledger__row"><span>Renews</span><i></i><b data-renew></b></li>
+              <li class="ledger__row"><span>Card</span><i></i><b>•••• 4471</b></li>
+            </ul>
+            <div class="rail__actions">
+              <button type="button" class="btn btn--ghost btn--sm" data-card><span>Update card</span></button>
+              <button type="button" class="rail__cancel" data-cancel>Cancel plan</button>
+            </div>
+            <div class="rail__confirm" data-confirm hidden>
+              <p>Your stamp stays active until <b data-renew></b>, then your profile returns to unverified.</p>
+              <div class="btn-row"><button type="button" class="btn btn--sm btn--ink" data-confirm-yes><span>Cancel at renewal</span></button><button type="button" class="btn btn--sm btn--ghost" data-confirm-no><span>Keep my stamp</span></button></div>
+            </div>
+          </div>
+          <div class="rail card card--ink" data-reveal data-delay=".1">
+            <h3>Privacy</h3>
+            <p>Your data is yours. Requests are answered within 30 days.</p>
+            <a class="rail__link" href="mailto:privacy@trulinq.com?subject=Export%20my%20data">Export my data <i>→</i></a>
+            <a class="rail__link rail__link--danger" href="mailto:privacy@trulinq.com?subject=Delete%20my%20account%20and%20documents">Delete account and documents <i>→</i></a>
+          </div>
+          <nav class="rail rail--jump" aria-label="On this page">
+            <a href="#timeline">Record</a><a href="#score">Score</a><a href="#documents">Documents</a><a href="#activity">Activity</a>
+          </nav>
+        </aside>
+      </div>
+    </section>
+
+  </main>
+  <!--@include(partials/footer.html)-->
+</body>
+</html>

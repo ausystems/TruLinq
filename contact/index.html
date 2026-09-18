@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <!--@include(partials/head.html)-->
+  <title>Contact — A real person reads every message — Trulinq</title>
+  <meta name="description" content="Contact Trulinq. A real person reads every message; most replies land within one business day. Verification support, fraud reports, privacy requests and enterprise.">
+  <script type="module" src="/src/js/pages/contact.js"></script>
+</head>
+<body>
+  <!--@include(partials/nav.html)-->
+  <main id="main" class="page">
+
+    <section class="panel panel--cream chero">
+      <div class="chero__inner">
+        <p class="eyebrow" data-reveal="fade">Contact</p>
+        <h1 class="display" data-split>Contact us.</h1>
+        <p class="lead" data-reveal>A real person reads every message. Most replies land within one business day.</p>
+        <p class="chero__meta mono" data-reveal data-delay=".05">Hilo, Hawaiʻi · replies in HST business hours</p>
+      </div>
+    </section>
+
+    <section class="panel panel--white channels">
+      <div class="channels__inner">
+        <h2 class="display" data-split>Pick a person, not a department.</h2>
+        <div class="channels__grid" role="radiogroup" aria-label="What is this about?" data-channels>
+          <button type="button" class="channel card" role="radio" aria-checked="true" data-topic="support" data-to="support@trulinq.com"><span class="channel__title">Verification support</span><span class="channel__desc">Questions about your application, documents or review status.</span><span class="channel__mail mono">support@trulinq.com</span></button>
+          <button type="button" class="channel card" role="radio" aria-checked="false" data-topic="fraud" data-to="trust@trulinq.com"><span class="channel__title">Report fraud</span><span class="channel__desc">Report a fake account, stolen identity or misuse of the Trulinq stamp.</span><span class="channel__mail mono">trust@trulinq.com</span></button>
+          <button type="button" class="channel card" role="radio" aria-checked="false" data-topic="privacy" data-to="privacy@trulinq.com"><span class="channel__title">Privacy requests</span><span class="channel__desc">Access, export or delete your data and verification documents.</span><span class="channel__mail mono">privacy@trulinq.com</span></button>
+          <button type="button" class="channel card" role="radio" aria-checked="false" data-topic="enterprise" data-to="sales@trulinq.com"><span class="channel__title">Enterprise &amp; teams</span><span class="channel__desc">Bulk verification, API access and dedicated review managers.</span><span class="channel__mail mono">sales@trulinq.com</span></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel panel--peach write">
+      <div class="write__inner">
+        <form class="letter card" data-letter novalidate>
+          <p class="letter__line">Hi, I’m <span class="field field--inline"><label class="sr-only" for="c-name">Your name</label><input class="inline-input" id="c-name" name="name" placeholder="your name" autocomplete="name" size="10"><span class="field__err">Add your name.</span></span>. You can reach me at <span class="field field--inline"><label class="sr-only" for="c-email">Email</label><input class="inline-input" id="c-email" name="email" type="email" placeholder="you@yourbusiness.com" autocomplete="email" size="22"><span class="field__err">Enter a working email so a reply can reach you.</span></span>.</p>
+          <p class="letter__line">I’m writing about <span class="field field--inline"><label class="sr-only" for="c-topic">Topic</label><span class="select select--inline"><select class="inline-input" id="c-topic" name="topic" data-topic-select><option value="support">verification support</option><option value="fraud">a fake account</option><option value="privacy">my data</option><option value="enterprise">verifying a team</option></select></span></span>.</p>
+          <div class="field"><label class="sr-only" for="c-msg">Message</label><textarea class="input letter__msg" id="c-msg" name="message" placeholder="Write it the way you’d say it. A person is reading."></textarea><p class="field__err">Say a little more, even one sentence helps.</p></div>
+          <div class="letter__opts">
+            <label class="switch"><input type="checkbox" data-member><i></i>I’m a member</label>
+            <span class="field field--inline letter__profile" data-profile hidden><label class="sr-only" for="c-profile">Profile link</label><input class="inline-input" id="c-profile" name="profile" placeholder="trulinqid.com/members/…" size="26"></span>
+            <label class="check"><input type="checkbox" name="copy" checked><i></i><span>Email me a copy</span></label>
+          </div>
+          <div class="letter__foot">
+            <p class="letter__to mono">To: <b data-to-line>support@trulinq.com</b></p>
+            <button type="submit" class="btn btn--primary btn--lg"><span>Send message</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></button>
+          </div>
+          <div class="letter__sealed" data-sealed hidden>
+            <span class="seal seal--lg" data-stamp data-manual role="img" aria-label="Sealed"></span>
+            <h2 class="display">Sealed and sent.</h2>
+            <ul class="ledger" data-sealed-ledger></ul>
+            <button type="button" class="arrow-link" data-again>Send another <i><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></i></button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section class="panel panel--white cemail">
+      <div class="cemail__inner">
+        <div class="cemail__copy">
+          <h2 class="display" data-split>Prefer email?</h2>
+          <p class="cemail__note" data-reveal>Every address below lands with a human, not a bot. Members can also <a href="/dashboard/">open the dashboard</a> for application status.</p>
+        </div>
+        <ul class="ledger cemail__ledger" data-reveal>
+          <li class="ledger__row"><span>Verification support</span><i></i><b><a href="mailto:support@trulinq.com">support@trulinq.com</a></b></li>
+          <li class="ledger__row"><span>Report fraud</span><i></i><b><a href="mailto:trust@trulinq.com">trust@trulinq.com</a></b></li>
+          <li class="ledger__row"><span>Privacy requests</span><i></i><b><a href="mailto:privacy@trulinq.com">privacy@trulinq.com</a></b></li>
+          <li class="ledger__row"><span>Enterprise &amp; teams</span><i></i><b><a href="mailto:sales@trulinq.com">sales@trulinq.com</a></b></li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+  <!--@include(partials/footer.html)-->
+</body>
+</html>

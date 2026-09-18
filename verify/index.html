@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <!--@include(partials/head.html)-->
+  <title>Get verified — Join the verified network — Trulinq</title>
+  <meta name="description" content="Apply for the Trulinq Verified stamp. Enter your invitation code, prove it's you, verify your business, and a human reviews everything within two business days.">
+  <script type="module" src="/src/js/pages/verify.js"></script>
+</head>
+<body>
+  <!--@include(partials/nav.html)-->
+  <main id="main" class="page">
+
+    <section class="panel panel--cream vhero">
+      <div class="vhero__inner">
+        <p class="eyebrow" data-reveal="fade">Get verified</p>
+        <h1 class="display" data-split>Join the verified network.</h1>
+        <p class="lead" data-reveal>Membership is invite only. Enter your invitation code to request access, then prove it’s you and your business. A human reviews every application within two business days.</p>
+      </div>
+    </section>
+
+    <section class="panel panel--white dossier" data-dossier>
+      <div class="dossier__inner">
+        <aside class="dossier__side">
+          <div class="dossier__progress" data-progress>
+            <svg viewBox="0 0 200 200" aria-hidden="true">
+              <circle cx="100" cy="100" r="86" fill="none" stroke="var(--sand)" stroke-width="10"/>
+              <g data-arcs>
+                <circle cx="100" cy="100" r="86" fill="none" stroke="var(--orange)" stroke-width="10" stroke-linecap="round" pathLength="100" stroke-dasharray="22 78" stroke-dashoffset="25" class="dossier__arc" data-arc="0"/>
+                <circle cx="100" cy="100" r="86" fill="none" stroke="var(--orange)" stroke-width="10" stroke-linecap="round" pathLength="100" stroke-dasharray="22 78" stroke-dashoffset="0" class="dossier__arc" data-arc="1"/>
+                <circle cx="100" cy="100" r="86" fill="none" stroke="var(--orange)" stroke-width="10" stroke-linecap="round" pathLength="100" stroke-dasharray="22 78" stroke-dashoffset="-25" class="dossier__arc" data-arc="2"/>
+                <circle cx="100" cy="100" r="86" fill="none" stroke="var(--orange)" stroke-width="10" stroke-linecap="round" pathLength="100" stroke-dasharray="22 78" stroke-dashoffset="-50" class="dossier__arc" data-arc="3"/>
+              </g>
+              <path class="dossier__check" d="M68 102 L90 124 L134 76" fill="none" stroke="var(--orange)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div class="dossier__progress-num"><b class="mono" data-step-num>1</b><span>of 4</span></div>
+          </div>
+          <ol class="dossier__steps" data-steps>
+            <li data-step-item="0" aria-current="step"><span class="mono">01</span><b>Invitation</b><em>Your code</em></li>
+            <li data-step-item="1"><span class="mono">02</span><b>Prove it’s you</b><em>Government ID</em></li>
+            <li data-step-item="2"><span class="mono">03</span><b>Verify the business</b><em>Registration</em></li>
+            <li data-step-item="3"><span class="mono">04</span><b>Review &amp; pay</b><em>$19 / month</em></li>
+          </ol>
+          <p class="dossier__eta mono">Estimated review: 2 business days</p>
+        </aside>
+
+        <div class="dossier__stage" data-stage aria-live="polite">
+
+          <form class="dossier__card card" data-step="0" novalidate>
+            <div class="dossier__card-head"><h2>Your invitation code</h2><p>Ask any verified member for a code, or <a href="/contact/?topic=invite">request one</a>.</p></div>
+            <div class="field">
+              <label class="field__label" for="v-code">Invitation code <small>TL-XXXX-XXXX</small></label>
+              <input class="input mono dossier__code" id="v-code" name="code" placeholder="TL-" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="12">
+              <p class="field__err">Enter the full code, letters and numbers, like TL-7K2M-Q9RD.</p>
+            </div>
+            <div class="dossier__actions">
+              <button type="submit" class="btn btn--primary"><span>Continue</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></button>
+              <button type="button" class="btn btn--ghost" data-google><span>Continue with Google</span></button>
+            </div>
+            <p class="dossier__alt">Already a member? <a href="/auth/">Sign in</a></p>
+          </form>
+
+          <form class="dossier__card card" data-step="1" novalidate hidden>
+            <div class="dossier__card-head"><h2>Prove it’s you</h2><p>Exactly as it appears on your government-issued ID.</p></div>
+            <div class="dossier__row">
+              <div class="field"><label class="field__label" for="v-first">Legal first name</label><input class="input" id="v-first" name="first" autocomplete="given-name"><p class="field__err">Enter the first name on your ID.</p></div>
+              <div class="field"><label class="field__label" for="v-last">Legal last name</label><input class="input" id="v-last" name="last" autocomplete="family-name"><p class="field__err">Enter the last name on your ID.</p></div>
+            </div>
+            <div class="dossier__row">
+              <div class="field"><label class="field__label" for="v-dob">Date of birth</label><input class="input" id="v-dob" name="dob" type="date" max="2008-09-18"><p class="field__err">You must be at least 18 to apply.</p></div>
+              <div class="field"><label class="field__label" for="v-country">Country of ID</label><div class="select"><select class="input" id="v-country" name="country"><option value="">Choose a country</option><option>United States</option><option>Canada</option><option>United Kingdom</option><option>Australia</option><option>New Zealand</option><option>Mexico</option><option>Philippines</option><option>Japan</option><option>Other</option></select></div><p class="field__err">Choose the country that issued your ID.</p></div>
+            </div>
+            <div class="field">
+              <span class="field__label">ID document type</span>
+              <div class="segmented" role="group" aria-label="ID type" data-idtype>
+                <button type="button" class="is-active" data-idtype-btn="Passport" aria-pressed="true">Passport</button>
+                <button type="button" data-idtype-btn="Driver’s licence" aria-pressed="false">Driver’s licence</button>
+                <button type="button" data-idtype-btn="National ID" aria-pressed="false">National ID</button>
+              </div>
+            </div>
+            <div class="field">
+              <span class="field__label">Upload your ID <small>JPG, PNG or PDF · both sides if applicable</small></span>
+              <label class="drop" data-drop>
+                <input type="file" accept="image/*,.pdf" class="sr-only" data-file>
+                <span class="drop__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg></span>
+                <span class="drop__text"><b>Drop your ID here</b> or <u>browse</u></span>
+                <span class="drop__file mono" data-file-name hidden></span>
+              </label>
+              <p class="field__err">Add a photo or scan of your ID so a reviewer can match it.</p>
+            </div>
+            <div class="dossier__aside card--peach">
+              <span class="seal seal--sm is-static" data-quiet></span>
+              <div><b>Selfie check comes next.</b><p>After you submit, we’ll ask for a short selfie to match the photo on your ID. It takes about 20 seconds.</p></div>
+            </div>
+            <p class="dossier__privacy">Your ID is never public. Only you and the Trulinq review team can see it. <a href="/privacy/">Privacy policy</a></p>
+            <div class="dossier__actions">
+              <button type="submit" class="btn btn--primary"><span>Continue</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></button>
+              <button type="button" class="btn btn--ghost" data-back><span>Back</span></button>
+            </div>
+          </form>
+
+          <form class="dossier__card card" data-step="2" novalidate hidden>
+            <div class="dossier__card-head"><h2>Verify the business</h2><p>We check this against public business registries.</p></div>
+            <div class="field"><label class="field__label" for="v-biz">Business legal name</label><input class="input" id="v-biz" name="business" autocomplete="organization"><p class="field__err">Enter the registered name of the business.</p></div>
+            <div class="dossier__row">
+              <div class="field"><label class="field__label" for="v-reg">Registration number</label><input class="input mono" id="v-reg" name="registration" placeholder="e.g. 274-119-042"><p class="field__err">Enter the number from your registration certificate.</p></div>
+              <div class="field"><label class="field__label" for="v-state">Registered in <small>country or state</small></label><input class="input" id="v-state" name="state" placeholder="e.g. Hawaiʻi, United States"><p class="field__err">Tell us where the business is registered.</p></div>
+            </div>
+            <div class="dossier__row">
+              <div class="field"><label class="field__label" for="v-site">Website <small>optional</small></label><input class="input" id="v-site" name="website" type="url" placeholder="yourbusiness.com" inputmode="url"><p class="field__err">That doesn’t look like a web address. Try yourbusiness.com.</p></div>
+              <div class="field"><label class="field__label" for="v-ind">Industry</label><div class="select"><select class="input" id="v-ind" name="industry" data-industries><option value="">Choose an industry</option></select></div><p class="field__err">Choose the closest industry.</p></div>
+            </div>
+            <div class="field"><label class="field__label" for="v-role">Your role</label><input class="input" id="v-role" name="role" placeholder="Founder, Owner, CEO…"><p class="field__err">Enter your role at the business.</p></div>
+            <div class="field">
+              <label class="check"><input type="checkbox" name="authorised" data-auth><i></i><span>I’m authorised to represent this business.</span></label>
+              <p class="field__err">We can only verify a business for someone authorised to represent it.</p>
+            </div>
+            <div class="dossier__actions">
+              <button type="submit" class="btn btn--primary"><span>Continue</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></button>
+              <button type="button" class="btn btn--ghost" data-back><span>Back</span></button>
+            </div>
+          </form>
+
+          <form class="dossier__card card" data-step="3" novalidate hidden>
+            <div class="dossier__card-head"><h2>Review &amp; pay</h2><p>Check everything once. A reviewer will check it twice.</p></div>
+            <ul class="ledger dossier__summary" data-summary></ul>
+            <div class="dossier__plan">
+              <span class="seal seal--sm is-static" data-quiet></span>
+              <div><b>Verified Business</b><span>$19 per month, billed yearly</span></div>
+              <b class="mono dossier__plan-total">$228 today</b>
+            </div>
+            <div class="dossier__pay">
+              <div class="dossier__pay-note mono">Payment is disabled in this preview</div>
+              <div class="field"><label class="field__label" for="v-card">Card number</label><input class="input mono" id="v-card" placeholder="4242 4242 4242 4242" inputmode="numeric" disabled></div>
+              <div class="dossier__row dossier__row--3">
+                <div class="field"><label class="field__label" for="v-exp">Expiry</label><input class="input mono" id="v-exp" placeholder="MM / YY" disabled></div>
+                <div class="field"><label class="field__label" for="v-cvc">CVC</label><input class="input mono" id="v-cvc" placeholder="123" disabled></div>
+                <div class="field"><label class="field__label" for="v-zip">Postal code</label><input class="input mono" id="v-zip" placeholder="96720" disabled></div>
+              </div>
+            </div>
+            <div class="field">
+              <label class="check"><input type="checkbox" name="terms" data-terms><i></i><span>I agree to the <a href="/terms/">Terms of Service</a> and understand what the stamp <a href="/trust/">does and doesn’t mean</a>.</span></label>
+              <p class="field__err">Please agree to the terms to submit your application.</p>
+            </div>
+            <div class="dossier__actions">
+              <button type="submit" class="btn btn--primary btn--lg"><span>Submit application</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></button>
+              <button type="button" class="btn btn--ghost" data-back><span>Back</span></button>
+            </div>
+          </form>
+
+          <div class="dossier__card dossier__done card" data-step="done" hidden>
+            <span class="seal seal--lg dossier__done-seal" data-stamp data-manual role="img" aria-label="Trulinq Verified"></span>
+            <h2 class="display">Application received.</h2>
+            <p>A reviewer will read it in the order it arrived. You’ll get an email at each step, and the reason if anything needs fixing.</p>
+            <ul class="ledger" data-done-ledger></ul>
+            <div class="dossier__actions">
+              <a class="btn btn--primary" href="/dashboard/"><span>Open dashboard</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
+              <a class="btn btn--ghost" href="/directory/"><span>Browse the directory</span></a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="panel panel--peach vwhy">
+      <div class="vwhy__inner">
+        <div class="vwhy__col" data-reveal>
+          <h2 class="display">A person reads it. Not a model.</h2>
+        </div>
+        <ol class="vwhy__list" data-reveal-group data-stagger=".1">
+          <li><b>Documents land with a reviewer</b><p>Readable, complete applications go to the front of the queue.</p></li>
+          <li><b>Registry and domain are checked</b><p>Public business registries, DNS and your live site are confirmed active.</p></li>
+          <li><b>You get an answer</b><p>Most decisions arrive within two business days. Rejections come with the reason and a way to resubmit.</p></li>
+        </ol>
+      </div>
+    </section>
+
+  </main>
+  <!--@include(partials/footer.html)-->
+</body>
+</html>

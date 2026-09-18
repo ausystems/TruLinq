@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <!--@include(partials/head.html)-->
+  <title>Search and match — Trulinq</title>
+  <meta name="description" content="Find verified members by what they can offer and what they are looking for. Mutual fits rise to the top.">
+  <script type="module" src="/src/js/pages/match.js"></script>
+</head>
+<body>
+  <!--@include(partials/nav.html)-->
+  <main id="main" class="page">
+
+    <section class="panel panel--cream xhero">
+      <div class="xhero__inner">
+        <p class="eyebrow" data-reveal="fade">Match</p>
+        <h1 class="display" data-split>Search and match.</h1>
+        <p class="lead" data-reveal>Find verified members by what they can offer and what they are looking for. Mutual fits rise to the top.</p>
+        <div class="xsearch" data-xsearch>
+          <label class="xsearch__field xsearch__field--a" data-side="a">
+            <span class="xsearch__label">They offer</span>
+            <input class="xsearch__input" type="search" placeholder="capital, distribution, logistics…" autocomplete="off" data-offer>
+          </label>
+          <span class="xsearch__link" aria-hidden="true"></span>
+          <label class="xsearch__field xsearch__field--b" data-side="b">
+            <span class="xsearch__label">They’re looking for</span>
+            <input class="xsearch__input" type="search" placeholder="suppliers, co-founder, tenants…" autocomplete="off" data-looking>
+          </label>
+        </div>
+        <div class="xtools" data-reveal data-delay=".15">
+          <div class="select xtools__select"><label class="sr-only" for="x-ind">Industry</label><select id="x-ind" class="input" data-industry><option value="All">All industries</option></select></div>
+          <label class="switch"><input type="checkbox" checked data-verified><i></i>Verified only</label>
+          <p class="xtools__count mono" data-count aria-live="polite"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel panel--white fits" id="fits">
+      <div class="fits__inner">
+        <h2 class="display" data-split>Mutual fits.</h2>
+        <p class="lead" data-reveal>Where what one member offers is exactly what another is looking for. Both directions checked, both people verified.</p>
+        <div class="fits__grid" data-fits></div>
+        <div class="fits__oneway" data-oneway-wrap>
+          <h3 class="fits__sub">One-way fits</h3>
+          <div class="fits__grid fits__grid--small" data-oneway></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel panel--cream people" id="people">
+      <div class="people__inner">
+        <h2 class="display" data-split>Everyone, by what they bring.</h2>
+        <div class="people__grid" data-people></div>
+        <div class="empty people__empty" data-empty hidden>
+          <h3>No one matches that yet.</h3>
+          <p>Try fewer words, or a different industry. New members are verified every week.</p>
+          <button type="button" class="btn btn--ink btn--sm" data-reset><span>Clear search</span></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel panel--ink xhow">
+      <div class="xhow__inner">
+        <h2 class="display" data-split>How matching works.</h2>
+        <ul class="ledger ledger--light xhow__ledger" data-reveal>
+          <li class="ledger__row"><span>Say what you offer</span><i></i><b>on your profile</b></li>
+          <li class="ledger__row"><span>Say what you’re looking for</span><i></i><b>one line is enough</b></li>
+          <li class="ledger__row"><span>Mutual fits rise to the top</span><i></i><b>both directions checked</b></li>
+        </ul>
+        <p class="xhow__note" data-reveal data-delay=".05">We never show unverified profiles here.</p>
+      </div>
+    </section>
+
+  </main>
+  <!--@include(partials/footer.html)-->
+</body>
+</html>

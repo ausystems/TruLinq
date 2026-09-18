@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <!--@include(partials/head.html)-->
+  <title>The verified directory — Trulinq</title>
+  <meta name="description" content="Every profile in the Trulinq directory belongs to a real person and a real business. Search verified founders, owners and operators by industry and city.">
+  <script type="module" src="/src/js/pages/directory.js"></script>
+</head>
+<body>
+  <!--@include(partials/nav.html)-->
+  <main id="main" class="page">
+
+    <section class="panel panel--cream dhero">
+      <div class="dhero__inner">
+        <p class="breadcrumb" data-reveal="fade"><a href="/">Trulinq</a><i></i><span>Directory</span></p>
+        <h1 class="display" data-split>The verified <span class="accent">directory</span></h1>
+        <p class="lead" data-reveal>Every profile below belongs to a real person and a real business. Check the stamp before you send money, sign, or partner.</p>
+        <ul class="dhero__ledger ledger" data-reveal data-delay=".1">
+          <li class="ledger__row"><span>Real people</span><i></i><b data-stat="people">16</b></li>
+          <li class="ledger__row"><span>Industries</span><i></i><b data-stat="industries">8</b></li>
+          <li class="ledger__row"><span>Cities</span><i></i><b data-stat="cities">16</b></li>
+          <li class="ledger__row"><span>Stamps revoked</span><i></i><b>0</b></li>
+        </ul>
+      </div>
+      <div class="dhero__faces marquee" aria-hidden="true">
+        <div class="marquee__track" data-marquee data-faces></div>
+      </div>
+    </section>
+
+    <section class="panel panel--white dir" id="list">
+      <div class="dir__inner">
+        <div class="dir__controls" data-controls data-reveal>
+          <label class="dir__search">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+            <span class="sr-only">Search members</span>
+            <input type="search" placeholder="Search name, business, industry or city" autocomplete="off" data-search>
+            <kbd aria-hidden="true">/</kbd>
+          </label>
+          <div class="dir__industries" role="group" aria-label="Filter by industry" data-industries></div>
+          <div class="dir__tools">
+            <label class="switch"><input type="checkbox" checked data-verified><i></i>Verified only</label>
+            <div class="segmented" role="group" aria-label="View" data-view>
+              <button type="button" class="is-active" data-view-btn="cards" aria-pressed="true">Cards</button>
+              <button type="button" data-view-btn="register" aria-pressed="false">Register</button>
+            </div>
+            <div class="select dir__sort">
+              <label class="sr-only" for="dir-sort">Sort</label>
+              <select id="dir-sort" class="input" data-sort>
+                <option value="newest">Newest stamps</option>
+                <option value="score">Highest score</option>
+                <option value="az">A to Z</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="dir__meta">
+          <p class="dir__count mono" data-count aria-live="polite"></p>
+          <button type="button" class="dir__reset" data-reset hidden>Clear filters</button>
+        </div>
+        <div class="dir__grid" data-grid></div>
+        <div class="reg" data-register hidden>
+          <div class="reg__head mono" aria-hidden="true"><span>Member</span><span>Business</span><span>Industry</span><span>City</span><span>Score</span><span>Verified</span><span></span></div>
+          <div data-register-rows></div>
+        </div>
+        <div class="empty dir__empty" data-empty hidden>
+          <svg viewBox="0 0 320 320" class="mascot" aria-hidden="true">
+            <path d="M62 244 C 40 200, 70 150, 160 148 C 250 150, 280 200, 258 244 C 246 270, 200 290, 160 288 C 120 290, 74 270, 62 244 Z" fill="#1B1B6B"/>
+            <ellipse cx="160" cy="240" rx="58" ry="40" fill="#F4EFE3"/>
+            <circle cx="160" cy="130" r="72" fill="#1B1B6B"/>
+            <ellipse cx="160" cy="154" rx="38" ry="26" fill="#F4EFE3"/>
+            <circle cx="134" cy="118" r="11" fill="#F4EFE3"/><circle cx="186" cy="118" r="11" fill="#F4EFE3"/>
+            <circle cx="136" cy="121" r="6" fill="#050347"/><circle cx="188" cy="121" r="6" fill="#050347"/>
+            <ellipse cx="160" cy="142" rx="9" ry="6.5" fill="#050347"/>
+            <path d="M150 158 q10 -7 20 0" stroke="#050347" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path d="M126 148 l-26 -6 M126 154 l-26 4 M194 148 l26 -6 M194 154 l26 4" stroke="#F4EFE3" stroke-width="2.4" stroke-linecap="round"/>
+            <path d="M78 214 C 40 226, 30 262, 62 268 C 84 272, 96 250, 92 232 Z" fill="#1B1B6B"/>
+            <path d="M242 214 C 280 226, 290 262, 258 268 C 236 272, 224 250, 228 232 Z" fill="#1B1B6B"/>
+          </svg>
+          <h3>No one matches that yet.</h3>
+          <p>Try another industry or a shorter search. Or invite them: every new member gets checked the same way.</p>
+          <button type="button" class="btn btn--ink btn--sm" data-reset><span>Clear filters</span></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel panel--peach dcta">
+      <div class="dcta__inner">
+        <div class="dcta__col" data-reveal>
+          <h2 class="display">Your stamp is two business days away.</h2>
+          <a class="btn btn--primary" href="/verify/"><span>Get verified</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
+        </div>
+        <div class="dcta__col dcta__col--report card" data-reveal data-delay=".1">
+          <h3>Report a profile and a human looks the same day.</h3>
+          <p>Fraudulent accounts and impersonation lose the stamp, and usually the account. Nothing you report is shared with the profile.</p>
+          <a class="arrow-link" href="mailto:trust@trulinq.com">Write to trust@trulinq.com <i><svg viewBox="0 0 16 16"><path d="M4 12L12 4M6 4h6v6"/></svg></i></a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <!--@include(partials/footer.html)-->
+</body>
+</html>

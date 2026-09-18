@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <!--@include(partials/head.html)-->
+  <title>Rooms — Verified voices only — Trulinq</title>
+  <meta name="description" content="Live topic rooms where every person posting has passed Trulinq verification. Anyone can read. Verified members can speak.">
+  <script type="module" src="/src/js/pages/rooms.js"></script>
+</head>
+<body>
+  <!--@include(partials/nav.html)-->
+  <main id="main" class="page">
+
+    <section class="panel panel--cream rhero">
+      <div class="rhero__inner">
+        <p class="eyebrow" data-reveal="fade">Rooms</p>
+        <h1 class="display" data-split>Rooms.</h1>
+        <p class="lead" data-reveal>Live topic rooms where every person posting has passed Trulinq verification. Anyone can read. Verified members can speak.</p>
+        <p class="rhero__gate" data-reveal data-delay=".05">Reading is open to everyone. To join the conversation, <a href="/verify/">create a verified account</a>.</p>
+      </div>
+    </section>
+
+    <section class="panel panel--white rooms">
+      <div class="rooms__inner">
+        <nav class="rooms__index" aria-label="Rooms" data-index></nav>
+        <div class="room" data-room>
+          <header class="room__head">
+            <div><h2 class="room__name" data-room-name></h2><p class="room__topic" data-room-topic></p></div>
+            <p class="room__rule">Anyone can read · verified members can speak</p>
+          </header>
+          <div class="room__scroll" data-room-scroll>
+            <div class="room__messages" data-messages></div>
+          </div>
+          <div class="room__composer">
+            <span class="room__lock" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="3"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span>
+            <input class="room__input" type="text" placeholder="Only verified members can post here" disabled aria-label="Message">
+            <a class="btn btn--primary btn--sm" href="/verify/"><span>Get verified</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel panel--cream rcta">
+      <div class="rcta__inner">
+        <h2 class="display" data-split>Rooms are read-only until you’re stamped.</h2>
+        <div class="btn-row" data-reveal>
+          <a class="btn btn--primary btn--lg" href="/verify/"><span>Get verified</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
+          <a class="btn btn--ghost btn--lg" href="/pricing/"><span>See pricing</span></a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <!--@include(partials/footer.html)-->
+</body>
+</html>
