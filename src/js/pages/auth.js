@@ -1,6 +1,6 @@
 import '../../styles/main.css';
 import '../../styles/pages/auth.css';
-import { boot, gsap, reduced, stamp, toast, hydrateSeals } from '../main.js';
+import { boot, gsap, reduced, stamp, toast, hydrateSeals, go } from '../main.js';
 import { idCard, href } from '../ui.js';
 import { byId } from '../../data/members.js';
 
@@ -22,7 +22,7 @@ function show(m, animate = true) {
   else { from.hidden = true; reveal(); }
 }
 
-function finish() { toast('Signed in as a preview account.'); setTimeout(() => (location.href = next && next.startsWith('/') && !next.startsWith('//') ? next : href('/dashboard/')), 600); }
+function finish() { toast('Signed in as a preview account.'); const to = next && next.startsWith('/') && !next.startsWith('//') ? next : href('/dashboard/'); setTimeout(() => go(to, to.includes('/members/') ? 'Member' : 'Dashboard'), 500); }
 
 function build() {
   const stack = document.querySelector('[data-stack]');

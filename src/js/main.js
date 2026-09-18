@@ -37,19 +37,30 @@ export function scrollTo(target, opts = {}) {
 const curtain = document.querySelector('.curtain');
 const fromTransition = sessionStorage.getItem('tq-transition') === '1';
 sessionStorage.removeItem('tq-transition');
+sessionStorage.removeItem('tq-to');
 
 export function revealPage(onLift) {
   return new Promise((resolve) => {
     const lift = () => { try { onLift && onLift(); } catch (err) { console.error(err); } };
     if (!curtain) { lift(); return resolve(); }
-    if (reduced) { curtain.style.display = 'none'; html.classList.add('is-ready'); lift(); return resolve(); }
+    if (reduced) { curtain.style.display = 'none'; html.classList.add('is-ready'); sessionStorage.setItem('tq-visited', '1'); lift(); return resolve(); }
     const check = curtain.querySelector('.curtain__check');
     const sealEl = curtain.querySelector('.curtain__seal');
-    const tl = gsap.timeline({ onComplete: () => { curtain.style.display = 'none'; html.classList.add('is-ready'); resolve(); } });
-    if (fromTransition) {
+    const label = curtain.querySelector('[data-curtain-label]');
+    const tl = gsap.timeline({ onComplete: () => { curtain.style.display = 'none'; curtain.classList.remove('is-transition'); html.classList.add('is-ready'); resolve(); } });
+    const revisit = !fromTransition && sessionStorage.getItem('tq-visited') === '1';
+    sessionStorage.setItem('tq-visited', '1');
+    if (revisit) {
+      /* Back, forward or a typed URL within the session: a quick lift, no preloader */
       tl.set(sealEl, { opacity: 0 })
         .add(lift, .05)
-        .to(curtain, { yPercent: -100, duration: .9, ease: 'expo.inOut', borderRadius: '0 0 40px 40px' }, .05);
+        .to(curtain, { yPercent: -100, borderRadius: '0 0 40px 40px', duration: .9, ease: 'expo.inOut' }, .05);
+    } else if (fromTransition && curtain.classList.contains('is-transition')) {
+      /* The label was already on screen before the reload; hold it a beat, send it up, and lift the panel behind it. */
+      tl.to(label, { yPercent: -110, duration: .55, ease: 'expo.in' }, .18)
+        .add(lift, .42)
+        .to(curtain, { yPercent: -100, borderRadius: '0 0 40px 40px', duration: 1, ease: 'expo.inOut' }, .42)
+        .from('main', { scale: 1.015, duration: 1.2, ease: 'expo.out', clearProps: 'transform' }, .5);
     } else {
       tl.fromTo(sealEl, { scale: .6, opacity: 0, rotate: -30 }, { scale: 1, opacity: 1, rotate: 0, duration: .8, ease: 'back.out(1.7)' })
         .to(check, { strokeDashoffset: 0, duration: .5, ease: 'power2.inOut' }, '-=.35')
@@ -61,6 +72,35 @@ export function revealPage(onLift) {
   });
 }
 
+/* Destination name shown on the panel during a transition */
+const SECTION_LABELS = { '': 'trulinq', directory: 'Directory', match: 'Match', rooms: 'Rooms', feed: 'Feed', pricing: 'Pricing', trust: 'Trust Centre', contact: 'Contact', privacy: 'Privacy', terms: 'Terms', verify: 'Get verified', auth: 'Sign in', dashboard: 'Dashboard', members: 'Member' };
+function cleanText(el) { const c = el.cloneNode(true); c.querySelectorAll('svg, .seal, .btn__icon, em, time, small').forEach((n) => n.remove()); return c.textContent.replace(/\s+/g, ' ').trim(); }
+function labelFor(a, url) {
+  if (a.dataset.label) return a.dataset.label;
+  const base = import.meta.env.BASE_URL || '/';
+  const rel = url.pathname.startsWith(base) ? url.pathname.slice(base.length) : url.pathname.replace(/^\//, '');
+  const seg = rel.split('/').filter(Boolean)[0] || '';
+  if (seg === 'members') {
+    const name = a.querySelector('.idcard__name, .mcard__name, b') || (a.matches('.fit__person, .msg__who, .post__who') ? a : null);
+    const t = name ? cleanText(name) : '';
+    return t && t.length <= 32 ? t : 'Member';
+  }
+  if (seg === 'auth') return url.searchParams.get('mode') === 'signup' ? 'Create account' : 'Sign in';
+  return SECTION_LABELS[seg] || 'trulinq';
+}
+
+/* Prefetch the next document as soon as intent shows, so the swap behind the panel is instant */
+const prefetched = new Set();
+function prefetch(a) {
+  if (!isInternal(a)) return;
+  const url = new URL(a.href, location.href); const key = url.pathname;
+  if (prefetched.has(key) || url.pathname === location.pathname) return;
+  prefetched.add(key);
+  const l = document.createElement('link'); l.rel = 'prefetch'; l.href = url.pathname + url.search; l.as = 'document'; document.head.appendChild(l);
+}
+document.addEventListener('pointerenter', (e) => { const a = e.target && e.target.closest && e.target.closest('a[href]'); if (a) prefetch(a); }, true);
+document.addEventListener('touchstart', (e) => { const a = e.target && e.target.closest && e.target.closest('a[href]'); if (a) prefetch(a); }, { passive: true, capture: true });
+
 function isInternal(a) {
   if (!a || a.target === '_blank' || a.hasAttribute('download') || a.dataset.noTransition !== undefined) return false;
   const url = new URL(a.href, location.href);
@@ -68,6 +108,28 @@ function isInternal(a) {
   if (url.pathname === location.pathname && url.hash) return false;
   if (url.protocol === 'mailto:' || url.protocol === 'tel:') return false;
   return true;
+}
+let leaving = false;
+/* Leave the page behind the rising panel, carrying the destination's name. Used by link clicks and programmatic navigation. */
+export function go(target, text = 'trulinq') {
+  const url = new URL(target, location.href);
+  if (reduced || !curtain) { location.href = url.href; return; }
+  if (leaving) return;
+  leaving = true;
+  closeMenu();
+  const label = curtain.querySelector('[data-curtain-label]');
+  label.textContent = text;
+  curtain.classList.add('is-transition');
+  curtain.style.display = 'grid';
+  const main = document.querySelector('main');
+  main && main.classList.add('is-leaving');
+  gsap.set(curtain, { yPercent: 100, borderRadius: '40px 40px 0 0' });
+  gsap.set(label, { yPercent: 110 });
+  gsap.timeline()
+    .to(main, { scale: .985, opacity: .55, duration: .8, ease: 'expo.inOut' }, 0)
+    .to(curtain, { yPercent: 0, borderRadius: '0 0 0 0', duration: .8, ease: 'expo.inOut' }, 0)
+    .to(label, { yPercent: 0, duration: .6, ease: 'expo.out' }, .42)
+    .add(() => { sessionStorage.setItem('tq-transition', '1'); sessionStorage.setItem('tq-to', text); location.href = url.href; }, .98);
 }
 document.addEventListener('click', (e) => {
   const a = e.target.closest('a[href]');
@@ -77,14 +139,9 @@ document.addEventListener('click', (e) => {
   if (url.pathname === location.pathname && !url.search) { e.preventDefault(); if (url.hash) scrollTo(url.hash); else scrollTo(0); return; }
   if (reduced || !curtain) return;
   e.preventDefault();
-  sessionStorage.setItem('tq-transition', '1');
-  closeMenu();
-  curtain.style.display = 'grid';
-  gsap.set(curtain, { yPercent: 100, borderRadius: '48px 48px 0 0' });
-  gsap.set(curtain.querySelector('.curtain__seal'), { opacity: 0 });
-  gsap.to(curtain, { yPercent: 0, borderRadius: '0 0 0 0', duration: .75, ease: 'expo.inOut', onComplete: () => { location.href = url.href; } });
+  go(url.href, labelFor(a, url));
 });
-window.addEventListener('pageshow', (e) => { if (e.persisted && curtain) { curtain.style.display = 'none'; } });
+window.addEventListener('pageshow', (e) => { if (e.persisted && curtain) { curtain.style.display = 'none'; leaving = false; const main = document.querySelector('main'); if (main) { main.classList.remove('is-leaving'); gsap.set(main, { clearProps: 'transform,opacity' }); } } });
 
 /* ── Nav behaviour ─────────────────────────────────────────────── */
 const nav = document.querySelector('[data-nav]');

@@ -1,14 +1,26 @@
 @layer pages {
   .nf { min-height: calc(100svh - var(--page-pad)); display: grid; }
-  .nf__inner { position: relative; z-index: 1; max-width: var(--max); width: 100%; margin: 0 auto; padding: calc(var(--nav-h) + clamp(40px, 6vw, 80px)) var(--gutter) clamp(56px, 7vw, 96px); display: grid; gap: 22px; align-content: center; justify-items: start; }
-  .nf__code { display: flex; align-items: flex-end; line-height: 1; height: clamp(120px, 20vw, 240px); }
-  .nf__digit { font-size: clamp(7rem, 20vw, 17rem); font-weight: 700; letter-spacing: -.07em; line-height: .85; color: var(--ink); }
-  .nf__mascot { width: clamp(120px, 20vw, 220px); margin-left: -.05em; margin-bottom: -.06em; }
+  .nf__inner { position: relative; z-index: 1; max-width: var(--max); width: 100%; margin: 0 auto; padding: calc(var(--nav-h) + clamp(40px, 6vw, 80px)) var(--gutter) clamp(56px, 7vw, 96px); display: grid; gap: clamp(32px, 5vw, 72px); align-content: center; align-items: center; }
+  @media (min-width: 1024px) { .nf__inner { grid-template-columns: 7fr 5fr; } }
+
+  /* The failed record: giant digits with a stamp across them */
+  .nf__stage { position: relative; display: grid; place-items: center; padding: clamp(16px, 3vw, 40px) 0; }
+  .nf__code { display: flex; line-height: 1; }
+  .nf__digit { font-size: clamp(7.5rem, 24vw, 21rem); font-weight: 700; letter-spacing: -.08em; line-height: .85; color: var(--ink); }
+  .nf__digit:last-child { margin-right: .08em; }
+  .nf__stamp { position: absolute; left: 50%; top: 52%; transform: translate(-50%, -50%) rotate(-12deg); padding: .22em .6em; border: 3px solid var(--orange); border-radius: .28em; outline: 1.5px solid var(--orange); outline-offset: 5px; color: var(--orange); font-family: var(--f-display); font-weight: 600; font-size: clamp(1.5rem, 4.6vw, 3.6rem); letter-spacing: -.03em; line-height: 1; white-space: nowrap; background: rgba(250,247,240,.94); box-shadow: 0 24px 60px -24px rgba(5,3,71,.35); opacity: 0; }
+  .nf__stamp-inner { display: block; }
+  html.reduced-motion .nf__stamp { opacity: 1; }
+
+  .nf__copy { display: grid; gap: 22px; justify-items: start; }
   .nf h1 { font-size: var(--fs-1); }
-  .nf .lead { max-width: 46ch; }
-  .nf__search { display: flex; gap: 8px; width: min(100%, 560px); padding: 6px; border-radius: var(--r-pill); background: var(--white); box-shadow: inset 0 0 0 1px var(--sand); }
+  .nf .lead { max-width: 42ch; }
+  .nf__ledger { width: min(100%, 460px); padding: 18px 22px; border-radius: var(--r-card); background: rgba(255,255,255,.6); font-size: .9rem; }
+  .nf__ledger .ledger__row > b { max-width: 60%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .nf__search { display: flex; gap: 8px; width: min(100%, 520px); padding: 6px; border-radius: var(--r-pill); background: var(--white); box-shadow: inset 0 0 0 1px var(--sand); }
   .nf__search .input { flex: 1; min-width: 0; background: transparent; box-shadow: none; min-height: 46px; padding: 8px 16px; }
   .nf__search .input:focus-visible { box-shadow: none; }
   .nf__search .btn { min-height: 46px; }
   .nf__links { display: flex; flex-wrap: wrap; gap: 8px; }
+  @media (max-width: 1023px) { .nf__stage { order: -1; } .nf__digit { font-size: clamp(6.5rem, 30vw, 12rem); } }
 }

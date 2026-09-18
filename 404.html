@@ -11,36 +11,33 @@
   <main id="main" class="page">
     <section class="panel panel--peach nf">
       <div class="nf__inner">
-        <div class="nf__code" aria-hidden="true">
-          <span class="nf__digit display" data-digit>4</span>
-          <span class="nf__digit display" data-digit>0</span>
-          <span class="nf__mascot" data-mascot>
-            <svg viewBox="0 0 320 320" class="mascot" aria-hidden="true">
-              <path d="M62 244 C 40 200, 70 150, 160 148 C 250 150, 280 200, 258 244 C 246 270, 200 290, 160 288 C 120 290, 74 270, 62 244 Z" fill="#1B1B6B"/>
-              <ellipse cx="160" cy="240" rx="58" ry="40" fill="#F4EFE3"/>
-              <circle cx="160" cy="130" r="72" fill="#1B1B6B"/>
-              <ellipse cx="160" cy="154" rx="38" ry="26" fill="#F4EFE3"/>
-              <circle cx="134" cy="118" r="11" fill="#F4EFE3"/><circle cx="186" cy="118" r="11" fill="#F4EFE3"/>
-              <circle cx="136" cy="120" r="6" fill="#050347"/><circle cx="188" cy="116" r="6" fill="#050347"/>
-              <ellipse cx="160" cy="142" rx="9" ry="6.5" fill="#050347"/>
-              <path d="M150 158 q10 -6 20 2" stroke="#050347" stroke-width="3" fill="none" stroke-linecap="round"/>
-              <path d="M126 148 l-26 -6 M126 154 l-26 4 M194 148 l26 -6 M194 154 l26 4" stroke="#F4EFE3" stroke-width="2.4" stroke-linecap="round"/>
-              <path d="M78 214 C 40 226, 30 262, 62 268 C 84 272, 96 250, 92 232 Z" fill="#1B1B6B"/>
-              <g transform="translate(236 196) rotate(-20)"><circle cx="0" cy="0" r="30" fill="none" stroke="#050347" stroke-width="8"/><circle cx="0" cy="0" r="24" fill="rgba(255,255,255,.35)"/><path d="M22 22 l30 30" stroke="#050347" stroke-width="10" stroke-linecap="round"/></g>
-            </svg>
-          </span>
+        <div class="nf__stage" aria-hidden="true">
+          <div class="nf__code">
+            <span class="nf__digit display" data-digit>4</span>
+            <span class="nf__digit display" data-digit>0</span>
+            <span class="nf__digit display" data-digit>4</span>
+          </div>
+          <div class="nf__stamp" data-nf-stamp><span class="nf__stamp-inner">Not verified</span></div>
         </div>
-        <h1 class="display" data-split>This page isn’t real.</h1>
-        <p class="lead" data-reveal>Which is sort of the point of Trulinq. The page you asked for doesn’t exist, was removed, or never passed verification.</p>
-        <form class="nf__search" data-nf-search data-reveal data-delay=".05">
-          <label class="sr-only" for="nf-q">Search the directory</label>
-          <input class="input" id="nf-q" type="search" placeholder="Search verified members…" autocomplete="off">
-          <button type="submit" class="btn btn--ink"><span>Search</span></button>
-        </form>
-        <div class="nf__links" data-reveal data-delay=".1">
-          <a class="pill" href="/directory/">Directory</a>
-          <a class="pill" href="/verify/">Get verified</a>
-          <a class="pill" href="/contact/">Contact</a>
+        <div class="nf__copy">
+          <h1 class="display" data-split>This page isn’t real.</h1>
+          <p class="lead" data-reveal>Which is sort of the point of Trulinq. The page you asked for doesn’t exist, was removed, or never passed verification.</p>
+          <ul class="ledger nf__ledger" data-nf-ledger>
+            <li class="ledger__row"><span>Path</span><i></i><b data-nf-path>/</b></li>
+            <li class="ledger__row"><span>Status</span><i></i><b>Not found</b></li>
+            <li class="ledger__row"><span>Checked</span><i></i><b data-nf-time>just now</b></li>
+            <li class="ledger__row"><span>Verified by</span><i></i><b>No one</b></li>
+          </ul>
+          <form class="nf__search" data-nf-search data-reveal data-delay=".05">
+            <label class="sr-only" for="nf-q">Search the directory</label>
+            <input class="input" id="nf-q" type="search" placeholder="Search verified members…" autocomplete="off">
+            <button type="submit" class="btn btn--ink"><span>Search</span></button>
+          </form>
+          <div class="nf__links" data-reveal data-delay=".1">
+            <a class="pill" href="/directory/">Directory</a>
+            <a class="pill" href="/verify/">Get verified</a>
+            <a class="pill" href="/contact/">Contact</a>
+          </div>
         </div>
       </div>
     </section>
