@@ -25,12 +25,24 @@ if (!reduced && !isTouch) {
   gsap.ticker.add((t) => lenis.raf(t * 1000));
   gsap.ticker.lagSmoothing(0);
 }
+let programmaticScroll = 0;
+const NAV_OFFSET = 90;
+/* Smooth-scroll to a number, selector or element. Targets resolve to an absolute position first so the landing
+   spot never depends on the smooth-scroller's internal state. Programmatic scrolls never hide the nav. */
 export function scrollTo(target, opts = {}) {
-  if (lenis) lenis.scrollTo(target, { offset: -90, duration: 1.4, ...opts });
+  let top = 0;
+  if (typeof target === 'number') top = target;
   else {
     const el = typeof target === 'string' ? document.querySelector(target) : target;
-    if (el) window.scrollTo({ top: el.getBoundingClientRect().top + scrollY - 90, behavior: reduced ? 'auto' : 'smooth' });
+    if (!el) return;
+    top = el.getBoundingClientRect().top + window.scrollY - (opts.offset === undefined ? NAV_OFFSET : -opts.offset);
   }
+  const max = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+  top = Math.min(Math.max(0, top), max);
+  clearTimeout(programmaticScroll); programmaticScroll = setTimeout(() => (programmaticScroll = 0), 1800);
+  const done = () => { clearTimeout(programmaticScroll); programmaticScroll = 0; opts.onComplete && opts.onComplete(); };
+  if (lenis) lenis.scrollTo(top, { duration: opts.duration || 1.4, onComplete: done });
+  else { window.scrollTo({ top, behavior: reduced ? 'auto' : 'smooth' }); setTimeout(done, reduced ? 0 : 900); }
 }
 
 /* ── Curtain: first load + between pages ───────────────────────── */
@@ -133,10 +145,19 @@ export function go(target, text = 'trulinq') {
 }
 document.addEventListener('click', (e) => {
   const a = e.target.closest('a[href]');
-  if (!a || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
-  if (!isInternal(a)) return;
+  if (!a || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
   const url = new URL(a.href, location.href);
-  if (url.pathname === location.pathname && !url.search) { e.preventDefault(); if (url.hash) scrollTo(url.hash); else scrollTo(0); return; }
+  /* Same-page anchors: smooth scroll with the nav offset; never a page transition */
+  if (url.origin === location.origin && url.pathname === location.pathname && url.hash && !a.hasAttribute('download')) {
+    const target = document.getElementById(decodeURIComponent(url.hash.slice(1)));
+    if (!target) return;
+    e.preventDefault();
+    history.pushState(null, '', url.hash);
+    scrollTo(target);
+    return;
+  }
+  if (!isInternal(a)) return;
+  if (url.pathname === location.pathname && !url.search) { e.preventDefault(); scrollTo(0); return; }
   if (reduced || !curtain) return;
   e.preventDefault();
   go(url.href, labelFor(a, url));
@@ -147,17 +168,33 @@ window.addEventListener('pageshow', (e) => { if (e.persisted && curtain) { curta
 const nav = document.querySelector('[data-nav]');
 const burger = document.querySelector('[data-burger]');
 const menu = document.querySelector('[data-menu]');
-let lastY = 0, menuOpen = false;
+let menuOpen = false;
 
-function onScroll() {
-  const y = window.scrollY;
+/* Hide on a deliberate scroll down, show on a deliberate scroll up. Direction-locked with hysteresis, so
+   smooth-scroll tails, trackpad jitter and iOS overscroll never flip the state. */
+const navState = { lastY: Math.max(0, window.scrollY), anchorY: Math.max(0, window.scrollY), dir: 0 };
+const HIDE_AFTER = 200, TRAVEL_TO_HIDE = 90, TRAVEL_TO_SHOW = 40, SHOW_BELOW = 120;
+function updateNav() {
   if (!nav) return;
-  nav.classList.toggle('is-scrolled', y > 24);
-  if (!menuOpen) nav.classList.toggle('is-hidden', y > 160 && y > lastY + 6);
-  if (y < lastY - 6) nav.classList.remove('is-hidden');
-  lastY = y;
+  const maxY = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+  const y = Math.min(Math.max(0, window.scrollY), maxY);
+  const delta = y - navState.lastY;
+  if (y > 32) nav.classList.add('is-scrolled'); else if (y < 8) nav.classList.remove('is-scrolled');
+  if (Math.abs(delta) < 1) return;
+  const dir = delta > 0 ? 1 : -1;
+  if (dir !== navState.dir) { navState.dir = dir; navState.anchorY = navState.lastY; }
+  navState.lastY = y;
+  const travelled = Math.abs(y - navState.anchorY);
+  if (menuOpen || leaving || programmaticScroll) { nav.classList.remove('is-hidden'); return; }
+  if (y < SHOW_BELOW) { nav.classList.remove('is-hidden'); return; }
+  if (dir === 1 && y > HIDE_AFTER && travelled >= TRAVEL_TO_HIDE) nav.classList.add('is-hidden');
+  else if (dir === -1 && travelled >= TRAVEL_TO_SHOW) nav.classList.remove('is-hidden');
 }
-window.addEventListener('scroll', onScroll, { passive: true });
+window.addEventListener('scroll', updateNav, { passive: true });
+window.addEventListener('resize', () => { navState.lastY = Math.max(0, window.scrollY); navState.anchorY = navState.lastY; }, { passive: true });
+/* Keyboard users tabbing into a hidden nav get it back */
+nav && nav.addEventListener('focusin', () => { nav.classList.remove('is-hidden'); navState.anchorY = navState.lastY; });
+updateNav();
 
 /* Dark-panel awareness: tint the pill when it floats over an ink panel */
 export function watchNavTone() {
@@ -183,6 +220,7 @@ function openMenu() {
   burger.setAttribute('aria-expanded', 'true'); burger.setAttribute('aria-label', 'Close menu');
   document.body.classList.add('is-locked'); lenis && lenis.stop();
   nav.classList.remove('is-hidden');
+  navState.anchorY = navState.lastY;
   const links = menu.querySelectorAll('.menu__links a, .menu__foot .btn');
   if (reduced) { gsap.set(menu, { clipPath: 'inset(0 0 0% 0 round 0 0 0px 0px)' }); gsap.set(links, { clearProps: 'all' }); return; }
   gsap.timeline()

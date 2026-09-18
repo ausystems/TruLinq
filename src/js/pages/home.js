@@ -1,6 +1,6 @@
 import '../../styles/main.css';
 import '../../styles/pages/home.css';
-import { boot, gsap, ScrollTrigger, stamp, reduced, isTouch, hydrateSeals, popIn, suspend } from '../main.js';
+import { boot, gsap, ScrollTrigger, stamp, reduced, isTouch, hydrateSeals, popIn, suspend, scrollTo } from '../main.js';
 import { idCard, photo, scoreOf, gradeOf, pct } from '../ui.js';
 import { byId, SCENES } from '../../data/members.js';
 import { gaugeHTML, factorsHTML, runGauge } from '../gauge.js';
@@ -161,7 +161,7 @@ function how() {
     /* clicking a step scrolls the pin to that scene */
     steps.forEach((st, i) => st.addEventListener('click', () => {
       const t = master.scrollTrigger; const p = [0.02, cuts[0] + .03, cuts[1] + .03][i];
-      window.scrollTo({ top: t.start + (t.end - t.start) * p, behavior: 'smooth' });
+      scrollTo(t.start + (t.end - t.start) * p, { duration: 1 });
     }));
     return () => { master.scrollTrigger && master.scrollTrigger.kill(); master.kill(); enterTrig.kill(); entrance.kill(); [a, b, c].forEach((t) => t.kill()); gsap.set([scenes, progress], { clearProps: 'all' }); };
   });

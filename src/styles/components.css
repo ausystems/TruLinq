@@ -34,9 +34,9 @@
 
   /* ── Nav: floating pill ──────────────────────────────────────── */
   .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: calc(14px + env(safe-area-inset-top, 0px)) max(var(--page-pad), env(safe-area-inset-right, 0px)) 0 max(var(--page-pad), env(safe-area-inset-left, 0px)); pointer-events: none; }
-  .nav__pill { pointer-events: auto; max-width: calc(var(--max) - 2 * var(--gutter) + 48px); margin: 0 auto; height: var(--nav-h); display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 8px 8px 8px 20px; border-radius: var(--r-pill); background: rgba(250, 247, 240, .82); -webkit-backdrop-filter: blur(18px) saturate(1.4); backdrop-filter: blur(18px) saturate(1.4); box-shadow: 0 1px 0 rgba(255,255,255,.7) inset, 0 10px 40px -18px rgba(5,3,71,.25); transition: transform var(--d-med) var(--e-out), box-shadow var(--d-med) var(--e-out), background var(--d-med); }
+  .nav__pill { pointer-events: auto; max-width: calc(var(--max) - 2 * var(--gutter) + 48px); margin: 0 auto; height: var(--nav-h); display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 8px 8px 8px 20px; border-radius: var(--r-pill); background: rgba(250, 247, 240, .82); -webkit-backdrop-filter: blur(18px) saturate(1.4); backdrop-filter: blur(18px) saturate(1.4); box-shadow: 0 1px 0 rgba(255,255,255,.7) inset, 0 10px 40px -18px rgba(5,3,71,.25); transition: transform .55s var(--e-inout), box-shadow var(--d-med) var(--e-out), background var(--d-med); will-change: transform; }
   .nav.is-scrolled .nav__pill { box-shadow: 0 1px 0 rgba(255,255,255,.7) inset, 0 18px 50px -20px rgba(5,3,71,.35); }
-  .nav.is-hidden .nav__pill { transform: translateY(calc(-100% - 20px)); }
+  .nav.is-hidden .nav__pill { transform: translateY(calc(-100% - 24px - env(safe-area-inset-top, 0px))); }
   .nav--ink .nav__pill { background: rgba(20, 20, 92, .72); color: var(--cream); }
   .nav__logo { display: flex; align-items: center; height: 40px; }
   .wordmark { height: 30px; width: auto; overflow: visible; }

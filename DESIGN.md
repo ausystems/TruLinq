@@ -87,6 +87,10 @@ Each page CSS file wraps its rules in `@layer pages { … }` and gives every sec
   label on the new document before its first frame, so the name holds still across the reload; the panel then lifts
   as the new hero animates in. Prefetch fires on hover/touch. First visit in a session shows the seal preloader;
   back/forward and typed URLs get a quick lift. `data-label` on a link overrides the derived name.
+* **Nav hide/show** is direction-locked with hysteresis (`updateNav` in `src/js/main.js`): it hides only after 90px of
+  deliberate downward travel past 200px, shows after 40px of upward travel or near the top, and ignores jitter,
+  momentum tails, overscroll, programmatic scrolls (`scrollTo()`), the open menu, page transitions, and reveals on
+  keyboard focus. Same-page anchors go through `scrollTo()`, which resolves targets to absolute positions.
 * `boot()` handles: Lenis smooth scroll, the curtain (seal preloader on first load, wipe between pages), nav, and generic
   reveals. Attributes: `data-split` (masked line reveal for headlines), `data-reveal` (`up|fade|scale|left|right|stamp`,
   optional `data-delay`), `data-reveal-group` (stagger children, `data-stagger`), `data-counter="812"`, `data-bar`,
