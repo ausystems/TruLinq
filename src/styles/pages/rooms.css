@@ -34,11 +34,11 @@
   .msg--cont .msg__head { display: none; }
   .msg--cont .avatar { visibility: hidden; height: 0; }
   .msg--cont { margin-top: -10px; }
-  .msg__head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .msg__head { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin-bottom: 6px; }
   .msg__who { font-weight: 500; font-size: .95rem; color: var(--ink); }
   .msg__who .seal { --seal-size: 16px; display: inline-grid; vertical-align: -3px; margin-left: 4px; }
   .msg__time { font-family: var(--f-mono); font-size: .74rem; color: var(--ink-mute); }
-  .msg__bubble { display: inline-block; max-width: 92%; padding: 12px 16px; border-radius: 18px; border-top-left-radius: 6px; background: var(--white); box-shadow: inset 0 0 0 1px rgba(5,3,71,.05); font-size: .98rem; line-height: 1.45; text-wrap: pretty; }
+  .msg__bubble { display: inline-block; max-width: 100%; padding: 12px 16px; border-radius: 18px; border-top-left-radius: 6px; background: var(--white); box-shadow: inset 0 0 0 1px rgba(5,3,71,.05); font-size: .98rem; line-height: 1.45; text-wrap: pretty; }
   .msg--new .msg__bubble { box-shadow: inset 0 0 0 1.5px var(--mint); }
   .room__composer { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px; padding: 14px 16px; border-top: 1px solid var(--sand); background: var(--white); }
   .room__lock { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 50%; background: var(--cream); }

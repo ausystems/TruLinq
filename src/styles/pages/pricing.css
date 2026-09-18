@@ -11,7 +11,7 @@
   .phero-p__toggle { position: relative; margin-top: clamp(24px, 3vw, 36px); display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; }
   .phero-p__note { position: static; }
   .phero-p__stage { position: relative; aspect-ratio: 1; width: min(100%, 560px); margin-inline: auto; }
-  .phero-p__canvas { width: 100% !important; height: 100% !important; cursor: grab; }
+  .phero-p__canvas { width: 100% !important; height: 100% !important; cursor: grab; touch-action: pan-y; }
   .phero-p__impression { position: absolute; left: 50%; bottom: 8%; transform: translateX(-50%) scale(.85); opacity: 0; pointer-events: none; }
   .phero-p__impression .seal { --seal-size: 130px; --seal-bg: var(--orange); mix-blend-mode: multiply; }
   @media (max-width: 1023px) { .phero-p__stage { width: min(100%, 380px); } }
@@ -23,6 +23,7 @@
   .plan { position: relative; display: grid; gap: 20px; align-content: start; padding: clamp(24px, 2.8vw, 36px); }
   .plan--hero { box-shadow: var(--sh-orange); }
   @media (min-width: 960px) { .plan--hero { padding-block: clamp(36px, 4vw, 52px); } }
+  @media (max-width: 959px) { .plan--hero { padding-top: 96px; } .plan__seal { top: 22px; left: 22px; --seal-size: 56px; } .plan__badge { top: 34px; } }
   .plan__badge { position: absolute; top: 20px; right: 20px; font-size: .78rem; font-weight: 500; padding: 6px 12px; border-radius: var(--r-pill); background: rgba(255,255,255,.22); color: #fff; }
   .plan__seal { --seal-size: 64px; position: absolute; top: -18px; left: -18px; filter: drop-shadow(0 10px 22px rgba(5,3,71,.25)); }
   .plan__head h2 { font-size: var(--fs-3); }
@@ -68,7 +69,7 @@
   .register__row [data-no]::before { content: ""; width: 14px; height: 2px; border-radius: 1px; background: var(--sand-2); }
   html.reduced-motion .register__row [data-yes]::before { transform: scale(1); }
   @keyframes pop { to { transform: scale(1); } }
-  @media (max-width: 720px) { .register__head, .register__row { grid-template-columns: 1.6fr 1fr 1fr 1fr; padding-inline: 14px; font-size: .84rem; } .register__head span { font-size: .62rem; } .register__row [data-yes], .register__row [data-no] { font-size: .66rem; } }
+  @media (max-width: 720px) { .register__head, .register__row { grid-template-columns: 1.7fr .8fr 1fr .9fr; gap: 6px; padding-inline: 12px; font-size: .84rem; } .register__head { font-size: .62rem; line-height: 1.2; } .register__row [data-yes], .register__row [data-no] { flex-direction: column; gap: 3px; font-size: .62rem; line-height: 1.1; text-align: center; } .register__row .register__hl { padding: 8px 2px; } }
 
   /* ── FAQ ──────────────────────────────────────────────────────── */
   .pfaq__inner { display: grid; gap: clamp(36px, 5vw, 72px); }

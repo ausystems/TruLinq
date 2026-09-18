@@ -184,6 +184,7 @@ function openMenu() {
   document.body.classList.add('is-locked'); lenis && lenis.stop();
   nav.classList.remove('is-hidden');
   const links = menu.querySelectorAll('.menu__links a, .menu__foot .btn');
+  if (reduced) { gsap.set(menu, { clipPath: 'inset(0 0 0% 0 round 0 0 0px 0px)' }); gsap.set(links, { clearProps: 'all' }); return; }
   gsap.timeline()
     .to(menu, { clipPath: 'inset(0 0 0% 0 round 0 0 0px 0px)', duration: .8, ease: 'expo.inOut' })
     .fromTo(links, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: .8, stagger: .06 }, '-=.35');
@@ -193,7 +194,9 @@ export function closeMenu() {
   menuOpen = false;
   burger.setAttribute('aria-expanded', 'false'); burger.setAttribute('aria-label', 'Open menu');
   document.body.classList.remove('is-locked'); lenis && lenis.start();
-  gsap.to(menu, { clipPath: 'inset(0 0 100% 0 round 0 0 40px 40px)', duration: .7, ease: 'expo.inOut', onComplete: () => { menu.classList.remove('is-open'); menu.setAttribute('aria-hidden', 'true'); } });
+  const done = () => { menu.classList.remove('is-open'); menu.setAttribute('aria-hidden', 'true'); };
+  if (reduced) { gsap.set(menu, { clipPath: 'inset(0 0 100% 0 round 0 0 40px 40px)' }); done(); return; }
+  gsap.to(menu, { clipPath: 'inset(0 0 100% 0 round 0 0 40px 40px)', duration: .7, ease: 'expo.inOut', onComplete: done });
 }
 burger && burger.addEventListener('click', () => (menuOpen ? closeMenu() : openMenu()));
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });

@@ -9,6 +9,7 @@
   .auth__stack .idcard:nth-child(3) { --tilt: -1.5deg; margin-left: 12px; }
   .auth__stack .idcard:nth-child(3) { display: none; }
   @media (min-width: 1024px) and (min-height: 960px) { .auth__stack .idcard:nth-child(3) { display: block; } }
+  @media (max-width: 1023px) { .auth__main { order: -1; } .auth__main-inner { min-height: 0; padding: calc(var(--nav-h) + 32px) var(--gutter) 48px; } .auth__side-inner { padding: 40px var(--gutter) 44px; gap: 22px; } .auth__stack .idcard:nth-child(2) { display: none; } .auth__stack .idcard { --tilt: 0deg; transform: none; margin: 0; max-width: none; } }
   .auth__note { position: static; color: var(--peach); }
   .auth__ledger { max-width: 420px; font-size: .9rem; }
   .auth__main-inner { min-height: calc(100svh - var(--page-pad) * 2); display: grid; align-content: center; justify-items: center; gap: 22px; padding: calc(var(--nav-h) + 40px) var(--gutter) 60px; }
