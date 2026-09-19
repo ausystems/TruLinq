@@ -6,11 +6,18 @@
   /* The failed record: giant digits with a stamp across them */
   .nf__stage { position: relative; display: grid; place-items: center; padding: clamp(16px, 3vw, 40px) 0; }
   .nf__code { display: flex; line-height: 1; }
-  .nf__digit { font-size: clamp(7.5rem, 24vw, 21rem); font-weight: 700; letter-spacing: -.08em; line-height: .85; color: var(--ink); }
+  .nf__digit { font-size: var(--digit); font-weight: 700; letter-spacing: -.08em; line-height: .85; color: var(--ink); }
   .nf__digit:last-child { margin-right: .08em; }
   .nf__stamp { position: absolute; left: 50%; top: 52%; transform: translate(-50%, -50%) rotate(-12deg); padding: .22em .6em; border: 3px solid var(--orange); border-radius: .28em; outline: 1.5px solid var(--orange); outline-offset: 5px; color: var(--orange); font-family: var(--f-display); font-weight: 600; font-size: clamp(1.5rem, 4.6vw, 3.6rem); letter-spacing: -.03em; line-height: 1; white-space: nowrap; background: rgba(250,247,240,.94); box-shadow: 0 24px 60px -24px rgba(5,3,71,.35); opacity: 0; }
   .nf__stamp-inner { display: block; }
   html.reduced-motion .nf__stamp { opacity: 1; }
+
+  /* The reviewer: sits on the floor at the bottom-left of the record, tucked into the notch of the first 4. The stage
+     reserves the drop with a margin (not padding) so the stamp mark keeps its place over the digits. */
+  .nf__stage { --digit: clamp(7.5rem, 24vw, 21rem); --seal-w: calc(var(--digit) * .73); --seal-x: calc(var(--digit) * 1.27); --seal-drop: calc(var(--digit) * .25); margin-bottom: var(--seal-drop); }
+  .nf__mascot { position: absolute; left: calc(50% - var(--seal-x)); bottom: calc(-1 * var(--seal-drop)); width: var(--seal-w); cursor: pointer; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; will-change: transform; }
+  .nf__mascot svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .nf__mascot [data-m-q] text { user-select: none; }
 
   .nf__copy { display: grid; gap: 22px; justify-items: start; }
   .nf h1 { font-size: var(--fs-1); }
@@ -22,5 +29,5 @@
   .nf__search .input:focus-visible { box-shadow: none; }
   .nf__search .btn { min-height: 46px; }
   .nf__links { display: flex; flex-wrap: wrap; gap: 8px; }
-  @media (max-width: 1023px) { .nf__stage { order: -1; } .nf__digit { font-size: clamp(6.5rem, 30vw, 12rem); } }
+  @media (max-width: 1023px) { .nf__stage { order: -1; --digit: clamp(6.5rem, 30vw, 12rem); --seal-w: calc(var(--digit) * .93); --seal-x: calc(var(--digit) * 1.63); --seal-drop: calc(var(--digit) * .41); } }
 }

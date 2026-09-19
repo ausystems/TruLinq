@@ -35,6 +35,10 @@ at build time with `<!--@include(partials/nav.html)-->`.
   3. Ledger rows: `.ledger > .ledger__row > span, i, b` (hairline leaders, mono values) for facts, stats and receipts.
   4. Pill boards: `.pill` with emoji, tones `pill--peach|mint|violet|sky|rose|sand|ink|outline`. Straight, evenly spaced.
   5. The mascot: a flat navy monk seal (see the FAQ on the homepage or `.empty` in the directory) for FAQ, empty states, 404.
+     On the 404 it is the reviewer: it pops up beside the record, squints, winds up and thumps its stamp in the same beat the
+     "Not verified" mark lands, then idles (breathing, blinks, cursor-following eyes, a hop on click). Its parts are
+     `data-m-*` groups in `404.html`; every transform lives on its own group so the intro, idle loops and the click
+     reaction never fight over a property. The seal is positioned from the stage centre in units of the digit size (`--digit`).
 * **Components** (all in `src/styles/components.css`): `.btn` (`--primary|--ink|--cream|--white|--ghost|--ghost-light`,
   `--sm|--lg`, optional trailing `.btn__icon` plain arrow), `.pill`, `.idcard` (member card, build with `idCard(member)` from
   `src/js/ui.js`), `.card` (`--peach|--ink|--orange|--sand|--outline`), `.acc` accordion (`data-single`), `.marquee`,
