@@ -6,10 +6,10 @@ export function gaugeHTML({ caption = '', id = 'g' + Math.random().toString(36).
   return `<div class="gauge-wrap" data-gauge-root>
     <svg viewBox="0 0 320 300" class="gauge" aria-hidden="true">
       <defs><linearGradient id="grad-${id}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4AB3FF"/><stop offset=".55" stop-color="#2981FB"/><stop offset="1" stop-color="#093DA1"/></linearGradient></defs>
-      <path class="gauge__track" d="M 40 236 A 130 130 0 1 1 280 236" fill="none" stroke="var(--gauge-track, #172233)" stroke-width="22" stroke-linecap="round"/>
-      <path class="gauge__ticks" d="${ticksPath()}" fill="none" stroke="#F4F7FB" stroke-opacity=".18" stroke-width="2"/>
+      <path class="gauge__track" d="M 40 236 A 130 130 0 1 1 280 236" fill="none" stroke="var(--gauge-track, #EAF1FA)" stroke-width="22" stroke-linecap="round"/>
+      <path class="gauge__ticks" d="${ticksPath()}" fill="none" stroke="#0C1526" stroke-opacity=".18" stroke-width="2"/>
       <path class="gauge__fill" d="M 40 236 A 130 130 0 1 1 280 236" fill="none" stroke="url(#grad-${id})" stroke-width="22" stroke-linecap="round" data-gauge-fill/>
-      <circle class="gauge__knob" r="9" fill="#F4F7FB" stroke="#2981FB" stroke-width="5" data-knob cx="40" cy="236"/>
+      <circle class="gauge__knob" r="9" fill="#FFFFFF" stroke="#2981FB" stroke-width="5" data-knob cx="40" cy="236"/>
       <text x="34" y="272" class="gauge__lbl mono">300</text>
       <text x="286" y="272" class="gauge__lbl mono" text-anchor="end">850</text>
     </svg>

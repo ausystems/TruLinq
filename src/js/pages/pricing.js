@@ -37,7 +37,7 @@ async function rubberStamp() {
   camera.position.set(0, .9, 9.4);
   camera.lookAt(0, .45, 0);
 
-  scene.add(new T.HemisphereLight(0xF4F7FB, 0x093DA1, 1.4));
+  scene.add(new T.HemisphereLight(0xFFFFFF, 0xDCEBFF, 1.4));
   const key = new T.DirectionalLight(0xFFFFFF, 2.2); key.position.set(3, 6, 4); scene.add(key);
   const rim = new T.DirectionalLight(0x4AB3FF, .9); rim.position.set(-4, 3, -3); scene.add(rim);
 
@@ -87,7 +87,7 @@ async function rubberStamp() {
   scene.add(stampGroup);
 
   /* shadow disc */
-  const shadow = new T.Mesh(new T.CylinderGeometry(1.35, 1.35, .01, 64), new T.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: .45 }));
+  const shadow = new T.Mesh(new T.CylinderGeometry(1.35, 1.35, .01, 64), new T.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: .14 }));
   shadow.position.y = -1.9; scene.add(shadow);
 
   function resize() { const w = stage.clientWidth, h = stage.clientHeight || w; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
@@ -105,7 +105,7 @@ async function rubberStamp() {
     stampGroup.rotation.y = -.5 + pointer.x * .45 + (reduced ? 0 : t * .12);
     stampGroup.rotation.z = .12 + pointer.x * .08;
     stampGroup.position.y = .55 + (reduced ? 0 : Math.sin(t * .9) * .08) - press.t * 1.7;
-    shadow.scale.setScalar(1 - press.t * .25); shadow.material.opacity = .45 + press.t * .3;
+    shadow.scale.setScalar(1 - press.t * .25); shadow.material.opacity = .14 + press.t * .3;
     renderer.render(scene, camera);
   }
   const loop = (now) => { render(now); raf = requestAnimationFrame(loop); };

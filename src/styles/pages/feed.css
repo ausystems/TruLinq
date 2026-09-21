@@ -17,9 +17,9 @@
   .composer__foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; min-width: 0; }
   .composer__foot .segmented { min-width: 0; }
   .composer .segmented button[disabled] { cursor: default; }
-  .composer__lock { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 12px; background: rgba(6,13,25,.72); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); border-radius: var(--r-card); }
+  .composer__lock { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 12px; background: rgba(255,255,255,.72); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); border-radius: var(--r-card); }
   .composer__lock p { font-weight: 500; }
-  @media (hover: none) { .composer__lock { backdrop-filter: none; -webkit-backdrop-filter: none; background: rgba(6,13,25,.9); } }
+  @media (hover: none) { .composer__lock { backdrop-filter: none; -webkit-backdrop-filter: none; background: rgba(255,255,255,.9); } }
 
   .feed__filters { display: flex; flex-wrap: wrap; gap: 8px; }
   .feed__filters .pill { cursor: pointer; background: var(--surface-2); transition: background var(--d-fast), color var(--d-fast), transform .4s var(--e-spring); }

@@ -77,7 +77,7 @@
   @media (min-width: 960px) { .vwhy__inner { grid-template-columns: 1fr 1.3fr; align-items: start; } }
   .vwhy__col h2 { font-size: var(--fs-2); max-width: 12ch; }
   .vwhy__list { display: grid; gap: 12px; counter-reset: step; }
-  .vwhy__list li { position: relative; padding: 22px 22px 22px 70px; border-radius: var(--r-card); background: rgba(244,247,251,.06); counter-increment: step; }
+  .vwhy__list li { position: relative; padding: 22px 22px 22px 70px; border-radius: var(--r-card); background: rgba(255,255,255,.7); counter-increment: step; }
   .vwhy__list li::before { content: counter(step, decimal-leading-zero); position: absolute; left: 22px; top: 24px; font-family: var(--f-mono); font-size: .8rem; letter-spacing: 0; color: var(--glow); }
   .vwhy__list li b { display: block; font-family: var(--f-display); font-size: var(--fs-4); font-weight: 600; letter-spacing: -.015em; }
   .vwhy__list li p { margin-top: 6px; color: var(--fg-soft); font-size: .95rem; }

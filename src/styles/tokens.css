@@ -1,37 +1,38 @@
 @layer tokens {
   :root {
-    /* ── colour: the Trulinq world (palette lifted from trulinqid.com, sRGB) ── */
+    /* ── colour: white and ice, with the Trulinq blues (an Apple-like light world) ── */
     /* surfaces, darkest to lightest */
-    --bg: #060D19;            /* the table: body, curtain, recessed fields */
-    --surface: #0E1726;       /* panels */
-    --surface-2: #161F2F;     /* lifted: cards, inputs, pills */
-    --surface-3: #172233;     /* subtle fills: tracks, placeholders, segmented controls */
-    --accent: #192C46;        /* the accent field (peach panels, active nav link, highlighted cards) */
-    --accent-2: #1B2F4D;      /* accent gradient top */
-    --accent-3: #15253D;      /* accent gradient bottom */
-    --deep: #051B49;          /* passport blue: ink cards, menu, deep buttons */
-    --deep-2: #102857;        /* elevated deep: highlighted pills, soft violet fields */
+    --bg: #F2F6FB;            /* the table: a cool light grey the panels sit on */
+    --surface: #FAFCFF;       /* panels: ice white */
+    --surface-2: #FFFFFF;     /* lifted: cards, inputs, pills, knobs */
+    --surface-3: #EAF1FA;     /* subtle fills: tracks, placeholders, segmented controls */
+    --accent: #E6F1FF;        /* the ice-blue field (accent panels, active nav link, highlighted cards) */
+    --accent-2: #F0F7FF;      /* accent gradient top */
+    --accent-3: #DCEBFF;      /* accent gradient bottom */
+    --deep: #051B49;          /* passport blue: ink cards */
+    --deep-2: #D6E7FF;        /* a stronger ice: highlighted pills, soft fields, the hero watermark */
     --deep-gradient: radial-gradient(110% 70% at 50% -10%, rgba(74,179,255,.22), transparent 62%), linear-gradient(165deg, #13295F, #031132 58%, #020C22);
-    --line: rgba(244,247,251,.12);   /* hairlines and card edges */
-    --line-2: rgba(244,247,251,.2);  /* stronger outlines and leaders */
+    --line: rgba(12,21,38,.08);      /* hairlines and card edges */
+    --line-2: rgba(12,21,38,.16);    /* stronger outlines and leaders */
     /* text */
-    --fg: #F4F7FB;            /* headings and body */
-    --fg-2: #EEF2F7;          /* emphasis and hover */
-    --fg-soft: #ABB9C9;       /* secondary text, leads, labels */
-    --fg-mute: rgba(171,185,201,.62); /* tertiary text, placeholders */
+    --fg: #0C1526;            /* headings and body: deep navy-black */
+    --fg-2: #1B2740;          /* emphasis and hover */
+    --fg-soft: #5B6B84;       /* secondary text, leads, labels */
+    --fg-mute: rgba(91,107,132,.62); /* tertiary text, placeholders */
+    --on-fg: #FFFFFF;         /* text on a --fg-coloured surface (dark buttons, toast, burger) */
     /* brand */
     --primary: #2981FB;       /* the only hot colour: CTAs, stamps, accents */
-    --primary-hover: #3672E9;
+    --primary-hover: #1F6FE8;
     --primary-deep: #093DA1;  /* deep royal: solid highlights, violet panels */
     --primary-gradient: linear-gradient(135deg, #4AB3FF, #2981FB 55%, #3672E9);
-    --glow: #4AB3FF;          /* sky: small accent text, verified, notes */
-    --glow-soft: rgba(74,179,255,.14); /* soft verified / sky fields */
-    --sky: #60C2FF;           /* light accent text on deep surfaces */
-    --on-primary: #F9FCFF;    /* text on primary */
-    --on-primary-soft: rgba(249,252,255,.78);
+    --glow: #0B6BE0;          /* small accent text on light: notes, verified lines, links */
+    --glow-soft: rgba(41,129,251,.1); /* soft blue fields */
+    --sky: #0B6BE0;           /* accent text on ice fields */
+    --on-primary: #FFFFFF;    /* text on primary */
+    --on-primary-soft: rgba(255,255,255,.78);
     --danger: #F13A35;
-    --danger-soft: rgba(241,58,53,.16);
-    /* the seal */
+    --danger-soft: rgba(241,58,53,.12);
+    /* the seal keeps its navy face on every surface */
     --seal-face-0: #1A2E4C; --seal-face-1: #06132A; --seal-face-2: #020511;
     --seal-rim-0: #77D9FF; --seal-rim-1: #007DF3; --seal-rim-2: #4FC1FF;
     --seal-text: #36ACFF;
@@ -78,11 +79,22 @@
     --d-med: .6s;
     --d-slow: 1s;
 
-    /* ── depth (black, diffused; the primary glows) ──────────────── */
-    --sh-card: 0 1px 2px rgba(0,0,0,.4), 0 18px 50px -18px rgba(0,0,0,.6);
-    --sh-lift: 0 2px 3px rgba(0,0,0,.4), 0 32px 64px -20px rgba(0,0,0,.7);
-    --sh-glow: 0 20px 60px -20px var(--primary);
-    --sh-deep: 0 34px 90px -24px rgba(0,0,0,.8);
-    --ring-focus: 0 0 0 3px var(--bg), 0 0 0 6px var(--primary);
+    /* ── depth (navy-tinted, diffused; the primary glows) ───────── */
+    --sh-card: 0 1px 2px rgba(12,21,38,.04), 0 14px 44px -14px rgba(12,21,38,.12);
+    --sh-lift: 0 2px 3px rgba(12,21,38,.05), 0 32px 64px -20px rgba(12,21,38,.22);
+    --sh-glow: 0 20px 50px -18px rgba(41,129,251,.5);
+    --sh-deep: 0 34px 90px -24px rgba(5,27,73,.45);
+    --ring-focus: 0 0 0 3px var(--surface-2), 0 0 0 6px var(--primary);
+  }
+
+  /* Deep contexts: anything drawn on a navy or primary field flips to light type and translucent-light fills,
+     so components inside .panel--ink, the footer and the primary panels need no special rules. Elements that paint
+     themselves with --fg (buttons, the toast, .pill--ink) use --on-fg for their text instead. */
+  .panel--ink, .card--ink, .panel--orange, .card--orange, .panel--violet, .nav--ink, [data-tone="deep"] {
+    --fg: #F4F7FB; --fg-2: #FFFFFF; --fg-soft: #ABB9C9; --fg-mute: rgba(171,185,201,.62); --on-fg: #0C1526;
+    --line: rgba(244,247,251,.12); --line-2: rgba(244,247,251,.2);
+    --surface-2: rgba(244,247,251,.08); --surface-3: rgba(244,247,251,.12); --accent: rgba(74,179,255,.16); --deep-2: rgba(74,179,255,.22);
+    --glow: #4AB3FF; --sky: #60C2FF; --glow-soft: rgba(74,179,255,.14);
+    --sh-card: 0 1px 2px rgba(0,0,0,.3), 0 18px 50px -18px rgba(0,0,0,.5);
   }
 }

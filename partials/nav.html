@@ -6,8 +6,14 @@
     <radialGradient id="tq-seal-face" cx="38%" cy="30%" r="85%"><stop offset="0" stop-color="#1A2E4C"/><stop offset=".55" stop-color="#06132A"/><stop offset="1" stop-color="#020511"/></radialGradient>
     <linearGradient id="tq-seal-rim" x1="20%" y1="0%" x2="80%" y2="100%"><stop offset="0" stop-color="#77D9FF"/><stop offset=".5" stop-color="#007DF3"/><stop offset="1" stop-color="#4FC1FF"/></linearGradient>
     <radialGradient id="tq-seal-glow" cx="50%" cy="50%" r="50%"><stop offset=".7" stop-color="#4AB3FF" stop-opacity="0"/><stop offset=".92" stop-color="#4AB3FF" stop-opacity=".45"/><stop offset="1" stop-color="#4AB3FF" stop-opacity="0"/></radialGradient>
+    <linearGradient id="tq-mark-t-dark" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1B2740"/><stop offset="1" stop-color="#0C1526"/></linearGradient>
     <symbol id="tq-mark" viewBox="0 0 1080 1080">
       <path fill="url(#tq-mark-t)" d="M28 139H775L654 289H406V938H271V289H28Z"/>
+      <path fill="url(#tq-mark-d)" fill-rule="evenodd" d="M473 362H600V487H668V362H763A288 288 0 0 1 763 938H473ZM600 487H763A163 163 0 0 1 763 813H600Z"/>
+    </symbol>
+    <!-- The same mark for light surfaces: the T turns navy, the D stays the brand blue -->
+    <symbol id="tq-mark-dark" viewBox="0 0 1080 1080">
+      <path fill="url(#tq-mark-t-dark)" d="M28 139H775L654 289H406V938H271V289H28Z"/>
       <path fill="url(#tq-mark-d)" fill-rule="evenodd" d="M473 362H600V487H668V362H763A288 288 0 0 1 763 938H473ZM600 487H763A163 163 0 0 1 763 813H600Z"/>
     </symbol>
   </defs>
@@ -40,7 +46,8 @@
   <div class="nav__pill">
     <a class="nav__logo" href="/" aria-label="Trulinq home">
       <svg class="wordmark" viewBox="0 0 176 40" aria-hidden="true">
-        <use href="#tq-mark" x="1" y="1" width="38" height="38"/>
+        <use class="wordmark__mark wordmark__mark--dark" href="#tq-mark-dark" x="1" y="1" width="38" height="38"/>
+        <use class="wordmark__mark wordmark__mark--light" href="#tq-mark" x="1" y="1" width="38" height="38"/>
         <text x="48" y="29" class="wordmark__text">Trulinq</text>
       </svg>
     </a>

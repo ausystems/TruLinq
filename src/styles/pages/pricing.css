@@ -13,7 +13,7 @@
   .phero-p__stage { position: relative; aspect-ratio: 1; width: min(100%, 560px); margin-inline: auto; }
   .phero-p__canvas { width: 100% !important; height: 100% !important; cursor: grab; touch-action: pan-y; }
   .phero-p__impression { position: absolute; left: 50%; bottom: 8%; transform: translateX(-50%) scale(.85); opacity: 0; pointer-events: none; }
-  .phero-p__impression .seal { --seal-size: 130px; --seal-bg: var(--primary); mix-blend-mode: screen; } /* a luminous print on the dark surface (multiply would vanish) */
+  .phero-p__impression .seal { --seal-size: 130px; --seal-bg: var(--primary); mix-blend-mode: multiply; } /* an inked print on the light surface (screen would vanish) */
   @media (max-width: 1023px) { .phero-p__stage { width: min(100%, 380px); } }
 
   /* ── Plans ────────────────────────────────────────────────────── */
@@ -25,7 +25,7 @@
   @media (min-width: 960px) { .plan--hero { padding-block: clamp(36px, 4vw, 52px); } }
   @media (max-width: 959px) { .plan--hero { padding-top: 96px; } .plan__seal { top: 22px; left: 22px; --seal-size: 56px; } .plan__badge { top: 34px; } }
   .plan__badge { position: absolute; top: 20px; right: 20px; font-size: .78rem; font-weight: 500; padding: 6px 12px; border-radius: var(--r-pill); background: rgba(255,255,255,.22); color: #fff; }
-  .plan__seal { --seal-size: 64px; position: absolute; top: -18px; left: -18px; filter: drop-shadow(0 10px 22px rgba(0,0,0,.5)); }
+  .plan__seal { --seal-size: 64px; position: absolute; top: -18px; left: -18px; filter: drop-shadow(0 10px 22px rgba(12,21,38,.22)); }
   .plan__head h2 { font-size: var(--fs-3); }
   .plan__for { margin-top: 6px; color: var(--fg-soft); font-size: .95rem; }
   .plan--hero .plan__for { color: rgba(249,252,255,.85); }

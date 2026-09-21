@@ -3,7 +3,7 @@
 
   /* ── HERO ─────────────────────────────────────────────────────── */
   .hero { min-height: calc(100svh - var(--page-pad)); display: grid; grid-template-rows: 1fr auto; }
-  .hero::before { content: ""; position: absolute; inset: 0; background: radial-gradient(52% 48% at 72% 42%, rgba(244,247,251,.06), rgba(244,247,251,0) 70%); pointer-events: none; }
+  .hero::before { content: ""; position: absolute; inset: 0; background: radial-gradient(52% 48% at 72% 42%, rgba(255,255,255,.7), rgba(255,255,255,0) 70%); pointer-events: none; }
   .hero__wordmark { position: absolute; left: 50%; top: -.36em; transform: translateX(-50%); z-index: 0; font-family: var(--f-display); font-weight: 600; font-size: clamp(9rem, 26vw, 30rem); line-height: 1; letter-spacing: -.055em; color: var(--deep-2); opacity: 0; pointer-events: none; user-select: none; mix-blend-mode: multiply;  white-space: nowrap; }
   .hero__inner { display: grid; gap: clamp(40px, 5vw, 72px); padding-top: calc(var(--nav-h) + clamp(56px, 8vw, 120px)); padding-bottom: clamp(48px, 6vw, 88px); align-items: center; width: 100%; }
   @media (min-width: 1024px) { .hero__inner { grid-template-columns: 1.15fr 1fr; } }
@@ -28,7 +28,7 @@
     @media (max-width: 600px) { .hero__cta .btn { width: 100%; justify-content: space-between; } }
   @media (max-width: 480px) { .hero__title { font-size: clamp(2rem, 10.6vw, 3rem); } .hero__wordmark { font-size: 40vw; } }
   @media (max-width: 1023px) { .hero__stage { min-height: 460px; margin-top: 8px; } .hero__cards .idcard { width: min(86%, 380px); } .hero__note-1 { top: -2%; right: 2%; } .hero__note-2 { bottom: 0; left: 2%; } .pin em { display: none; } .pin { font-size: .72rem; padding: 3px 10px 3px 3px; } .pin img { width: 26px; height: 26px; } }
-  .hero__ledger { border-top: 1px solid var(--line); background: rgba(244,247,251,.06); }
+  .hero__ledger { border-top: 1px solid var(--line); background: rgba(255,255,255,.7); }
   .hero__ledger-inner { max-width: var(--max); margin: 0 auto; padding: 22px var(--gutter); display: grid; gap: 14px 40px; align-items: center; }
   @media (min-width: 1024px) { .hero__ledger-inner { grid-template-columns: auto 1fr auto; } }
   .hero__ledger-title { font-size: .88rem; color: var(--fg-soft); white-space: nowrap; }
@@ -151,7 +151,7 @@
   .pin.is-crowded { padding: 4px; }
   .pin.is-crowded .pin__txt, .pin.is-crowded .seal { display: none; }
   .pin--hq { background: var(--fg); color: var(--bg); }
-  .pin--hq em { color: var(--primary-deep); }
+  .pin--hq em { color: #4AB3FF; }
   .world__note { right: 4%; top: 3%; }
   
   /* ── SCORE ────────────────────────────────────────────────────── */
@@ -185,7 +185,7 @@
   .card--peach .bento__text p { color: var(--sky); opacity: .85; }
   .bento__ui { flex: 1; display: grid; place-items: center; border-radius: 16px; background: var(--bg); padding: 20px; min-height: 150px; overflow: hidden; }
   .card--ink .bento__ui { background: rgba(244,247,251,.06); }
-  .card--peach .bento__ui { background: rgba(244,247,251,.06); }
+  .card--peach .bento__ui { background: rgba(255,255,255,.7); }
   .bento__ui--feed { display: grid; gap: 10px; align-content: center; place-items: stretch; }
   .mini-post { display: grid; grid-template-columns: 36px 1fr; gap: 12px; padding: 12px 14px; border-radius: 14px; background: var(--surface-2); box-shadow: var(--sh-card); font-size: .82rem; }
   .mini-post .avatar { width: 36px; height: 36px; }
@@ -201,7 +201,7 @@
   .bento__ui--rooms { display: grid; gap: 10px; align-content: center; justify-items: start; }
   .bubble { max-width: 82%; padding: 10px 14px; border-radius: 16px; font-size: .84rem; line-height: 1.4; }
   .bubble--a { background: var(--surface-2); border-bottom-left-radius: 4px; box-shadow: var(--sh-card); }
-  .bubble--b { background: var(--deep); color: var(--fg); justify-self: end; border-bottom-right-radius: 4px; }
+  .bubble--b { background: var(--deep); color: #F4F7FB; justify-self: end; border-bottom-right-radius: 4px; }
   .vouch { position: relative; padding: 18px 20px 18px 34px; font-family: var(--f-display); font-size: 1.1rem; font-weight: 500; letter-spacing: -.02em; line-height: 1.3; color: var(--fg); }
   .vouch__q { position: absolute; left: 6px; top: 4px; font-size: 3rem; color: var(--primary); line-height: 1; }
   .vouch__by { display: block; margin-top: 10px; font: 500 .78rem var(--f-text); color: rgba(244,247,251,.6); }

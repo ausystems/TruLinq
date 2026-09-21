@@ -8,7 +8,7 @@
   .mhero__photo { position: relative; margin: 0; width: min(100%, 400px); aspect-ratio: 1; border-radius: 32px; }
   .mhero__photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 32px; background: var(--surface-3); clip-path: inset(100% 0 0 0 round 32px); }
   html.reduced-motion .mhero__photo img { clip-path: none; }
-  .mhero__seal { position: absolute; right: -6%; bottom: -6%; --seal-size: clamp(92px, 10vw, 128px); filter: drop-shadow(0 14px 28px rgba(0,0,0,.56)); }
+  .mhero__seal { position: absolute; right: -6%; bottom: -6%; --seal-size: clamp(92px, 10vw, 128px); filter: drop-shadow(0 14px 28px rgba(12,21,38,.25)); }
   .mhero__id { display: grid; gap: 16px; justify-items: start; }
   .mhero__id h1 { font-size: var(--fs-1); max-width: 12ch; }
   .mhero__role { font-size: var(--fs-lead); color: var(--fg-soft); }

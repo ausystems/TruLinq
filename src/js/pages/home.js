@@ -204,7 +204,7 @@ async function globe() {
   };
 
   /* occluder sphere */
-  group.add(new THREE.Mesh(new THREE.SphereGeometry(.985, 64, 64), new THREE.MeshBasicMaterial({ color: 0x102857 })));
+  group.add(new THREE.Mesh(new THREE.SphereGeometry(.985, 64, 64), new THREE.MeshBasicMaterial({ color: 0xFFFFFF })));
 
   /* dotted surface */
   const N = isTouch ? 1500 : 3000;
@@ -219,7 +219,7 @@ async function globe() {
   group.add(dots);
 
   /* graticule */
-  const lineMat = new THREE.LineBasicMaterial({ color: 0xF4F7FB, transparent: true, opacity: .08 });
+  const lineMat = new THREE.LineBasicMaterial({ color: 0x0C1526, transparent: true, opacity: .08 });
   for (let lat = -60; lat <= 60; lat += 30) {
     const pts = []; for (let lng = -180; lng <= 180; lng += 4) pts.push(toVec(lat, lng, 1.001));
     group.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), lineMat));
@@ -242,7 +242,7 @@ async function globe() {
     const line = new THREE.Line(geo, arcMat); group.add(line); arcs.push(geo);
   });
   /* city dots */
-  const cityGeo = new THREE.SphereGeometry(.014, 12, 12), cityMat = new THREE.MeshBasicMaterial({ color: 0xF4F7FB });
+  const cityGeo = new THREE.SphereGeometry(.014, 12, 12), cityMat = new THREE.MeshBasicMaterial({ color: 0x0C1526 });
   members.forEach((m) => { const s = new THREE.Mesh(cityGeo, cityMat); s.position.copy(toVec(m.lat, m.lng, 1.005)); group.add(s); });
 
   /* HTML pins */
