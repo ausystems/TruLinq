@@ -204,7 +204,7 @@ async function globe() {
   };
 
   /* occluder sphere */
-  group.add(new THREE.Mesh(new THREE.SphereGeometry(.985, 64, 64), new THREE.MeshBasicMaterial({ color: 0xFBF8F1 })));
+  group.add(new THREE.Mesh(new THREE.SphereGeometry(.985, 64, 64), new THREE.MeshBasicMaterial({ color: 0x102857 })));
 
   /* dotted surface */
   const N = isTouch ? 1500 : 3000;
@@ -215,11 +215,11 @@ async function globe() {
     pos[i * 3] = Math.cos(th) * rr; pos[i * 3 + 1] = y; pos[i * 3 + 2] = Math.sin(th) * rr;
   }
   const dotsGeo = new THREE.BufferGeometry(); dotsGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-  const dots = new THREE.Points(dotsGeo, new THREE.PointsMaterial({ color: 0xF8501A, size: .016, sizeAttenuation: true, transparent: true, opacity: .55 }));
+  const dots = new THREE.Points(dotsGeo, new THREE.PointsMaterial({ color: 0x2981FB, size: .016, sizeAttenuation: true, transparent: true, opacity: .55 }));
   group.add(dots);
 
   /* graticule */
-  const lineMat = new THREE.LineBasicMaterial({ color: 0x050347, transparent: true, opacity: .08 });
+  const lineMat = new THREE.LineBasicMaterial({ color: 0xF4F7FB, transparent: true, opacity: .08 });
   for (let lat = -60; lat <= 60; lat += 30) {
     const pts = []; for (let lng = -180; lng <= 180; lng += 4) pts.push(toVec(lat, lng, 1.001));
     group.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), lineMat));
@@ -231,7 +231,7 @@ async function globe() {
 
   /* arcs from Hilo (HQ) to every pinned member */
   const hq = members[0];
-  const arcMat = new THREE.LineBasicMaterial({ color: 0xF8501A, transparent: true, opacity: .55 });
+  const arcMat = new THREE.LineBasicMaterial({ color: 0x2981FB, transparent: true, opacity: .55 });
   const arcs = [];
   members.slice(1).forEach((m) => {
     const p1 = toVec(hq.lat, hq.lng, 1.01), p2 = toVec(m.lat, m.lng, 1.01);
@@ -242,7 +242,7 @@ async function globe() {
     const line = new THREE.Line(geo, arcMat); group.add(line); arcs.push(geo);
   });
   /* city dots */
-  const cityGeo = new THREE.SphereGeometry(.014, 12, 12), cityMat = new THREE.MeshBasicMaterial({ color: 0x050347 });
+  const cityGeo = new THREE.SphereGeometry(.014, 12, 12), cityMat = new THREE.MeshBasicMaterial({ color: 0xF4F7FB });
   members.forEach((m) => { const s = new THREE.Mesh(cityGeo, cityMat); s.position.copy(toVec(m.lat, m.lng, 1.005)); group.add(s); });
 
   /* HTML pins */

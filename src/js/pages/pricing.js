@@ -37,31 +37,40 @@ async function rubberStamp() {
   camera.position.set(0, .9, 9.4);
   camera.lookAt(0, .45, 0);
 
-  scene.add(new T.HemisphereLight(0xFFF3E6, 0xF8C9AE, 1.4));
+  scene.add(new T.HemisphereLight(0xF4F7FB, 0x093DA1, 1.4));
   const key = new T.DirectionalLight(0xFFFFFF, 2.2); key.position.set(3, 6, 4); scene.add(key);
-  const rim = new T.DirectionalLight(0xFFD9C4, .9); rim.position.set(-4, 3, -3); scene.add(rim);
+  const rim = new T.DirectionalLight(0x4AB3FF, .9); rim.position.set(-4, 3, -3); scene.add(rim);
 
-  /* seal texture for the base */
+  /* seal texture for the base: the Trulinq seal (navy face, sky-to-royal rim, ring text, the mark) */
   const size = 1024, c = document.createElement('canvas'); c.width = c.height = size;
   const ctx = c.getContext('2d');
-  ctx.fillStyle = '#F8501A'; ctx.beginPath(); ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2); ctx.fill();
-  ctx.strokeStyle = 'rgba(252,225,210,.5)'; ctx.lineWidth = 8; ctx.beginPath(); ctx.arc(size / 2, size / 2, size * .455, 0, Math.PI * 2); ctx.stroke();
-  ctx.fillStyle = '#FCE1D2'; ctx.font = '600 92px Geist, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  const faceGrad = ctx.createRadialGradient(size * .38, size * .3, 0, size * .38, size * .3, size * .85);
+  faceGrad.addColorStop(0, '#1A2E4C'); faceGrad.addColorStop(.55, '#06132A'); faceGrad.addColorStop(1, '#020511');
+  ctx.fillStyle = faceGrad; ctx.beginPath(); ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2); ctx.fill();
+  const rimGrad = ctx.createLinearGradient(size * .2, 0, size * .8, size);
+  rimGrad.addColorStop(0, '#77D9FF'); rimGrad.addColorStop(.5, '#007DF3'); rimGrad.addColorStop(1, '#4FC1FF');
+  ctx.strokeStyle = rimGrad; ctx.lineWidth = 28; ctx.beginPath(); ctx.arc(size / 2, size / 2, size * .46, 0, Math.PI * 2); ctx.stroke();
+  ctx.strokeStyle = 'rgba(54,172,255,.45)'; ctx.lineWidth = 12; ctx.beginPath(); ctx.arc(size / 2, size / 2, size * .285, 0, Math.PI * 2); ctx.stroke();
+  ctx.fillStyle = '#36ACFF'; ctx.font = '700 92px Geist, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
   const text = 'TRULINQ · VERIFIED · ENTREPRENEUR · '; const radius = size * .37;
   ctx.save(); ctx.translate(size / 2, size / 2);
   const per = (Math.PI * 2) / text.length;
   for (let i = 0; i < text.length; i++) { ctx.save(); ctx.rotate(i * per - Math.PI / 2); ctx.translate(0, -radius); ctx.fillText(text[i], 0, 0); ctx.restore(); }
   ctx.restore();
-  ctx.strokeStyle = '#fff'; ctx.lineWidth = 80; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-  /* drawn mirrored: the face is flipped to point down, so this reads as a normal check */
-  ctx.beginPath(); ctx.moveTo(size * .66, size * .51); ctx.lineTo(size * .55, size * .62); ctx.lineTo(size * .33, size * .38); ctx.stroke();
+  /* the mark (the ring text is drawn unmirrored on this face, so the mark is too) */
+  const markT = new Path2D('M28 139H775L654 289H406V938H271V289H28Z');
+  const markD = new Path2D('M473 362H600V487H668V362H763A288 288 0 0 1 763 938H473ZM600 487H763A163 163 0 0 1 763 813H600Z');
+  ctx.save(); ctx.translate(size / 2, size / 2); const mk = (size * .36) / 1080; ctx.scale(mk, mk); ctx.translate(-540, -540);
+  const tGrad = ctx.createLinearGradient(0, 139, 0, 938); tGrad.addColorStop(0, '#FCFCFC'); tGrad.addColorStop(1, '#C6C6C6'); ctx.fillStyle = tGrad; ctx.fill(markT);
+  const dGrad = ctx.createLinearGradient(0, 362, 0, 938); dGrad.addColorStop(0, '#0080FF'); dGrad.addColorStop(1, '#003CAC'); ctx.fillStyle = dGrad; ctx.fill(markD, 'evenodd');
+  ctx.restore();
   const sealTex = new T.CanvasTexture(c); sealTex.colorSpace = T.SRGBColorSpace; sealTex.anisotropy = 8;
 
   const stampGroup = new T.Group();
-  const wood = new T.MeshStandardMaterial({ color: 0xC98B5A, roughness: .55, metalness: .05 });
-  const navy = new T.MeshStandardMaterial({ color: 0x14145C, roughness: .5, metalness: .1 });
-  const rubber = new T.MeshStandardMaterial({ color: 0xD9410F, roughness: .85 });
-  const cream = new T.MeshStandardMaterial({ color: 0xF4EFE3, roughness: .6 });
+  const wood = new T.MeshStandardMaterial({ color: 0x102857, roughness: .55, metalness: .05 });
+  const navy = new T.MeshStandardMaterial({ color: 0x051B49, roughness: .5, metalness: .1 });
+  const rubber = new T.MeshStandardMaterial({ color: 0x2981FB, roughness: .85 });
+  const cream = new T.MeshStandardMaterial({ color: 0xF4F7FB, roughness: .6 });
 
   /* handle: lathe profile for a turned wooden knob */
   const pts = [];
@@ -78,7 +87,7 @@ async function rubberStamp() {
   scene.add(stampGroup);
 
   /* shadow disc */
-  const shadow = new T.Mesh(new T.CylinderGeometry(1.35, 1.35, .01, 64), new T.MeshBasicMaterial({ color: 0xE7B79B, transparent: true, opacity: .45 }));
+  const shadow = new T.Mesh(new T.CylinderGeometry(1.35, 1.35, .01, 64), new T.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: .45 }));
   shadow.position.y = -1.9; scene.add(shadow);
 
   function resize() { const w = stage.clientWidth, h = stage.clientHeight || w; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }

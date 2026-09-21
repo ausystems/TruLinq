@@ -6,12 +6,16 @@ export const BASE = import.meta.env.BASE_URL || '/';
 export const href = (path) => BASE + String(path).replace(/^\//, '');
 
 export function sealSVG({ ring = RING, id = 'r' + Math.random().toString(36).slice(2, 7) } = {}) {
+  /* The Trulinq seal as on trulinqid.com: a navy face, a sky-to-royal rim, the ring text (still rotating) and the mark.
+     Gradients and the mark symbol are defined once in partials/nav.html. */
   return `<svg viewBox="0 0 100 100" aria-hidden="true">
     <defs><path id="${id}" d="M50,50 m-37,0 a37,37 0 1,1 74,0 a37,37 0 1,1 -74,0"/></defs>
-    <circle class="seal__disc" cx="50" cy="50" r="49"/>
-    <circle cx="50" cy="50" r="45.5" fill="none" stroke="var(--seal-ring)" stroke-opacity=".35" stroke-width="1"/>
+    <circle class="seal__glow" cx="50" cy="50" r="49" fill="url(#tq-seal-glow)"/>
+    <circle class="seal__disc" cx="50" cy="50" r="47"/>
+    <circle class="seal__rim" cx="50" cy="50" r="46" fill="none" stroke="url(#tq-seal-rim)" stroke-width="2.6"/>
     <g class="seal__rot"><text class="seal__ring" font-size="9.4" letter-spacing="1.35" fill="var(--seal-ring)"><textPath href="#${id}" textLength="232" lengthAdjust="spacingAndGlyphs">${ring}</textPath></text></g>
-    <path class="seal__check" d="M34 51 L45 62 L67 38" stroke-width="7.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="50" cy="50" r="28.5" fill="none" stroke="var(--seal-ring)" stroke-opacity=".45" stroke-width="1.2"/>
+    <use class="seal__mark" href="#tq-mark" x="32" y="32" width="36" height="36"/>
   </svg>`;
 }
 

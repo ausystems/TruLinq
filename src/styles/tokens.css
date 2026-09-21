@@ -1,29 +1,40 @@
 @layer tokens {
   :root {
-    /* ── colour: the TruLinq world ─────────────────────────────── */
-    --orange: #F8501A;
-    --orange-deep: #D9410F;
-    --orange-ink: #7E2606;
-    --peach: #FCE1D2;
-    --peach-2: #F9C6AF;
-    --peach-3: #F5A585;
-    --cream: #F4EFE3;
-    --cream-2: #FAF7F0;
-    --sand: #E9E1CF;
-    --sand-2: #D6CCB4;
-    --ink: #050347;
-    --ink-2: #14145C;
-    --ink-3: #26267A;
-    --ink-soft: #52528A;
-    --ink-mute: #8A8AB2;
-    --violet: #6966ED;
-    --violet-soft: #E8E7FB;
-    --mint: #12BC95;
-    --mint-deep: #0E9A7A;
-    --mint-soft: #DCF4EC;
-    --white: #FFFFFF;
-    --danger: #D8302C;
-    --danger-soft: #FBE3E1;
+    /* ── colour: the Trulinq world (palette lifted from trulinqid.com, sRGB) ── */
+    /* surfaces, darkest to lightest */
+    --bg: #060D19;            /* the table: body, curtain, recessed fields */
+    --surface: #0E1726;       /* panels */
+    --surface-2: #161F2F;     /* lifted: cards, inputs, pills */
+    --surface-3: #172233;     /* subtle fills: tracks, placeholders, segmented controls */
+    --accent: #192C46;        /* the accent field (peach panels, active nav link, highlighted cards) */
+    --accent-2: #1B2F4D;      /* accent gradient top */
+    --accent-3: #15253D;      /* accent gradient bottom */
+    --deep: #051B49;          /* passport blue: ink cards, menu, deep buttons */
+    --deep-2: #102857;        /* elevated deep: highlighted pills, soft violet fields */
+    --deep-gradient: radial-gradient(110% 70% at 50% -10%, rgba(74,179,255,.22), transparent 62%), linear-gradient(165deg, #13295F, #031132 58%, #020C22);
+    --line: rgba(244,247,251,.12);   /* hairlines and card edges */
+    --line-2: rgba(244,247,251,.2);  /* stronger outlines and leaders */
+    /* text */
+    --fg: #F4F7FB;            /* headings and body */
+    --fg-2: #EEF2F7;          /* emphasis and hover */
+    --fg-soft: #ABB9C9;       /* secondary text, leads, labels */
+    --fg-mute: rgba(171,185,201,.62); /* tertiary text, placeholders */
+    /* brand */
+    --primary: #2981FB;       /* the only hot colour: CTAs, stamps, accents */
+    --primary-hover: #3672E9;
+    --primary-deep: #093DA1;  /* deep royal: solid highlights, violet panels */
+    --primary-gradient: linear-gradient(135deg, #4AB3FF, #2981FB 55%, #3672E9);
+    --glow: #4AB3FF;          /* sky: small accent text, verified, notes */
+    --glow-soft: rgba(74,179,255,.14); /* soft verified / sky fields */
+    --sky: #60C2FF;           /* light accent text on deep surfaces */
+    --on-primary: #F9FCFF;    /* text on primary */
+    --on-primary-soft: rgba(249,252,255,.78);
+    --danger: #F13A35;
+    --danger-soft: rgba(241,58,53,.16);
+    /* the seal */
+    --seal-face-0: #1A2E4C; --seal-face-1: #06132A; --seal-face-2: #020511;
+    --seal-rim-0: #77D9FF; --seal-rim-1: #007DF3; --seal-rim-2: #4FC1FF;
+    --seal-text: #36ACFF;
 
     /* ── type ─────────────────────────────────────────────────── */
     --f-display: "Geist", -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", system-ui, sans-serif;
@@ -67,11 +78,11 @@
     --d-med: .6s;
     --d-slow: 1s;
 
-    /* ── depth (warm, diffused, never grey) ───────────────────── */
-    --sh-card: 0 1px 1px rgba(5, 3, 71, .04), 0 14px 44px -14px rgba(5, 3, 71, .14);
-    --sh-lift: 0 2px 3px rgba(5, 3, 71, .05), 0 32px 64px -20px rgba(5, 3, 71, .26);
-    --sh-orange: 0 20px 50px -18px rgba(248, 80, 26, .55);
-    --sh-ink: 0 34px 90px -24px rgba(5, 3, 71, .55);
-    --ring-focus: 0 0 0 3px var(--cream), 0 0 0 6px var(--orange);
+    /* ── depth (black, diffused; the primary glows) ──────────────── */
+    --sh-card: 0 1px 2px rgba(0,0,0,.4), 0 18px 50px -18px rgba(0,0,0,.6);
+    --sh-lift: 0 2px 3px rgba(0,0,0,.4), 0 32px 64px -20px rgba(0,0,0,.7);
+    --sh-glow: 0 20px 60px -20px var(--primary);
+    --sh-deep: 0 34px 90px -24px rgba(0,0,0,.8);
+    --ring-focus: 0 0 0 3px var(--bg), 0 0 0 6px var(--primary);
   }
 }

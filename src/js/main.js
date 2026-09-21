@@ -85,7 +85,7 @@ export function revealPage(onLift) {
 }
 
 /* Destination name shown on the panel during a transition */
-const SECTION_LABELS = { '': 'trulinq', directory: 'Directory', match: 'Match', rooms: 'Rooms', feed: 'Feed', pricing: 'Pricing', trust: 'Trust Centre', contact: 'Contact', privacy: 'Privacy', terms: 'Terms', verify: 'Get verified', auth: 'Sign in', dashboard: 'Dashboard', members: 'Member' };
+const SECTION_LABELS = { '': 'Trulinq', directory: 'Directory', match: 'Match', rooms: 'Rooms', feed: 'Feed', pricing: 'Pricing', trust: 'Trust Centre', contact: 'Contact', privacy: 'Privacy', terms: 'Terms', verify: 'Get verified', auth: 'Sign in', dashboard: 'Dashboard', members: 'Member' };
 function cleanText(el) { const c = el.cloneNode(true); c.querySelectorAll('svg, .seal, .btn__icon, em, time, small').forEach((n) => n.remove()); return c.textContent.replace(/\s+/g, ' ').trim(); }
 function labelFor(a, url) {
   if (a.dataset.label) return a.dataset.label;
@@ -98,7 +98,7 @@ function labelFor(a, url) {
     return t && t.length <= 32 ? t : 'Member';
   }
   if (seg === 'auth') return url.searchParams.get('mode') === 'signup' ? 'Create account' : 'Sign in';
-  return SECTION_LABELS[seg] || 'trulinq';
+  return SECTION_LABELS[seg] || 'Trulinq';
 }
 
 /* Prefetch the next document as soon as intent shows, so the swap behind the panel is instant */
@@ -123,7 +123,7 @@ function isInternal(a) {
 }
 let leaving = false;
 /* Leave the page behind the rising panel, carrying the destination's name. Used by link clicks and programmatic navigation. */
-export function go(target, text = 'trulinq') {
+export function go(target, text = 'Trulinq') {
   const url = new URL(target, location.href);
   if (reduced || !curtain) { location.href = url.href; return; }
   if (leaving) return;
@@ -298,7 +298,7 @@ export function stamp(el, { delay = 0, rotate = -6 } = {}) {
   if (el.parentElement && !el.dataset.quiet) {
     const ripple = document.createElement('i');
     ripple.className = 'stamp-ripple';
-    ripple.style.cssText = `position:absolute;inset:-6%;border-radius:50%;border:2px solid ${getComputedStyle(el).getPropertyValue('--seal-bg') || '#F8501A'};pointer-events:none;opacity:0`;
+    ripple.style.cssText = `position:absolute;inset:-6%;border-radius:50%;border:2px solid ${getComputedStyle(el).getPropertyValue('--seal-bg') || '#2981FB'};pointer-events:none;opacity:0`;
     el.appendChild(ripple);
     tl.fromTo(ripple, { scale: .7, opacity: .8 }, { scale: 1.9, opacity: 0, duration: .9, ease: 'power2.out', onComplete: () => ripple.remove() }, .42);
   }
@@ -397,7 +397,7 @@ document.querySelectorAll('[data-newsletter]').forEach((form) => {
     e.preventDefault();
     const input = form.querySelector('input[type=email]');
     const msg = form.querySelector('.footer__form-msg');
-    if (!input.validity.valid || !input.value) { msg.textContent = 'Enter a working email so the dispatch can reach you.'; msg.style.color = 'var(--peach-3)'; input.focus(); return; }
+    if (!input.validity.valid || !input.value) { msg.textContent = 'Enter a working email so the dispatch can reach you.'; msg.style.color = 'var(--danger)'; input.focus(); return; }
     msg.style.color = ''; msg.textContent = 'You are on the list. The next dispatch lands early next month.';
     form.querySelector('button').disabled = true; input.value = '';
     toast('Subscribed to the verified dispatch.');

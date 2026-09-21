@@ -11,30 +11,43 @@ at build time with `<!--@include(partials/nav.html)-->`.
 
 ## The visual world (heavily inspired by the Tasa reference boards)
 
-* **Panels on a cream table.** The body is cream (`--cream #F4EFE3`). Every section is a `.panel` with a big radius
-  (`--r-panel`), separated by `--panel-gap`. Panel tones: `.panel--cream` (near white), `.panel--white`, `.panel--peach`,
-  `.panel--ink` (navy #050347, add `.grain`), `.panel--orange`, `.panel--violet`. Never put a section directly on the body.
-* **Colour.** Orange `#F8501A` is the only hot colour: CTAs, the stamp, accents. Peach tints for warm fields. Navy ink for
-  type and dark panels. Purple `#6966ED` and mint `#12BC95` are semantic only: purple = a highlighted pill / match, mint =
-  verified / success. Tokens are in `src/styles/tokens.css`. Never invent new colours.
+* **Panels on a navy table.** The body is navy (`--bg #060D19`). Every section is a `.panel` with a big radius
+  (`--r-panel`), separated by `--panel-gap`. Panel tones are lifted navy surfaces (the class names are historical):
+  `.panel--cream` (`--surface`), `.panel--white` (`--surface-2`, one step lighter), `.panel--peach` (the `--accent` gradient),
+  `.panel--ink` (`--deep-gradient`, passport blue, add `.grain`), `.panel--orange` (`--primary-gradient`), `.panel--violet`
+  (`--primary-deep`). Never put a section directly on the body.
+* **Colour.** The palette is lifted from trulinqid.com. Royal blue `--primary #2981FB` is the only hot colour: CTAs, the
+  stamp, accents (`--primary-hover` on hover, `--primary-deep #093DA1` for solid highlights). Near-white `--fg #F4F7FB` for
+  type, `--fg-soft` / `--fg-mute` for secondary and tertiary text, `--line` / `--line-2` for hairlines and outlines.
+  `--glow #4AB3FF` and `--sky #60C2FF` are the small accents: notes, verified lines, links, light accent text on deep
+  surfaces (`--glow-soft` for their soft fields). `--deep` / `--deep-gradient` (passport blue) carry the drama panels, ink
+  cards and the menu. `--danger #F13A35` is for errors and destructive actions only: invalid fields and form messages,
+  the revoke cross, the 404 "Not verified" stamp. `.accent` words inside display headings are `--primary-gradient` clipped
+  to the text, like the live hero's "real". Tokens are in `src/styles/tokens.css`. Never invent new colours.
 * **Type (Apple-like, minimal).** One family: `Geist` for display and text (`.display` is 600 weight with -.03em
   tracking; `.display--cond` is the 700-weight tight variant for the one masked word). Data, IDs, dates, scores:
   `Geist Mono` (`.mono`). Everything is sentence case: no tracked uppercase labels anywhere. Sizes: `--fs-hero`, `--fs-1`
   (page titles), `--fs-2` (section titles), `--fs-3`, `--fs-4` (card titles), `--fs-lead`. Body is 17px / 1.47.
 * **No eyebrows above section titles.** The only label above a title is the page hero's `.eyebrow` (plain grey text,
   e.g. "Pricing", "Trust Centre"). Sections open with the heading itself.
-* **No decorative dots or circles.** No orange dots, no mint status dots, no dotted grids, no circled icons, no circled
+* **No decorative dots or circles.** No blue dots, no status dots, no dotted grids, no circled icons, no circled
   arrows inside buttons, no washi tape. Circles that remain are functional or the brand mark: the seal, portraits, the
   toggle knob, progress rings. Do not reintroduce these with look-alike ornaments.
 * **Signature elements.**
-  1. The seal: `<span class="seal seal--md" data-stamp></span>` (empty shells are auto-filled with the rotating ring
-     artwork). Sizes `seal--sm|md|lg|xl`; tones `seal--ink|white|mint`. `data-stamp` seals slam in on scroll (the TruLinq
-     motion signature). Add `data-manual` when a page timeline stamps it itself via `stamp(el)`.
-  2. Captions: `<p class="note">human-reviewed, every time</p>` inside a `position: relative` parent. Small orange
-     typeset captions next to real UI, at most two per page. No arrows, no rotation.
+  1. The seal: `<span class="seal seal--md" data-stamp></span>` (empty shells are auto-filled with the trulinqid.com seal:
+     a navy face, a sky-to-royal rim, the rotating ring text in `--seal-text` and the TD mark in the centre; its gradients
+     and the `#tq-mark` symbol are defined once in `partials/nav.html`). Sizes `seal--sm|md|lg|xl`; the tones
+     `seal--ink|white|mint` still parse but draw the same seal, since the face carries its own contrast on every surface.
+     `data-stamp` seals slam in on scroll (the TruLinq motion signature). Add `data-manual` when a page timeline stamps it
+     itself via `stamp(el)`. The nav wordmark is the same TD mark (`<use href="#tq-mark">`) plus "Trulinq" set in `--fg`.
+  2. Captions: `<p class="note">human-reviewed, every time</p>` inside a `position: relative` parent. Small sky-blue
+     (`--glow`) typeset captions next to real UI, at most two per page. No arrows, no rotation.
   3. Ledger rows: `.ledger > .ledger__row > span, i, b` (hairline leaders, mono values) for facts, stats and receipts.
-  4. Pill boards: `.pill` with emoji, tones `pill--peach|mint|violet|sky|rose|sand|ink|outline`. Straight, evenly spaced.
-  5. The mascot: a flat navy monk seal (see the FAQ on the homepage or `.empty` in the directory) for FAQ, empty states, 404.
+  4. Pill boards: `.pill` with emoji, tones `pill--peach|mint|violet|sky|rose|sand|ink|outline` (historical names:
+     `--peach` the `--accent` field, `--violet` `--deep-2` with `--sky` text, `--mint` the `--glow-soft` field with
+     `--glow` text, `--ink` an inverted near-white pill). Straight, evenly spaced.
+  5. The mascot: a flat royal-blue monk seal with a near-white belly and a sky blush (see the FAQ on the homepage or
+     `.empty` in the directory) for FAQ, empty states, 404.
      On the 404 it is the reviewer: it pops up beside the record, squints, winds up and thumps its stamp in the same beat the
      "Not verified" mark lands, then idles (breathing, blinks, cursor-following eyes, a hop on click). Its parts are
      `data-m-*` groups in `404.html`; every transform lives on its own group so the intro, idle loops and the click
@@ -86,11 +99,12 @@ Each page CSS file wraps its rules in `@layer pages { … }` and gives every sec
 ## Motion rules
 
 * **Page transitions (the chapter turn).** Clicking any internal link calls `go(url, label)` in `src/js/main.js`: the
-  page recedes (scale .985, opacity .55), a cream panel rises with rounded top corners and the destination's name rises
+  page recedes (scale .985, opacity .55), a navy (`--bg`) panel rises with rounded top corners and the destination's name rises
   through a mask at its centre, then the browser navigates. An inline script in `partials/nav.html` paints the same
   label on the new document before its first frame, so the name holds still across the reload; the panel then lifts
-  as the new hero animates in. Prefetch fires on hover/touch. First visit in a session shows the seal preloader;
-  back/forward and typed URLs get a quick lift. `data-label` on a link overrides the derived name.
+  as the new hero animates in. Prefetch fires on hover/touch. First visit in a session shows the seal preloader (a single
+  near-white stroke traces the TD monogram over the seal, then the curtain lifts); back/forward and typed URLs get a quick
+  lift. `data-label` on a link overrides the derived name.
 * **Nav hide/show** is direction-locked with hysteresis (`updateNav` in `src/js/main.js`): it hides only after 90px of
   deliberate downward travel past 200px, shows after 40px of upward travel or near the top, and ignores jitter,
   momentum tails, overscroll, programmatic scrolls (`scrollTo()`), the open menu, page transitions, and reveals on
