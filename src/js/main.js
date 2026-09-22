@@ -315,19 +315,6 @@ export function initPanels() {
   });
 }
 
-/* A soft light follows the pointer across cards (pointer devices only) */
-export function initSpotlight(scope = document) {
-  if (isTouch || reduced) return;
-  scope.querySelectorAll('.card:not(form), .quote, .doubt__pillar, .how__step, .plan, .fit, .mcard, .idcard, .bento__card').forEach((el) => {
-    el.classList.add('has-spot');
-    el.addEventListener('pointermove', (e) => {
-      const r = el.getBoundingClientRect();
-      el.style.setProperty('--mx', `${((e.clientX - r.left) / r.width * 100).toFixed(1)}%`);
-      el.style.setProperty('--my', `${((e.clientY - r.top) / r.height * 100).toFixed(1)}%`);
-    }, { passive: true });
-  });
-}
-
 /* Seal slam: the TruLinq motion signature */
 export function stamp(el, { delay = 0, rotate = -6 } = {}) {
   if (!el || el.classList.contains('is-stamped')) return;
@@ -468,7 +455,7 @@ export async function boot(pageInit, heroInit) {
   await hydrateSeals();
   ScrollTrigger.refresh();
   await revealPage(() => {
-    initReveals(); initStamps(); initCounters(); initAccordions(); initMagnetic(); initImages(); initSpotlight(); watchNavTone();
+    initReveals(); initStamps(); initCounters(); initAccordions(); initMagnetic(); initImages(); watchNavTone();
     if (typeof heroInit === 'function') heroInit(ctx);
     initPanels();
     /* Pins are created by the page after the generic reveals. Sorting puts them first in the refresh order, so every
