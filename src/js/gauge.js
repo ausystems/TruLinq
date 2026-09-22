@@ -9,16 +9,23 @@ export function gaugeHTML({ caption = '', id = 'g' + Math.random().toString(36).
       <path class="gauge__track" d="M 40 236 A 130 130 0 1 1 280 236" fill="none" stroke="var(--gauge-track, #EAF1FA)" stroke-width="22" stroke-linecap="round"/>
       <path class="gauge__ticks" d="${ticksPath()}" fill="none" stroke="#0C1526" stroke-opacity=".18" stroke-width="2"/>
       <path class="gauge__fill" d="M 40 236 A 130 130 0 1 1 280 236" fill="none" stroke="url(#grad-${id})" stroke-width="22" stroke-linecap="round" data-gauge-fill/>
+      <circle class="gauge__pulse" r="9" fill="none" stroke="#2981FB" stroke-width="3" opacity="0" data-pulse cx="40" cy="236"/>
       <circle class="gauge__knob" r="9" fill="#FFFFFF" stroke="#2981FB" stroke-width="5" data-knob cx="40" cy="236"/>
       <text x="34" y="272" class="gauge__lbl mono">300</text>
       <text x="286" y="272" class="gauge__lbl mono" text-anchor="end">850</text>
     </svg>
     <div class="score__readout">
-      <span class="score__num mono" data-score-num>300</span>
+      <span class="score__num mono" data-score-num><span class="sr-only" data-score-text>300</span>${odometerHTML()}</span>
       <span class="score__grade"><b data-score-grade>—</b><span data-score-band>Building</span></span>
     </div>
     ${caption ? `<p class="score__caption">${caption}</p>` : ''}
   </div>`;
+}
+
+/* The number is a real odometer: three reels of 0-9 (plus a 0 to wrap into). Each reel rolls only while the digit
+   below it turns over, so it reads like a mechanical counter settling on the score. */
+function odometerHTML() {
+  return `<span class="odo" aria-hidden="true">${[2, 1, 0].map((p) => `<span class="odo__col"><span class="odo__reel" data-odo="${p}">${'01234567890'.split('').map((d) => `<i>${d}</i>`).join('')}</span></span>`).join('')}</span>`;
 }
 
 export function ticksPath() {
@@ -55,24 +62,52 @@ export function runGauge(root, factors, { trigger = root, delay = 0 } = {}) {
   const num = root.querySelector('[data-score-num]');
   const gradeEl = root.querySelector('[data-score-grade]');
   const bandEl = root.querySelector('[data-score-band]');
+  const pulse = root.querySelector('[data-pulse]');
+  const text = root.querySelector('[data-score-text]');
+  const reels = [...root.querySelectorAll('[data-odo]')];
+  const badge = gradeEl.parentElement;
   const L = fill.getTotalLength();
   fill.style.strokeDasharray = L; fill.style.strokeDashoffset = L;
   const state = { p: 0 };
-  const apply = () => {
+  let last = 300, lastGrade = '';
+  /* place every reel for a (fractional) score: the ones reel rolls continuously, each higher reel turns over only
+     while the reel below passes from 9 to 0; the faster a reel moves, the more it blurs */
+  const setNumber = (s, blur) => {
+    text.textContent = Math.round(s);
+    reels.forEach((reel) => {
+      const p = +reel.dataset.odo, base = 10 ** p;
+      const v = p === 0 ? s % 10 : Math.floor(s / base) % 10 + Math.max(0, (s % base) - (base - 1));
+      reel.style.transform = `translate3d(0, ${(-v).toFixed(4)}em, 0)`;
+      if (blur !== undefined) reel.style.filter = blur / base > .25 ? `blur(${Math.min(5, blur / base * .35).toFixed(2)}px)` : '';
+    });
+  };
+  const apply = (animated = false) => {
     const p = state.p;
     fill.style.strokeDashoffset = L * (1 - p);
     const pt = fill.getPointAtLength(L * p);
     knob.setAttribute('cx', pt.x.toFixed(2)); knob.setAttribute('cy', pt.y.toFixed(2));
-    const s = Math.round(300 + p * 550);
-    num.textContent = s;
-    const g = gradeOf(s); gradeEl.textContent = g.grade; bandEl.textContent = g.band;
+    pulse.setAttribute('cx', pt.x.toFixed(2)); pulse.setAttribute('cy', pt.y.toFixed(2));
+    const s = 300 + p * 550;
+    setNumber(s, animated ? Math.abs(s - last) : undefined); last = s;
+    const g = gradeOf(Math.round(s)); gradeEl.textContent = g.grade; bandEl.textContent = g.band;
+    /* every grade the score climbs through gets its own little pop */
+    if (animated && g.grade !== lastGrade && lastGrade) gsap.fromTo(badge, { scale: .86 }, { scale: 1, duration: .7, ease: 'elastic.out(1, .45)', overwrite: true });
+    lastGrade = g.grade;
   };
   apply();
   const bars = root.closest('section, main, body').querySelectorAll('.factor__bar i');
+  const wrap = root.closest('.gauge-wrap') || root;
   const run = () => {
-    gsap.to(state, { p: pct(target) / 100, duration: 2.4, ease: 'expo.out', delay, onUpdate: apply });
-    gsap.to(bars, { scaleX: 1, duration: 1.4, ease: 'expo.out', stagger: .12, delay: delay + .2 });
+    gsap.timeline({ delay })
+      /* the count: fast off the mark, a long settle */
+      .to(state, { p: (target - 300) / 550, duration: 3, ease: 'expo.out', onUpdate: () => apply(true) }, 0)
+      .to(bars, { scaleX: 1, duration: 1.4, ease: 'expo.out', stagger: .12 }, .2)
+      /* the landing: the number settles with a spring, a glint crosses the digits, the knob sends out a ring */
+      .add(() => { reels.forEach((r) => (r.style.filter = '')); wrap.classList.add('is-done'); }, 2.9)
+      .fromTo(num, { scale: 1.05 }, { scale: 1, duration: 1, ease: 'elastic.out(1, .4)' }, 2.9)
+      .fromTo(pulse, { attr: { r: 9 }, opacity: .9 }, { attr: { r: 34 }, opacity: 0, duration: 1.1, ease: 'power2.out' }, 2.95);
   };
-  if (reduced) { state.p = pct(target) / 100; apply(); gsap.set(bars, { scaleX: 1 }); return; }
-  ScrollTrigger.create({ trigger, start: 'top 78%', once: true, onEnter: run });
+  if (reduced) { state.p = (target - 300) / 550; apply(); gsap.set(bars, { scaleX: 1 }); wrap.classList.add('is-done'); return; }
+  /* starts the first time the section scrolls into view, and never again */
+  ScrollTrigger.create({ trigger, start: 'top 72%', once: true, onEnter: run });
 }

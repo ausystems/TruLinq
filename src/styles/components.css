@@ -326,7 +326,21 @@
   .gauge__lbl { font-size: 11px; fill: var(--fg-soft); letter-spacing: 0; }
   .gauge__fill { stroke-dasharray: 1000; stroke-dashoffset: 1000; }
   .score__readout { position: absolute; left: 0; right: 0; top: 40%; display: grid; justify-items: center; gap: 6px; }
-  .score__num { font-size: clamp(4rem, 6vw, 5.4rem); font-weight: 600; letter-spacing: -.06em; line-height: 1; }
+  .score__num { position: relative; display: inline-flex; font-size: clamp(4rem, 6vw, 5.4rem); font-weight: 600; letter-spacing: -.06em; line-height: 1; will-change: transform; }
+  /* the odometer: three reels, each a column of digits that rolls behind a 1em window */
+  .odo { display: inline-flex; }
+  .odo__col { display: block; height: 1em; overflow: hidden; }
+  .odo__reel { display: block; will-change: transform, filter; }
+  .odo__reel i { display: block; height: 1em; line-height: 1; font-style: normal; }
+  /* the landing: a glint crosses the digits and the gauge glows for a beat */
+  .score__num::after { content: ""; position: absolute; inset: -.1em -.2em; background: linear-gradient(105deg, transparent 32%, rgba(255,255,255,.95) 50%, transparent 68%); background-size: 260% 100%; background-position: 130% 0; mix-blend-mode: soft-light; opacity: 0; pointer-events: none; }
+  .gauge-wrap.is-done .score__num::after { animation: score-glint 1.1s var(--e-out) .1s both; }
+  @keyframes score-glint { 0% { opacity: 1; background-position: 130% 0; } 100% { opacity: 1; background-position: -30% 0; } }
+  .gauge__fill { transition: filter 1.2s var(--e-out); }
+  .gauge-wrap.is-done .gauge__fill { filter: drop-shadow(0 0 10px rgba(41,129,251,.45)); }
+  .gauge-wrap.is-done .score__num { animation: score-glow 1.6s var(--e-out) both; }
+  @keyframes score-glow { 0% { text-shadow: 0 0 0 rgba(41,129,251,0); } 30% { text-shadow: 0 0 28px rgba(41,129,251,.5); } 100% { text-shadow: 0 0 0 rgba(41,129,251,0); } }
+  @media (prefers-reduced-motion: reduce) { .gauge-wrap.is-done .score__num, .gauge-wrap.is-done .score__num::after { animation: none; } }
   .score__grade { display: inline-flex; align-items: center; gap: 10px; padding: 6px 14px 6px 6px; border-radius: var(--r-pill); background: var(--surface-2); box-shadow: var(--sh-card); font-size: .85rem; font-weight: 600; color: var(--fg-soft); }
   .score__grade b { display: grid; place-items: center; min-width: 34px; height: 30px; padding: 0 8px; border-radius: 15px; background: var(--fg); color: var(--on-fg); font-family: var(--f-mono); font-size: .85rem; }
   .score__caption { text-align: center; margin-top: 8px; font-size: .88rem; color: var(--fg-soft); }

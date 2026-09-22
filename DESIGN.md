@@ -148,6 +148,10 @@ Each page CSS file wraps its rules in `@layer pages { … }` and gives every sec
 * Easing: `expo.out` for entrances (1–1.4s), `expo.inOut` for wipes, `elastic.out(1,.5)` for stamps and stickers,
   `back.out(2)` for chips. Stagger 0.05–0.08 per line or card; cap cascades near 0.8s. Scrubbed sequences use `scrub: .8`,
   `anticipatePin: 1`, one pinned section per page at most. Always provide a reduced-motion path (`reduced` flag).
+* **The score gauge** (`src/js/gauge.js`, shared by the homepage, profiles and the dashboard) counts once, the first
+  time its section scrolls into view, and never replays: the number is a three-reel odometer (each reel turns over only
+  while the reel below wraps, blurring with speed), the grade badge pops at every grade it climbs through, and the landing
+  is a spring settle, a glint across the digits and a ring from the knob.
 * Every page needs one choreographed hero moment and at least one page-specific interaction that means something
   (a stamp slam, a masked wipe, a ledger that fills, a card flip). Do not use the same fade-up everywhere.
 * Only animate `transform` and `opacity` (plus SVG stroke props). No layout-triggering tweens.
