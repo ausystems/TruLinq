@@ -44,6 +44,10 @@ at build time with `<!--@include(partials/nav.html)-->`.
   (page titles), `--fs-2` (section titles), `--fs-3`, `--fs-4` (card titles), `--fs-lead`. Body is 17px / 1.47.
 * **No eyebrows above section titles.** The only label above a title is the page hero's `.eyebrow` (plain grey text,
   e.g. "Pricing", "Trust Centre"). Sections open with the heading itself.
+* **No decorative rules or numbering.** No hairline dividers, dashed borders, dotted leaders or inset rings used as
+  decoration; separate things with space, tone (`--surface-2` on `--surface`) and `--sh-card`. Functional lines stay:
+  ledger leaders, data bars, the seal's rim. Never number steps or sections (no 01, 02, 03); the active step is the one
+  with the white card.
 * **No decorative dots or circles.** No blue dots, no status dots, no dotted grids, no circled icons, no circled
   arrows inside buttons, no washi tape. Circles that remain are functional or the brand mark: the seal, portraits, the
   toggle knob, progress rings. Do not reintroduce these with look-alike ornaments.
@@ -66,10 +70,17 @@ at build time with `<!--@include(partials/nav.html)-->`.
      homepage or `.empty` in the directory) for FAQ, empty states, 404. Its artwork colours are literal and stay the same
      on light and deep surfaces (it also peeks over the ink footer); only the parts that touch the page, the ground shadow
      and the stamp handle, are navy-black (`#0C1526`) so they read on light panels.
-     On the 404 it is the reviewer: it pops up beside the record, squints, winds up and thumps its stamp in the same beat the
-     "Not verified" mark lands, then idles (breathing, blinks, cursor-following eyes, a hop on click). Its parts are
-     `data-m-*` groups in `404.html`; every transform lives on its own group so the intro, idle loops and the click
-     reaction never fight over a property. The seal is positioned from the stage centre in units of the digit size (`--digit`).
+     It lives in `src/js/mascot.js`: `mascotSVG()` draws it (every part a `data-m-*` group), `mascotParts()` sets the pivots,
+     `prime()` + `review(tl, parts, { land })` add the reviewer choreography to any timeline (pop up, eye the record, squint,
+     wind up, thump so the impact lands at `land` seconds, recoil, look at you, smile, double-blink) and `idle()` gives it
+     life (breathing, the stamp's tap, random blinks, cursor-following eyes, a hop on click). It appears on the homepage
+     hero (watching the 3D stamp press the seal), on the "Earn the stamp" scene of How it works, in the FAQ and on the 404,
+     always the same drawing and behaviours. The 404 positions it from the stage centre in units of the digit size (`--digit`).
+  6. The 3D rubber stamp: `createStamp(canvas, host, options)` in `src/js/stamp3d.js` (Three.js; navy handle, blue rubber
+     base, the seal on its face). The caller drives `press.t` (0 hovering, 1 pressed) and `setPointer()`; `project()` gives
+     the landing spot in host pixels so DOM can be lined up under it. Used by the pricing hero (`mode: 'tip'`) and the
+     homepage hero (`mode: 'straight'`, where the card is placed so its seal sits under the landing spot and the seal
+     slams the instant the face touches; click the desk to press again).
 * **Components** (all in `src/styles/components.css`): `.btn` (`--primary|--ink|--cream|--white|--ghost|--ghost-light`,
   `--sm|--lg`, optional trailing `.btn__icon` plain arrow; the default and `--ink` are `--fg` buttons with `--on-fg` text:
   navy on light, inverted inside deep contexts), `.pill`, `.idcard` (member card, build with `idCard(member)` from

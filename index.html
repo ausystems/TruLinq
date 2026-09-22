@@ -21,7 +21,6 @@
           <h1 class="hero__title display">
             <span class="hero__line"><span>Everyone here</span></span>
             <span class="hero__line"><span>is <span class="hero__real">real</span>.</span></span>
-            <span class="seal seal--md hero__seal" data-stamp data-manual role="img" aria-label="Trulinq Verified"></span>
           </h1>
           <p class="lead hero__lead">A trusted network for entrepreneurs, built around verified identities and verified businesses. One stamp, checked by a human, before anyone gets to pitch you.</p>
           <div class="btn-row hero__cta">
@@ -29,10 +28,13 @@
             <a class="btn btn--ghost btn--lg" href="#how"><span>How it works</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M8 3.5v9M4 8.5l4 4 4-4"/></svg></span></a>
           </div>
         </div>
-        <div class="hero__stage" data-hero-stage>
-          <div class="hero__cards" data-cards></div>
-          <p class="note hero__note-1" data-delay="1.9">human-reviewed, every time</p>
-          <p class="note hero__note-2" data-delay="2.3">the score you can't fake</p>
+        <div class="hero__stage" data-hero-stage role="img" aria-label="The Trulinq stamp pressing a verified seal onto a member card while the Trulinq seal looks on">
+          <div class="hero__desk" data-desk>
+            <div class="hero__card" data-hero-card></div>
+            <canvas class="hero__stamp" data-hero-stamp aria-hidden="true"></canvas>
+            <div class="hero__mascot" data-hero-mascot aria-hidden="true"></div>
+          </div>
+          <p class="note hero__note-1" data-delay="2.6">human-reviewed, every time</p>
         </div>
       </div>
       <div class="hero__ledger" data-ledger>
@@ -48,24 +50,6 @@
         </div>
       </div>
     </section>
-
-    <!-- ── PRESS STRIP ──────────────────────────────────────── -->
-    <section class="panel panel--white press" aria-label="Featured in">
-      <div class="press__inner">
-        <p class="press__label"><span>Built for the people who</span> <span>can't afford a fake</span></p>
-        <div class="marquee press__marquee">
-          <div class="marquee__track" data-marquee>
-            <span class="press__logo press__logo--serif">Freight &amp; Trade Weekly</span>
-            <span class="press__logo press__logo--cond">Founders Guild</span>
-            <span class="press__logo press__logo--wide">SMB Council</span>
-            <span class="press__logo press__logo--serif">Commerce Standard</span>
-            <span class="press__logo press__logo--cond">The Deal Room</span>
-            <span class="press__logo press__logo--wide">Chamber Network</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
 
     <!-- ── FOR FOUNDERS LIKE ────────────────────────────────── -->
     <section class="panel panel--white who" aria-labelledby="who-title">
@@ -128,19 +112,15 @@
           <h2 class="display" data-split>Know who’s behind the profile.</h2>
           <ol class="how__steps" data-steps role="list">
             <li class="how__step is-active" data-step="0">
-              <span class="how__num mono">01</span>
               <div><h3>Prove it’s you</h3><p>Government-issued ID and identity verification help confirm that the person behind the profile is real.</p></div>
             </li>
             <li class="how__step" data-step="1">
-              <span class="how__num mono">02</span>
               <div><h3>Verify the business</h3><p>Business information is checked against trusted data sources to confirm the company and its connection to the person claiming it.</p></div>
             </li>
             <li class="how__step" data-step="2">
-              <span class="how__num mono">03</span>
               <div><h3>Earn the stamp</h3><p>Profiles that complete Trulinq’s requirements receive the Trulinq Verified™ stamp, a clear signal that verification has been completed.</p></div>
             </li>
           </ol>
-          <div class="how__progress" aria-hidden="true"><i data-how-progress></i></div>
         </div>
         <div class="how__stage" data-stage>
           <div class="how__frame">
@@ -172,6 +152,7 @@
             <!-- Scene 3: the stamped profile -->
             <div class="scene scene--stamp" data-scene="2">
               <div class="how__card" data-how-card></div>
+              <div class="how__mascot" data-how-mascot aria-hidden="true"></div>
             </div>
           </div>
         </div>
@@ -290,31 +271,7 @@
         <div class="faq__side">
           <h2 class="display" data-split>Have questions?</h2>
           <p class="faq__sub" data-reveal>Still unsure? <a href="/contact/">Contact us</a>, a real person reads every message.</p>
-          <div class="faq__mascot" data-reveal="scale" data-delay=".2">
-            <svg viewBox="0 0 320 320" class="mascot mascot--full" aria-hidden="true">
-              <ellipse cx="160" cy="292" rx="120" ry="14" fill="#0C1526" opacity=".08"/>
-              <path d="M62 244 C 40 200, 70 150, 160 148 C 250 150, 280 200, 258 244 C 246 270, 200 290, 160 288 C 120 290, 74 270, 62 244 Z" fill="#1545A2"/>
-              <ellipse cx="160" cy="240" rx="58" ry="40" fill="#F4F7FB"/>
-              <circle cx="160" cy="130" r="72" fill="#1545A2"/>
-              <ellipse cx="160" cy="154" rx="38" ry="26" fill="#F4F7FB"/>
-              <circle cx="134" cy="118" r="11" fill="#F4F7FB"/><circle cx="186" cy="118" r="11" fill="#F4F7FB"/>
-              <circle cx="136" cy="119" r="6" fill="#060D19"/><circle cx="188" cy="119" r="6" fill="#060D19"/>
-              <circle cx="138.5" cy="116.5" r="2" fill="#fff"/><circle cx="190.5" cy="116.5" r="2" fill="#fff"/>
-              <ellipse cx="160" cy="142" rx="9" ry="6.5" fill="#060D19"/>
-              <path d="M150 154 q10 9 20 0" stroke="#060D19" stroke-width="3" fill="none" stroke-linecap="round"/>
-              <circle cx="118" cy="146" r="7" fill="#4AB3FF" opacity=".55"/><circle cx="202" cy="146" r="7" fill="#4AB3FF" opacity=".55"/>
-              <path d="M126 148 l-26 -6 M126 154 l-26 4 M194 148 l26 -6 M194 154 l26 4" stroke="#F4F7FB" stroke-width="2.4" stroke-linecap="round"/>
-              <path d="M78 214 C 40 226, 30 262, 62 268 C 84 272, 96 250, 92 232 Z" fill="#1545A2"/>
-              <path d="M242 214 C 280 226, 290 262, 258 268 C 236 272, 224 250, 228 232 Z" fill="#1545A2"/>
-              <g class="mascot__stamp" transform="translate(252 150)">
-                <rect x="-10" y="-38" width="20" height="30" rx="6" fill="#0C1526"/>
-                <circle cx="0" cy="8" r="30" fill="#2981FB"/>
-                <path d="M-14 9 l9 9 l19 -21" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-              </g>
-              <text x="66" y="92" class="mascot__q" font-family="Geist, sans-serif" font-weight="600" font-size="44" fill="#4AB3FF" transform="rotate(-12 66 92)">?</text>
-              <text x="236" y="68" class="mascot__q" font-family="Geist, sans-serif" font-weight="600" font-size="34" fill="#60C2FF" transform="rotate(10 236 68)">?</text>
-            </svg>
-          </div>
+          <div class="faq__mascot" data-reveal="scale" data-delay=".2" data-faq-mascot aria-hidden="true"></div>
         </div>
         <div class="acc faq__acc" data-single>
           <div class="acc__item is-open">

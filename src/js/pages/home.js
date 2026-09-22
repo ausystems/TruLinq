@@ -1,18 +1,25 @@
 import '../../styles/main.css';
 import '../../styles/pages/home.css';
 import { boot, gsap, ScrollTrigger, stamp, reduced, isTouch, hydrateSeals, popIn, suspend, scrollTo } from '../main.js';
-import { idCard, photo, scoreOf, gradeOf, pct } from '../ui.js';
+import { idCard, photo } from '../ui.js';
 import { byId, SCENES } from '../../data/members.js';
 import { gaugeHTML, factorsHTML, runGauge } from '../gauge.js';
+import { mascotSVG, mascotParts, prime, review, idle } from '../mascot.js';
+import { createStamp } from '../stamp3d.js';
 
 /* ── Build DOM that depends on data ──────────────────────────── */
 function build() {
-  const kai = byId['kai-nakamura'], amara = byId['amara-cole'], leilani = byId['leilani-akana'], grace = byId['grace-okafor'];
+  const kai = byId['kai-nakamura'], leilani = byId['leilani-akana'], grace = byId['grace-okafor'];
 
-  const cards = document.querySelector('[data-cards]');
-  cards.innerHTML = idCard(kai, { stamp: true }) + idCard(amara, { stamp: true });
-  cards.querySelectorAll('.seal').forEach((s) => s.setAttribute('data-manual', ''));
-  cards.querySelectorAll('img').forEach((img) => { img.loading = 'eager'; img.fetchPriority = 'high'; });
+  const heroCard = document.querySelector('[data-hero-card]');
+  heroCard.innerHTML = idCard(kai, { href: false, stamp: true });
+  heroCard.querySelector('.seal').setAttribute('data-manual', '');
+  heroCard.querySelectorAll('img').forEach((img) => { img.loading = 'eager'; img.fetchPriority = 'high'; });
+
+  /* one mascot, three appearances: the hero desk, the stamped scene, the FAQ */
+  document.querySelector('[data-hero-mascot]').innerHTML = mascotSVG({ marks: false });
+  document.querySelector('[data-how-mascot]').innerHTML = mascotSVG({ marks: false });
+  document.querySelector('[data-faq-mascot]').innerHTML = `<div class="mascot-root" data-faq-root>${mascotSVG({ marks: true })}</div>`;
 
   const howCard = document.querySelector('[data-how-card]');
   howCard.innerHTML = idCard(kai, { href: false, stamp: true });
@@ -27,63 +34,100 @@ function build() {
   document.querySelector('[data-factors-mount]').innerHTML = factorsHTML(kai);
 }
 
-/* ── Hero choreography ───────────────────────────────────────── */
-function hero() {
+/* ── Hero: the stamp presses the seal onto the card while the reviewer watches ── */
+async function hero() {
   const heroEl = document.querySelector('[data-hero]');
-  const cards = heroEl.querySelectorAll('[data-cards] .idcard');
-  const seal = heroEl.querySelector('.hero__seal');
-  const under = heroEl.querySelector('.hero__underline path');
-  /* pin the seal to the top-right corner of the word "real" (the line boxes clip overflow) */
-  const placeSeal = () => {
-    const title = heroEl.querySelector('.hero__title');
-    const word = heroEl.querySelector('.hero__real');
-    const size = seal.offsetWidth || 48;
-    let top = 0, left = 0, el = word;
-    while (el && el !== title) { top += el.offsetTop; left += el.offsetLeft; el = el.offsetParent; }
-    seal.style.left = `${left + word.offsetWidth - size * .22}px`;
-    seal.style.top = `${top - size * .62}px`;
+  const stage = heroEl.querySelector('[data-hero-stage]');
+  const cardWrap = heroEl.querySelector('[data-hero-card]');
+  const card = cardWrap.querySelector('.idcard');
+  const seal = card.querySelector('.seal');
+  const canvas = heroEl.querySelector('[data-hero-stamp]');
+  const p = mascotParts(heroEl.querySelector('[data-hero-mascot]'));
+
+  /* the card lies on the desk */
+  gsap.set(card, { rotateX: 34, rotateZ: -6, rotateY: 4, transformPerspective: 1400, transformOrigin: '50% 50%' });
+  const S = await createStamp(canvas, stage, {
+    mode: 'straight', fov: 30, camPos: [0, 3.6, 9.4], look: [0, .8, 0], scale: .56,
+    rest: { x: -.32, y: -.7, z: .08 }, restY: .95, dropY: 1, bob: .07, spin: .1, idleTilt: .05,
+    shadowY: -.02, shadowOpacity: .1, position: [-.1, 0, .4]
+  });
+  const LAND = [-.1, -.06, .4];
+
+  /* put the card's seal exactly under the stamp's landing spot (host pixels) */
+  const place = () => {
+    const land = S.project(...LAND);
+    const st = stage.getBoundingClientRect(), sr = seal.getBoundingClientRect(), wr = cardWrap.getBoundingClientRect();
+    const fy = gsap.getProperty(cardWrap, 'y') || 0;
+    const cx = sr.left + sr.width / 2 - st.left, cy = sr.top + sr.height / 2 - st.top - fy;
+    cardWrap.style.left = `${(wr.left - st.left) + (land.x - cx)}px`;
+    cardWrap.style.top = `${(wr.top - st.top - fy) + (land.y - cy)}px`;
   };
-  placeSeal(); window.addEventListener('resize', placeSeal);
+  place(); window.addEventListener('resize', place);
+
+  /* the impact: the seal slams on, the card takes the hit */
+  const thud = () => {
+    if (!seal.classList.contains('is-stamped')) stamp(seal, { rotate: -7 });
+    else gsap.fromTo(seal, { scale: .86 }, { scale: 1, duration: .9, ease: 'elastic.out(1, .4)' });
+    gsap.timeline().to(card, { y: 9, duration: .1, ease: 'power2.out' }).to(card, { y: 0, duration: .9, ease: 'elastic.out(1, .4)' });
+  };
+
   if (reduced) {
     gsap.set('.hero__line > span', { y: 0 }); gsap.set('.hero__eyebrow, .hero__lead, .hero__cta', { opacity: 1 });
-    gsap.set(under, { strokeDashoffset: 0 }); seal.classList.add('is-stamped');
-    const wideR = matchMedia('(min-width: 1024px)').matches;
-    gsap.set(cards[0], { xPercent: wideR ? -8 : -2, yPercent: wideR ? -26 : -30, rotate: wideR ? -5 : -3, opacity: 1 }); gsap.set(cards[1], { xPercent: wideR ? 10 : 4, yPercent: wideR ? 30 : 26, rotate: wideR ? 3.5 : 2.5, opacity: 1 });
-    cards.forEach((c) => c.querySelector('.seal').classList.add('is-stamped'));
+    gsap.set(cardWrap, { opacity: 1 }); seal.classList.add('is-stamped');
+    S.render();
     return;
   }
-  suspend(cards);
-  const wide = matchMedia('(min-width: 1024px)').matches;
-  gsap.set(cards[0], { xPercent: wide ? -8 : -2, yPercent: wide ? -26 : -30, rotate: wide ? -5 : -3, y: 90, opacity: 0 });
-  gsap.set(cards[1], { xPercent: wide ? 10 : 4, yPercent: wide ? 30 : 26, rotate: wide ? 3.5 : 2.5, y: 120, opacity: 0 });
+
   gsap.set(['.hero__lead', '.hero__cta'], { y: 24 });
+  gsap.set(cardWrap, { opacity: 0, y: 60 });
+  gsap.set(canvas, { opacity: 0, y: -80 });
+  prime(p);
+  S.start();
   const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
   tl.to('.hero__eyebrow', { opacity: 1, duration: .9 }, 0)
     .to('.hero__line > span', { y: 0, duration: 1.4, stagger: .13 }, .05)
-    .to(under, { strokeDashoffset: 0, duration: .75, ease: 'power2.inOut' }, .95)
-    .add(() => stamp(seal, { rotate: -9 }), 1.3)
     .to('.hero__lead', { opacity: 1, y: 0, duration: 1.1 }, .75)
     .to('.hero__cta', { opacity: 1, y: 0, duration: 1.1 }, .9)
-    .to(cards[0], { y: 0, opacity: 1, duration: 1.5 }, .55)
-    .to(cards[1], { y: 0, opacity: 1, duration: 1.5 }, .75)
-    .add(() => stamp(cards[0].querySelector('.seal'), { rotate: -7 }), 1.55)
-    .add(() => stamp(cards[1].querySelector('.seal'), { rotate: -5 }), 1.85)
-    /* after the entrance the cards breathe: a slow, out-of-phase float */
-    .add(() => { gsap.to(cards[0], { y: -7, duration: 3.6, ease: 'sine.inOut', yoyo: true, repeat: -1 }); gsap.to(cards[1], { y: 6, duration: 4.4, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: .6 }); }, 2.3);
+    /* the card slides onto the desk, the stamp arrives from above */
+    .to(cardWrap, { opacity: 1, y: 0, duration: 1.4 }, .5)
+    .to(canvas, { opacity: 1, y: 0, duration: 1.3 }, .7)
+    /* the press: down fast, thud, lift with a spring */
+    .to(S.press, { t: 1, duration: .38, ease: 'power3.in' }, 1.6)
+    .add(thud, 1.98)
+    .to(S.press, { t: 0, duration: 1.1, ease: 'elastic.out(1, .45)' }, 2.12)
+    /* then the card breathes on the desk */
+    .add(() => gsap.to(cardWrap, { y: -6, duration: 3.8, ease: 'sine.inOut', yoyo: true, repeat: -1 }), 3.2);
+  /* the reviewer thumps its own stamp in the same beat */
+  review(tl, p, { land: 1.98 });
 
-  /* pointer parallax on the stage */
+  /* pointer parallax: the desk tilts a little, the stamp leans with you */
   if (!isTouch) {
-    const stage = heroEl.querySelector('[data-hero-stage]');
-    const qx = [gsap.quickTo(cards[0], 'x', { duration: 1.2, ease: 'power3.out' }), gsap.quickTo(cards[1], 'x', { duration: 1.4, ease: 'power3.out' })];
-    const qr = [gsap.quickTo(cards[0], 'rotate', { duration: 1.2, ease: 'power3.out' }), gsap.quickTo(cards[1], 'rotate', { duration: 1.4, ease: 'power3.out' })];
+    const rx = gsap.quickTo(card, 'rotationX', { duration: 1.2, ease: 'power3.out' }), ry = gsap.quickTo(card, 'rotationY', { duration: 1.2, ease: 'power3.out' });
     heroEl.addEventListener('pointermove', (e) => {
-      if (tl.isActive()) return;
       const r = stage.getBoundingClientRect();
       const dx = (e.clientX - (r.left + r.width / 2)) / r.width, dy = (e.clientY - (r.top + r.height / 2)) / r.height;
-      qx[0](dx * -16); qr[0](-5 + dy * -2); qx[1](dx * 22); qr[1](3.5 + dy * 2);
+      S.setPointer(dx * 2, dy * 2);
+      if (tl.isActive()) return;
+      rx(34 + dy * -5); ry(4 + dx * 7);
     });
-    heroEl.addEventListener('pointerleave', () => { qx[0](0); qr[0](-5); qx[1](0); qr[1](3.5); });
+    heroEl.addEventListener('pointerleave', () => { S.setPointer(0, 0); rx(34); ry(4); });
   }
+
+  /* click the desk: the stamp presses again */
+  let pressing = false;
+  stage.addEventListener('pointerdown', (e) => {
+    if (e.button || pressing || tl.isActive() || e.target.closest('[data-hero-mascot]')) return;
+    pressing = true;
+    gsap.timeline({ onComplete: () => (pressing = false) })
+      .to(S.press, { t: 1, duration: .3, ease: 'power3.in' })
+      .add(thud, .3)
+      .add(() => { gsap.timeline().to(p.eyes, { scaleY: 1.18, scaleX: 1.08, duration: .1 }).to(p.eyes, { scaleY: 1, scaleX: 1, duration: .5, ease: 'elastic.out(1, .5)' }); gsap.timeline().to(p.body, { scaleY: .94, scaleX: 1.04, duration: .09 }).to(p.body, { scaleY: 1, scaleX: 1, duration: .7, ease: 'elastic.out(1, .4)' }); }, .3)
+      .to(S.press, { t: 0, duration: 1, ease: 'elastic.out(1, .45)' }, .42);
+  });
+  stage.style.cursor = 'pointer';
+
+  /* render only while the hero is on screen */
+  ScrollTrigger.create({ trigger: stage, start: 'top bottom', end: 'bottom top', onToggle: (s) => (s.isActive ? S.start() : S.stop()) });
 }
 
 /* ── Scene animations for “How it works” ─────────────────────── */
@@ -112,12 +156,15 @@ function sceneStamp() {
   const s = document.querySelector('[data-scene="2"]');
   const card = s.querySelector('.idcard');
   const seal = s.querySelector('.seal');
+  const p = mascotParts(s.querySelector('[data-how-mascot]'));
   const tl = gsap.timeline({ paused: true });
   tl.fromTo(card, { y: 60, rotate: -8, opacity: 0 }, { y: 0, rotate: -3, opacity: 1, duration: 1, ease: 'expo.out' })
     .fromTo(seal, { opacity: 0, scale: 2.2, rotate: -26 }, { opacity: 1, scale: 1, rotate: -8, duration: .55, ease: 'power4.in' }, .9)
     .to(card, { rotate: -1.5, y: 6, duration: .18, ease: 'power2.out' }, 1.42)
     .to(card, { y: 0, duration: .8, ease: 'elastic.out(1, .4)' }, 1.6)
     .to(seal, { scale: 1.04, duration: .8, ease: 'elastic.out(1, .4)' }, 1.45);
+  /* the reviewer thumps as the seal lands */
+  if (p) { prime(p); review(tl, p, { land: 1.45, idle: false }); }
   return tl;
 }
 
@@ -125,7 +172,6 @@ function how() {
   const section = document.querySelector('[data-how]');
   const steps = section.querySelectorAll('[data-step]');
   const scenes = section.querySelectorAll('[data-scene]');
-  const progress = section.querySelector('[data-how-progress]');
   const setStep = (i) => steps.forEach((s, j) => { s.classList.toggle('is-active', i === j); s.setAttribute('aria-current', i === j ? 'step' : 'false'); });
 
   const mm = gsap.matchMedia();
@@ -146,7 +192,7 @@ function how() {
     let cuts = [0, 1];
     const master = gsap.timeline({
       scrollTrigger: { trigger: section, start: 'top top', end: '+=260%', pin: true, pinSpacing: true, scrub: .8, anticipatePin: 1, invalidateOnRefresh: true,
-        onUpdate: (self) => { gsap.set(progress, { scaleX: self.progress }); setStep(self.progress < cuts[0] ? 0 : self.progress < cuts[1] ? 1 : 2); } }
+        onUpdate: (self) => setStep(self.progress < cuts[0] ? 0 : self.progress < cuts[1] ? 1 : 2) }
     });
     master.addLabel('one').add(a.play(), 'one')
       .to({}, { duration: .5 })
@@ -155,7 +201,7 @@ function how() {
       .to({}, { duration: .5 })
       .to(scenes[1], { opacity: 0, y: -30, duration: .35, ease: 'power2.in' })
       .addLabel('three').set(scenes[2], { opacity: 1 }).add(c.play(), 'three')
-      .to({}, { duration: .7 });
+      .to({}, { duration: .9 });
     cuts = [master.labels.two / master.duration(), master.labels.three / master.duration()];
     setStep(0);
     /* clicking a step scrolls the pin to that scene */
@@ -163,7 +209,7 @@ function how() {
       const t = master.scrollTrigger; const p = [0.02, cuts[0] + .03, cuts[1] + .03][i];
       scrollTo(t.start + (t.end - t.start) * p, { duration: 1 });
     }));
-    return () => { master.scrollTrigger && master.scrollTrigger.kill(); master.kill(); enterTrig.kill(); entrance.kill(); [a, b, c].forEach((t) => t.kill()); gsap.set([scenes, progress], { clearProps: 'all' }); };
+    return () => { master.scrollTrigger && master.scrollTrigger.kill(); master.kill(); enterTrig.kill(); entrance.kill(); [a, b, c].forEach((t) => t.kill()); gsap.set(scenes, { clearProps: 'all' }); };
   });
 
   /* Mobile & tablet: scenes stack; each plays once as it enters */
@@ -206,7 +252,7 @@ async function globe() {
   /* occluder sphere */
   group.add(new THREE.Mesh(new THREE.SphereGeometry(.985, 64, 64), new THREE.MeshBasicMaterial({ color: 0xFFFFFF })));
 
-  /* dotted surface */
+  /* dotted surface: the whole globe is made of dots, no lines */
   const N = isTouch ? 1500 : 3000;
   const pos = new Float32Array(N * 3);
   const golden = Math.PI * (3 - Math.sqrt(5));
@@ -215,19 +261,8 @@ async function globe() {
     pos[i * 3] = Math.cos(th) * rr; pos[i * 3 + 1] = y; pos[i * 3 + 2] = Math.sin(th) * rr;
   }
   const dotsGeo = new THREE.BufferGeometry(); dotsGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-  const dots = new THREE.Points(dotsGeo, new THREE.PointsMaterial({ color: 0x2981FB, size: .016, sizeAttenuation: true, transparent: true, opacity: .55 }));
+  const dots = new THREE.Points(dotsGeo, new THREE.PointsMaterial({ color: 0x2981FB, size: .018, sizeAttenuation: true, transparent: true, opacity: .5 }));
   group.add(dots);
-
-  /* graticule */
-  const lineMat = new THREE.LineBasicMaterial({ color: 0x0C1526, transparent: true, opacity: .08 });
-  for (let lat = -60; lat <= 60; lat += 30) {
-    const pts = []; for (let lng = -180; lng <= 180; lng += 4) pts.push(toVec(lat, lng, 1.001));
-    group.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), lineMat));
-  }
-  for (let lng = -180; lng < 180; lng += 30) {
-    const pts = []; for (let lat = -90; lat <= 90; lat += 4) pts.push(toVec(lat, lng, 1.001));
-    group.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), lineMat));
-  }
 
   /* arcs from Hilo (HQ) to every pinned member */
   const hq = members[0];
@@ -335,8 +370,6 @@ function extras() {
 
   /* pill boards pop in like stickers */
   document.querySelectorAll('[data-pills], [data-feat-pills]').forEach((board) => popIn(board.querySelectorAll('.pill'), {}, board));
-  const sq = document.querySelector('.feats__squiggle path');
-  if (sq) gsap.to(sq, { strokeDashoffset: 0, duration: 1.2, ease: 'power2.inOut', delay: .4, scrollTrigger: { trigger: '.feats__title', start: 'top 85%', once: true } });
   document.querySelectorAll('[data-feat-pills] .pill').forEach((p) => {
     const card = document.querySelector(`.bento__card--${p.dataset.target}`);
     if (!card) return;
@@ -344,9 +377,9 @@ function extras() {
     p.addEventListener('pointerleave', () => card.classList.remove('is-hot'));
   });
 
-  /* mascot stamp gently taps */
-  const ms = document.querySelector('.mascot__stamp');
-  if (ms && !reduced) gsap.to(ms, { rotate: -8, duration: 1.4, yoyo: true, repeat: -1, ease: 'sine.inOut', transformOrigin: '0px 40px' });
+  /* the FAQ mascot lives: breathes, blinks, follows you, hops when tapped */
+  const faq = mascotParts(document.querySelector('[data-faq-root]'));
+  if (faq) idle(faq, { hop: true });
 }
 
 boot(

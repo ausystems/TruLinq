@@ -137,7 +137,7 @@
   @media (prefers-reduced-motion: reduce) { .seal__rot { animation: none; } .seal[data-stamp] { opacity: 1; transform: none; } }
 
   /* ── Member ID card ───────────────────────────────────────────── */
-  .idcard { position: relative; display: grid; grid-template-columns: 96px 1fr; gap: 18px; align-items: start; padding: 18px; border-radius: var(--r-card); background: var(--surface-2); box-shadow: inset 0 0 0 1px var(--line), var(--sh-card); color: var(--fg); transition: transform .6s var(--e-out), box-shadow .6s var(--e-out); }
+  .idcard { position: relative; display: grid; grid-template-columns: 96px 1fr; gap: 18px; align-items: start; padding: 18px; border-radius: var(--r-card); background: var(--surface-2); box-shadow: var(--sh-card); color: var(--fg); transition: transform .6s var(--e-out), box-shadow .6s var(--e-out); }
   .idcard:hover { transform: translateY(-4px); box-shadow: var(--sh-lift); }
   .idcard__photo { position: relative; width: 96px; aspect-ratio: 1; border-radius: 18px; overflow: visible; }
   .idcard__photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 18px; background: var(--surface-3); }
@@ -145,7 +145,7 @@
   .idcard__name { font-family: var(--f-display); font-weight: 600; font-size: 1.3rem; letter-spacing: -.025em; line-height: 1.1; }
   .idcard__role { color: var(--fg-soft); font-size: .92rem; margin-top: 4px; }
   .idcard__meta { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
-  .idcard__score { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 10px; margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--line-2); }
+  .idcard__score { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 10px; margin-top: 16px; }
   .idcard__grade { font-family: var(--f-mono); font-weight: 600; font-size: 1.45rem; letter-spacing: -.04em; color: var(--fg); line-height: 1; }
   .idcard__grade small { display: block; font-size: .66rem; letter-spacing: 0; font-weight: 500; color: var(--fg-mute); margin-top: 3px; }
   .idcard__bar { position: relative; height: 6px; border-radius: 3px; background: var(--surface-3); overflow: hidden; }
@@ -173,9 +173,11 @@
   .note svg { display: none; }
 
   /* ── Accordion ────────────────────────────────────────────────── */
-  .acc { border-top: 1px solid var(--line-2); }
-  .acc__item { border-bottom: 1px solid var(--line-2); }
-  .acc__btn { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 22px 0; text-align: left; font-family: var(--f-display); font-size: var(--fs-4); font-weight: 500; letter-spacing: -.018em; line-height: 1.25; }
+  .acc { display: grid; gap: 6px; }
+  .acc__item { border-radius: 18px; padding: 0 22px; transition: background .5s var(--e-out), box-shadow .5s var(--e-out); }
+  .acc__item.is-open { background: var(--surface-2); box-shadow: var(--sh-card); }
+  .acc__item:not(.is-open):hover { background: rgba(255,255,255,.6); }
+  .acc__btn { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 20px 0; text-align: left; font-family: var(--f-display); font-size: var(--fs-4); font-weight: 500; letter-spacing: -.018em; line-height: 1.25; }
   .acc__btn:focus-visible { box-shadow: none; }
   .acc__btn:focus-visible span:first-child { text-decoration: underline; text-decoration-color: var(--primary); text-underline-offset: 4px; }
   .acc__plus { position: relative; width: 24px; height: 24px; flex: none; display: grid; place-items: center; transition: transform .55s var(--e-inout); }
@@ -187,9 +189,9 @@
   .acc__panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .6s var(--e-inout); }
   .acc__item.is-open .acc__panel { grid-template-rows: 1fr; }
   .acc__panel > div { overflow: hidden; }
-  .acc__body { padding: 0 64px 26px 0; color: var(--fg-soft); max-width: 62ch; text-wrap: pretty; }
-  .acc--light { border-color: rgba(244,247,251,.18); }
-  .acc--light .acc__item { border-color: rgba(244,247,251,.18); }
+  .acc__body { padding: 0 64px 22px 0; color: var(--fg-soft); max-width: 62ch; text-wrap: pretty; }
+  .acc--light .acc__item.is-open { background: rgba(244,247,251,.08); box-shadow: none; }
+  .acc--light .acc__item:not(.is-open):hover { background: rgba(244,247,251,.05); }
   .acc--light .acc__body { color: rgba(244,247,251,.72); }
   .acc--light .acc__plus::before, .acc--light .acc__plus::after { background: var(--fg); }
 
@@ -260,7 +262,7 @@
   .footer__form input::placeholder { color: rgba(244,247,251,.45); }
   .footer__form input:focus-visible { box-shadow: none; outline: 2px solid var(--primary); outline-offset: -2px; border-radius: var(--r-pill); }
   .footer__form-msg { position: absolute; left: 20px; top: calc(100% + 8px); font-size: .82rem; color: var(--glow); width: 100%; }
-  .footer__bottom { position: relative; margin-top: clamp(48px, 6vw, 88px); padding-top: 24px; border-top: 1px solid rgba(244,247,251,.14); display: flex; flex-wrap: wrap; align-items: center; gap: 12px 28px; font-size: .86rem; color: rgba(244,247,251,.6); min-height: 96px; }
+  .footer__bottom { position: relative; margin-top: clamp(48px, 6vw, 88px); padding-top: 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 28px; font-size: .86rem; color: rgba(244,247,251,.6); min-height: 96px; }
   .footer__legal { display: flex; gap: 18px; }
   .footer__legal a:hover { color: var(--fg); }
   .footer__mascot { position: absolute; right: 8px; bottom: -6px; width: clamp(120px, 14vw, 180px); pointer-events: none; }
@@ -283,7 +285,7 @@
   .avatar-stack .avatar { width: 36px; height: 36px; box-shadow: 0 0 0 3px var(--surface); margin-left: -10px; }
   .avatar-stack .avatar:first-child { margin-left: 0; }
   .divider { height: 1px; background: var(--line-2); border: 0; margin: 0; }
-  .card { background: var(--surface-2); border-radius: var(--r-card); padding: clamp(22px, 2.4vw, 32px); box-shadow: inset 0 0 0 1px var(--line); }
+  .card { background: var(--surface-2); border-radius: var(--r-card); padding: clamp(22px, 2.4vw, 32px); box-shadow: var(--sh-card); }
   .card--peach { background: var(--accent); box-shadow: none; }
   .card--ink { background: var(--deep); color: var(--fg); box-shadow: none; }
   .card--orange { background: var(--primary); color: var(--on-primary); box-shadow: none; }
