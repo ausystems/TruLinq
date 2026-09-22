@@ -18,6 +18,12 @@
   /* The desk: a member card lies in perspective, the stamp hovers above it and presses the seal on, the reviewer watches
      from the corner. The card is positioned by JS so its seal sits exactly under the stamp's landing spot. */
   .hero__stage { position: relative; min-height: 460px; }
+  /* a soft sky haze behind the desk gives the card and the stamp somewhere to sit */
+  .hero__stage::before { content: ""; position: absolute; left: 50%; top: 56%; width: 118%; aspect-ratio: 1.25; transform: translate(-50%, -50%); background: radial-gradient(closest-side, rgba(74,179,255,.22), rgba(74,179,255,.07) 52%, transparent 72%); pointer-events: none; }
+  /* the brand word drifts slowly through its gradient */
+  .hero__real { background-size: 220% 100%; animation: hero-sheen 7s ease-in-out infinite alternate; }
+  @keyframes hero-sheen { from { background-position: 0% 50%; } to { background-position: 100% 50%; } }
+  html.reduced-motion .hero__real { animation: none; }
   @media (min-width: 1024px) { .hero__stage { min-height: 580px; } }
   .hero__desk { position: absolute; inset: 0; }
   .hero__stamp { position: absolute; inset: 0; width: 100% !important; height: 100% !important; z-index: 2; pointer-events: none; }

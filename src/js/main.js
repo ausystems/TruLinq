@@ -248,7 +248,7 @@ export function popIn(targets, vars = {}, trigger = null) {
   if (!els.length) return;
   if (reduced) { gsap.set(els, { clearProps: 'all' }); return; }
   suspend(els);
-  return gsap.from(els, { scale: .4, opacity: 0, rotation: () => gsap.utils.random(-14, 14), duration: 1.1, ease: 'elastic.out(1, .6)', stagger: { each: .045, from: 'random' },
+  return gsap.from(els, { scale: .5, opacity: 0, rotation: () => gsap.utils.random(-7, 7), duration: 1.2, ease: 'elastic.out(1, .7)', stagger: { each: .045, from: 'random' },
     ...vars, scrollTrigger: trigger ? { trigger, start: 'top 88%', once: true } : undefined,
     onComplete: () => gsap.set(els, { clearProps: 'transform,opacity,transition' }) });
 }
@@ -288,17 +288,43 @@ export function initReveals(scope = document) {
   scope.querySelectorAll('[data-reveal]').forEach((el) => {
     const kind = el.dataset.reveal || 'up';
     const delay = parseFloat(el.dataset.delay || 0);
-    const from = { up: { y: 36, opacity: 0 }, fade: { opacity: 0 }, scale: { scale: .92, opacity: 0 }, left: { x: -40, opacity: 0 }, right: { x: 40, opacity: 0 }, stamp: { scale: 1.6, rotate: -14, opacity: 0 } }[kind] || { y: 36, opacity: 0 };
-    const to = kind === 'stamp' ? { scale: 1, rotate: 0, opacity: 1, duration: .6, ease: 'back.out(2.2)' } : { x: 0, y: 0, scale: 1, opacity: 1, duration: 1.1, ease: 'expo.out' };
+    /* entrances settle from a soft blur (pointer devices only: a phone GPU should not repaint filters) */
+    const soft = isTouch ? {} : { filter: 'blur(10px)' }, sharp = isTouch ? {} : { filter: 'blur(0px)' };
+    const from = { up: { y: 28, opacity: 0, ...soft }, fade: { opacity: 0, ...soft }, scale: { scale: .94, opacity: 0, ...soft }, left: { x: -32, opacity: 0 }, right: { x: 32, opacity: 0 }, stamp: { scale: 1.6, rotate: -14, opacity: 0 } }[kind] || { y: 28, opacity: 0, ...soft };
+    const to = kind === 'stamp' ? { scale: 1, rotate: 0, opacity: 1, duration: .6, ease: 'back.out(2.2)' } : { x: 0, y: 0, scale: 1, opacity: 1, ...sharp, duration: 1.25, ease: 'expo.out' };
     suspend(el);
-    gsap.fromTo(el, from, { ...to, delay, scrollTrigger: gateFor(el, { trigger: el, start: 'top 88%', once: true }), onComplete: () => gsap.set(el, { clearProps: 'transform,transition' }) });
+    gsap.fromTo(el, from, { ...to, delay, scrollTrigger: gateFor(el, { trigger: el, start: 'top 88%', once: true }), onComplete: () => gsap.set(el, { clearProps: 'transform,transition,filter' }) });
   });
 
   scope.querySelectorAll('[data-reveal-group]').forEach((group) => {
     const items = group.querySelectorAll(':scope > *');
     const stagger = parseFloat(group.dataset.stagger || 0.08);
     suspend(items);
-    gsap.fromTo(items, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 1.1, ease: 'expo.out', stagger: Math.min(stagger, 0.8 / items.length), scrollTrigger: gateFor(group, { trigger: group, start: 'top 85%', once: true }), onComplete: () => gsap.set(items, { clearProps: 'transform,transition' }) });
+    const soft = isTouch ? {} : { filter: 'blur(8px)' }, sharp = isTouch ? {} : { filter: 'blur(0px)' };
+    gsap.fromTo(items, { y: 32, opacity: 0, ...soft }, { y: 0, opacity: 1, ...sharp, duration: 1.25, ease: 'expo.out', stagger: Math.min(stagger, 0.8 / items.length), scrollTrigger: gateFor(group, { trigger: group, start: 'top 85%', once: true }), onComplete: () => gsap.set(items, { clearProps: 'transform,transition,filter' }) });
+  });
+}
+
+/* Every panel settles into place as it enters: a touch smaller and softer at the bottom of the screen, full size
+   and full presence by the time it reaches the middle. Scroll-linked, so it never lags the hand. The hero (it opens
+   the page) and pinned sections (their spacing must stay untouched) are left alone. */
+export function initPanels() {
+  if (reduced) return;
+  document.querySelectorAll('.page > .panel:not(.hero):not([data-pin]):not([data-how]), .footer.panel').forEach((panel) => {
+    gsap.fromTo(panel, { scale: .975, opacity: .55 }, { scale: 1, opacity: 1, ease: 'none', transformOrigin: '50% 100%', scrollTrigger: { trigger: panel, start: 'top 98%', end: 'top 55%', scrub: .5 } });
+  });
+}
+
+/* A soft light follows the pointer across cards (pointer devices only) */
+export function initSpotlight(scope = document) {
+  if (isTouch || reduced) return;
+  scope.querySelectorAll('.card:not(form), .quote, .doubt__pillar, .how__step, .plan, .fit, .mcard, .idcard, .bento__card').forEach((el) => {
+    el.classList.add('has-spot');
+    el.addEventListener('pointermove', (e) => {
+      const r = el.getBoundingClientRect();
+      el.style.setProperty('--mx', `${((e.clientX - r.left) / r.width * 100).toFixed(1)}%`);
+      el.style.setProperty('--my', `${((e.clientY - r.top) / r.height * 100).toFixed(1)}%`);
+    }, { passive: true });
   });
 }
 
@@ -442,8 +468,9 @@ export async function boot(pageInit, heroInit) {
   await hydrateSeals();
   ScrollTrigger.refresh();
   await revealPage(() => {
-    initReveals(); initStamps(); initCounters(); initAccordions(); initMagnetic(); initImages(); watchNavTone();
+    initReveals(); initStamps(); initCounters(); initAccordions(); initMagnetic(); initImages(); initSpotlight(); watchNavTone();
     if (typeof heroInit === 'function') heroInit(ctx);
+    initPanels();
     /* Pins are created by the page after the generic reveals. Sorting puts them first in the refresh order, so every
        trigger below a pinned section is measured with the pin spacing in place (otherwise it fires a viewport or
        more too early). Pins carry refreshPriority: 1. */

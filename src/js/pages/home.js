@@ -148,6 +148,9 @@ async function hero() {
 
   /* render only while the hero is on screen */
   ScrollTrigger.create({ trigger: stage, start: 'top bottom', end: 'bottom top', onToggle: (s) => (s.isActive ? S.start() : S.stop()) });
+
+  /* beside the copy, the whole desk recedes and fades as the next panel comes up over it */
+  if (!stacked.matches) gsap.to([heroEl.querySelector('.hero__copy'), stage], { y: -60, opacity: 0, ease: 'none', scrollTrigger: { trigger: heroEl, start: 'top top', end: 'bottom 40%', scrub: .6 } });
 }
 
 /* ── Scene animations for “How it works” ─────────────────────── */

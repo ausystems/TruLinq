@@ -2,9 +2,10 @@
   /* ── Layout: panels on a cream table ─────────────────────────── */
   .page { display: flex; flex-direction: column; gap: var(--panel-gap); padding: var(--page-pad); padding-top: 0; }
   .panel { position: relative; border-radius: var(--r-panel); background: var(--surface); overflow: clip; isolation: isolate; }
-  .panel--cream { background: var(--surface); }
+  /* light panels are lit faintly from above */
+  .panel--cream { background: linear-gradient(180deg, #FDFEFF 0%, var(--surface) 34%); }
   .panel--peach { background: linear-gradient(180deg, var(--accent-2) 0%, var(--accent-3) 100%); }
-  .panel--white { background: var(--surface-2); }
+  .panel--white { background: linear-gradient(180deg, var(--surface-2) 0%, var(--surface-2) 72%, #FBFCFF 100%); }
   .panel--ink { background: var(--deep-gradient); color: var(--fg); }
   .panel--orange { background: var(--primary-gradient); color: var(--on-primary); }
   .panel--violet { background: var(--primary-deep); color: var(--on-primary); }
@@ -34,8 +35,8 @@
 
   /* ── Nav: floating pill ──────────────────────────────────────── */
   .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: calc(14px + env(safe-area-inset-top, 0px)) max(var(--page-pad), env(safe-area-inset-right, 0px)) 0 max(var(--page-pad), env(safe-area-inset-left, 0px)); pointer-events: none; }
-  .nav__pill { pointer-events: auto; max-width: calc(var(--max) - 2 * var(--gutter) + 48px); margin: 0 auto; height: var(--nav-h); display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 8px 8px 8px 20px; border-radius: var(--r-pill); background: rgba(255,255,255,.72); -webkit-backdrop-filter: blur(18px) saturate(1.4); backdrop-filter: blur(18px) saturate(1.4); box-shadow: 0 1px 0 rgba(255,255,255,.7) inset, 0 10px 40px -18px rgba(12,21,38,.18); transition: transform .55s var(--e-inout), box-shadow var(--d-med) var(--e-out), background var(--d-med); will-change: transform; }
-  .nav.is-scrolled .nav__pill { box-shadow: 0 1px 0 rgba(255,255,255,.7) inset, 0 18px 50px -20px rgba(12,21,38,.24); }
+  .nav__pill { pointer-events: auto; max-width: calc(var(--max) - 2 * var(--gutter) + 48px); margin: 0 auto; height: var(--nav-h); display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 8px 8px 8px 20px; border-radius: var(--r-pill); background: rgba(255,255,255,.72); -webkit-backdrop-filter: blur(18px) saturate(1.4); backdrop-filter: blur(18px) saturate(1.4); box-shadow: 0 1px 0 rgba(255,255,255,.7) inset, 0 10px 40px -18px rgba(12,21,38,.18); transition: transform .55s var(--e-inout), height .5s var(--e-out), box-shadow var(--d-med) var(--e-out), background var(--d-med); will-change: transform; }
+  .nav.is-scrolled .nav__pill { height: 58px; background: rgba(255,255,255,.8); box-shadow: 0 1px 0 rgba(255,255,255,.7) inset, 0 18px 50px -20px rgba(12,21,38,.24); }
   .nav.is-hidden .nav__pill { transform: translateY(calc(-100% - 24px - env(safe-area-inset-top, 0px))); }
   .nav--ink .nav__pill { background: rgba(5, 27, 73, .72); color: var(--fg); box-shadow: 0 1px 0 rgba(255,255,255,.08) inset, 0 18px 50px -20px rgba(0,0,0,.5); }
   .nav__logo { display: flex; align-items: center; height: 40px; }
@@ -84,9 +85,10 @@
   .btn:hover { transform: translateY(-1px); }
   .btn:hover .btn__icon { transform: translateX(3px); }
   .btn:active { transform: scale(.975); }
-  .btn--primary { --btn-bg: var(--primary); --btn-fg: var(--on-primary); --btn-icon: rgba(255,255,255,.22); box-shadow: 0 10px 30px -12px rgba(41,129,251,.5); }
-  .btn--primary:hover { --btn-bg: var(--primary-hover); box-shadow: 0 16px 40px -14px rgba(41,129,251,.6); }
-  .btn--ink { --btn-bg: var(--fg); --btn-fg: var(--on-fg); }
+  /* the primary and ink pills carry a faint top light, like a lacquered button */
+  .btn--primary { --btn-bg: var(--primary); --btn-fg: var(--on-primary); --btn-icon: rgba(255,255,255,.22); background-image: linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,0) 60%); box-shadow: inset 0 1px 0 rgba(255,255,255,.22), 0 10px 30px -12px rgba(41,129,251,.5); }
+  .btn--primary:hover { --btn-bg: var(--primary-hover); box-shadow: inset 0 1px 0 rgba(255,255,255,.22), 0 16px 40px -14px rgba(41,129,251,.6); }
+  .btn--ink { --btn-bg: var(--fg); --btn-fg: var(--on-fg); background-image: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,0) 60%); box-shadow: inset 0 1px 0 rgba(255,255,255,.1); }
   .btn--ink:hover { --btn-bg: var(--fg-2); }
   .btn--cream { --btn-bg: #FFFFFF; --btn-fg: #0C1526; --btn-icon: #E6F1FF; box-shadow: inset 0 0 0 1px var(--line); } /* literal white: stays a white pill on deep panels too */
   .btn--cream:hover { --btn-bg: #F0F7FF; }
@@ -275,6 +277,12 @@
 
   /* ── Mascot (the Trulinq monk seal) ──────────────────────────── */
   .mascot--full { width: 100%; height: auto; }
+
+  /* ── Spotlight: a soft light follows the pointer across cards ──── */
+  .has-spot { position: relative; }
+  .has-spot::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; background: radial-gradient(280px circle at var(--mx, 50%) var(--my, 50%), rgba(74,179,255,.16), transparent 62%); transition: opacity .6s var(--e-out); }
+  .has-spot:hover::after { opacity: 1; }
+  .card--ink.has-spot::after, .panel--ink .has-spot::after { background: radial-gradient(280px circle at var(--mx, 50%) var(--my, 50%), rgba(255,255,255,.1), transparent 62%); }
 
   /* ── Reveal primitives (JS sets final state) ─────────────────── */
   [data-reveal] { opacity: 0; }

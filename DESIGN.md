@@ -143,6 +143,13 @@ Each page CSS file wraps its rules in `@layer pages { … }` and gives every sec
   reveals. Attributes: `data-split` (masked line reveal for headlines), `data-reveal` (`up|fade|scale|left|right|stamp`,
   optional `data-delay`), `data-reveal-group` (stagger children, `data-stagger`), `data-counter="812"`, `data-bar`,
   `data-parallax=".1"`, `data-stamp` on seals, `data-marquee` on `.marquee__track` (content is cloned once).
+* **The luxury layer (2026-09-22).** Four scroll-linked and pointer-linked behaviours give the site its Apple-like calm,
+  and every page gets them from `boot()`: (1) every panel settles as it enters (`initPanels`: scale .975 and 55% presence
+  at the bottom of the screen, full by the middle, scrubbed; the hero and pinned sections are exempt); (2) on desktop
+  the homepage hero recedes and fades as the next panel comes up over it; (3) `data-reveal` entrances settle from a soft
+  blur on pointer devices (never on phones); (4) a soft sky light follows the pointer across cards (`initSpotlight`,
+  `.has-spot::after`, pointer devices only). Buttons carry a faint top light. Keep these when adding sections: a new
+  panel needs nothing extra, a new card type only needs adding to the spotlight selector.
 * Elements with CSS `transition: transform` fight GSAP: call `suspend(els)` before a GSAP transform tween and `restore(els)`
   (or `clearProps: 'transform,transition'`) after. `popIn(els, vars, trigger)` does this for sticker-style pop-ins.
 * Easing: `expo.out` for entrances (1–1.4s), `expo.inOut` for wipes, `elastic.out(1,.5)` for stamps and stickers,

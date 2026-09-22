@@ -44,19 +44,19 @@
     --f-hand: var(--f-text);
 
     --fs-hero: clamp(2.9rem, 7vw, 6.6rem);
-    --fs-1: clamp(2.4rem, 5vw, 4.6rem);
-    --fs-2: clamp(1.9rem, 3.5vw, 3.2rem);
+    --fs-1: clamp(2.5rem, 5.2vw, 4.8rem);
+    --fs-2: clamp(2rem, 3.8vw, 3.5rem);
     --fs-3: clamp(1.4rem, 2vw, 1.8rem);
     --fs-4: clamp(1.1rem, 1.35vw, 1.3rem);
-    --fs-lead: clamp(1.1rem, 1.3vw, 1.3rem);
+    --fs-lead: clamp(1.1rem, 1.35vw, 1.35rem);
     --fs-body: 1.0625rem;
     --fs-small: .92rem;
     --fs-tiny: .8rem;
     --fs-eyebrow: .95rem;
 
     /* ── shape ────────────────────────────────────────────────── */
-    --r-panel: clamp(20px, 2.2vw, 32px);
-    --r-card: 20px;
+    --r-panel: clamp(22px, 2.6vw, 40px);
+    --r-card: 22px;
     --r-md: 14px;
     --r-sm: 10px;
     --r-pill: 999px;
@@ -65,7 +65,7 @@
     --gutter: clamp(20px, 3.6vw, 64px);
     --page-pad: clamp(8px, 1vw, 14px);
     --panel-gap: clamp(8px, 1vw, 14px);
-    --sect-y: clamp(80px, 9.5vw, 160px);
+    --sect-y: clamp(88px, 10vw, 176px);
     --sect-y-sm: clamp(52px, 6vw, 100px);
     --max: 1480px;
     --nav-h: 64px;
@@ -80,8 +80,8 @@
     --d-slow: 1s;
 
     /* ── depth (navy-tinted, diffused; the primary glows) ───────── */
-    --sh-card: 0 1px 2px rgba(12,21,38,.04), 0 14px 44px -14px rgba(12,21,38,.12);
-    --sh-lift: 0 2px 3px rgba(12,21,38,.05), 0 32px 64px -20px rgba(12,21,38,.22);
+    --sh-card: 0 1px 2px rgba(12,21,38,.04), 0 18px 50px -18px rgba(12,21,38,.14);
+    --sh-lift: 0 2px 3px rgba(12,21,38,.05), 0 36px 72px -24px rgba(12,21,38,.24);
     --sh-glow: 0 20px 50px -18px rgba(41,129,251,.5);
     --sh-deep: 0 34px 90px -24px rgba(5,27,73,.45);
     --ring-focus: 0 0 0 3px var(--surface-2), 0 0 0 6px var(--primary);

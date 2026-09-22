@@ -41,7 +41,7 @@
   /* Typography roles */
   .display { font-family: var(--f-display); font-weight: 600; letter-spacing: -.032em; line-height: 1.04; }
   .display--cond { font-weight: 700; letter-spacing: -.045em; line-height: .94; }
-  .lead { font-size: var(--fs-lead); line-height: 1.45; letter-spacing: -.012em; color: var(--fg-soft); max-width: 40ch; text-wrap: pretty; }
+  .lead { font-size: var(--fs-lead); line-height: 1.5; letter-spacing: -.012em; color: var(--fg-soft); max-width: 40ch; text-wrap: pretty; }
   .eyebrow { font-family: var(--f-text); font-size: var(--fs-eyebrow); font-weight: 500; letter-spacing: -.005em; color: var(--fg-soft); display: inline-block; }
   .mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
   .hand { font-family: var(--f-text); font-weight: 500; color: var(--glow); font-size: .95rem; line-height: 1.3; letter-spacing: -.005em; }
