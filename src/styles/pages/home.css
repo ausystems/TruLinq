@@ -85,7 +85,12 @@
   .how__inner { display: grid; gap: clamp(36px, 5vw, 72px); }
   @media (min-width: 1024px) { .how__inner { grid-template-columns: 5fr 7fr; align-items: center; min-height: 100vh; padding-block: clamp(40px, 5vw, 72px); } }
   .how__copy h2 { font-size: var(--fs-2); max-width: 13ch; }
-  .how__steps { margin-top: clamp(28px, 3vw, 44px); display: grid; gap: 6px; }
+  /* The progress rail: a soft ice track down the left of the steps, and a blue fill (primary at the top, sky at its tip)
+     that travels down as the stage advances on desktop and as the steps scroll past on phones and tablets. */
+  .how__flow { position: relative; margin-top: clamp(28px, 3vw, 44px); padding-left: 26px; }
+  .how__rail { position: absolute; left: 6px; top: 22px; bottom: 22px; width: 4px; border-radius: 2px; background: rgba(41,129,251,.14); }
+  .how__rail-fill { position: absolute; inset: 0; border-radius: 2px; background: linear-gradient(180deg, #2981FB, #4AB3FF); box-shadow: 0 0 16px rgba(41,129,251,.55), 0 0 3px rgba(74,179,255,.8); transform: scaleY(0); transform-origin: 50% 0; will-change: transform; }
+  .how__steps { display: grid; gap: 6px; }
   .how__step { display: block; padding: 18px 20px; border-radius: 18px; transition: background .5s var(--e-out), opacity .5s, box-shadow .5s; opacity: .45; }
   @media (min-width: 1024px) { .how__step { cursor: pointer; } .how__step:hover { opacity: .8; } }
   .how__step.is-active { opacity: 1; background: var(--surface-2); box-shadow: var(--sh-card); }
@@ -125,7 +130,7 @@
   .how__mascot { position: absolute; left: 5%; bottom: -1%; width: clamp(130px, 30%, 210px); z-index: 2; }
   .how__mascot [data-m-shadow] { fill: #4AB3FF; } /* on the navy stage the seal sits in a soft sky glow, not a shadow */
   .how__mascot svg { display: block; width: 100%; height: auto; overflow: visible; }
-  @media (max-width: 1023px) { .how__frame { aspect-ratio: auto; min-height: 0; padding: 20px; display: grid; gap: 20px; } .scene { position: relative; padding: 0; opacity: 1 !important; transform: none !important; } .scene--stamp { padding-bottom: clamp(150px, 30%, 220px); } .how__mascot { left: 0; } .how__step { opacity: 1; background: var(--surface-2); box-shadow: var(--sh-card); } }
+  @media (max-width: 1023px) { .how__frame { aspect-ratio: auto; min-height: 0; padding: 20px; display: grid; gap: 20px; } .scene { position: relative; padding: 0; opacity: 1 !important; transform: none !important; } .scene--stamp { padding-bottom: clamp(150px, 30%, 220px); } .how__mascot { left: 0; } .how__step { opacity: .5; background: var(--surface-2); box-shadow: var(--sh-card); } .how__step.is-active { opacity: 1; } .how__step.is-active ~ .how__step { opacity: .5; } html.reduced-motion .how__step { opacity: 1; } }
   @media (max-width: 400px) { .how__frame { padding: 14px; gap: 14px; } }
 
   /* ── WORLD ────────────────────────────────────────────────────── */

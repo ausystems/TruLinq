@@ -165,6 +165,7 @@ open) and 740×360 (landscape). No console errors. No horizontal overflow. Every
 * **Stacked layouts (below 1024px) get their own hero framing.** The desk camera looks lower so the scene rises into the
   stage, the card is kept inside the stage by sliding the stamp and its landing spot together (`frame()` in
   `src/js/pages/home.js`), and the desk choreography waits until the stage scrolls into view instead of playing off-screen.
+* **The How-it-works progress rail** (`.how__rail` beside the steps) is the one line that is allowed: it is progress, not decoration. Its fill runs with the scrub on the pinned stage and with the scroll on stacked layouts, lighting the step its tip is in.
 * **Nothing is scrubbed or offset on phones.** The stamped scene keeps its slot (no `xPercent`/`yPercent` nudge), scenes
   stack and play once as they enter.
 * **Headlines re-split on resize.** `[data-split]` uses `SplitText.create({ autoSplit: true })`, so a rotated phone never

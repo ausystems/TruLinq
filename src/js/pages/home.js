@@ -203,6 +203,19 @@ function how() {
   const scenes = section.querySelectorAll('[data-scene]');
   const setStep = (i) => steps.forEach((s, j) => { s.classList.toggle('is-active', i === j); s.setAttribute('aria-current', i === j ? 'step' : 'false'); });
 
+  /* The progress rail. Its fill travels down the rail; the anchors are the top of each step as a fraction of the
+     rail's height (and 1 for the end), so the tip enters a step the moment that step becomes the current one. */
+  const rail = section.querySelector('[data-rail]'), fill = section.querySelector('[data-rail-fill]');
+  let anchors = [0, 0, 0, 1];
+  const measureRail = () => {
+    const rr = rail.getBoundingClientRect();
+    anchors = [...steps].map((s) => gsap.utils.clamp(0, 1, (s.getBoundingClientRect().top + 14 - rr.top) / rr.height)).concat(1);
+  };
+  /* v: 0..1 through the stage (step k spans [k/3, (k+1)/3]) -> rail fraction, piecewise through the anchors */
+  const railAt = (v) => { const k = Math.min(2, Math.floor(v * 3)), t = v * 3 - k; return anchors[k] + (anchors[k + 1] - anchors[k]) * t; };
+  const setRail = (v) => gsap.set(fill, { scaleY: gsap.utils.clamp(0, 1, v) });
+  measureRail(); ScrollTrigger.addEventListener('refresh', measureRail);
+
   const mm = gsap.matchMedia();
 
   /* Desktop: one pinned stage, three scenes scrubbed by scroll */
@@ -216,7 +229,7 @@ function how() {
     if (reduced) {
       [a, b, c].forEach((t) => t.progress(1));
       gsap.set(scenes, { opacity: 1, position: 'relative' }); gsap.set('.how__frame', { display: 'grid', gap: 20, padding: 20, height: 'auto' });
-      setStep(-1); return;
+      setStep(-1); setRail(1); return;
     }
     let cuts = [0, 1], inThree = false;
     /* the first two scenes are scrubbed; the stamped scene plays itself the moment the stage reaches it */
@@ -224,7 +237,13 @@ function how() {
     const leaveThree = () => { if (!inThree) return; inThree = false; c.reset(); };
     const master = gsap.timeline({
       scrollTrigger: { trigger: section, start: 'top top', end: '+=260%', pin: true, pinSpacing: true, scrub: .8, anticipatePin: 1, invalidateOnRefresh: true,
-        onUpdate: (self) => { const step = self.progress < cuts[0] ? 0 : self.progress < cuts[1] ? 1 : 2; setStep(step); if (step === 2) enterThree(); else leaveThree(); } }
+        onUpdate: (self) => {
+          const p = self.progress, step = p < cuts[0] ? 0 : p < cuts[1] ? 1 : 2;
+          setStep(step); if (step === 2) enterThree(); else leaveThree();
+          /* the rail runs through the current step in step with the scrub */
+          const [s0, s1] = [[0, cuts[0]], [cuts[0], cuts[1]], [cuts[1], 1]][step];
+          setRail(railAt((step + (p - s0) / (s1 - s0)) / 3));
+        } }
     });
     master.addLabel('one').add(a.play(), 'one')
       .to({}, { duration: .5 })
@@ -235,25 +254,27 @@ function how() {
       .addLabel('three').set(scenes[2], { opacity: 1 })
       .to({}, { duration: 1.2 });
     cuts = [master.labels.two / master.duration(), master.labels.three / master.duration()];
-    setStep(0);
+    setStep(0); setRail(0);
     /* clicking a step scrolls the pin to that scene */
     steps.forEach((st, i) => st.addEventListener('click', () => {
       const t = master.scrollTrigger; const p = [0.02, cuts[0] + .03, cuts[1] + .03][i];
       scrollTo(t.start + (t.end - t.start) * p, { duration: 1 });
     }));
-    return () => { leaveThree(); master.scrollTrigger && master.scrollTrigger.kill(); master.kill(); enterTrig.kill(); entrance.kill(); [a, b, c].forEach((t) => t.kill()); gsap.set(scenes, { clearProps: 'all' }); };
+    return () => { leaveThree(); master.scrollTrigger && master.scrollTrigger.kill(); master.kill(); enterTrig.kill(); entrance.kill(); [a, b, c].forEach((t) => t.kill()); gsap.set(scenes, { clearProps: 'all' }); setRail(0); };
   });
 
   /* Mobile & tablet: scenes stack; each plays once as it enters */
   mm.add('(max-width: 1023px)', () => {
     const a = sceneId(), b = sceneRegistry(), c = sceneStamp({ offset: false });
     const tls = [a, b, c]; const triggers = [];
-    setStep(-1);
-    tls.forEach((t, i) => {
-      if (reduced) { t.progress(1); return; }
-      triggers.push(ScrollTrigger.create({ trigger: scenes[i], start: 'top 80%', once: true, onEnter: () => t.play() }));
-    });
-    return () => { c.reset(); triggers.forEach((t) => t.kill()); tls.forEach((t) => t.kill()); gsap.set(scenes, { clearProps: 'all' }); };
+    if (reduced) { setStep(-1); setRail(1); tls.forEach((t) => t.progress(1)); return () => { c.reset(); tls.forEach((t) => t.kill()); gsap.set(scenes, { clearProps: 'all' }); }; }
+    tls.forEach((t, i) => triggers.push(ScrollTrigger.create({ trigger: scenes[i], start: 'top 80%', once: true, onEnter: () => t.play() })));
+    /* the rail fills as the steps scroll past, lighting each step as the tip reaches it */
+    const flow = section.querySelector('[data-flow]');
+    setStep(-1); setRail(0);
+    triggers.push(ScrollTrigger.create({ trigger: flow, start: 'top 72%', end: 'bottom 45%', scrub: .5, invalidateOnRefresh: true,
+      onUpdate: (self) => { const v = self.progress; setRail(v); setStep(v <= 0 ? -1 : v < anchors[1] ? 0 : v < anchors[2] ? 1 : 2); } }));
+    return () => { c.reset(); triggers.forEach((t) => t.kill()); tls.forEach((t) => t.kill()); gsap.set(scenes, { clearProps: 'all' }); setRail(0); };
   });
 }
 
