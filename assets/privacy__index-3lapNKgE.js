@@ -1,0 +1,1 @@
+import"./main-DD527R8H.js";import{r as e,t}from"./legal-B4A8NW0_.js";e(t);
