@@ -45,7 +45,8 @@ async function rubberStamp() {
   let dragging = false, lastX = 0;
   stage.addEventListener('pointerdown', (e) => { dragging = true; lastX = e.clientX; canvas.style.cursor = 'grabbing'; });
   window.addEventListener('pointermove', (e) => { if (!dragging) return; const dx = e.clientX - lastX; lastX = e.clientX; S.nudgeSpin(dx * 40); });
-  window.addEventListener('pointerup', () => { dragging = false; canvas.style.cursor = 'grab'; });
+  const release = () => { dragging = false; canvas.style.cursor = 'grab'; };
+  window.addEventListener('pointerup', release); window.addEventListener('pointercancel', release); /* a scroll that starts on the stamp cancels the pointer; never leave it "dragging" */
 }
 
 /* ── Register checks & ledger leaders ────────────────────────── */

@@ -145,7 +145,8 @@ export function idle(p, { hop = true, follow = true } = {}) {
 
   if (!hop) return;
   p.root.style.cursor = 'pointer';
-  p.root.addEventListener('pointerdown', (e) => {
+  /* a mouse reacts on press; a finger reacts on tap, so a scroll that starts on the seal never startles it */
+  p.root.addEventListener(isTouch ? 'click' : 'pointerdown', (e) => {
     if (busy || e.button) return;
     busy = true;
     const tl = gsap.timeline({ onComplete: () => (busy = false) })

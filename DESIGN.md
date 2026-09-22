@@ -157,7 +157,24 @@ Each page CSS file wraps its rules in `@layer pages { … }` and gives every sec
 Every page is judged as a piece of graphic design in isolation: deliberate type sizes and line breaks, generous section
 padding (`--sect-y`), asymmetric compositions, no generic three-column card grids without a reason, no default browser
 form styling, refined hover and focus states (`:focus-visible` is handled by base.css), real content, working controls.
-Check at 1440px and at 390px (phone). No console errors. No horizontal overflow. Every link goes somewhere real.
+Check at 1440px, 1024×768 (the smallest pinned layout), 768 (tablet), 390 and 360 (phones), 375×667 (a short phone, menu
+open) and 740×360 (landscape). No console errors. No horizontal overflow. Every link goes somewhere real.
+
+### Responsive rules
+
+* **Stacked layouts (below 1024px) get their own hero framing.** The desk camera looks lower so the scene rises into the
+  stage, the card is kept inside the stage by sliding the stamp and its landing spot together (`frame()` in
+  `src/js/pages/home.js`), and the desk choreography waits until the stage scrolls into view instead of playing off-screen.
+* **Nothing is scrubbed or offset on phones.** The stamped scene keeps its slot (no `xPercent`/`yPercent` nudge), scenes
+  stack and play once as they enter.
+* **Headlines re-split on resize.** `[data-split]` uses `SplitText.create({ autoSplit: true })`, so a rotated phone never
+  wraps a line inside its mask; once the reveal has played, fresh lines sit at rest.
+* **Touch never triggers on scroll-start.** Tap reactions (the desk press, the seal's hop) listen for `click` on touch
+  devices and `pointerdown` with a mouse; every drag (globe, pricing stamp) also ends on `pointercancel`.
+* **Grids never let a child dictate their width.** Grid and flex children get `min-width: 0` (components.css), long
+  pills wrap under 400px, nowrap ledger lines wrap under 400px.
+* **Tap targets on `(hover: none)` are at least 40px tall** (footer legal links, inline action buttons, pills).
+* **The menu scrolls on short screens** (`max-height: 720px` starts the list at the top; the panel is frosted).
 
 ## Deploying
 

@@ -24,6 +24,7 @@
   .dir__search input:focus-visible { box-shadow: none; }
   .dir__search input::-webkit-search-cancel-button { -webkit-appearance: none; }
   .dir__search kbd { font: 500 .78rem var(--f-mono); padding: 3px 8px; border-radius: 7px; background: var(--surface-2); box-shadow: inset 0 0 0 1px var(--line-2); color: var(--fg-soft); }
+  @media (hover: none), (max-width: 480px) { .dir__search kbd { display: none; } } /* a keyboard hint means nothing on a phone */
   .dir__industries { display: flex; flex-wrap: wrap; gap: 8px; }
   .dir__industries .pill { cursor: pointer; transition: transform .5s var(--e-spring), background var(--d-fast), color var(--d-fast), box-shadow var(--d-fast); box-shadow: inset 0 0 0 1.5px var(--line-2); background: var(--surface-2); }
   .dir__industries .pill:hover { transform: translateY(-2px); }

@@ -29,6 +29,8 @@
     .pillar--3 { left: 0; bottom: 0; }
     .pillar--4 { right: 0; bottom: 0; }
     .pillar__note { right: auto; left: 100%; bottom: 10px; margin-left: 14px; }
+    /* the right-hand pillars hang their notes inward, so nothing runs past the diagram's edge */
+    .pillar--2 .pillar__note, .pillar--4 .pillar__note { left: auto; right: 100%; margin-left: 0; margin-right: 14px; }
   }
 
   /* ── Means ────────────────────────────────────────────────────── */

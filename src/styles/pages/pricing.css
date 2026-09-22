@@ -69,7 +69,7 @@
   .register__row [data-no]::before { content: ""; width: 14px; height: 2px; border-radius: 1px; background: var(--line-2); }
   html.reduced-motion .register__row [data-yes]::before { transform: scale(1); }
   @keyframes pop { to { transform: scale(1); } }
-  @media (max-width: 720px) { .register__head, .register__row { grid-template-columns: 1.7fr .8fr 1fr .9fr; gap: 6px; padding-inline: 12px; font-size: .84rem; } .register__head { font-size: .62rem; line-height: 1.2; } .register__row [data-yes], .register__row [data-no] { flex-direction: column; gap: 3px; font-size: .62rem; line-height: 1.1; text-align: center; } .register__row .register__hl { padding: 8px 2px; } }
+  @media (max-width: 720px) { .register__head, .register__row { grid-template-columns: 1.7fr .8fr 1fr .9fr; gap: 6px; padding-inline: 12px; font-size: .84rem; } .register__head { font-size: .68rem; line-height: 1.2; } .register__row [data-yes], .register__row [data-no] { flex-direction: column; gap: 3px; font-size: .62rem; line-height: 1.1; text-align: center; } .register__row .register__hl { padding: 8px 2px; } }
 
   /* ── FAQ ──────────────────────────────────────────────────────── */
   .pfaq__inner { display: grid; gap: clamp(36px, 5vw, 72px); }

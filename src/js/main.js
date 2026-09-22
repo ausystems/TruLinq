@@ -261,12 +261,17 @@ export function initReveals(scope = document) {
   if (reduced) { scope.querySelectorAll('[data-reveal],[data-split]').forEach((el) => (el.style.opacity = 1)); return; }
 
   scope.querySelectorAll('[data-split]').forEach((el) => {
-    const split = splitLines(el);
-    el.style.opacity = 1;
-    gsap.from(split.lines, {
-      yPercent: 110, duration: 1.15, ease: 'expo.out', stagger: 0.07,
-      delay: parseFloat(el.dataset.delay || 0),
-      scrollTrigger: { trigger: el, start: 'top 88%', once: true }
+    const delay = parseFloat(el.dataset.delay || 0);
+    let played = false;
+    /* autoSplit re-splits when the width changes (a phone rotating, a window resizing), so a line never wraps inside
+       its mask; once the reveal has played the fresh lines simply sit at rest */
+    SplitText.create(el, {
+      type: 'lines', mask: 'lines', linesClass: 'split-line-inner', autoSplit: true,
+      onSplit(self) {
+        el.style.opacity = 1;
+        if (played) return;
+        return gsap.from(self.lines, { yPercent: 110, duration: 1.15, ease: 'expo.out', stagger: 0.07, delay, scrollTrigger: { trigger: el, start: 'top 88%', once: true }, onComplete: () => { played = true; } });
+      }
     });
   });
 

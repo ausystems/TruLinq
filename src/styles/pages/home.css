@@ -31,6 +31,8 @@
   @media (max-width: 600px) { .hero__cta .btn { width: 100%; justify-content: space-between; } }
   @media (max-width: 480px) { .hero__title { font-size: clamp(2rem, 10.6vw, 3rem); } .hero__wordmark { font-size: 40vw; } }
   @media (max-width: 1023px) { .hero__stage { min-height: 440px; margin-top: 8px; } .hero__card { width: min(80%, 360px); } .hero__mascot { width: clamp(120px, 30%, 160px); left: 0; } .hero__note-1 { top: 0; right: 2%; } .pin em { display: none; } .pin { font-size: .72rem; padding: 3px 10px 3px 3px; } .pin img { width: 26px; height: 26px; } }
+  @media (max-width: 600px) { .hero__stage { min-height: 420px; } .hero__card { width: min(80%, 320px); } .hero__card .idcard__name { font-size: 1.08rem; } .hero__card .idcard__photo .seal { --seal-size: 64px; right: -26px; bottom: -26px; } }
+  @media (max-width: 400px) { .hero__ledger-title, .hero__ledger-motto { white-space: normal; } }
   .hero__ledger { background: rgba(255,255,255,.7); }
   .hero__ledger-inner { max-width: var(--max); margin: 0 auto; padding: 22px var(--gutter); display: grid; gap: 14px 40px; align-items: center; }
   @media (min-width: 1024px) { .hero__ledger-inner { grid-template-columns: auto 1fr auto; } }
@@ -96,7 +98,7 @@
   .scene { position: absolute; inset: 0; display: grid; place-items: center; padding: 8%; z-index: 1; }
   .scene:not(:first-child) { opacity: 0; }
   .iddoc { position: relative; width: min(100%, 380px); padding: 18px 20px 20px; border-radius: 18px; background: var(--surface); color: var(--fg); box-shadow: var(--sh-lift); overflow: hidden; }
-  .iddoc__head { display: flex; justify-content: space-between; align-items: center; padding-bottom: 6px; }
+  .iddoc__head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 4px 12px; padding-bottom: 6px; }
   .iddoc__no { font-size: .74rem; color: var(--fg-soft); }
   .iddoc__body { display: grid; grid-template-columns: 96px 1fr; gap: 18px; padding-top: 16px; align-items: start; }
   .iddoc__photo { width: 96px; height: 120px; object-fit: cover; border-radius: 10px; filter: grayscale(.2); }
@@ -108,7 +110,7 @@
   .iddoc__tick { width: 16px; height: 16px; display: grid; place-items: center; }
   .iddoc__tick::after { content: ""; width: 9px; height: 5px; border-left: 2px solid #fff; border-bottom: 2px solid #fff; transform: rotate(-45deg); margin-top: -3px; }
   .registry { width: min(100%, 420px); padding: 20px 22px 12px; border-radius: 18px; background: var(--surface-2); color: var(--fg); box-shadow: var(--sh-lift); }
-  .registry__head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-bottom: 8px; font-size: .78rem; }
+  .registry__head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 4px 12px; padding-bottom: 8px; font-size: .78rem; }
   .registry__head .mono { color: var(--fg-soft); }
   .registry__rows li { display: flex; align-items: center; gap: 10px; padding: 10px 12px; margin-inline: -12px; border-radius: 10px; font-size: .86rem; opacity: .35; }
   .registry__rows li:nth-child(even) { background: var(--bg); }
@@ -123,7 +125,8 @@
   .how__mascot { position: absolute; left: 5%; bottom: -1%; width: clamp(130px, 30%, 210px); z-index: 2; }
   .how__mascot [data-m-shadow] { fill: #4AB3FF; } /* on the navy stage the seal sits in a soft sky glow, not a shadow */
   .how__mascot svg { display: block; width: 100%; height: auto; overflow: visible; }
-  @media (max-width: 1023px) { .how__frame { aspect-ratio: auto; min-height: 0; padding: 20px; display: grid; gap: 20px; } .scene { position: relative; padding: 0; opacity: 1 !important; transform: none !important; } .scene--stamp { padding-bottom: 150px; } .how__mascot { left: 0; } .how__step { opacity: 1; background: var(--surface-2); box-shadow: var(--sh-card); } }
+  @media (max-width: 1023px) { .how__frame { aspect-ratio: auto; min-height: 0; padding: 20px; display: grid; gap: 20px; } .scene { position: relative; padding: 0; opacity: 1 !important; transform: none !important; } .scene--stamp { padding-bottom: clamp(150px, 30%, 220px); } .how__mascot { left: 0; } .how__step { opacity: 1; background: var(--surface-2); box-shadow: var(--sh-card); } }
+  @media (max-width: 400px) { .how__frame { padding: 14px; gap: 14px; } }
 
   /* ── WORLD ────────────────────────────────────────────────────── */
   .world__inner { display: grid; gap: clamp(36px, 5vw, 72px); align-items: center; }
@@ -166,7 +169,11 @@
 
   /* ── BENTO ────────────────────────────────────────────────────── */
   .bento { display: grid; gap: var(--panel-gap); grid-template-columns: 1fr; }
-  @media (min-width: 760px) { .bento { grid-template-columns: repeat(6, 1fr); grid-template-areas: "feed feed feed match match match" "feed feed feed rooms rooms rooms" "endorse endorse report report renew renew"; } .bento__card--feed { grid-area: feed; } .bento__card--match { grid-area: match; } .bento__card--rooms { grid-area: rooms; } .bento__card--endorse { grid-area: endorse; } .bento__card--report { grid-area: report; } .bento__card--renew { grid-area: renew; } }
+  .bento > * { min-width: 0; }
+  @media (min-width: 760px) { .bento { grid-template-columns: repeat(6, 1fr); grid-template-areas: "feed feed feed match match match" "feed feed feed rooms rooms rooms" "endorse endorse endorse endorse endorse endorse" "report report report renew renew renew"; } .bento__card--feed { grid-area: feed; } .bento__card--match { grid-area: match; } .bento__card--rooms { grid-area: rooms; } .bento__card--endorse { grid-area: endorse; } .bento__card--report { grid-area: report; } .bento__card--renew { grid-area: renew; } }
+  /* tablets: the quote runs as a full-width band; desktops: the three small cards share the last row */
+  @media (min-width: 760px) and (max-width: 1023px) { .bento__card--endorse { min-height: 0; flex-direction: row; align-items: center; gap: 32px; } .bento__card--endorse .bento__ui { flex: 1 1 58%; min-height: 150px; } .bento__card--endorse .bento__text { flex: 1 1 42%; } }
+  @media (min-width: 1024px) { .bento { grid-template-areas: "feed feed feed match match match" "feed feed feed rooms rooms rooms" "endorse endorse report report renew renew"; } }
   .bento__card { display: flex; flex-direction: column; justify-content: space-between; gap: 24px; min-height: 280px; padding: 22px; transition: transform .7s var(--e-out), box-shadow .7s var(--e-out); }
   .bento__card:hover { transform: translateY(-4px); box-shadow: var(--sh-lift); }
   .bento__card.card--ink:hover, .bento__card.card--peach:hover { box-shadow: var(--sh-lift); }
@@ -189,6 +196,7 @@
   .linq__pill--b { background: var(--deep-2); color: var(--sky); margin: -12px 0 0 44px; }
   .bento__card--match:hover .linq__pill--a { transform: translate(18px, 6px) rotate(-2deg); }
   .bento__card--match:hover .linq__pill--b { transform: translate(-18px, -6px) rotate(2deg); }
+  @media (max-width: 480px) { .linq { max-width: 100%; } .linq__pill { max-width: 100%; white-space: normal; line-height: 1.25; } .linq__pill--b { margin: 6px 0 0 24px; } }
   .bento__ui--rooms { display: grid; gap: 10px; align-content: center; justify-items: start; }
   .bubble { max-width: 82%; padding: 10px 14px; border-radius: 16px; font-size: .84rem; line-height: 1.4; }
   .bubble--a { background: var(--surface-2); border-bottom-left-radius: 4px; box-shadow: var(--sh-card); }
@@ -206,7 +214,7 @@
   .ring12 { position: relative; width: 120px; height: 120px; display: grid; place-items: center; }
   .ring12 svg { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
   .ring12 b { display: grid; justify-items: center; font-family: var(--f-display); font-weight: 600; font-size: 2rem; letter-spacing: -.04em; line-height: 1; color: var(--fg); }
-  .ring12 small { font: 600 .6rem var(--f-mono); letter-spacing: 0; color: var(--fg-soft); margin-top: 2px; }
+  .ring12 small { font: 600 .68rem var(--f-mono); letter-spacing: 0; color: var(--fg-soft); margin-top: 2px; }
 
   /* ── QUOTES ───────────────────────────────────────────────────── */
   .quotes .section-head { justify-items: center; }

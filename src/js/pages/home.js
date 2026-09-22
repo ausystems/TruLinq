@@ -43,15 +43,17 @@ async function hero() {
   const seal = card.querySelector('.seal');
   const canvas = heroEl.querySelector('[data-hero-stamp]');
   const p = mascotParts(heroEl.querySelector('[data-hero-mascot]'));
+  const stacked = matchMedia('(max-width: 1023px)');
 
   /* the card lies on the desk */
   gsap.set(card, { rotateX: 34, rotateZ: -6, rotateY: 4, transformPerspective: 1400, transformOrigin: '50% 50%' });
+  const BASE_X = -.1, LOOK = { wide: .8, stacked: .38 };
   const S = await createStamp(canvas, stage, {
-    mode: 'straight', fov: 30, camPos: [0, 3.6, 9.4], look: [0, .8, 0], scale: .56,
+    mode: 'straight', fov: 30, camPos: [0, 3.6, 9.4], look: [0, LOOK.wide, 0], scale: .56,
     rest: { x: -.32, y: -.7, z: .08 }, restY: .95, dropY: 1, bob: .07, spin: .1, idleTilt: .05,
-    shadowY: -.02, shadowOpacity: .1, position: [-.1, 0, .4]
+    shadowY: -.02, shadowOpacity: .1, position: [BASE_X, 0, .4]
   });
-  const LAND = [-.1, -.06, .4];
+  const LAND = [BASE_X, -.06, .4];
 
   /* put the card's seal exactly under the stamp's landing spot (host pixels) */
   const place = () => {
@@ -62,7 +64,22 @@ async function hero() {
     cardWrap.style.left = `${(wr.left - st.left) + (land.x - cx)}px`;
     cardWrap.style.top = `${(wr.top - st.top - fy) + (land.y - cy)}px`;
   };
-  place(); window.addEventListener('resize', place);
+  /* Frame the desk for the layout. Beside the copy the scene sits low with the note floating above it; stacked under
+     the copy the camera looks lower, so the scene rises into the stage instead of leaving air above the stamp. Then
+     keep the whole card inside the stage: if it would run past an edge, the stamp and its landing spot slide over
+     with it, so the seal still lands exactly under the press. */
+  const shift = (du) => { LAND[0] = BASE_X + du; S.group.position.x = BASE_X + du; S.shadow.position.x = BASE_X + du; };
+  const frame = () => {
+    S.resize();
+    S.camera.lookAt(0, stacked.matches ? LOOK.stacked : LOOK.wide, 0);
+    shift(0); place();
+    const st = stage.getBoundingClientRect(), cr = card.getBoundingClientRect(), pad = 6;
+    const dx = cr.right > st.right - pad ? (st.right - pad) - cr.right : cr.left < st.left + pad ? (st.left + pad) - cr.left : 0;
+    if (!dx) return;
+    const a = S.project(...LAND), b = S.project(LAND[0] + 1, LAND[1], LAND[2]);
+    shift(dx / (b.x - a.x)); place();
+  };
+  frame(); new ResizeObserver(frame).observe(stage);
 
   /* the impact: the seal slams on, the card takes the hit */
   const thud = () => {
@@ -83,22 +100,25 @@ async function hero() {
   gsap.set(canvas, { opacity: 0, y: -80 });
   prime(p);
   S.start();
-  const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
-  tl.to('.hero__eyebrow', { opacity: 1, duration: .9 }, 0)
+  gsap.timeline({ defaults: { ease: 'expo.out' } })
+    .to('.hero__eyebrow', { opacity: 1, duration: .9 }, 0)
     .to('.hero__line > span', { y: 0, duration: 1.4, stagger: .13 }, .05)
     .to('.hero__lead', { opacity: 1, y: 0, duration: 1.1 }, .75)
-    .to('.hero__cta', { opacity: 1, y: 0, duration: 1.1 }, .9)
-    /* the card slides onto the desk, the stamp arrives from above */
-    .to(cardWrap, { opacity: 1, y: 0, duration: 1.4 }, .5)
-    .to(canvas, { opacity: 1, y: 0, duration: 1.3 }, .7)
-    /* the press: down fast, thud, lift with a spring */
-    .to(S.press, { t: 1, duration: .38, ease: 'power3.in' }, 1.6)
-    .add(thud, 1.98)
-    .to(S.press, { t: 0, duration: 1.1, ease: 'elastic.out(1, .45)' }, 2.12)
-    /* then the card breathes on the desk */
-    .add(() => gsap.to(cardWrap, { y: -6, duration: 3.8, ease: 'sine.inOut', yoyo: true, repeat: -1 }), 3.2);
+    .to('.hero__cta', { opacity: 1, y: 0, duration: 1.1 }, .9);
+  /* The desk: the card slides on, the stamp arrives from above, presses (down fast, thud, lift with a spring), then
+     the card breathes. Beside the copy it starts with the page; stacked below the copy it waits for the stage to
+     scroll into view, so nobody misses the press. */
+  const desk = gsap.timeline({ paused: true, defaults: { ease: 'expo.out' } });
+  desk.to(cardWrap, { opacity: 1, y: 0, duration: 1.4 }, 0)
+    .to(canvas, { opacity: 1, y: 0, duration: 1.3 }, .2)
+    .to(S.press, { t: 1, duration: .38, ease: 'power3.in' }, 1.1)
+    .add(thud, 1.48)
+    .to(S.press, { t: 0, duration: 1.1, ease: 'elastic.out(1, .45)' }, 1.62)
+    .add(() => gsap.to(cardWrap, { y: -6, duration: 3.8, ease: 'sine.inOut', yoyo: true, repeat: -1 }), 2.7);
   /* the reviewer thumps its own stamp in the same beat */
-  review(tl, p, { land: 1.98 });
+  review(desk, p, { land: 1.48 });
+  if (stage.getBoundingClientRect().top < innerHeight * .6) gsap.delayedCall(.5, () => desk.play());
+  else ScrollTrigger.create({ trigger: stage, start: 'top 60%', once: true, onEnter: () => desk.play() });
 
   /* pointer parallax: the desk tilts a little, the stamp leans with you */
   if (!isTouch) {
@@ -107,16 +127,16 @@ async function hero() {
       const r = stage.getBoundingClientRect();
       const dx = (e.clientX - (r.left + r.width / 2)) / r.width, dy = (e.clientY - (r.top + r.height / 2)) / r.height;
       S.setPointer(dx * 2, dy * 2);
-      if (tl.isActive()) return;
+      if (desk.isActive()) return;
       rx(34 + dy * -5); ry(4 + dx * 7);
     });
     heroEl.addEventListener('pointerleave', () => { S.setPointer(0, 0); rx(34); ry(4); });
   }
 
-  /* click the desk: the stamp presses again */
+  /* press the desk again: a mouse on press, a finger on tap (so a scroll that starts here never fires it) */
   let pressing = false;
-  stage.addEventListener('pointerdown', (e) => {
-    if (e.button || pressing || tl.isActive() || e.target.closest('[data-hero-mascot]')) return;
+  stage.addEventListener(isTouch ? 'click' : 'pointerdown', (e) => {
+    if (e.button || pressing || desk.isActive() || !desk.progress() || e.target.closest('[data-hero-mascot]')) return;
     pressing = true;
     gsap.timeline({ onComplete: () => (pressing = false) })
       .to(S.press, { t: 1, duration: .3, ease: 'power3.in' })
@@ -154,13 +174,14 @@ function sceneRegistry() {
 }
 /* The stamped scene plays in real time (never scrubbed): the card rises, the seal slams, the reviewer pops up and
    thumps in the same beat, then lives on the stage until the scene leaves. */
-function sceneStamp() {
+function sceneStamp({ offset = true } = {}) {
   const s = document.querySelector('[data-scene="2"]');
   const card = s.querySelector('.idcard');
   const seal = s.querySelector('.seal');
   const p = mascotParts(s.querySelector('[data-how-mascot]'));
   const tl = gsap.timeline({ paused: true });
-  gsap.set(card, { xPercent: 6, yPercent: -10 });
+  /* on the pinned stage the card sits up and to the right so the seal thumps toward it; stacked, it stays in its slot */
+  gsap.set(card, offset ? { xPercent: 6, yPercent: -10 } : { xPercent: 0, yPercent: 0 });
   tl.fromTo(card, { y: 60, rotate: -8, opacity: 0 }, { y: 0, rotate: -3, opacity: 1, duration: 1, ease: 'expo.out' })
     .fromTo(seal, { opacity: 0, scale: 2.2, rotate: -26 }, { opacity: 1, scale: 1, rotate: -8, duration: .55, ease: 'power4.in' }, .9)
     .to(card, { rotate: -1.5, y: 6, duration: .18, ease: 'power2.out' }, 1.42)
@@ -225,7 +246,7 @@ function how() {
 
   /* Mobile & tablet: scenes stack; each plays once as it enters */
   mm.add('(max-width: 1023px)', () => {
-    const a = sceneId(), b = sceneRegistry(), c = sceneStamp();
+    const a = sceneId(), b = sceneRegistry(), c = sceneStamp({ offset: false });
     const tls = [a, b, c]; const triggers = [];
     setStep(-1);
     tls.forEach((t, i) => {
@@ -343,7 +364,7 @@ async function globe() {
   const onMove = (e) => { if (!dragging) return; const dx = e.clientX - lastX; lastX = e.clientX; group.rotation.y += dx * .005; velocity = dx * .0004; };
   const onUp = () => { dragging = false; wrap.style.cursor = 'grab'; };
   wrap.style.cursor = 'grab';
-  wrap.addEventListener('pointerdown', onDown); window.addEventListener('pointermove', onMove); window.addEventListener('pointerup', onUp);
+  wrap.addEventListener('pointerdown', onDown); window.addEventListener('pointermove', onMove); window.addEventListener('pointerup', onUp); window.addEventListener('pointercancel', onUp);
 
   /* render only while visible */
   let raf = null;
