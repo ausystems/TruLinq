@@ -4,7 +4,7 @@ import { boot, gsap, ScrollTrigger, stamp, reduced, isTouch, hydrateSeals, popIn
 import { idCard, photo } from '../ui.js';
 import { byId, SCENES } from '../../data/members.js';
 import { gaugeHTML, factorsHTML, runGauge } from '../gauge.js';
-import { mascotSVG, mascotParts, prime, review, idle } from '../mascot.js';
+import { mascotSVG, mascotParts, prime, review, idle, liveIdle } from '../mascot.js';
 import { createStamp } from '../stamp3d.js';
 
 /* ── Build DOM that depends on data ──────────────────────────── */
@@ -152,19 +152,27 @@ function sceneRegistry() {
   });
   return tl;
 }
+/* The stamped scene plays in real time (never scrubbed): the card rises, the seal slams, the reviewer pops up and
+   thumps in the same beat, then lives on the stage until the scene leaves. */
 function sceneStamp() {
   const s = document.querySelector('[data-scene="2"]');
   const card = s.querySelector('.idcard');
   const seal = s.querySelector('.seal');
   const p = mascotParts(s.querySelector('[data-how-mascot]'));
   const tl = gsap.timeline({ paused: true });
+  gsap.set(card, { xPercent: 6, yPercent: -10 });
   tl.fromTo(card, { y: 60, rotate: -8, opacity: 0 }, { y: 0, rotate: -3, opacity: 1, duration: 1, ease: 'expo.out' })
     .fromTo(seal, { opacity: 0, scale: 2.2, rotate: -26 }, { opacity: 1, scale: 1, rotate: -8, duration: .55, ease: 'power4.in' }, .9)
     .to(card, { rotate: -1.5, y: 6, duration: .18, ease: 'power2.out' }, 1.42)
     .to(card, { y: 0, duration: .8, ease: 'elastic.out(1, .4)' }, 1.6)
     .to(seal, { scale: 1.04, duration: .8, ease: 'elastic.out(1, .4)' }, 1.45);
-  /* the reviewer thumps as the seal lands */
-  if (p) { prime(p); review(tl, p, { land: 1.45, idle: false }); }
+  if (p) {
+    prime(p);
+    review(tl, p, { land: 1.45, idle: false });
+    tl.eventCallback('onComplete', () => { tl.life = liveIdle(p); });
+  }
+  /* leaving the scene: stop the idle loops and put everything back to the start, ready to replay */
+  tl.reset = () => { if (tl.life) { tl.life.kill(); tl.life = null; } tl.pause(0); };
   return tl;
 }
 
@@ -189,10 +197,13 @@ function how() {
       gsap.set(scenes, { opacity: 1, position: 'relative' }); gsap.set('.how__frame', { display: 'grid', gap: 20, padding: 20, height: 'auto' });
       setStep(-1); return;
     }
-    let cuts = [0, 1];
+    let cuts = [0, 1], inThree = false;
+    /* the first two scenes are scrubbed; the stamped scene plays itself the moment the stage reaches it */
+    const enterThree = () => { if (inThree) return; inThree = true; c.play(0); };
+    const leaveThree = () => { if (!inThree) return; inThree = false; c.reset(); };
     const master = gsap.timeline({
       scrollTrigger: { trigger: section, start: 'top top', end: '+=260%', pin: true, pinSpacing: true, scrub: .8, anticipatePin: 1, invalidateOnRefresh: true,
-        onUpdate: (self) => setStep(self.progress < cuts[0] ? 0 : self.progress < cuts[1] ? 1 : 2) }
+        onUpdate: (self) => { const step = self.progress < cuts[0] ? 0 : self.progress < cuts[1] ? 1 : 2; setStep(step); if (step === 2) enterThree(); else leaveThree(); } }
     });
     master.addLabel('one').add(a.play(), 'one')
       .to({}, { duration: .5 })
@@ -200,8 +211,8 @@ function how() {
       .addLabel('two').set(scenes[1], { opacity: 1 }).add(b.play(), 'two')
       .to({}, { duration: .5 })
       .to(scenes[1], { opacity: 0, y: -30, duration: .35, ease: 'power2.in' })
-      .addLabel('three').set(scenes[2], { opacity: 1 }).add(c.play(), 'three')
-      .to({}, { duration: .9 });
+      .addLabel('three').set(scenes[2], { opacity: 1 })
+      .to({}, { duration: 1.2 });
     cuts = [master.labels.two / master.duration(), master.labels.three / master.duration()];
     setStep(0);
     /* clicking a step scrolls the pin to that scene */
@@ -209,7 +220,7 @@ function how() {
       const t = master.scrollTrigger; const p = [0.02, cuts[0] + .03, cuts[1] + .03][i];
       scrollTo(t.start + (t.end - t.start) * p, { duration: 1 });
     }));
-    return () => { master.scrollTrigger && master.scrollTrigger.kill(); master.kill(); enterTrig.kill(); entrance.kill(); [a, b, c].forEach((t) => t.kill()); gsap.set(scenes, { clearProps: 'all' }); };
+    return () => { leaveThree(); master.scrollTrigger && master.scrollTrigger.kill(); master.kill(); enterTrig.kill(); entrance.kill(); [a, b, c].forEach((t) => t.kill()); gsap.set(scenes, { clearProps: 'all' }); };
   });
 
   /* Mobile & tablet: scenes stack; each plays once as it enters */
@@ -221,7 +232,7 @@ function how() {
       if (reduced) { t.progress(1); return; }
       triggers.push(ScrollTrigger.create({ trigger: scenes[i], start: 'top 80%', once: true, onEnter: () => t.play() }));
     });
-    return () => { triggers.forEach((t) => t.kill()); tls.forEach((t) => t.kill()); gsap.set(scenes, { clearProps: 'all' }); };
+    return () => { c.reset(); triggers.forEach((t) => t.kill()); tls.forEach((t) => t.kill()); gsap.set(scenes, { clearProps: 'all' }); };
   });
 }
 

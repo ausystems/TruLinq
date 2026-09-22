@@ -167,3 +167,23 @@ export function idle(p, { hop = true, follow = true } = {}) {
     if (p.mark) tl.fromTo(p.mark, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: .5, ease: 'back.out(2.6)' }, .08).to(p.mark, { scale: .5, opacity: 0, duration: .28, ease: 'power2.in' }, 1.15);
   });
 }
+
+/* A killable idle for scenes that come and go (the pinned "Earn the stamp" stage): breathing, the stamp's tap and
+   random blinks, with a kill() that stops the loops and puts every part back to rest. */
+export function liveIdle(p) {
+  if (reduced) return { kill() {} };
+  let alive = true, call = null;
+  const loops = [
+    gsap.to(p.root, { scaleY: 1.018, scaleX: 1.006, transformOrigin: '50% 100%', duration: 2.3, yoyo: true, repeat: -1, ease: 'sine.inOut' }),
+    gsap.to(p.stamp, { rotate: -8, duration: 1.4, yoyo: true, repeat: -1, ease: 'sine.inOut', transformOrigin: '0px 40px' })
+  ];
+  const next = () => { call = gsap.delayedCall(gsap.utils.random(2.4, 5.5), () => { if (!alive) return; if (!gsap.isTweening(p.eyes[0])) blink(p, Math.random() < .25); next(); }); };
+  next();
+  return {
+    kill() {
+      if (!alive) return; alive = false;
+      loops.forEach((t) => t.kill()); call && call.kill(); gsap.killTweensOf(p.eyes);
+      gsap.set(p.root, { scaleX: 1, scaleY: 1 }); gsap.set(p.stamp, { rotate: 0 }); gsap.set(p.eyes, { scaleY: 1, scaleX: 1 });
+    }
+  };
+}

@@ -120,7 +120,8 @@
   .registry__ok::after { content: ""; width: 10px; height: 5px; border-left: 2px solid var(--sky); border-bottom: 2px solid var(--sky); transform: rotate(-45deg); margin-top: -3px; }
   .scene--stamp .idcard { width: min(100%, 420px); transform: rotate(-3deg); }
   .scene--stamp .idcard .seal { --seal-size: 64px; right: -20px; bottom: -20px; }
-  .how__mascot { position: absolute; left: 4%; bottom: 0; width: clamp(120px, 27%, 180px); z-index: 2; }
+  .how__mascot { position: absolute; left: 5%; bottom: -1%; width: clamp(130px, 30%, 210px); z-index: 2; }
+  .how__mascot [data-m-shadow] { fill: #4AB3FF; } /* on the navy stage the seal sits in a soft sky glow, not a shadow */
   .how__mascot svg { display: block; width: 100%; height: auto; overflow: visible; }
   @media (max-width: 1023px) { .how__frame { aspect-ratio: auto; min-height: 0; padding: 20px; display: grid; gap: 20px; } .scene { position: relative; padding: 0; opacity: 1 !important; transform: none !important; } .scene--stamp { padding-bottom: 150px; } .how__mascot { left: 0; } .how__step { opacity: 1; background: var(--surface-2); box-shadow: var(--sh-card); } }
 
