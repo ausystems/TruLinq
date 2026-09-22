@@ -257,6 +257,16 @@ export function splitLines(el) {
   return new SplitText(el, { type: 'lines', mask: 'lines', linesClass: 'split-line-inner' });
 }
 
+/* A section with data-gate holds every reveal inside it until one moment: its own trigger (data-gate-trigger, a
+   selector, default the section) reaches the given start (data-gate, default "top 60%"). Used where a section must
+   read as one event, like the score gauge. */
+export function gateFor(el, fallback) {
+  const gate = el.closest('[data-gate]');
+  if (!gate) return fallback;
+  const trig = gate.dataset.gateTrigger ? gate.querySelector(gate.dataset.gateTrigger) || gate : gate;
+  return { trigger: trig, start: gate.dataset.gate || 'top 60%', once: true };
+}
+
 export function initReveals(scope = document) {
   if (reduced) { scope.querySelectorAll('[data-reveal],[data-split]').forEach((el) => (el.style.opacity = 1)); return; }
 
@@ -270,7 +280,7 @@ export function initReveals(scope = document) {
       onSplit(self) {
         el.style.opacity = 1;
         if (played) return;
-        return gsap.from(self.lines, { yPercent: 110, duration: 1.15, ease: 'expo.out', stagger: 0.07, delay, scrollTrigger: { trigger: el, start: 'top 88%', once: true }, onComplete: () => { played = true; } });
+        return gsap.from(self.lines, { yPercent: 110, duration: 1.15, ease: 'expo.out', stagger: 0.07, delay, scrollTrigger: gateFor(el, { trigger: el, start: 'top 88%', once: true }), onComplete: () => { played = true; } });
       }
     });
   });
@@ -281,14 +291,14 @@ export function initReveals(scope = document) {
     const from = { up: { y: 36, opacity: 0 }, fade: { opacity: 0 }, scale: { scale: .92, opacity: 0 }, left: { x: -40, opacity: 0 }, right: { x: 40, opacity: 0 }, stamp: { scale: 1.6, rotate: -14, opacity: 0 } }[kind] || { y: 36, opacity: 0 };
     const to = kind === 'stamp' ? { scale: 1, rotate: 0, opacity: 1, duration: .6, ease: 'back.out(2.2)' } : { x: 0, y: 0, scale: 1, opacity: 1, duration: 1.1, ease: 'expo.out' };
     suspend(el);
-    gsap.fromTo(el, from, { ...to, delay, scrollTrigger: { trigger: el, start: 'top 88%', once: true }, onComplete: () => gsap.set(el, { clearProps: 'transform,transition' }) });
+    gsap.fromTo(el, from, { ...to, delay, scrollTrigger: gateFor(el, { trigger: el, start: 'top 88%', once: true }), onComplete: () => gsap.set(el, { clearProps: 'transform,transition' }) });
   });
 
   scope.querySelectorAll('[data-reveal-group]').forEach((group) => {
     const items = group.querySelectorAll(':scope > *');
     const stagger = parseFloat(group.dataset.stagger || 0.08);
     suspend(items);
-    gsap.fromTo(items, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 1.1, ease: 'expo.out', stagger: Math.min(stagger, 0.8 / items.length), scrollTrigger: { trigger: group, start: 'top 85%', once: true }, onComplete: () => gsap.set(items, { clearProps: 'transform,transition' }) });
+    gsap.fromTo(items, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 1.1, ease: 'expo.out', stagger: Math.min(stagger, 0.8 / items.length), scrollTrigger: gateFor(group, { trigger: group, start: 'top 85%', once: true }), onComplete: () => gsap.set(items, { clearProps: 'transform,transition' }) });
   });
 }
 
@@ -434,9 +444,12 @@ export async function boot(pageInit, heroInit) {
   await revealPage(() => {
     initReveals(); initStamps(); initCounters(); initAccordions(); initMagnetic(); initImages(); watchNavTone();
     if (typeof heroInit === 'function') heroInit(ctx);
-    ScrollTrigger.refresh();
+    /* Pins are created by the page after the generic reveals. Sorting puts them first in the refresh order, so every
+       trigger below a pinned section is measured with the pin spacing in place (otherwise it fires a viewport or
+       more too early). Pins carry refreshPriority: 1. */
+    ScrollTrigger.sort(); ScrollTrigger.refresh();
   });
-  ScrollTrigger.refresh();
+  ScrollTrigger.sort(); ScrollTrigger.refresh();
 }
 
 export { gsap, ScrollTrigger, SplitText };

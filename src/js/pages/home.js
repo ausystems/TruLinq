@@ -236,7 +236,7 @@ function how() {
     const enterThree = () => { if (inThree) return; inThree = true; c.play(0); };
     const leaveThree = () => { if (!inThree) return; inThree = false; c.reset(); };
     const master = gsap.timeline({
-      scrollTrigger: { trigger: section, start: 'top top', end: '+=260%', pin: true, pinSpacing: true, scrub: .8, anticipatePin: 1, invalidateOnRefresh: true,
+      scrollTrigger: { trigger: section, start: 'top top', end: '+=260%', pin: true, pinSpacing: true, scrub: .8, anticipatePin: 1, invalidateOnRefresh: true, refreshPriority: 1,
         onUpdate: (self) => {
           const p = self.progress, step = p < cuts[0] ? 0 : p < cuts[1] ? 1 : 2;
           setStep(step); if (step === 2) enterThree(); else leaveThree();
@@ -396,7 +396,8 @@ async function globe() {
 
 /* ── Score gauge ─────────────────────────────────────────────── */
 function score() {
-  runGauge(document.querySelector('[data-gauge-root]'), byId['kai-nakamura'].factors, { trigger: '[data-gauge]' });
+  /* every animation in the section (headline, lead, dial, bars) starts on the same moment: the dial reaching 62% of the viewport */
+  runGauge(document.querySelector('[data-gauge-root]'), byId['kai-nakamura'].factors, { trigger: '[data-gauge]', start: 'top 62%' });
 }
 
 /* ── Smaller choreographies ──────────────────────────────────── */

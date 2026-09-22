@@ -56,7 +56,7 @@ export function factorsHTML(m) {
 }
 
 /* Animate a mounted gauge to a member's score. */
-export function runGauge(root, factors, { trigger = root, delay = 0 } = {}) {
+export function runGauge(root, factors, { trigger = root, start = 'top 58%', delay = 0 } = {}) {
   const target = scoreOf(factors);
   const fill = root.querySelector('[data-gauge-fill]');
   const knob = root.querySelector('[data-knob]');
@@ -118,5 +118,5 @@ export function runGauge(root, factors, { trigger = root, delay = 0 } = {}) {
   gsap.set(readout, { opacity: 0 });
   /* starts once the gauge itself is well inside the viewport (its top past the middle of the screen), the first time
      the reader scrolls onto it, and never again */
-  ScrollTrigger.create({ trigger: root, start: 'top 58%', once: true, onEnter: run });
+  ScrollTrigger.create({ trigger: typeof trigger === 'string' ? document.querySelector(trigger) || root : trigger, start, once: true, onEnter: run });
 }
