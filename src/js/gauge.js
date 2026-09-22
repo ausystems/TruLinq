@@ -8,6 +8,7 @@ export function gaugeHTML({ caption = '', id = 'g' + Math.random().toString(36).
       <defs><linearGradient id="grad-${id}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4AB3FF"/><stop offset=".55" stop-color="#2981FB"/><stop offset="1" stop-color="#093DA1"/></linearGradient></defs>
       <path class="gauge__track" d="M 40 236 A 130 130 0 1 1 280 236" fill="none" stroke="var(--gauge-track, #EAF1FA)" stroke-width="22" stroke-linecap="round"/>
       <path class="gauge__ticks" d="${ticksPath()}" fill="none" stroke="#0C1526" stroke-opacity=".18" stroke-width="2"/>
+      <path class="gauge__ticks gauge__ticks--lit" d="${ticksPath()}" fill="none" stroke="#2981FB" stroke-width="2" data-ticks-lit/>
       <path class="gauge__fill" d="M 40 236 A 130 130 0 1 1 280 236" fill="none" stroke="url(#grad-${id})" stroke-width="22" stroke-linecap="round" data-gauge-fill/>
       <circle class="gauge__pulse" r="9" fill="none" stroke="#2981FB" stroke-width="3" opacity="0" data-pulse cx="40" cy="236"/>
       <circle class="gauge__knob" r="9" fill="#FFFFFF" stroke="#2981FB" stroke-width="5" data-knob cx="40" cy="236"/>
@@ -66,8 +67,11 @@ export function runGauge(root, factors, { trigger = root, delay = 0 } = {}) {
   const text = root.querySelector('[data-score-text]');
   const reels = [...root.querySelectorAll('[data-odo]')];
   const badge = gradeEl.parentElement;
-  const L = fill.getTotalLength();
+  const lit = root.querySelector('[data-ticks-lit]');
+  const readout = root.querySelector('.score__readout');
+  const L = fill.getTotalLength(), TL = lit.getTotalLength();
   fill.style.strokeDasharray = L; fill.style.strokeDashoffset = L;
+  lit.style.strokeDasharray = TL; lit.style.strokeDashoffset = TL;
   const state = { p: 0 };
   let last = 300, lastGrade = '';
   /* place every reel for a (fractional) score: the ones reel rolls continuously, each higher reel turns over only
@@ -84,6 +88,7 @@ export function runGauge(root, factors, { trigger = root, delay = 0 } = {}) {
   const apply = (animated = false) => {
     const p = state.p;
     fill.style.strokeDashoffset = L * (1 - p);
+    lit.style.strokeDashoffset = TL * (1 - p); /* the ticks light up as the knob passes them */
     const pt = fill.getPointAtLength(L * p);
     knob.setAttribute('cx', pt.x.toFixed(2)); knob.setAttribute('cy', pt.y.toFixed(2));
     pulse.setAttribute('cx', pt.x.toFixed(2)); pulse.setAttribute('cy', pt.y.toFixed(2));
@@ -99,8 +104,10 @@ export function runGauge(root, factors, { trigger = root, delay = 0 } = {}) {
   const wrap = root.closest('.gauge-wrap') || root;
   const run = () => {
     gsap.timeline({ delay })
+      /* the readout rises into place as the count begins */
+      .fromTo(readout, { opacity: 0, y: 18, scale: .94 }, { opacity: 1, y: 0, scale: 1, duration: 1.2, ease: 'expo.out' }, 0)
       /* the count: fast off the mark, a long settle */
-      .to(state, { p: (target - 300) / 550, duration: 3, ease: 'expo.out', onUpdate: () => apply(true) }, 0)
+      .to(state, { p: (target - 300) / 550, duration: 3, ease: 'expo.out', onUpdate: () => apply(true) }, .08)
       .to(bars, { scaleX: 1, duration: 1.4, ease: 'expo.out', stagger: .12 }, .2)
       /* the landing: the number settles with a spring, a glint crosses the digits, the knob sends out a ring */
       .add(() => { reels.forEach((r) => (r.style.filter = '')); wrap.classList.add('is-done'); }, 2.9)
@@ -108,6 +115,8 @@ export function runGauge(root, factors, { trigger = root, delay = 0 } = {}) {
       .fromTo(pulse, { attr: { r: 9 }, opacity: .9 }, { attr: { r: 34 }, opacity: 0, duration: 1.1, ease: 'power2.out' }, 2.95);
   };
   if (reduced) { state.p = (target - 300) / 550; apply(); gsap.set(bars, { scaleX: 1 }); wrap.classList.add('is-done'); return; }
-  /* starts the first time the section scrolls into view, and never again */
-  ScrollTrigger.create({ trigger, start: 'top 72%', once: true, onEnter: run });
+  gsap.set(readout, { opacity: 0 });
+  /* starts once the gauge itself is well inside the viewport (its top past the middle of the screen), the first time
+     the reader scrolls onto it, and never again */
+  ScrollTrigger.create({ trigger: root, start: 'top 58%', once: true, onEnter: run });
 }
