@@ -221,18 +221,24 @@
         <div class="bento">
           <a id="feat-feed" class="bento__card bento__card--feed card" href="/feed/">
             <div class="bento__ui bento__ui--feed" aria-hidden="true">
-              <span class="mini-post"><span class="mini-post__avatar"></span><span class="mini-post__lines"><i style="--w:34%"></i><i style="--w:94%"></i><i style="--w:72%"></i></span><span class="mini-post__when">newest</span></span>
-              <span class="mini-post"><span class="mini-post__avatar" data-tone="1"></span><span class="mini-post__lines"><i style="--w:28%"></i><i style="--w:86%"></i><i style="--w:54%"></i></span><span class="mini-post__when">earlier</span></span>
-              <span class="mini-post"><span class="mini-post__avatar" data-tone="2"></span><span class="mini-post__lines"><i style="--w:40%"></i><i style="--w:78%"></i></span><span class="mini-post__when">earlier</span></span>
+              <span class="feedmock">
+                <span class="feedmock__col">
+                  <span class="mini-post mini-post--new" style="--n:0"><span class="mini-post__avatar" data-tone="1"></span><span class="mini-post__lines"><i style="--w:30%"></i><i style="--w:90%"></i><i style="--w:62%"></i></span><span class="mini-post__side"><span class="mini-post__when"><b>just now</b></span><span class="seal seal--xs"></span></span></span>
+                  <span class="mini-post" style="--n:1"><span class="mini-post__avatar"></span><span class="mini-post__lines"><i style="--w:34%"></i><i style="--w:94%"></i><i style="--w:72%"></i></span><span class="mini-post__side"><span class="mini-post__when mini-post__when--swap"><b>newest</b><b>earlier</b></span><span class="seal seal--xs"></span></span></span>
+                  <span class="mini-post" style="--n:2"><span class="mini-post__avatar" data-tone="3"></span><span class="mini-post__lines"><i style="--w:28%"></i><i style="--w:86%"></i><i style="--w:54%"></i></span><span class="mini-post__side"><span class="mini-post__when"><b>earlier</b></span><span class="seal seal--xs"></span></span></span>
+                  <span class="mini-post" style="--n:3"><span class="mini-post__avatar" data-tone="2"></span><span class="mini-post__lines"><i style="--w:40%"></i><i style="--w:78%"></i><i style="--w:46%"></i></span><span class="mini-post__side"><span class="mini-post__when"><b>earlier</b></span><span class="seal seal--xs"></span></span></span>
+                  <span class="mini-post" style="--n:4"><span class="mini-post__avatar"></span><span class="mini-post__lines"><i style="--w:32%"></i><i style="--w:82%"></i></span><span class="mini-post__side"><span class="mini-post__when"><b>earlier</b></span><span class="seal seal--xs"></span></span></span>
+                </span>
+              </span>
             </div>
             <div class="bento__text"><h3>The feed</h3><p>Chronological. Ad-free. No algorithm deciding what you see, just verified founders, newest first.</p></div>
           </a>
           <a id="feat-match" class="bento__card bento__card--match card" href="/match/">
             <div class="bento__ui bento__ui--match" aria-hidden="true">
               <span class="linq">
-                <span class="linq__field"><small>They offer</small>capital, distribution…</span>
-                <span class="linq__join"></span>
-                <span class="linq__field"><small>They’re looking for</small>suppliers, a co-founder…</span>
+                <span class="linq__field linq__field--offer"><small>They offer</small><span>capital, <mark>distribution</mark>…</span></span>
+                <span class="linq__join"><span class="linq__thread"></span><span class="linq__knot"><i class="tick"></i>Mutual fit</span></span>
+                <span class="linq__field linq__field--need"><small>They’re looking for</small><span><mark>distribution</mark>, a co-founder…</span></span>
               </span>
             </div>
             <div class="bento__text"><h3>Match</h3><p>Say what you offer and what you’re looking for. Mutual fits rise to the top.</p></div>
@@ -245,18 +251,21 @@
             <div class="bento__ui bento__ui--endorse" aria-hidden="true">
               <span class="vouch-mock">
                 <span class="vouch-mock__q">“</span>
-                <span class="vouch-mock__lines"><i style="--w:92%"></i><i style="--w:66%"></i></span>
-                <span class="vouch-mock__by"><span class="vouch-mock__avatar"></span><i style="--w:36%"></i><span class="seal seal--xs"></span></span>
+                <span class="vouch-mock__lines"><i style="--w:92%"></i><i style="--w:78%"></i><i style="--w:56%"></i></span>
+                <span class="vouch-mock__by"><span class="vouch-mock__avatar"></span><i style="--w:36%"></i><span class="vouch-mock__seal"><span class="seal seal--sm"></span></span></span>
               </span>
             </div>
             <div class="bento__text"><h3>Endorsements</h3><p>Vouches written by other verified members. One per person, signed with their name, and always public.</p></div>
           </a>
           <a id="feat-report" class="bento__card bento__card--report card" href="/trust/#report">
-            <div class="bento__ui bento__ui--report" aria-hidden="true"><span class="revoke"><span class="seal seal--md"></span><span class="revoke__x"></span></span><span class="tag tag--danger">Revoked</span></div>
+            <div class="bento__ui bento__ui--report" aria-hidden="true">
+              <span class="revoke"><span class="revoke__seal"><span class="seal seal--md"></span></span><span class="revoke__x"><i></i><i></i></span></span>
+              <span class="revoke__tags"><span class="tag tag--pending">Reported</span><span class="tag tag--danger">Revoked</span></span>
+            </div>
             <div class="bento__text"><h3>Report &amp; revoke</h3><p>Spot a fake? Report it. A stamp can be revoked at any time.</p></div>
           </a>
           <a id="feat-renew" class="bento__card bento__card--renew card card--blue" href="/pricing/">
-            <div class="bento__ui bento__ui--renew" aria-hidden="true"><span class="ring12"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="8"/><circle cx="50" cy="50" r="42" fill="none" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="8"/></svg><b>{{reverify.months}}<small>months</small></b></span></div>
+            <div class="bento__ui bento__ui--renew" aria-hidden="true"><span class="ring12"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="8"/><circle class="ring12__arc" cx="50" cy="50" r="42" fill="none" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="8"/><g class="ring12__knob"><circle cx="92" cy="50" r="7.5" fill="#1766E6" stroke="#FFFFFF" stroke-width="3"/></g></svg><b>{{reverify.months}}<small>months</small></b><span class="ring12__check"><i class="tick"></i></span></span></div>
             <div class="bento__text"><h3>Re-verification</h3><p>Every {{reverify.months}} months we check again. Businesses close; stamps shouldn’t outlive them.</p></div>
           </a>
         </div>

@@ -1,6 +1,6 @@
 import '../../styles/main.css';
 import '../../styles/pages/home.css';
-import { boot, gsap, stamp, reduced, isTouch, whenVisible } from '../main.js';
+import { boot, gsap, stamp, reduced, isTouch, whenVisible, introDone } from '../main.js';
 import { idCard, portrait, seal, esc, href, fmtDate, relTime } from '../ui.js';
 import { loadMembers, loadStats, loadRooms } from '../data.js';
 import { FEATURED, QUOTES } from '../../data/editorial.js';
@@ -66,7 +66,8 @@ async function build() {
     </figure>`).join('');
   if (!quotes.length) document.querySelector('.quotes').hidden = true;
 
-  document.querySelector('[data-room-list]').innerHTML = rooms.slice(0, 4).map((r) => `<li>${esc(r.name)}${r.lastMessageAt ? `<span>active ${relTime(r.lastMessageAt)}</span>` : ''}</li>`).join('');
+  /* each room gets the seal its speakers carry; hovering the card stamps them in, one by one */
+  document.querySelector('[data-room-list]').innerHTML = rooms.slice(0, 4).map((r, i) => `<li style="--i:${i}"><b>${esc(r.name)}</b>${r.lastMessageAt ? `<span>active ${relTime(r.lastMessageAt)}</span>` : ''}<span class="seal seal--xs"></span></li>`).join('');
 }
 
 /* ── Hero: the stamp presses the seal onto a real member's card ── */
@@ -82,8 +83,8 @@ async function hero() {
   const stacked = matchMedia('(max-width: 1023px)');
   const write = () => note && note.classList.add('is-written');
 
-  /* the headline's full stop is the seal, pressed as the page arrives */
-  stamp(document.querySelector('[data-hero-stop]'), { delay: .2, rotate: -12 });
+  /* the headline's full stop is the seal, pressed as the page arrives (after the intro, when there is one) */
+  introDone.then(() => stamp(document.querySelector('[data-hero-stop]'), { delay: .1, rotate: -12 }));
 
   /* the card lies on the desk */
   gsap.set(card, { rotationX: 34, rotationZ: -6, rotationY: 4, transformPerspective: 1400, transformOrigin: '50% 50%' });
@@ -339,5 +340,7 @@ function globe() {
 boot(build, () => {
   hero();
   how();
+  /* touch screens have no hover: each feature card plays its scene once, as it comes into view */
+  if (isTouch) document.querySelectorAll('.bento__card').forEach((card) => whenVisible(card, () => card.classList.add('is-live'), { rootMargin: '0px 0px -30% 0px' }));
   whenVisible(document.querySelector('[data-globe]'), globe, { rootMargin: '400px 0px' });
 });

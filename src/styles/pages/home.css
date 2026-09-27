@@ -227,50 +227,143 @@
     .bento__ui { min-height: 120px; }
     .bento__card--report .bento__text p, .bento__card--renew .bento__text p { font-size: .875rem; }
     .bento__card--report, .bento__card--renew { padding: 18px; }
-    .ring12 { width: 96px; height: 96px; } .ring12 b { font-size: 1.75rem; }
+    .ring12 { width: 100px; height: 100px; } .ring12 b { font-size: 1.75rem; }
     .revoke { transform: scale(.85); }
   }
-  .bento__card { display: flex; flex-direction: column; justify-content: space-between; gap: 22px; min-height: 280px; padding: clamp(22px, 2.2vw, 30px); box-shadow: none; transition: box-shadow var(--t-hover) var(--e-out), transform var(--t-state) var(--e-out); }
-  .bento__card:hover { box-shadow: 0 22px 44px -30px rgba(10, 22, 51, .45); transform: translateY(-2px); }
-  .bento__text h3 { font-size: var(--fs-4); font-weight: 500; }
+
+  /* ── The feature cards act out what they describe ──────────────────
+     Each scene is still at rest and plays when its card is hovered or focused (on touch screens, once, when it
+     scrolls into view): a new post arrives at the top of the feed, an offer meets a need, every room's voices are
+     stamped, a vouch is written and signed, a stamp is struck out, the year of a stamp comes round again. Nothing
+     follows the pointer; the card only knows whether it is being looked at. */
+  .bento { --live: cubic-bezier(.2, .9, .1, 1); --pop: cubic-bezier(.34, 1.56, .64, 1); --draw: cubic-bezier(.7, 0, .2, 1); }
+  .bento__card { position: relative; display: flex; flex-direction: column; justify-content: space-between; gap: 22px; min-height: 280px; padding: clamp(22px, 2.2vw, 30px); box-shadow: 0 0 0 0 rgba(10, 22, 51, 0); transition: box-shadow .7s var(--live), transform .7s var(--live); }
+  .bento__card:is(:hover, :focus-visible) { transform: translateY(-5px); box-shadow: 0 34px 64px -38px rgba(10, 22, 51, .5), 0 2px 6px -2px rgba(10, 22, 51, .06); }
+  .bento__card.card--navy:is(:hover, :focus-visible) { box-shadow: 0 34px 64px -30px rgba(3, 12, 36, .75); }
+  .bento__card.card--blue:is(:hover, :focus-visible) { box-shadow: 0 34px 64px -30px rgba(20, 100, 220, .7); }
+  .bento__card:focus-visible { outline: 2px solid #1464DC; outline-offset: 4px; }
+  .bento__text h3 { display: flex; align-items: center; gap: 10px; font-size: var(--fs-4); font-weight: 500; }
+  /* the way in: an arrow disc slides out beside the title */
+  .bento__text h3::after { content: ""; flex: none; width: 24px; height: 24px; border-radius: 50%; background: #1464DC url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8h9M8.5 4l4 4-4 4' fill='none' stroke='%23fff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 12px no-repeat; opacity: 0; transform: translateX(-10px) scale(.5); transition: opacity .3s var(--e-out), transform .55s var(--pop); }
+  .card--navy .bento__text h3::after, .card--blue .bento__text h3::after { background-color: #FFFFFF; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8h9M8.5 4l4 4-4 4' fill='none' stroke='%231464DC' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); }
+  .bento__card:is(:hover, :focus-visible, .is-live) .bento__text h3::after { opacity: 1; transform: none; transition-delay: .08s; }
   .bento__text p { margin-top: 8px; max-width: 42ch; font-size: .9375rem; color: var(--fg-soft); }
   .bento__ui { flex: 1; display: grid; place-items: center; min-height: 170px; padding: 16px 4px; overflow: hidden; }
-  .bento__ui--feed { display: grid; gap: 10px; align-content: center; justify-content: stretch; place-items: stretch; }
-  .bento__ui--feed .mini-post { width: min(100%, 440px); justify-self: center; }
-  .bento__ui--feed .mini-post:nth-child(2) { opacity: .8; transform: scale(.97); }
-  .bento__ui--feed .mini-post:nth-child(3) { opacity: .55; transform: scale(.94); }
-  .mini-post { display: grid; grid-template-columns: 32px minmax(0, 1fr) auto; gap: 12px; align-items: start; padding: 13px 15px; border-radius: 14px; background: #FFFFFF; box-shadow: 0 0 0 1px rgba(10, 22, 51, .05), 0 14px 30px -18px rgba(10, 22, 51, .35); }
-  .mini-post__avatar { width: 32px; height: 32px; border-radius: 50%; background: #0B2459; }
+
+  /* The feed: the newest post drops in on top, the others make room, the oldest leaves at the bottom */
+  .bento__ui--feed { overflow: visible; }
+  .feedmock { --post: 64px; --gap: 10px; --rows: 4; position: relative; display: block; width: min(100%, 520px); height: calc(var(--post) * var(--rows) + var(--gap) * (var(--rows) - 1) + 32px); padding: 16px 12px; overflow: hidden; -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 14px, #000 calc(100% - 18px), transparent 100%); mask-image: linear-gradient(180deg, transparent 0, #000 14px, #000 calc(100% - 18px), transparent 100%); }
+  @media (max-width: 759px) { .feedmock { --rows: 3; --post: 58px; } }
+  .feedmock__col { display: grid; gap: var(--gap); transform: translateY(calc(-1 * (var(--post) + var(--gap)))); transition: transform .95s var(--live); }
+  /* each post steps back a little further: fainter and smaller the older it is */
+  .mini-post { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 14px; align-items: start; height: var(--post); padding: 14px 16px; border-radius: 16px; background: #FFFFFF; box-shadow: 0 0 0 1px rgba(10, 22, 51, .05), 0 14px 30px -18px rgba(10, 22, 51, .35); opacity: calc(1.2 - var(--n) * .2); transform: scale(calc(1.03 - var(--n) * .03)); transition: opacity .8s var(--live), transform .95s var(--live), box-shadow .6s var(--live); }
+  .mini-post--new { opacity: 0; transform: scale(.9); }
+  .mini-post__avatar { width: 34px; height: 34px; border-radius: 50%; background: #0B2459; }
   .mini-post__avatar[data-tone="1"] { background: #1766E6; }
   .mini-post__avatar[data-tone="2"] { background: #A9CDFD; }
+  .mini-post__avatar[data-tone="3"] { background: #283347; }
   .mini-post__lines { display: grid; gap: 7px; padding-top: 3px; }
-  .mini-post__lines i { display: block; width: var(--w); height: 7px; border-radius: 4px; background: var(--surface-3); }
+  .mini-post__lines i { display: block; width: var(--w); height: 7px; border-radius: 4px; background: var(--surface-3); transform-origin: left center; }
   .mini-post__lines i:first-child { height: 8px; background: #C9D5E6; }
-  .mini-post__when { font-family: var(--f-mono); font-size: .6875rem; color: var(--fg-mute); }
-  .linq { display: grid; width: min(100%, 360px); }
-  .linq__field { display: grid; gap: 2px; padding: 12px 16px; border-radius: 14px; background: #FFFFFF; box-shadow: 0 0 0 1px rgba(10, 22, 51, .07), 0 12px 26px -18px rgba(10, 22, 51, .35); font-size: .9375rem; font-weight: 450; }
+  .mini-post__side { display: grid; justify-items: end; gap: 7px; }
+  .mini-post__side .seal { --seal-size: 14px; }
+  .mini-post__when { display: grid; font-family: var(--f-mono); font-size: .6875rem; color: var(--fg-mute); white-space: nowrap; }
+  .mini-post__when b { grid-area: 1 / 1; justify-self: end; font-weight: 400; transition: opacity .35s var(--e-out), transform .5s var(--live); }
+  .mini-post--new .mini-post__when b { color: #1464DC; font-weight: 500; }
+  .mini-post__when--swap b + b { opacity: 0; transform: translateY(7px); }
+  .mini-post--new .mini-post__lines i { transform: scaleX(0); transition: transform .6s var(--e-out); }
+  .mini-post--new .seal { transform: scale(0) rotate(-45deg); transition: transform .5s var(--pop); }
+  .bento__card:is(:hover, :focus-visible, .is-live) .feedmock__col { transform: none; }
+  .bento__card:is(:hover, :focus-visible, .is-live) .mini-post--new { opacity: 1; transform: none; transition-delay: .1s; box-shadow: 0 0 0 1.5px rgba(20, 100, 220, .32), 0 18px 34px -18px rgba(20, 100, 220, .5); }
+  .bento__card:is(:hover, :focus-visible, .is-live) .mini-post:not(.mini-post--new) { opacity: calc(1 - var(--n) * .2); transform: scale(calc(1 - var(--n) * .03)); }
+  .bento__card:is(:hover, :focus-visible, .is-live) .mini-post--new .mini-post__lines i { transform: none; }
+  .bento__card:is(:hover, :focus-visible, .is-live) .mini-post--new .mini-post__lines i:nth-child(1) { transition-delay: .38s; }
+  .bento__card:is(:hover, :focus-visible, .is-live) .mini-post--new .mini-post__lines i:nth-child(2) { transition-delay: .48s; }
+  .bento__card:is(:hover, :focus-visible, .is-live) .mini-post--new .mini-post__lines i:nth-child(3) { transition-delay: .58s; }
+  .bento__card:is(:hover, :focus-visible, .is-live) .mini-post--new .seal { transform: none; transition-delay: .78s; }
+  .bento__card:is(:hover, :focus-visible, .is-live) .mini-post__when--swap b:first-child { opacity: 0; transform: translateY(-7px); transition-delay: .3s; }
+  .bento__card:is(:hover, :focus-visible, .is-live) .mini-post__when--swap b + b { opacity: 1; transform: none; transition-delay: .36s; }
+
+  /* Match: the offer and the need close in, the shared word lights up, and a knot ties them */
+  .linq { position: relative; display: grid; width: min(100%, 360px); }
+  .linq__field { position: relative; z-index: 1; display: grid; gap: 2px; padding: 12px 16px; border-radius: 14px; background: #FFFFFF; box-shadow: 0 0 0 1px rgba(10, 22, 51, .07), 0 12px 26px -18px rgba(10, 22, 51, .35); font-size: .9375rem; font-weight: 450; transition: transform .8s var(--live), box-shadow .6s var(--live); }
   .linq__field small { font-size: .75rem; font-weight: 400; color: var(--fg-soft); }
-  .linq__join { justify-self: center; width: 2px; height: 18px; background: var(--blue); }
+  .linq__field mark { padding: 0 2px; margin: 0 -2px; border-radius: 3px; background: linear-gradient(#D3E4FD, #D3E4FD) 0 100% / 0% 100% no-repeat; color: inherit; transition: background-size .6s var(--draw); }
+  .linq__join { position: relative; justify-self: center; width: 2px; height: 24px; }
+  .linq__thread { position: absolute; inset: 0; border-radius: 1px; background: var(--line-2); overflow: hidden; }
+  .linq__thread::after { content: ""; position: absolute; inset: 0; background: #1464DC; transform: scaleY(0); transform-origin: top; transition: transform .5s var(--e-out); }
+  .linq__knot { position: absolute; left: 50%; top: 50%; z-index: 2; display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 12px 0 5px; border-radius: var(--r-pill); background: #1464DC; color: #FFFFFF; font-size: .75rem; font-weight: 500; white-space: nowrap; box-shadow: 0 0 0 4px rgba(20, 100, 220, .12), 0 14px 26px -12px rgba(20, 100, 220, .85); opacity: 0; transform: translate(-50%, -50%) scale(.3); transition: opacity .2s var(--e-out), transform .6s var(--pop); }
+  .linq__knot .tick { width: 18px; height: 18px; background: rgba(255, 255, 255, .24); }
+  .bento__card:is(:hover, :focus-visible, .is-live) .linq__field--offer { transform: translateY(7px); box-shadow: 0 0 0 1.5px #1464DC, 0 18px 34px -20px rgba(20, 100, 220, .55); }
+  .bento__card:is(:hover, :focus-visible, .is-live) .linq__field--need { transform: translateY(-7px); box-shadow: 0 0 0 1.5px #1464DC, 0 18px 34px -20px rgba(20, 100, 220, .55); }
+  .bento__card:is(:hover, :focus-visible, .is-live) .linq__field mark { background-size: 100% 100%; transition-delay: .2s; }
+  .bento__card:is(:hover, :focus-visible, .is-live) .linq__thread::after { transform: none; transition-delay: .12s; }
+  .bento__card:is(:hover, :focus-visible, .is-live) .linq__knot { opacity: 1; transform: translate(-50%, -50%) scale(1); transition-delay: .38s; }
+
+  /* Rooms: one by one, every room's voices receive the stamp */
   .room-list { display: grid; gap: 6px; width: 100%; }
-  .room-list li { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 11px 16px; border-radius: 12px; background: var(--ice-2); font-size: .875rem; font-weight: 500; }
-  .room-list li span { flex: none; font-size: .75rem; font-weight: 400; color: var(--fg-mute); }
-  .vouch-mock { display: grid; gap: 12px; width: min(100%, 420px); padding: 20px 22px; border-radius: 16px; background: rgba(243, 247, 252, .06); box-shadow: inset 0 0 0 1px var(--line); }
-  .vouch-mock__q { height: 18px; font-size: 2.5rem; line-height: .7; color: var(--sky); }
+  .room-list li { display: flex; align-items: center; gap: 12px; padding: 11px 14px 11px 16px; border-radius: 12px; background: var(--ice-2); font-size: .875rem; transition: transform .6s var(--live), background .4s var(--e-out), box-shadow .4s var(--e-out); }
+  .room-list li b { flex: 1; min-width: 0; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .room-list li span:not(.seal) { flex: none; font-size: .75rem; font-weight: 400; color: var(--fg-mute); }
+  .room-list .seal { --seal-size: 18px; opacity: 0; transform: scale(0) rotate(-60deg); transition: opacity .2s var(--e-out), transform .4s var(--e-out); }
+  .bento__card:is(:hover, :focus-visible, .is-live) .room-list li { transform: translateX(6px); background: #FFFFFF; box-shadow: inset 0 0 0 1px var(--line), 0 12px 24px -18px rgba(10, 22, 51, .4); transition-duration: .7s, .5s, .5s; transition-delay: calc(var(--i, 0) * 55ms); }
+  .bento__card:is(:hover, :focus-visible, .is-live) .room-list .seal { opacity: 1; transform: none; transition-duration: .2s, .55s; transition-timing-function: var(--e-out), var(--pop); transition-delay: calc(.14s + var(--i, 0) * 75ms); }
+
+  /* Endorsements: the vouch is written again, line by line, then signed and stamped */
+  .vouch-mock { display: grid; gap: 12px; width: min(100%, 420px); padding: 22px 24px; border-radius: 18px; background: rgba(243, 247, 252, .06); box-shadow: inset 0 0 0 1px var(--line); transition: transform .8s var(--live), background .6s var(--e-out), box-shadow .6s var(--e-out); }
+  .vouch-mock__q { height: 18px; font-size: 2.5rem; line-height: .7; color: var(--sky); transform-origin: left top; transition: transform .7s var(--pop), color .5s; }
   .vouch-mock__lines { display: grid; gap: 8px; }
-  .vouch-mock i { display: block; width: var(--w); height: 9px; border-radius: 5px; background: rgba(243, 247, 252, .22); }
+  .vouch-mock i { display: block; width: var(--w); height: 9px; border-radius: 5px; background: rgba(243, 247, 252, .22); transform-origin: left center; }
   .vouch-mock__by { display: flex; align-items: center; gap: 10px; margin-top: 4px; }
   .vouch-mock__by i { flex: 0 0 var(--w); height: 8px; }
   .vouch-mock__avatar { width: 28px; height: 28px; border-radius: 50%; background: rgba(127, 203, 255, .35); }
-  .vouch-mock__by .seal { margin-left: auto; }
-  .bento__ui--report { display: grid; place-items: center; gap: 14px; align-content: center; }
-  .revoke { position: relative; display: grid; place-items: center; width: 84px; height: 84px; }
-  .revoke .seal { --seal-size: 72px; }
+  .vouch-mock__seal { display: grid; margin-left: auto; }
+  .vouch-mock__seal .seal { --seal-size: 30px; }
+  .bento__card:is(:hover, :focus-visible, .is-live) .vouch-mock { transform: translateY(-4px) rotate(-.8deg); background: rgba(243, 247, 252, .09); box-shadow: inset 0 0 0 1px var(--line-2), 0 24px 44px -26px rgba(0, 0, 0, .6); }
+  .bento__card:is(:hover, :focus-visible, .is-live) .vouch-mock__q { transform: scale(1.18); color: #A8DCFF; }
+  .bento__card:is(:hover, :focus-visible, .is-live) .vouch-mock__lines i { animation: vm-write .62s var(--draw) both; }
+  .bento__card:is(:hover, :focus-visible, .is-live) .vouch-mock__lines i:nth-child(2) { animation-delay: .14s; }
+  .bento__card:is(:hover, :focus-visible, .is-live) .vouch-mock__lines i:nth-child(3) { animation-delay: .28s; }
+  .bento__card:is(:hover, :focus-visible, .is-live) .vouch-mock__avatar { animation: vm-pop .5s var(--pop) .42s both; }
+  .bento__card:is(:hover, :focus-visible, .is-live) .vouch-mock__by i { animation: vm-write .5s var(--draw) .5s both; }
+  .bento__card:is(:hover, :focus-visible, .is-live) .vouch-mock__seal { animation: vm-stamp .6s var(--e-out) .78s both; }
+  @keyframes vm-write { from { transform: scaleX(0); } }
+  @keyframes vm-pop { from { transform: scale(0); } }
+  @keyframes vm-stamp { 0% { opacity: 0; transform: scale(1.9) rotate(-28deg); } 55% { opacity: 1; transform: scale(.9) rotate(-6deg); } 100% { transform: none; } }
+
+  /* Report & revoke: two strokes of red cross the stamp out; it greys, and the report becomes a revocation */
+  .bento__ui--report { display: grid; place-items: center; gap: 16px; align-content: center; }
+  .revoke { position: relative; display: grid; place-items: center; width: 92px; height: 92px; }
+  .revoke__seal { display: grid; transition: filter .5s var(--e-out), opacity .5s var(--e-out), transform .6s var(--live); }
+  .revoke .seal { --seal-size: 76px; }
   .revoke__x { position: absolute; inset: 0; }
-  .revoke__x::before, .revoke__x::after { content: ""; position: absolute; left: 50%; top: 50%; width: 112%; height: 7px; border-radius: 4px; background: var(--danger); box-shadow: 0 0 0 3px #FFFFFF; transform: translate(-50%, -50%) rotate(45deg); }
-  .revoke__x::after { transform: translate(-50%, -50%) rotate(-45deg); }
-  .ring12 { position: relative; display: grid; place-items: center; width: 124px; height: 124px; }
-  .ring12 svg { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+  .revoke__x i { position: absolute; left: -10%; right: -10%; top: 50%; height: 7px; margin-top: -3.5px; transform: rotate(45deg); }
+  .revoke__x i + i { transform: rotate(135deg); }
+  .revoke__x i::after { content: ""; position: absolute; inset: 0; border-radius: 4px; background: var(--danger); box-shadow: 0 0 0 3px #FFFFFF; transform: scaleX(0); transform-origin: left center; transition: transform .36s var(--draw); }
+  .revoke__tags { display: grid; height: 26px; overflow: hidden; }
+  .revoke__tags .tag { grid-area: 1 / 1; justify-self: center; height: 26px; transition: transform .5s var(--live), opacity .3s var(--e-out); }
+  .revoke__tags .tag + .tag { opacity: 0; transform: translateY(110%); }
+  .bento__card:is(:hover, :focus-visible, .is-live) .revoke__x i::after { transform: none; transition-delay: .12s; }
+  .bento__card:is(:hover, :focus-visible, .is-live) .revoke__x i + i::after { transition-delay: .4s; }
+  .bento__card:is(:hover, :focus-visible, .is-live) .revoke__seal { filter: grayscale(1); opacity: .5; transform: scale(.92) rotate(-8deg); transition-duration: .7s, .7s, .8s; transition-delay: .5s; }
+  .bento__card:is(:hover, :focus-visible, .is-live) .revoke { animation: revoke-shake .42s var(--e-out) .7s both; }
+  .bento__card:is(:hover, :focus-visible, .is-live) .revoke__tags .tag:first-child { opacity: 0; transform: translateY(-110%); transition-delay: .55s; }
+  .bento__card:is(:hover, :focus-visible, .is-live) .revoke__tags .tag + .tag { opacity: 1; transform: none; transition-delay: .55s; }
+  @keyframes revoke-shake { 20% { transform: translateX(-4px); } 45% { transform: translateX(3px); } 70% { transform: translateX(-2px); } }
+
+  /* Re-verification: the year comes round again, the ring refills, and the check is made */
+  .ring12 { position: relative; display: grid; place-items: center; width: 128px; height: 128px; transition: transform .8s var(--live); }
+  .ring12 svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; transform: rotate(-90deg); }
+  .ring12__knob { transform-origin: 50px 50px; transform: rotate(331.2deg); }
   .ring12 b { display: grid; justify-items: center; font-size: 2.125rem; font-weight: 400; letter-spacing: -.045em; line-height: 1; }
+  .ring12__check { position: absolute; right: -2px; top: -2px; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: #FFFFFF; box-shadow: 0 10px 20px -10px rgba(4, 22, 70, .6); opacity: 0; transform: scale(0); transition: opacity .2s var(--e-out), transform .5s var(--pop); }
+  .ring12__check .tick { background: #1464DC; }
+  .bento__card:is(:hover, :focus-visible, .is-live) .ring12 { transform: scale(1.04); }
+  .bento__card:is(:hover, :focus-visible, .is-live) .ring12__arc { animation: ring-refill 1.4s cubic-bezier(.65, 0, .15, 1) both; }
+  .bento__card:is(:hover, :focus-visible, .is-live) .ring12__knob { animation: ring-knob 1.4s cubic-bezier(.65, 0, .15, 1) both; }
+  .bento__card:is(:hover, :focus-visible, .is-live) .ring12__check { opacity: 1; transform: none; transition-delay: 1.25s; }
+  @keyframes ring-refill { 0% { stroke-dashoffset: 8; } 32% { stroke-dashoffset: 100; } 100% { stroke-dashoffset: 8; } }
+  @keyframes ring-knob { 0% { transform: rotate(331.2deg); } 32% { transform: rotate(0deg); } 100% { transform: rotate(331.2deg); } }
   .ring12 small { margin-top: 4px; font-family: var(--f-mono); font-size: .6875rem; font-weight: 500; letter-spacing: 0; color: var(--fg-soft); }
 
   /* ── In their own words: set like a magazine page, not a carousel ── */
