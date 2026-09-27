@@ -6,8 +6,11 @@ import { loadMembers, loadStats, loadRooms } from '../data.js';
 import { FEATURED, QUOTES } from '../../data/editorial.js';
 import { gaugeHTML, factorsHTML, runGauge } from '../gauge.js';
 import { createStamp } from '../stamp3d.js';
+import { LAND } from '../../data/land.js';
 
 let members = [], byId = {};
+/* the reviewer's note beside the hero card: written once the stamp has landed */
+const HERO_NOTE = `<p class="scribble hero__note" aria-hidden="true" data-manual><span class="scribble__text">checked by a person</span><svg class="scribble__pen" style="--pen-w:52px" viewBox="0 0 80 48"><path pathLength="1" d="M8 44c14-4 30-16 44-36"/><path pathLength="1" d="M40 12l13-5 3 13"/></svg></p>`;
 const job = (m) => [m.role, m.company].filter(Boolean).join(', ') || m.headline || '';
 
 const STAT_LABELS = {
@@ -43,7 +46,7 @@ async function build() {
 
   const lead = byId[FEATURED.hero] || members[0];
   if (lead) {
-    document.querySelector('[data-hero-card]').innerHTML = idCard(lead, { link: false, stamp: 'manual', sealSize: 'md' });
+    document.querySelector('[data-hero-card]').innerHTML = idCard(lead, { link: false, stamp: 'manual', sealSize: 'md' }) + HERO_NOTE;
     document.querySelector('[data-hero-caption]').innerHTML = `<a class="link" href="${href(`/members/${lead.id}/`)}">${esc(lead.name)}</a>${job(lead) ? ` · ${esc(job(lead))}` : ''}${lead.verifiedOn ? ` · Verified ${fmtDate(lead.verifiedOn)}` : ''}`;
   }
 
@@ -75,7 +78,12 @@ async function hero() {
   if (!card) return;
   const sealEl = card.querySelector('.seal');
   const canvas = stage.querySelector('[data-hero-stamp]');
+  const note = cardWrap.querySelector('.hero__note');
   const stacked = matchMedia('(max-width: 1023px)');
+  const write = () => note && note.classList.add('is-written');
+
+  /* the headline's full stop is the seal, pressed as the page arrives */
+  stamp(document.querySelector('[data-hero-stop]'), { delay: .2, rotate: -12 });
 
   /* the card lies on the desk */
   gsap.set(card, { rotationX: 34, rotationZ: -6, rotationY: 4, transformPerspective: 1400, transformOrigin: '50% 50%' });
@@ -93,6 +101,7 @@ async function hero() {
     Object.assign(cardWrap.style, { left: '50%', top: '46%', transform: 'translate(-50%, -50%)' });
     if (sealEl) sealEl.classList.add('is-stamped');
     cardWrap.classList.add('is-placed');
+    write();
     return;
   }
 
@@ -121,13 +130,14 @@ async function hero() {
   frame();
   new ResizeObserver(frame).observe(desk);
 
-  if (reduced) { sealEl.classList.add('is-stamped'); return; }
+  if (reduced) { sealEl.classList.add('is-stamped'); write(); return; }
 
   /* the impact: the seal lands, the card takes the hit */
   const thud = () => {
     if (!sealEl.classList.contains('is-stamped')) stamp(sealEl, { rotate: -7 });
     else gsap.fromTo(sealEl, { scale: .88 }, { scale: 1, duration: .8, ease: 'elastic.out(1, .45)' });
     gsap.timeline().to(card, { y: 8, duration: .1, ease: 'power2.out' }).to(card, { y: 0, duration: .8, ease: 'elastic.out(1, .45)' });
+    setTimeout(write, 350);
   };
   let pressing = false;
   const press = (delay = 0) => {
@@ -189,7 +199,8 @@ function how() {
   }, { rootMargin: '0px 0px -25% 0px' });
 }
 
-/* ── Globe: members who list a city, grouped where they are close together ── */
+/* ── Globe: members who list a city, grouped where they work close together ── */
+const RAD = Math.PI / 180;
 const inHawaii = (m) => m.lat > 18.5 && m.lat < 22.6 && m.lng > -160.6 && m.lng < -154.4;
 function groupsOf(list) {
   const groups = [];
@@ -208,7 +219,21 @@ function groupsOf(list) {
   return groups.sort((a, b) => b.hq - a.hq || b.members.length - a.members.length);
 }
 
-async function globe() {
+/* The land, as dots: an even grid on the sphere (src/data/land.js), kept where the grid falls on land. */
+function landDots() {
+  const bytes = Uint8Array.from(atob(LAND.bits), (c) => c.charCodeAt(0));
+  const out = [];
+  let i = 0;
+  for (let lat = 90 - LAND.step / 2; lat > -90; lat -= LAND.step) {
+    const n = Math.max(1, Math.round((360 * Math.cos(lat * RAD)) / LAND.step));
+    for (let j = 0; j < n; j++, i++) if (bytes[i >> 3] & (1 << (i & 7))) out.push(Math.sin(lat * RAD), Math.cos(lat * RAD), (-180 + ((j + .5) * 360) / n) * RAD);
+  }
+  return new Float32Array(out);
+}
+
+/* An orthographic globe drawn in 2D: a paper sphere, a faint graticule, the land in blue-ink dots and each group of
+   members as monograms where they work. It is drawn once, and again only while someone turns it. */
+function globe() {
   const wrap = document.querySelector('[data-globe]');
   const sphere = wrap.querySelector('.world__sphere');
   const canvas = wrap.querySelector('[data-globe-canvas]');
@@ -219,82 +244,94 @@ async function globe() {
   const where = groups.map((g) => `${g.label} (${g.members.length})`).join(', ');
   canvas.setAttribute('aria-label', `A globe showing where verified members work: ${where}.`);
   wrap.querySelector('[data-globe-caption]').textContent = `${located.length} of ${members.length} verified members list a city. Each is pinned where they work.${isTouch ? '' : ' Drag to turn the globe.'}`;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) { sphere.hidden = true; return; }
 
-  let THREE;
-  try { THREE = await import('../three-lite.js'); }
-  catch { wrap.hidden = true; return; }
-  let renderer;
-  try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' }); }
-  catch { sphere.hidden = true; return; }
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, isTouch ? 1.5 : 2));
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(30, 1, .1, 100);
-  camera.position.set(0, 0, 4.1);
-  const group = new THREE.Group();
-  scene.add(group);
-
-  const toVec = (lat, lng, r = 1) => {
-    const phi = (90 - lat) * Math.PI / 180, theta = (lng + 180) * Math.PI / 180;
-    return new THREE.Vector3(-r * Math.sin(phi) * Math.cos(theta), r * Math.cos(phi), r * Math.sin(phi) * Math.sin(theta));
-  };
-
-  /* an occluder, then a globe drawn only in dots */
-  group.add(new THREE.Mesh(new THREE.SphereGeometry(.985, 64, 64), new THREE.MeshBasicMaterial({ color: 0xFFFFFF })));
-  const N = isTouch ? 1600 : 3000;
-  const pos = new Float32Array(N * 3), golden = Math.PI * (3 - Math.sqrt(5));
-  for (let i = 0; i < N; i++) {
-    const y = 1 - (i / (N - 1)) * 2, rr = Math.sqrt(1 - y * y), th = golden * i;
-    pos[i * 3] = Math.cos(th) * rr; pos[i * 3 + 1] = y; pos[i * 3 + 2] = Math.sin(th) * rr;
-  }
-  const dotsGeo = new THREE.BufferGeometry(); dotsGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-  group.add(new THREE.Points(dotsGeo, new THREE.PointsMaterial({ color: 0x2981FB, size: .018, sizeAttenuation: true, transparent: true, opacity: .5 })));
-  const cityGeo = new THREE.SphereGeometry(.014, 12, 12), cityMat = new THREE.MeshBasicMaterial({ color: 0x0C1526 });
-  located.forEach((m) => { const s = new THREE.Mesh(cityGeo, cityMat); s.position.copy(toVec(m.lat, m.lng, 1.005)); group.add(s); });
-
+  const dots = landDots();
   pinsEl.innerHTML = groups.map((g, i) => {
     const one = g.members.length === 1;
-    return `<div class="pin ${g.hq ? 'pin--hq' : ''}" data-pin="${i}"><span class="pin__faces">${g.members.slice(0, 3).map((m) => portrait(m, { size: 26 })).join('')}</span><span>${esc(g.label)} <em>${one ? esc(g.members[0].first) : `${g.members.length} members`}</em></span></div>`;
+    return `<div class="pin ${g.hq ? 'pin--hq' : ''} ${one ? 'pin--solo' : ''}" data-pin="${i}"><span class="pin__faces">${g.members.slice(0, 5).map((m) => portrait(m, { size: 52 })).join('')}</span><span class="pin__label">${esc(g.label)} <em>${one ? esc(g.members[0].first) : `${g.members.length} members`}</em></span></div>`;
   }).join('');
   const pinEls = [...pinsEl.querySelectorAll('[data-pin]')];
-  const pinVecs = groups.map((g) => toVec(g.lat, g.lng, 1.02));
+  /* each pin is anchored at the middle of its faces, wherever its label sits */
+  let anchors = [];
+  const measure = () => { anchors = pinEls.map((el) => { const f = el.firstElementChild; return [f.offsetLeft + f.offsetWidth / 2, f.offsetTop + f.offsetHeight / 2]; }); pinEls.forEach((el, i) => (el.style.transformOrigin = `${anchors[i][0]}px ${anchors[i][1]}px`)); };
 
-  /* face the middle of the pins: turn to their longitude, tilt to their latitude */
-  const mid = { lat: groups.reduce((a, g) => a + g.lat, 0) / groups.length, lng: groups.reduce((a, g) => a + g.lng, 0) / groups.length };
-  const mv = toVec(0, mid.lng);
-  group.rotation.y = -Math.atan2(mv.x, mv.z);
-  group.rotation.x = mid.lat * Math.PI / 180 * .8;
+  /* face the middle of the groups */
+  const view = { lng: groups.reduce((a, g) => a + g.lng, 0) / groups.length, lat: Math.max(-40, Math.min(40, groups.reduce((a, g) => a + g.lat, 0) / groups.length - 6)) };
+  let W = 0, R = 0, dpr = 1;
+  const project = (sinLat, cosLat, lng) => {
+    const l0 = view.lng * RAD, p0 = view.lat * RAD, dl = lng - l0, c = Math.cos(dl);
+    return [cosLat * Math.sin(dl), Math.cos(p0) * sinLat - Math.sin(p0) * cosLat * c, Math.sin(p0) * sinLat + Math.cos(p0) * cosLat * c];
+  };
+  const graticule = [];
+  for (let lng = -180; lng < 180; lng += 30) { const line = []; for (let lat = -90; lat <= 90; lat += 3) line.push([lat, lng]); graticule.push(line); }
+  for (let lat = -60; lat <= 60; lat += 30) { const line = []; for (let lng = -180; lng <= 180; lng += 3) line.push([lat, lng]); graticule.push(line); }
 
-  const resize = () => { const w = sphere.clientWidth, h = sphere.clientHeight || w; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); render(); };
-  const v = new THREE.Vector3(), camDir = new THREE.Vector3();
-  function render() {
-    renderer.render(scene, camera);
-    const w = sphere.clientWidth, h = sphere.clientHeight;
-    group.updateMatrixWorld();
-    camDir.copy(camera.position).normalize();
-    pinVecs.forEach((pv, i) => {
-      v.copy(pv).applyMatrix4(group.matrixWorld);
-      const facing = v.clone().normalize().dot(camDir);
-      v.project(camera);
-      const x = (v.x * .5 + .5) * w, y = (-v.y * .5 + .5) * h - 22;
-      const vis = facing > .12, el = pinEls[i];
-      el.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) translate(-50%, -50%) scale(${vis ? (.85 + facing * .2).toFixed(3) : .6})`;
-      el.style.opacity = vis ? Math.min(1, (facing - .12) * 4).toFixed(2) : 0;
-      el.style.zIndex = Math.round(facing * 100);
+  function draw() {
+    const cx = W / 2, cy = W / 2;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, W, W);
+    /* the paper sphere */
+    const shade = ctx.createRadialGradient(cx - R * .3, cy - R * .35, R * .1, cx, cy, R);
+    shade.addColorStop(0, '#FFFFFF'); shade.addColorStop(.7, '#F7FAFF'); shade.addColorStop(1, '#E7EFFC');
+    ctx.fillStyle = shade; ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.fill();
+    /* the graticule, front side only */
+    ctx.strokeStyle = 'rgba(41, 129, 251, .16)'; ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (const line of graticule) {
+      let pen = false;
+      for (const [lat, lng] of line) {
+        const [x, y, z] = project(Math.sin(lat * RAD), Math.cos(lat * RAD), lng * RAD);
+        if (z < 0) { pen = false; continue; }
+        const px = cx + x * R, py = cy - y * R;
+        if (pen) ctx.lineTo(px, py); else { ctx.moveTo(px, py); pen = true; }
+      }
+    }
+    ctx.stroke();
+    /* the land, in four shades of ink by how directly it faces us */
+    const base = R * .0068, buckets = [[], [], [], []];
+    for (let k = 0; k < dots.length; k += 3) {
+      const [x, y, z] = project(dots[k], dots[k + 1], dots[k + 2]);
+      if (z <= .02) continue;
+      buckets[Math.min(3, Math.floor(z * 4))].push(cx + x * R, cy - y * R, base * (.55 + .45 * z));
+    }
+    buckets.forEach((b, i) => {
+      ctx.fillStyle = `rgba(23, 102, 230, ${[.36, .56, .78, .95][i]})`;
+      ctx.beginPath();
+      for (let k = 0; k < b.length; k += 3) { ctx.moveTo(b[k] + b[k + 2], b[k + 1]); ctx.arc(b[k], b[k + 1], b[k + 2], 0, Math.PI * 2); }
+      ctx.fill();
+    });
+    /* the rim */
+    ctx.strokeStyle = 'rgba(10, 22, 51, .08)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(cx, cy, R - .5, 0, Math.PI * 2); ctx.stroke();
+    /* the members */
+    groups.forEach((g, i) => {
+      const [x, y, z] = project(Math.sin(g.lat * RAD), Math.cos(g.lat * RAD), g.lng * RAD);
+      const el = pinEls[i], vis = z > .15, [ax, ay] = anchors[i];
+      const px = cx + x * R - ax, py = cy - y * R - ay;
+      el.style.transform = `translate(${px.toFixed(1)}px, ${py.toFixed(1)}px) scale(${vis ? (.86 + z * .14).toFixed(3) : .6})`;
+      el.style.opacity = vis ? Math.min(1, (z - .15) * 5).toFixed(2) : 0;
+      el.style.zIndex = Math.round(z * 100);
     });
   }
+  const resize = () => {
+    W = sphere.clientWidth; R = W * .44; dpr = Math.min(window.devicePixelRatio || 1, 2); measure();
+    canvas.width = Math.round(W * dpr); canvas.height = Math.round(W * dpr);
+    draw();
+  };
   resize(); new ResizeObserver(resize).observe(sphere);
 
-  /* drag to turn; it renders only while it moves */
+  /* drag to turn; it redraws only while it moves */
   let raf = null, velocity = 0, dragging = false, lastX = 0;
   const tick = () => {
     raf = null;
-    if (!dragging) { group.rotation.y += velocity; velocity *= .92; }
-    render();
-    if (dragging || Math.abs(velocity) > .0002) raf = requestAnimationFrame(tick);
+    if (!dragging) { view.lng -= velocity; velocity *= .92; }
+    draw();
+    if (dragging || Math.abs(velocity) > .01) raf = requestAnimationFrame(tick);
   };
   const kick = () => { if (!raf) raf = requestAnimationFrame(tick); };
   canvas.addEventListener('pointerdown', (e) => { dragging = true; lastX = e.clientX; velocity = 0; canvas.classList.add('is-dragging'); canvas.setPointerCapture?.(e.pointerId); kick(); });
-  canvas.addEventListener('pointermove', (e) => { if (!dragging) return; const dx = e.clientX - lastX; lastX = e.clientX; group.rotation.y += dx * .005; velocity = reduced ? 0 : dx * .0005; });
+  canvas.addEventListener('pointermove', (e) => { if (!dragging) return; const dx = e.clientX - lastX; lastX = e.clientX; const deg = (dx / R) / RAD; view.lng -= deg; velocity = reduced ? 0 : deg * .9; });
   const up = () => { if (!dragging) return; dragging = false; canvas.classList.remove('is-dragging'); kick(); };
   canvas.addEventListener('pointerup', up); canvas.addEventListener('pointercancel', up); canvas.addEventListener('lostpointercapture', up);
 }

@@ -2,16 +2,19 @@
   /* The form comes first in reading order. On wide screens the verified members sit to its left; on small screens
      they follow it. Both scroll with the page. */
   .auth { display: grid; gap: var(--panel-gap); }
+  .auth > * { min-width: 0; }
   @media (min-width: 1024px) { .auth { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); } .auth__side { grid-column: 1; grid-row: 1; } .auth__main { grid-column: 2; grid-row: 1; } }
   .auth__main-inner { display: grid; justify-items: center; align-content: center; gap: 20px; min-height: calc(100svh - var(--nav-h) - var(--page-pad) * 2); padding: clamp(40px, 6vw, 88px) var(--gutter); }
-  .auth__card { width: min(100%, 480px); display: grid; gap: 18px; padding: clamp(24px, 3vw, 36px); }
+  .auth__card { width: min(100%, 500px); display: grid; gap: 18px; padding: clamp(26px, 3.2vw, 40px); box-shadow: 0 40px 80px -48px rgba(10, 22, 51, .45), 0 1px 2px rgba(10, 22, 51, .04); }
+  .auth__modes { background: #FFFFFF; box-shadow: var(--sh-chip); }
+  .auth__modes button.is-active { background: #1464DC; color: #FFFFFF; box-shadow: none; }
   .auth__card[hidden] { display: none; }
   .auth__head { display: grid; gap: 8px; }
   .auth__card h1 { font-size: var(--fs-2); }
   .auth__lead { color: var(--fg-soft); }
   .auth__row { display: grid; gap: 18px; }
   @media (min-width: 520px) { .auth__row { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  .auth__inline { font-size: var(--fs-meta); font-weight: 550; color: var(--blue-ink); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; border-radius: 3px; }
+  .auth__inline { font-size: var(--fs-meta); font-weight: 500; color: var(--blue-ink); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; border-radius: 3px; }
   .auth__reset { display: grid; gap: 10px; justify-items: start; }
   .auth__reset[hidden] { display: none; }
   .auth__alt { font-size: .9375rem; color: var(--fg-soft); text-align: center; }
@@ -22,9 +25,10 @@
 
   .auth__side-inner { display: grid; align-content: center; gap: 24px; height: 100%; padding: clamp(40px, 5vw, 72px) var(--gutter); }
   .auth__stack { display: grid; gap: 12px; }
-  .auth__stack .idcard { max-width: 420px; box-shadow: none; }
-  @media (min-width: 1024px) { .auth__stack .idcard:nth-child(2) { margin-left: 32px; } .auth__stack .idcard:nth-child(3) { margin-left: 12px; } }
-  .auth__note { font-size: var(--fs-meta); color: var(--fg-soft); }
+  .auth__stack .idcard { --fg: #0A1633; --fg-soft: #48566F; --fg-mute: #5C6980; --line: rgba(10, 22, 51, .08); --surface-2: #FFFFFF; --surface-3: #E9EEF5; max-width: 420px; background: #FFFFFF; color: var(--fg); box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .55); }
+  @media (min-width: 1024px) { .auth__stack .idcard:nth-child(1) { transform: rotate(-1.5deg); } .auth__stack .idcard:nth-child(2) { margin-left: 40px; transform: rotate(1deg); } .auth__stack .idcard:nth-child(3) { margin-left: 14px; transform: rotate(-.5deg); } }
+  .auth__note { align-items: flex-end; gap: 6px; --tilt: -4deg; color: var(--sky); }
+  .auth__note .scribble__text { color: var(--sky); }
   .auth__ledger { max-width: 420px; font-size: .9375rem; }
   .auth__ledger b { font-family: var(--f-mono); }
 }

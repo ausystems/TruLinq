@@ -14,7 +14,7 @@ function sealTexture(T) {
   rimGrad.addColorStop(0, '#77D9FF'); rimGrad.addColorStop(.5, '#007DF3'); rimGrad.addColorStop(1, '#4FC1FF');
   ctx.strokeStyle = rimGrad; ctx.lineWidth = 28; ctx.beginPath(); ctx.arc(size / 2, size / 2, size * .46, 0, Math.PI * 2); ctx.stroke();
   ctx.strokeStyle = 'rgba(54,172,255,.45)'; ctx.lineWidth = 12; ctx.beginPath(); ctx.arc(size / 2, size / 2, size * .285, 0, Math.PI * 2); ctx.stroke();
-  ctx.fillStyle = '#36ACFF'; ctx.font = '700 92px Geist, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillStyle = '#36ACFF'; ctx.font = '600 92px Lexend, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
   const text = 'TRULINQ · VERIFIED · ENTREPRENEUR · '; const radius = size * .37;
   ctx.save(); ctx.translate(size / 2, size / 2);
   const per = (Math.PI * 2) / text.length;

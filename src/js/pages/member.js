@@ -17,7 +17,7 @@ const addMonths = (iso, n) => { const d = new Date(iso + 'T12:00:00'); d.setMont
 const vouchHTML = (v) => `<figure class="vouch-card"><blockquote>${esc(v.text)}</blockquote><figcaption><a href="${href(`/members/${v.from.id}/`)}">${portrait(v.from, { size: 32, cls: 'avatar' })}<span><b>${esc(v.from.name)}</b>${esc([v.from.role, v.from.company].filter(Boolean).join(', '))}</span></a>${seal({ size: 'xs' })}<time datetime="${esc(v.date)}">${fmtDate(v.date)}</time></figcaption></figure>`;
 
 function notFound() {
-  document.title = 'Profile not found — Trulinq';
+  document.title = 'Profile not found · Trulinq';
   $('.mhero__inner').innerHTML = `<nav class="breadcrumb" aria-label="Breadcrumb"><a href="${href('/')}">Trulinq</a><i aria-hidden="true"></i><a href="${href('/directory/')}">Directory</a></nav>
     <div class="mhero__missing"><h1 class="display">This profile isn’t here.</h1><p>No verified member uses this address. The profile may have been renamed, made private, or never existed.</p><a class="btn btn--ink" href="${href('/directory/')}"><span>Search the directory</span></a></div>`;
   document.querySelectorAll('.mscore, .mvouch, .mnext').forEach((s) => (s.hidden = true));
@@ -32,7 +32,7 @@ async function build() {
   const role = [m.role, m.company].filter(Boolean).join(' · ');
 
   if (attr === '__dynamic__') {
-    document.title = `${m.name} — ${verified ? 'Verified on Trulinq' : 'Trulinq'}`;
+    document.title = `${m.name} · ${verified ? 'Verified on Trulinq' : 'Trulinq'}`;
     const canonical = document.querySelector('link[rel="canonical"]'); if (canonical) canonical.href = `${SITE.url}/members/${m.id}/`;
   }
   $('[data-name]').textContent = m.name;

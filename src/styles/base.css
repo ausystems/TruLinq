@@ -12,11 +12,11 @@
     min-height: 100dvh;
     font-family: var(--f-sans);
     font-size: var(--fs-body);
-    line-height: 1.55;
-    letter-spacing: -.006em;
+    font-weight: 400;
+    line-height: 1.6;
+    letter-spacing: -.008em;
     color: var(--fg);
     background: var(--bg);
-    font-feature-settings: "ss01" off, "cv11" on;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
@@ -32,11 +32,12 @@
   a { color: inherit; text-decoration: none; }
   button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
   input, textarea, select { font: inherit; color: inherit; }
-  h1, h2, h3, h4, h5 { margin: 0; font-weight: 600; letter-spacing: -.022em; line-height: 1.1; text-wrap: balance; }
+  h1, h2, h3, h4, h5 { margin: 0; font-weight: 500; letter-spacing: -.028em; line-height: 1.1; text-wrap: balance; }
   p { margin: 0; text-wrap: pretty; }
   ul, ol { margin: 0; padding: 0; list-style: none; }
   figure { margin: 0; }
   hr { border: 0; height: 1px; background: var(--line); margin: 0; }
+  b, strong { font-weight: 550; }
   time, .num { font-variant-numeric: tabular-nums; }
   ::selection { background: var(--blue-ink); color: #fff; }
 
@@ -45,25 +46,29 @@
   :focus-visible { outline: 2px solid var(--blue-ink); outline-offset: 2px; border-radius: 4px; }
 
   .sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
-  .skip { position: absolute; left: 12px; top: -80px; z-index: 200; padding: 10px 16px; border-radius: var(--r-field); background: var(--fg); color: var(--on-fg); font-size: var(--fs-sm); font-weight: 550; transition: top var(--t-state) var(--e-out); }
+  .skip { position: absolute; left: 12px; top: -80px; z-index: 200; padding: 10px 16px; border-radius: var(--r-field); background: var(--fg); color: var(--on-fg); font-size: var(--fs-sm); font-weight: 500; transition: top var(--t-state) var(--e-out); }
   .skip:focus-visible { top: 12px; outline-offset: 3px; }
 
-  /* ── Type roles ───────────────────────────────────────────────── */
-  .display { font-weight: 600; letter-spacing: -.03em; line-height: 1.04; }
-  .lead { font-size: var(--fs-lead); line-height: 1.5; letter-spacing: -.011em; color: var(--fg-soft); max-width: 40ch; }
-  .eyebrow { display: inline-block; font-size: var(--fs-sm); font-weight: 500; letter-spacing: -.004em; color: var(--fg-soft); }
+  /* ── Type roles ───────────────────────────────────────────────────
+     Display is set large and light, the way a headline is set on a poster; titles are a step heavier so they hold at
+     smaller sizes. One word in a display line may carry the ink (.hl): the thing the sentence is about. */
+  .display { font-weight: 450; letter-spacing: -.04em; line-height: 1.02; }
+  h1.display { font-weight: 400; letter-spacing: -.05em; line-height: .98; }
+  .hl { color: var(--blue-ink); }
+  .lead { font-size: var(--fs-lead); font-weight: 350; line-height: 1.52; letter-spacing: -.012em; color: var(--fg-soft); max-width: 42ch; }
   .mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums slashed-zero; letter-spacing: -.01em; }
-  .meta { font-size: var(--fs-meta); line-height: 1.4; color: var(--fg-soft); }
-  .accent { color: var(--blue-ink); background: linear-gradient(120deg, #3F9DFF 0%, #1D6BEA 60%, #2F5FD8 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .meta { font-size: var(--fs-meta); line-height: 1.45; color: var(--fg-soft); }
   .measure { max-width: var(--measure); }
   .u-center { text-align: center; }
+  /* The reviewer's hand: margin notes written in blue ink by the people who check every application */
+  .hand { font-family: var(--f-hand); font-size: var(--fs-hand); font-weight: 600; line-height: 1; letter-spacing: 0; color: var(--blue-ink); }
 
-  /* Links inside prose are underlined, never color alone */
-  .prose a, .link { color: var(--blue-ink); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); transition: text-decoration-color var(--t-hover) var(--e-out), color var(--t-hover); }
+  /* Links inside prose are underlined, never colour alone */
+  .prose a, .link { color: var(--blue-ink); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .22em; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); transition: text-decoration-color var(--t-hover) var(--e-out), color var(--t-hover); }
   .prose a:hover, .link:hover { text-decoration-color: currentColor; }
 
   @view-transition { navigation: auto; }
-  ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 180ms; animation-timing-function: var(--e-out); }
+  ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 200ms; animation-timing-function: var(--e-out); }
   @media (prefers-reduced-motion: reduce) {
     ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
     *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }

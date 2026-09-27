@@ -2,7 +2,7 @@
 <html lang="en" class="no-js">
 <head>
   <!--@include(partials/head.html)-->
-  <title>The verified directory — Trulinq</title>
+  <title>The verified directory · Trulinq</title>
   <meta name="description" content="Every profile in the Trulinq directory belongs to a real person and a real business. Search verified founders, owners and operators by industry and city.">
   <script type="module" src="/src/js/pages/directory.js"></script>
 </head>
@@ -10,10 +10,10 @@
   <!--@include(partials/nav.html)-->
   <main id="main" class="page">
 
-    <section class="panel panel--cream dhero" aria-labelledby="dir-title">
+    <section class="panel panel--ice dhero" aria-labelledby="dir-title">
       <div class="dhero__inner">
         <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Trulinq</a><i aria-hidden="true"></i><span aria-current="page">Directory</span></nav>
-        <h1 id="dir-title" class="display">The verified <span class="accent">directory</span></h1>
+        <h1 id="dir-title" class="display">The verified <span class="hl">directory</span></h1>
         <p class="lead">Every profile below belongs to a real person and a real business. Check the stamp before you send money, sign, or partner.</p>
         <ul class="dhero__ledger ledger" aria-label="The directory in numbers">
           <li class="ledger__row"><span>Verified members</span><i></i><b data-stat="verified">{{stats.verified}}</b></li>
@@ -22,10 +22,13 @@
           <li class="ledger__row"><span>Stamps revoked</span><i></i><b data-stat="revoked">{{stats.revoked}}</b></li>
         </ul>
       </div>
-      <div class="dhero__faces" aria-hidden="true" data-faces></div>
+      <div class="dhero__faces" aria-hidden="true">
+        <span class="dhero__faceset" data-faces></span>
+        <span class="scribble scribble--inline dhero__note"><svg class="scribble__pen" style="--pen-w:46px" viewBox="0 0 80 48"><path pathLength="1" d="M76 22c-20-10-44-10-66 2"/><path pathLength="1" d="M20 12l-10 12 13 4"/></svg><span class="scribble__text">each one reviewed by a person</span></span>
+      </div>
     </section>
 
-    <section class="panel panel--white dir" id="list" aria-labelledby="list-title">
+    <section class="panel panel--paper dir" id="list" aria-labelledby="list-title">
       <div class="dir__inner">
         <h2 id="list-title" class="sr-only">Members</h2>
         <div class="dir__controls">
@@ -78,14 +81,14 @@
       </div>
     </section>
 
-    <section class="panel panel--peach dcta" aria-labelledby="dcta-title">
+    <section class="panel panel--blue dcta" aria-labelledby="dcta-title">
       <div class="dcta__inner">
         <div class="dcta__col">
           <h2 id="dcta-title" class="display">Get your stamp.</h2>
           <p>A person reviews every application within {{review.businessDays}} business days.</p>
-          <a class="btn btn--primary" href="/verify/"><span>Get verified</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
+          <a class="btn btn--white btn--lg" href="/verify/"><span>Get verified</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
         </div>
-        <div class="dcta__col dcta__col--report card">
+        <div class="dcta__col dcta__col--report card paper">
           <h3>See a profile that isn’t what it claims?</h3>
           <p>Report it and a person reviews it. Fraudulent accounts and impersonation lose the stamp, and usually the account. Nothing you report is shared with the profile.</p>
           <a class="arrow-link" href="/trust/#report"><span>Report a profile</span><i aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></i></a>

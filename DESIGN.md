@@ -6,8 +6,8 @@ and their business, a person on the review team signs off, and the profile carri
 contact, privacy, terms, auth, dashboard, 404.
 
 The site is a Vite multi-page app with vanilla JS modules. GSAP core runs the few animations that mean something;
-Three.js draws the rubber stamp and the members globe. Run `npm run dev` (port 5180, API on 5190). Append `?nomotion`
-to any URL to review a page with motion switched off.
+Three.js draws only the rubber stamp. The members globe is a 2D canvas. Run `npm run dev` (port 5180, API on 5190).
+Append `?nomotion` to any URL to review a page with motion switched off.
 
 ## Principles
 
@@ -26,61 +26,87 @@ to any URL to review a page with motion switched off.
   JavaScript imitation of any of these. The header scrolls away with the page. The only fixed layers are the modal
   menu and transient toasts.
 
+## The idea: blue ink on a verification desk
+
+The site is the desk where a person checks every application. One colour does all the work, the way one ink does on a
+desk: the Trulinq blue of the stamp pad and of the reviewer's pen. The navy of a passport cover frames the moments that
+are the record itself. The composition language comes from a brand board the owner chose (tiles on a table, a navy
+frame around a paper sheet, a two-tone display headline, tabs dropped on the desk, margin notes in a hand, a dotted
+globe with the people on it, a round badge pressed on a frame's edge), rendered in blue with the restraint of a
+premium product page: few elements per viewport, very large light type, generous space, motion only as feedback.
+
 ## The visual world
 
-* **Panels on a table.** The body is the table (`--bg`). Every section is a `.panel` with the panel radius, separated
-  by `--panel-gap`. Tones (historical class names): `.panel--cream` (`--surface`), `.panel--white` (`--surface-2`),
-  `.panel--peach` (the ice gradient). Three deep panels carry weight on purpose: `.panel--ink` (passport navy; the
-  footer is one), `.panel--orange` (the brand blue, used by closing calls to action) and navy cards.
-* **Deep contexts re-tune the tokens.** `.panel--ink`, `.card--ink`, `.panel--orange`, `.card--orange` and
-  `[data-tone="deep"]` override text, line and fill tokens, so components inside them need no special rules. Anything
-  that must keep the brand blue as a fill uses the literal `#1464DC` (`.btn--primary`, `.card--orange`), because
-  `--blue-ink` becomes a light text blue inside deep contexts.
-* **Colour.** Type is navy-black `--fg`; `--fg-soft` (6.9:1) for secondary text and `--fg-mute` (4.6:1) for tertiary
-  text and placeholders. `--blue` is the brand blue for graphics, `--blue-ink` (4.9:1 with white) for blue text and
-  blue fills that carry white text. `--danger` is for errors and destructive states only. Never add colours; reach for
-  a token.
-* **Radius by object type, not one radius everywhere.** Panels `--r-panel`, cards `--r-card` (18), wells inside cards
-  `--r-well` (14), fields, buttons and segmented controls `--r-field` (10), rows and small documents `--r-record` (8),
-  tags `--r-tag` (6), portraits `--r-portrait` (12). Circles are for the seal, avatars in dense lists, nodes and
-  progress rings.
-* **Lines are structure, not decoration.** `--line` for rules inside records, `--line-2` for the boundaries of things
-  you can touch, `--line-3` for their hover. Ledgers, registers, timelines and the how-it-works rail are the ruled
-  language. No decorative dividers, dotted grids or ornament.
-* **Depth is rare.** `--sh-object` and `--sh-lifted` belong to objects that sit on the page: the member card on the
-  hero desk, documents in the sample scenes, the highlighted plan. Everything else is flat with a hairline.
-* **Type.** One family, Geist, with Geist Mono for dates, scores, codes and references. Sentence case throughout, no
-  tracked uppercase labels, no numbered steps. Sizes: `--fs-hero`, `--fs-1` page titles, `--fs-2` section titles,
-  `--fs-3`, `--fs-4` card titles, `--fs-lead`, body 17px. Paragraphs are capped at readable measures.
+* **Sheets on a table.** The body is the table (`--bg`). Every section is a `.panel` laid on it, separated by
+  `--panel-gap`. Tones: `.panel--paper` (white), `.panel--mist` (off-white), `.panel--ice` (the blue-ink tint, used
+  for every page's first sheet), `.panel--navy` (passport navy, for dramatic statements) and `.panel--blue` (the
+  brand blue, for closing calls to action). Neighbouring panels change tone, never repeat it.
+* **The bezel.** `.bezel` is a navy cover around a `.sheet` of paper: the homepage members section, the contact
+  letter, the footer and the phone menu. It is the passport motif; keep it for places that are the record or the
+  ending, not for ordinary sections.
+* **Deep contexts re-tune the tokens.** `.panel--navy`, `.card--navy`, `.panel--blue`, `.card--blue`, `.bezel` and
+  `[data-tone="deep"]` override text, line and fill tokens, so components inside them need no special rules.
+  `.sheet` and `.paper` restore the light tokens for paper placed inside a deep context. Anything that must keep the
+  brand blue as a fill uses the literal `#1464DC` (`.btn--primary`, chips that are on, the disc), because `--blue-ink`
+  becomes a light text blue inside deep contexts.
+* **Colour.** Type is navy-black `--fg`; `--fg-soft` (7.4:1) for secondary text and `--fg-mute` (5.5:1 on white,
+  4.8:1 on ice) for tertiary text and placeholders. `--blue` is the brand blue for graphics, `--blue-ink` (5.4:1 with
+  white) for blue text and fills. The ice ramp (`--ice-2`, `--ice`, `--ice-3`, `--ice-4`) is the brand blue at 8, 14,
+  22 and 40 percent: wells, selected rows, fields at rest. `--danger` is for errors and revocations only. Never add a
+  hue; reach for a token.
+* **Radius by object type.** Panels `--r-panel`, sheets `--r-sheet`, cards `--r-card` (20), wells `--r-well` (14),
+  fields and buttons `--r-field` (12), rows `--r-record` (8), tags `--r-tag` (6), portraits `--r-portrait` (14).
+  `--r-pill` is for chips and the grade badge, never for buttons. Circles are for the seal, avatars, the arrow disc
+  inside buttons, icon buttons and progress rings.
+* **Lines are structure.** `--line` inside records, `--line-2` for the edges of things you can touch, `--line-3` for
+  their hover. A 1.5px navy rule opens an editorial list (quotes, the register, the dossier steps, terms in short).
+* **Depth is for objects on the desk.** `--sh-chip` for tabs, `--sh-object` for records and fields that float on a
+  tint, `--sh-lifted` for the member card and documents in scenes. Flat everywhere else.
+* **Type.** Three voices with separate jobs. Lexend is the voice: display sizes are set large and light (400, tight
+  tracking, `h1.display`), titles a step heavier (450), text at 400 and leads at 350. Geist Mono is the record: dates,
+  scores, codes, references. Caveat is the reviewer's hand (`--f-hand`), used only for margin notes. Sentence case,
+  no tracked uppercase labels (the seal and the disc legends are the only ring text), no eyebrows, no numbered steps.
+  One word or phrase in a display line may carry the ink (`.hl`): the thing the sentence is about, not decoration.
 
 ## Signature elements
 
 1. **The seal.** `seal({ size })` in `src/js/ui.js`, or an empty `<span class="seal seal--md"></span>` that the boot
-   fills. Sizes `xs` (16), `sm` (32), `md` (64), `lg` (112), `xl`. Under 56px the compact seal drops the ring text,
-   which cannot be read that small. `data-manual` seals stay hidden until `stamp(el)` issues them; that press is the
-   one motion signature. Gradients and the TD mark symbols are defined once in `partials/nav.html`.
-2. **Portraits.** `portrait(member)` shows the member's approved photo, or a monogram in one of four fixed tones.
-   Placeholders (`placeholder: true`, used only by samples and the demo dashboard) render a blank silhouette, never
-   initials that could read as a person.
-3. **The member card.** `idCard(member)`: portrait with the seal on it, name, role and business, industry and place,
-   grade, score bar and score. Unverified members show their status instead of a seal.
-4. **Records.** `.ledger` rows (label, leader, value) for facts; `.register` and `.matrix` tables for comparisons;
-   `.timeline` for dated events; `.redact` bars for private data that exists but is never shown.
-5. **The 3D rubber stamp.** `createStamp(canvas, host, options)` in `src/js/stamp3d.js`. It stands still and renders
-   only while pressing: the caller tweens `press.t` and calls `play(seconds)`. The homepage hero presses once when the
-   desk is on screen and again on click; the pricing stamp presses once and leaves an impression.
-6. **No mascot, no cartoon character**, anywhere.
+   fills. Sizes `xs` (16), `sm` (32), `md` (64), `lg` (112), `xl`. Under 56px the compact seal drops the ring text.
+   `data-manual` seals stay hidden until `stamp(el)` issues them. The homepage headline ends with a seal instead of a
+   full stop (`.hero__stop`), pressed as the page arrives.
+2. **The reviewer's notes.** `.scribble`: a few words in blue ink with a hand-drawn pen stroke
+   (`.scribble__pen`, two paths with `pathLength="1"`) pointing at what they are about. Rules: one note per section
+   at most, never on every page head, it states one true thing that the page also says in text (so it can be
+   `aria-hidden`), and it writes itself once when first seen (`initScribbles()`; `data-manual` notes are written by
+   their page, like the hero note after the stamp lands). `.scribble--inline` sits in the flow, `.scribble--label` is
+   the boxed label on the blue desk. The legal pages' "In short" labels use the same hand.
+3. **Tabs on the desk.** `.scatter` lays chips at small fixed angles; hovering straightens one. Used once, for the
+   feature index under "trulinq features". Everywhere else chips sit straight (`.chip-row`).
+4. **The disc.** `.disc` is the round call to apply, with its legend on a ring and an arrow in the middle, pressed on
+   the edge of the members bezel. Its legend turns a little on hover.
+5. **Portraits.** `portrait(member)` shows the member's approved photo, or a monogram in one of four fixed tones.
+   Placeholders (`placeholder: true`) render a blank silhouette, never initials.
+6. **The member card.** `idCard(member)`: portrait with the seal on it, name, role and business, industry and place,
+   grade, score bar and score.
+7. **Records.** `.ledger` rows (label, leader, value); `.register` and `.matrix` tables; `.timeline` for dated
+   events; `.redact` bars for private data that exists but is never shown.
+8. **The globe.** The homepage globe is an orthographic 2D canvas: a paper sphere, a faint graticule, the land as an
+   even grid of blue dots (`src/data/land.js`, generated by `scripts/gen-land.mjs` from Natural Earth) and each group
+   of members as monograms where they work. It draws once and again only while someone turns it.
+9. **The 3D rubber stamp.** `createStamp(canvas, host, options)` in `src/js/stamp3d.js`, rendered only while pressing.
+10. **No mascot, no animal, no cartoon character**, anywhere.
 
 ## Components (`src/styles/components.css`)
 
-Buttons `.btn` with roles `--primary` (acts), `--ink` (commits), `--ghost` (offers), `--white` and `--ghost-light` for
-blue panels, `--danger`; sizes 36/44/52px; `.is-busy` shows progress and disables. Text links are underlined
-(`.link`, `.prose a`) or carry an arrow (`.arrow-link`). Tags `.tag` (`--verified`, `--pending`, `--danger`, `--ink`),
-filter `.chip`s with `aria-pressed`, `.segmented` (buttons or radios), fields (`.field`, `.field__label`, `.field__hint`,
-`.field__err`, `.input`, `.select`, `.check`, `.switch`, `fieldset.field`), `.form-error` and `.form-note`,
-`.dialog` (native modal dialogs), `.toast`, `.acc` accordions (headings wrap the buttons), `.empty`, `.skeleton`, the
-score gauge (`gaugeHTML()`, `factorsHTML()`, `runGauge()` in `src/js/gauge.js`), posts (`postHTML()`), endorsements
-(`.vouch-card`), the footer and the menu dialog.
+Buttons `.btn`: a label and, when it goes somewhere, a small disc carrying the arrow (`.btn__icon`) that inverts on
+hover. Roles `--primary` (acts), `--ink` (commits), `--tint` (offers), `--ghost` (quiet), `--white` and `--ghost-light`
+for blue panels, `--danger`; sizes 38/48/56px; `.is-busy` shows progress and disables. Text links are underlined
+(`.link`, `.prose a`) or carry a chevron (`.arrow-link`). Tags `.tag`, filter `.chip`s with `aria-pressed` (on is
+blue), `.segmented` (buttons or radios), fields (`.field`, `.field__label`, `.field__hint`, `.field__err`, `.input`,
+`.select`, `.check`, `.switch`, `fieldset.field`), `.form-error` and `.form-note`, `.dialog`, `.toast`, `.acc`
+accordions (a disc with a plus that turns blue when open), `.empty`, `.skeleton`, the score gauge (`gaugeHTML()`,
+`factorsHTML()`, `runGauge()` in `src/js/gauge.js`), posts (`postHTML()`), endorsements (`.vouch-card`), `.phead`
+page heads, the footer bezel and the menu.
 
 ## Forms
 
@@ -92,17 +118,21 @@ session storage until it is submitted (never the ID document itself).
 
 ## Motion
 
-Motion is feedback, not decoration. Allowed: the stamp being issued, the score being read once when first seen, the
-how-it-works application moving through its three checks once, state changes (menu, dialogs, toggles, chips, filters,
-busy buttons), and the completeness ring. Not allowed: fade-ups on every section, parallax, scroll-linked movement,
-pinning, floating or looping elements, cursor-following effects. Every animation has a reduced-motion path (`reduced`
-in `src/js/main.js`, also forced by `?nomotion`). Pages crossfade with the View Transitions API where supported.
+Motion is feedback, not decoration. Allowed: the stamp being issued (the 3D press, the seal full stop), the
+reviewer's notes writing themselves once, the score being read once when first seen, the how-it-works application
+moving through its three checks once, state changes (menu, dialogs, toggles, chips, filters, busy buttons, the disc
+turning on hover), the globe turning while dragged, and the completeness ring. Not allowed: fade-ups on every
+section, parallax, scroll-linked movement, pinning, floating or looping elements, cursor-following effects. Every
+animation has a reduced-motion path (`reduced` in `src/js/main.js`, also forced by `?nomotion`). Pages crossfade with
+the View Transitions API where supported.
 
 ## Responsive and accessibility
 
 Check every page at 1440, 1280, 1024, 768, 414, 375 and 320px wide: no horizontal overflow, no clipped text, no
-orphaned headings, touch targets at least 36px (primary actions 44px). The header collapses into a menu dialog below
-1024px with a focus trap, Escape to close and its own close button. Headings follow the document outline; every
+orphaned headings, touch targets at least 36px (primary actions 44px). Phones get their own compositions, not a
+squeezed desktop: the hero headline re-breaks for the width, the small feature tiles pair up, margin notes that would
+crowd a small screen are left out, and the header becomes a menu dialog below 1024px (a navy cover around a paper
+sheet) with a focus trap, Escape to close and its own close button. Headings follow the document outline; every
 section is labelled; decorative graphics are hidden from assistive technology; the globe and portraits carry text
 alternatives; focus is always visible.
 
@@ -113,14 +143,14 @@ alternatives; focus is always visible.
 <html lang="en" class="no-js">
 <head>
   <!--@include(partials/head.html)-->
-  <title>Page — Trulinq</title>
+  <title>Page · Trulinq</title>
   <meta name="description" content="…">
   <script type="module" src="/src/js/pages/PAGE.js"></script>
 </head>
 <body>
   <!--@include(partials/nav.html)-->
   <main id="main" class="page">
-    <section class="panel panel--cream xhero" aria-labelledby="…"> … </section>
+    <section class="panel panel--ice xhero" aria-labelledby="…"> … </section>
   </main>
   <!--@include(partials/footer.html)-->
 </body>

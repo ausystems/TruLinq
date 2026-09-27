@@ -1,102 +1,114 @@
 @layer tokens {
   :root {
-    /* ── Surfaces: white and ice on a cool table ───────────────── */
-    --bg: #F1F4F9;            /* the table the panels sit on */
-    --surface: #FAFBFD;       /* the default panel */
-    --surface-2: #FFFFFF;     /* paper: cards, fields, records */
-    --surface-3: #ECF1F7;     /* recessed wells, tracks, skeletons */
-    --ice: #E8F1FE;           /* the Trulinq ice field: verified states, emphasis panels */
-    --ice-2: #F2F7FE;
-    --ice-3: #D8E7FC;
-    --deep: #071A45;          /* passport navy: the drama panels */
+    /* ── Surfaces: paper sheets and blue-ink tints on a cool table ── */
+    --bg: #ECF0F6;            /* the table every panel is laid on */
+    --surface: #F7F9FC;       /* a quiet panel */
+    --surface-2: #FFFFFF;     /* paper: sheets, cards, fields, records */
+    --surface-3: #E9EEF5;     /* recessed wells, tracks, skeletons */
+    /* The blue-ink tints, the way a stamp pad bleeds into paper: 8, 14, 22 and 40 percent of the brand blue */
+    --ice-2: #F1F6FE;
+    --ice: #E6EFFD;
+    --ice-3: #D3E4FD;
+    --ice-4: #A9CDFD;
+    --deep: #071A45;          /* passport navy: covers, frames, the drama panels */
     --deep-2: #0B2459;
     --deep-3: #12306E;
 
     /* ── Ink ─────────────────────────────────────────────────── */
-    --fg: #0C1526;            /* type */
-    --fg-2: #1F2A3E;          /* hover and emphasis */
-    --fg-soft: #4C5A70;       /* secondary text, 6.9:1 on white */
-    --fg-mute: #6F7C91;       /* tertiary text and placeholders, 4.6:1 on white */
+    --fg: #0A1633;            /* type: navy-black, never pure black */
+    --fg-2: #1C2944;          /* hover and emphasis */
+    --fg-soft: #48566F;       /* secondary text: 7.4:1 on white, 6.4:1 on ice */
+    --fg-mute: #5C6980;       /* tertiary text and placeholders: 5.5:1 on white, 4.8:1 on ice */
     --on-fg: #FFFFFF;
 
     /* ── Lines: structure is quieter than interaction ────────── */
-    --line: rgba(12, 21, 38, .075);     /* structural rules inside records */
-    --line-2: rgba(12, 21, 38, .14);    /* boundaries of things you can touch */
-    --line-3: rgba(12, 21, 38, .28);    /* hovered boundaries */
+    --line: rgba(10, 22, 51, .08);      /* rules inside records */
+    --line-2: rgba(10, 22, 51, .14);    /* boundaries of things you can touch */
+    --line-3: rgba(10, 22, 51, .28);    /* hovered boundaries */
 
-    /* ── Brand ───────────────────────────────────────────────── */
-    --blue: #2981FB;          /* the brand blue: the seal rim, graphics, fills */
-    --blue-ink: #1464DC;      /* blue that carries white text or sits as text: 4.9:1 */
-    --blue-ink-2: #0F55C0;    /* its hover */
-    --blue-soft: rgba(41, 129, 251, .1);
-    --sky: #60C2FF;           /* blue on navy */
-    --danger: #C8321F;        /* 5.4:1 on white */
+    /* ── Brand: one colour does all the work ─────────────────── */
+    --blue: #2981FB;          /* the brand blue: graphics, the seal rim, the globe */
+    --blue-ink: #1464DC;      /* blue that carries white text or sits as text: 5.4:1 */
+    --blue-ink-2: #0F55C0;    /* its pressed and hovered state */
+    --blue-soft: rgba(41, 129, 251, .12);
+    --sky: #7FCBFF;           /* blue on navy */
+    --danger: #C8321F;        /* errors and revocations only: 5.3:1 on white */
     --danger-soft: #FDEDEA;
     --seal-ring: #36ACFF;
 
-    /* legacy names still used by a few templates */
-    --primary: var(--blue);
-    --glow: var(--blue-ink);
-    --line-soft: var(--line);
-
-    /* ── Type ────────────────────────────────────────────────── */
-    --f-sans: "Geist", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", system-ui, sans-serif;
+    /* ── Type: one voice, one record, one hand ───────────────── */
+    --f-sans: "Lexend", "Lexend Deca", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", system-ui, sans-serif;
     --f-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
-    --fs-hero: clamp(2.75rem, 1.6rem + 4.4vw, 5.75rem);
-    --fs-1: clamp(2.25rem, 1.55rem + 2.9vw, 4rem);
-    --fs-2: clamp(1.75rem, 1.3rem + 1.9vw, 2.875rem);
-    --fs-3: clamp(1.375rem, 1.2rem + .7vw, 1.75rem);
+    --f-hand: "Caveat", "Bradley Hand", "Segoe Print", cursive;
+    --fs-hero: clamp(3rem, 1.35rem + 5.4vw, 7rem);
+    --fs-1: clamp(2.5rem, 1.55rem + 3.1vw, 4.5rem);
+    --fs-2: clamp(2rem, 1.4rem + 2vw, 3.375rem);
+    --fs-3: clamp(1.375rem, 1.18rem + .7vw, 1.8125rem);
     --fs-4: 1.1875rem;
-    --fs-lead: clamp(1.0625rem, .98rem + .38vw, 1.3125rem);
-    --fs-body: 1.0625rem;
+    --fs-lead: clamp(1.0625rem, .97rem + .42vw, 1.3125rem);
+    --fs-body: 1rem;
     --fs-sm: .9375rem;
     --fs-meta: .8125rem;
     --fs-micro: .75rem;
+    --fs-hand: clamp(1.375rem, 1.15rem + .6vw, 1.75rem);
 
     /* ── Space: a 4-point scale, spent unevenly on purpose ───── */
     --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 20px; --s-6: 24px; --s-7: 32px;
     --s-8: 40px; --s-9: 48px; --s-10: 64px; --s-11: 80px; --s-12: 96px; --s-13: 128px;
-    --gutter: clamp(20px, 4.2vw, 64px);
-    --page-pad: clamp(8px, 1vw, 12px);
-    --panel-gap: clamp(8px, 1vw, 12px);
-    --sect-y: clamp(72px, 4rem + 5vw, 144px);
-    --sect-y-sm: clamp(48px, 2.6rem + 3vw, 96px);
+    --gutter: clamp(20px, 4.4vw, 72px);
+    --page-pad: clamp(8px, 1vw, 14px);
+    --panel-gap: clamp(8px, 1vw, 14px);
+    --sect-y: clamp(80px, 4rem + 6vw, 168px);
+    --sect-y-sm: clamp(56px, 2.6rem + 3.6vw, 104px);
     --max: 1400px;
-    --measure: 62ch;
-    --nav-h: 72px;
+    --measure: 60ch;
+    --nav-h: 76px;
 
     /* ── Radius: by what the object is ───────────────────────── */
-    --r-panel: clamp(20px, 1.2rem + 1vw, 32px);   /* page sections */
-    --r-card: 18px;                               /* cards and member cards */
+    --r-panel: clamp(20px, 1rem + 1vw, 30px);     /* page sections */
+    --bezel: clamp(8px, .3rem + .8vw, 16px);      /* the navy cover around a sheet */
+    --r-sheet: calc(var(--r-panel) - var(--bezel) * .45);
+    --r-card: 20px;                               /* cards and member cards */
     --r-well: 14px;                               /* wells inside cards */
-    --r-field: 10px;                              /* fields, buttons, segmented controls */
+    --r-field: 12px;                              /* fields, buttons, segmented controls */
     --r-record: 8px;                              /* rows, table cells, small documents */
     --r-tag: 6px;                                 /* labels */
-    --r-portrait: 12px;                           /* portraits at card size */
+    --r-portrait: 14px;                           /* portraits at card size */
+    --r-pill: 999px;                              /* chips, and nothing else */
 
-    /* ── Depth: rare, and only for objects ───────────────────── */
-    --sh-object: 0 1px 1px rgba(12, 21, 38, .04), 0 10px 28px -12px rgba(12, 21, 38, .2);
-    --sh-lifted: 0 2px 2px rgba(12, 21, 38, .04), 0 24px 48px -20px rgba(12, 21, 38, .28);
-    --sh-pop: 0 0 0 1px rgba(12, 21, 38, .06), 0 18px 44px -18px rgba(12, 21, 38, .32);
+    /* ── Depth: rare, and only for objects on the desk ───────── */
+    --sh-chip: 0 1px 1px rgba(10, 22, 51, .04), 0 6px 16px -8px rgba(10, 22, 51, .2);
+    --sh-object: 0 1px 1px rgba(10, 22, 51, .04), 0 12px 30px -14px rgba(10, 22, 51, .22);
+    --sh-lifted: 0 2px 2px rgba(10, 22, 51, .04), 0 28px 56px -24px rgba(10, 22, 51, .32);
+    --sh-pop: 0 0 0 1px rgba(10, 22, 51, .06), 0 18px 44px -18px rgba(10, 22, 51, .32);
     --focus: 0 0 0 2px var(--surface-2), 0 0 0 4px var(--blue-ink);
 
     /* ── Motion: tuned per interaction ───────────────────────── */
     --e-out: cubic-bezier(.2, .8, .2, 1);
     --e-in-out: cubic-bezier(.6, 0, .2, 1);
     --e-spring: cubic-bezier(.34, 1.36, .64, 1);
+    --e-pen: cubic-bezier(.45, .05, .25, 1);
     --t-press: 90ms;
-    --t-hover: 160ms;
-    --t-state: 240ms;
-    --t-reveal: 420ms;
+    --t-hover: 200ms;
+    --t-state: 260ms;
+    --t-reveal: 460ms;
   }
 
   /* Deep contexts: navy and blue panels flip text, lines and fills to their light counterparts, so components need no
-     special rules inside them. */
-  .panel--ink, .card--ink, .panel--orange, .card--orange, [data-tone="deep"] {
-    --fg: #F3F7FC; --fg-2: #FFFFFF; --fg-soft: #B3C1D3; --fg-mute: #8A9BB2; --on-fg: #0C1526;
-    --line: rgba(243, 247, 252, .12); --line-2: rgba(243, 247, 252, .22); --line-3: rgba(243, 247, 252, .4);
+     special rules inside them. Paper sheets inside a deep context (.sheet) flip them back. */
+  .panel--navy, .card--navy, .panel--blue, .card--blue, .bezel, [data-tone="deep"] {
+    --fg: #F3F7FC; --fg-2: #FFFFFF; --fg-soft: #B8C6DA; --fg-mute: #8FA2BD; --on-fg: #0A1633;
+    --line: rgba(243, 247, 252, .12); --line-2: rgba(243, 247, 252, .22); --line-3: rgba(243, 247, 252, .42);
     --surface-2: rgba(243, 247, 252, .06); --surface-3: rgba(243, 247, 252, .1);
-    --ice: rgba(96, 194, 255, .14); --blue-ink: #7FCBFF; --blue-soft: rgba(96, 194, 255, .14);
+    --ice: rgba(127, 203, 255, .14); --blue-ink: #7FCBFF; --blue-soft: rgba(127, 203, 255, .14);
     --focus: 0 0 0 2px var(--deep), 0 0 0 4px var(--sky);
+  }
+  .panel--blue, .card--blue { --fg-soft: #EEF4FF; --fg-mute: #DCE8FF; --line: rgba(255, 255, 255, .18); --line-2: rgba(255, 255, 255, .32); --line-3: rgba(255, 255, 255, .6); --blue-ink: #FFFFFF; --focus: 0 0 0 2px #1464DC, 0 0 0 4px #FFFFFF; }
+  .sheet, .paper {
+    --fg: #0A1633; --fg-2: #1C2944; --fg-soft: #48566F; --fg-mute: #5C6980; --on-fg: #FFFFFF;
+    --line: rgba(10, 22, 51, .08); --line-2: rgba(10, 22, 51, .14); --line-3: rgba(10, 22, 51, .28);
+    --surface-2: #FFFFFF; --surface-3: #E9EEF5; --ice: #E6EFFD; --blue-ink: #1464DC; --blue-soft: rgba(41, 129, 251, .12);
+    --focus: 0 0 0 2px #FFFFFF, 0 0 0 4px #1464DC;
+    color: var(--fg);
   }
 }

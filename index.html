@@ -2,9 +2,9 @@
 <html lang="en" class="no-js">
 <head>
   <!--@include(partials/head.html)-->
-  <title>Trulinq — Everyone here is real</title>
+  <title>Trulinq · Everyone here is real</title>
   <meta name="description" content="Trulinq verifies every entrepreneur and business profile, so you connect, deal and grow without getting scammed. One stamp, checked by a person.">
-  <meta property="og:title" content="Trulinq — Everyone here is real">
+  <meta property="og:title" content="Trulinq · Everyone here is real">
   <meta property="og:description" content="A trusted network for entrepreneurs, built around verified identities and verified businesses.">
   <script type="module" src="/src/js/pages/home.js"></script>
 </head>
@@ -12,16 +12,15 @@
   <!--@include(partials/nav.html)-->
   <main id="main" class="page">
 
-    <!-- ── Hero ──────────────────────────────────────────────── -->
-    <section class="panel panel--peach hero" aria-labelledby="hero-title">
+    <!-- ── Hero: the word "real", and the stamp that makes it true ─────────── -->
+    <section class="panel panel--ice hero" aria-labelledby="hero-title">
       <div class="hero__inner">
+        <h1 id="hero-title" class="hero__title display">Everyone here is <span class="hl">real</span><span class="hero__stop" aria-hidden="true"><span class="seal seal--sm" data-manual data-hero-stop></span></span><span class="sr-only">.</span></h1>
         <div class="hero__copy">
-          <p class="eyebrow hero__eyebrow">Verified entrepreneur network · {{site.place}}</p>
-          <h1 id="hero-title" class="hero__title display">Everyone here is <span class="hero__real">real</span>.</h1>
           <p class="lead hero__lead">A trusted network for entrepreneurs, built around verified identities and verified businesses. One stamp, checked by a person, before anyone gets to pitch you.</p>
           <div class="btn-row hero__cta">
             <a class="btn btn--primary btn--lg" href="/verify/"><span>Get verified</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
-            <a class="btn btn--ghost btn--lg" href="#how"><span>How it works</span></a>
+            <a class="arrow-link arrow-link--lg" href="#how"><span>How it works</span><i aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M6 3.5l4.5 4.5L6 12.5"/></svg></i></a>
           </div>
         </div>
         <figure class="hero__stage" data-hero-stage>
@@ -33,48 +32,36 @@
         </figure>
       </div>
       <div class="hero__ledger">
-        <div class="hero__ledger-inner">
-          <p class="hero__ledger-title">The network in numbers</p>
-          <ul class="hero__stats">
-            <li><b data-stat="people">{{stats.people}}</b> <span data-stat-label="people">people on Trulinq</span></li>
-            <li><b data-stat="verified">{{stats.verified}}</b> <span data-stat-label="verified">verified profiles</span></li>
-            <li><b data-stat="posts">{{stats.posts}}</b> <span data-stat-label="posts">posts shared</span></li>
-            <li><b data-stat="revoked">{{stats.revoked}}</b> <span data-stat-label="revoked">stamps revoked</span></li>
-          </ul>
-          <p class="hero__ledger-motto">We never faked momentum. <em>We built it.</em></p>
-        </div>
+        <ul class="hero__stats" aria-label="The network in numbers">
+          <li><b data-stat="people">{{stats.people}}</b><span data-stat-label="people">people on Trulinq</span></li>
+          <li><b data-stat="verified">{{stats.verified}}</b><span data-stat-label="verified">verified profiles</span></li>
+          <li><b data-stat="posts">{{stats.posts}}</b><span data-stat-label="posts">posts shared</span></li>
+          <li><b data-stat="revoked">{{stats.revoked}}</b><span data-stat-label="revoked">stamps revoked</span></li>
+        </ul>
+        <p class="hero__motto">We never faked momentum. <em>We built it.</em></p>
       </div>
     </section>
 
-    <!-- ── For founders in ───────────────────────────────────── -->
-    <section class="panel panel--white who" aria-labelledby="who-title">
+    <!-- ── For founders in: one sentence, every industry a way in ─────────── -->
+    <section class="panel panel--paper who" aria-labelledby="who-title">
       <div class="who__inner">
-        <h2 id="who-title" class="display">For founders in:</h2>
-        <ul class="who__tags" data-who>
-          <li><a class="who__tag" href="/directory/?industry=Consulting" data-industry-tag="Consulting">Consulting</a></li>
-          <li><a class="who__tag" href="/directory/?industry=Direct%20sales%2Fservice" data-industry-tag="Direct sales/service">Direct sales &amp; service</a></li>
-          <li><a class="who__tag" href="/directory/?industry=Energy" data-industry-tag="Energy">Energy</a></li>
-          <li><a class="who__tag" href="/directory/?industry=Marketing" data-industry-tag="Marketing">Marketing</a></li>
-          <li><a class="who__tag" href="/directory/?industry=Real%20Estate" data-industry-tag="Real Estate">Real estate</a></li>
-          <li><a class="who__tag" href="/directory/?industry=Restaurant" data-industry-tag="Restaurant">Restaurants</a></li>
-          <li><a class="who__tag" href="/directory/?industry=Technology" data-industry-tag="Technology">Technology</a></li>
-          <li><a class="who__tag who__tag--any" href="/verify/">Any other real business</a></li>
-        </ul>
+        <h2 id="who-title" class="who__title">For founders in</h2>
+        <p class="who__line" data-who><a href="/directory/?industry=Consulting" data-industry-tag="Consulting">consulting</a>, <a href="/directory/?industry=Direct%20sales%2Fservice" data-industry-tag="Direct sales/service">direct sales &amp; service</a>, <a href="/directory/?industry=Energy" data-industry-tag="Energy">energy</a>, <a href="/directory/?industry=Marketing" data-industry-tag="Marketing">marketing</a>, <a href="/directory/?industry=Real%20Estate" data-industry-tag="Real Estate">real estate</a>, <a href="/directory/?industry=Restaurant" data-industry-tag="Restaurant">restaurants</a> and <a href="/directory/?industry=Technology" data-industry-tag="Technology">technology</a>. <a class="who__any" href="/verify/">And any other real business.</a></p>
       </div>
     </section>
 
     <!-- ── One stamp. Zero doubt. ─────────────────────────────── -->
-    <section class="panel panel--ink doubt" id="stamp" aria-labelledby="doubt-title">
+    <section class="panel panel--navy doubt" id="stamp" aria-labelledby="doubt-title">
       <div class="doubt__inner">
         <div class="doubt__type">
           <h2 id="doubt-title" class="doubt__title display"><span class="doubt__one">One stamp.</span> <span class="doubt__zero">Zero doubt.</span></h2>
           <p class="doubt__lead">Fake buyers, fake suppliers, fake “investors”. Every one of them needs a profile nobody checked. Trulinq removes the profile nobody checked.</p>
         </div>
-        <aside class="doubt__card card card--orange" aria-labelledby="doubt-card-title">
+        <aside class="doubt__card card card--blue" aria-labelledby="doubt-card-title">
           <span class="seal seal--lg" role="img" aria-label="The Trulinq Verified seal"></span>
           <h3 id="doubt-card-title">What the stamp says</h3>
           <p>The Trulinq Verified stamp signals that an identity or business has completed our verification process. One clear standard, so you know who you’re dealing with.</p>
-          <a class="arrow-link" href="/trust/"><span>Read the Trust Centre</span><i aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></i></a>
+          <a class="arrow-link" href="/trust/"><span>Read the Trust Centre</span><i aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M6 3.5l4.5 4.5L6 12.5"/></svg></i></a>
         </aside>
         <div class="doubt__pillars">
           <article class="doubt__pillar">
@@ -116,17 +103,18 @@
       </div>
     </section>
 
-    <!-- ── How it works ──────────────────────────────────────── -->
-    <section class="panel panel--cream how" id="how" aria-labelledby="how-title" data-how>
+    <!-- ── How it works: one application, moving across the desk ─────────── -->
+    <section class="panel panel--paper how" id="how" aria-labelledby="how-title" data-how>
       <div class="how__inner">
         <div class="how__head">
-          <h2 id="how-title" class="display">Know who’s behind the profile.</h2>
-          <p class="how__caption">A sample application. Private details are redacted.</p>
+          <h2 id="how-title" class="display">Know who’s behind <span class="hl">the profile.</span></h2>
+          <p class="lead how__lead">Three checks, in the order a reviewer runs them. The stamp is issued only when all three pass.</p>
         </div>
         <ol class="how__steps" data-steps>
           <li class="how__step" data-step="0">
             <div class="how__text"><h3>Prove it’s you</h3><p>Government-issued ID and identity verification help confirm that the person behind the profile is real.</p></div>
             <div class="how__scene" aria-hidden="true">
+              <p class="scribble scribble--label how__label"><span class="scribble__text">A sample application, redacted</span><svg class="scribble__pen" style="--pen-w:58px" viewBox="0 0 80 48" aria-hidden="true"><path pathLength="1" d="M6 6c16 2 36 12 52 32"/><path pathLength="1" d="M45 36l13 3 0-13"/></svg></p>
               <div class="iddoc">
                 <div class="iddoc__head"><span class="tag">Government ID</span><span class="redact" style="--w:9ch"></span></div>
                 <div class="iddoc__body">
@@ -175,51 +163,58 @@
       </div>
     </section>
 
-    <!-- ── Real people, real places ──────────────────────────── -->
-    <section class="panel panel--white world" id="members" aria-labelledby="world-title">
-      <div class="world__inner">
-        <div class="world__copy">
-          <h2 id="world-title" class="display">Real people. Real places.</h2>
-          <p class="lead">Founders, owners and operators, each one checked against a real business. The stamp means the same thing in Hilo as it does in Phoenix.</p>
-          <div class="world__list" data-world-cards></div>
-          <a class="btn btn--ink" href="/directory/"><span>Browse the directory</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
-        </div>
-        <figure class="world__globe" data-globe>
-          <div class="world__sphere">
-            <canvas class="world__canvas" data-globe-canvas role="img" aria-label="A globe showing where verified members are based"></canvas>
-            <div class="world__pins" data-globe-pins aria-hidden="true"></div>
+    <!-- ── Real people, real places: the members, pinned where they work ─── -->
+    <section class="world bezel" id="members" aria-labelledby="world-title">
+      <div class="sheet world__sheet">
+        <div class="world__inner">
+          <div class="world__copy">
+            <h2 id="world-title" class="world__title display">Real people.<br><span class="hl">Real places.</span></h2>
+            <p class="lead">Founders, owners and operators, each one checked against a real business. The stamp means the same thing in Hilo as it does in Phoenix.</p>
+            <div class="world__list" data-world-cards></div>
+            <a class="btn btn--ink" href="/directory/"><span>Browse the directory</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
           </div>
-          <figcaption class="world__caption" data-globe-caption>Members who list a city, pinned where they work.</figcaption>
-        </figure>
+          <figure class="world__globe" data-globe>
+            <div class="world__sphere">
+              <canvas class="world__canvas" data-globe-canvas role="img" aria-label="A globe showing where verified members are based"></canvas>
+              <div class="world__pins" data-globe-pins aria-hidden="true"></div>
+              <svg class="scribble world__arc" viewBox="0 0 100 100" aria-hidden="true"><defs><path id="world-arc" d="M 8.2,34.8 A 44.5,44.5 0 0 1 51.6,5.5"/></defs><text><textPath href="#world-arc">it all started in Hilo</textPath></text></svg>
+            </div>
+            <figcaption class="world__caption" data-globe-caption>Members who list a city, pinned where they work.</figcaption>
+          </figure>
+          <a class="disc world__disc" href="/verify/" aria-label="Get verified. A person reviews your application within {{review.businessDays}} business days.">
+        <svg viewBox="0 0 120 120" aria-hidden="true"><defs><path id="disc-ring" d="M60,60 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0"/></defs><text><textPath href="#disc-ring" textLength="276" lengthAdjust="spacing">GET VERIFIED · REVIEWED IN {{review.businessDays}} BUSINESS DAYS ·</textPath></text></svg>
+        <span class="disc__arrow" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span>
+      </a>
+        </div>
       </div>
     </section>
 
     <!-- ── The score ─────────────────────────────────────────── -->
-    <section class="panel panel--peach score" id="score" aria-labelledby="score-title">
+    <section class="panel panel--mist score" id="score" aria-labelledby="score-title">
       <div class="score__inner">
         <div class="score__gauge" data-gauge-mount></div>
         <div class="score__copy">
-          <h2 id="score-title" class="display">A number you can’t fake.</h2>
+          <h2 id="score-title" class="display">A number you <span class="hl">can’t fake.</span></h2>
           <p class="lead">Every verified profile carries a 300 to 850 rating built from verification, business details, web presence and standing over time. It moves when the facts move.</p>
         </div>
         <div class="score__factors" data-factors-mount></div>
       </div>
     </section>
 
-    <!-- ── Features ──────────────────────────────────────────── -->
-    <section class="panel panel--cream feats" id="features" aria-labelledby="feats-title">
+    <!-- ── Features: the tabs on the desk, then what each one does ───────── -->
+    <section class="panel panel--ice feats" id="features" aria-labelledby="feats-title">
       <div class="feats__inner">
         <div class="feats__board">
-          <h2 id="feats-title" class="feats__title display"><span class="accent">trulinq</span> features</h2>
-          <ul class="feats__index">
-            <li><a href="#feat-feed">Chronological feed</a></li>
-            <li><a href="#feat-match">Match</a></li>
-            <li><a href="#feat-endorse">Endorsements</a></li>
-            <li><a href="#feat-rooms">Rooms</a></li>
-            <li><a href="#feat-report">Report &amp; revoke</a></li>
-            <li><a href="#feat-renew">Re-verification</a></li>
-            <li><a href="#score">Trulinq Score</a></li>
-            <li><a href="#how">Human review</a></li>
+          <h2 id="feats-title" class="feats__title display"><span class="hl">trulinq</span> features</h2>
+          <ul class="scatter feats__index">
+            <li><a class="chip" href="#feat-feed">Chronological feed</a></li>
+            <li><a class="chip" href="#feat-match">Match</a></li>
+            <li><a class="chip" href="#feat-endorse">Endorsements</a></li>
+            <li><a class="chip" href="#feat-rooms">Rooms</a></li>
+            <li><a class="chip" href="#feat-report">Report &amp; revoke</a></li>
+            <li><a class="chip" href="#feat-renew">Re-verification</a></li>
+            <li><a class="chip" href="#score">Trulinq Score</a></li>
+            <li class="feats__human"><a class="chip chip--blue" href="#how">Human review</a><p class="scribble feats__note" aria-hidden="true"><svg class="scribble__pen" style="--pen-w:46px" viewBox="0 0 80 48"><path pathLength="1" d="M74 42c-16-2-36-12-52-32"/><path pathLength="1" d="M34 10l-13-1 1 13"/></svg><span class="scribble__text">the part we never automate</span></p></li>
           </ul>
           <p class="lead feats__lead">A feed without an algorithm, a room without anonymous voices, a match without a catfish. Boring on purpose, because boring is what trust looks like.</p>
         </div>
@@ -246,7 +241,7 @@
             <div class="bento__ui bento__ui--rooms" aria-hidden="true"><ul class="room-list" data-room-list></ul></div>
             <div class="bento__text"><h3>Rooms</h3><p>Topic rooms where every person posting has passed verification. Anyone can read.</p></div>
           </a>
-          <a id="feat-endorse" class="bento__card bento__card--endorse card card--ink" href="/directory/">
+          <a id="feat-endorse" class="bento__card bento__card--endorse card card--navy" href="/directory/">
             <div class="bento__ui bento__ui--endorse" aria-hidden="true">
               <span class="vouch-mock">
                 <span class="vouch-mock__q">“</span>
@@ -260,8 +255,8 @@
             <div class="bento__ui bento__ui--report" aria-hidden="true"><span class="revoke"><span class="seal seal--md"></span><span class="revoke__x"></span></span><span class="tag tag--danger">Revoked</span></div>
             <div class="bento__text"><h3>Report &amp; revoke</h3><p>Spot a fake? Report it. A stamp can be revoked at any time.</p></div>
           </a>
-          <a id="feat-renew" class="bento__card bento__card--renew card card--peach" href="/pricing/">
-            <div class="bento__ui bento__ui--renew" aria-hidden="true"><span class="ring12"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="none" stroke="#D8E7FC" stroke-width="8"/><circle cx="50" cy="50" r="42" fill="none" stroke="#1464DC" stroke-width="8" stroke-linecap="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="8"/></svg><b>{{reverify.months}}<small>months</small></b></span></div>
+          <a id="feat-renew" class="bento__card bento__card--renew card card--blue" href="/pricing/">
+            <div class="bento__ui bento__ui--renew" aria-hidden="true"><span class="ring12"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="8"/><circle cx="50" cy="50" r="42" fill="none" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="8"/></svg><b>{{reverify.months}}<small>months</small></b></span></div>
             <div class="bento__text"><h3>Re-verification</h3><p>Every {{reverify.months}} months we check again. Businesses close; stamps shouldn’t outlive them.</p></div>
           </a>
         </div>
@@ -269,10 +264,10 @@
     </section>
 
     <!-- ── In their own words ─────────────────────────────────── -->
-    <section class="panel panel--white quotes" id="quotes" aria-labelledby="quotes-title">
+    <section class="panel panel--paper quotes" id="quotes" aria-labelledby="quotes-title">
       <div class="quotes__inner">
         <div class="quotes__head">
-          <h2 id="quotes-title" class="display">In their own words.</h2>
+          <h2 id="quotes-title" class="display">In their <span class="hl">own words.</span></h2>
           <p class="quotes__note">Excerpts from the public profiles of verified members.</p>
         </div>
         <div class="quotes__grid" data-quotes></div>
@@ -280,7 +275,7 @@
     </section>
 
     <!-- ── FAQ ───────────────────────────────────────────────── -->
-    <section class="panel panel--cream faq" id="faq" aria-labelledby="faq-title">
+    <section class="panel panel--mist faq" id="faq" aria-labelledby="faq-title">
       <div class="faq__inner">
         <div class="faq__side">
           <h2 id="faq-title" class="display">Have questions?</h2>
@@ -312,7 +307,7 @@
     </section>
 
     <!-- ── Call to action ────────────────────────────────────── -->
-    <section class="panel panel--orange cta" id="join" aria-labelledby="cta-title">
+    <section class="panel panel--blue cta" id="join" aria-labelledby="cta-title">
       <div class="cta__seal" aria-hidden="true"><span class="seal seal--xl"></span></div>
       <div class="cta__inner">
         <h2 id="cta-title" class="display">Claim your stamp.</h2>

@@ -2,7 +2,7 @@
 <html lang="en" class="no-js">
 <head>
   <!--@include(partials/head.html)-->
-  <title>Rooms — Verified voices only — Trulinq</title>
+  <title>Rooms · Verified voices only · Trulinq</title>
   <meta name="description" content="Topic rooms where every person posting has passed Trulinq verification. Anyone can read. Verified members can speak.">
   <script type="module" src="/src/js/pages/rooms.js"></script>
 </head>
@@ -10,16 +10,15 @@
   <!--@include(partials/nav.html)-->
   <main id="main" class="page">
 
-    <section class="panel panel--cream rhero" aria-labelledby="rooms-title">
+    <section class="panel panel--ice rhero" aria-labelledby="rooms-title">
       <div class="rhero__inner">
-        <p class="eyebrow">Rooms</p>
-        <h1 id="rooms-title" class="display">Rooms.</h1>
+        <h1 id="rooms-title" class="display">Rooms where every voice <span class="hl">is verified.</span></h1>
         <p class="lead">Topic rooms where every person posting has passed Trulinq verification. Anyone can read. Verified members can speak.</p>
         <p class="rhero__gate">Reading is open to everyone. To join the conversation, <a class="link" href="/verify/">get verified</a>.</p>
       </div>
     </section>
 
-    <section class="panel panel--white rooms" aria-label="Rooms">
+    <section class="panel panel--paper rooms" aria-label="Rooms">
       <div class="rooms__inner">
         <nav class="rooms__index" aria-label="Choose a room" data-index></nav>
         <div class="room" data-room>
@@ -40,12 +39,12 @@
       </div>
     </section>
 
-    <section class="panel panel--cream rcta" aria-labelledby="rcta-title">
+    <section class="panel panel--navy rcta" aria-labelledby="rcta-title">
       <div class="rcta__inner">
         <h2 id="rcta-title" class="display">Rooms are read-only until you’re stamped.</h2>
         <div class="btn-row">
           <a class="btn btn--primary btn--lg" href="/verify/"><span>Get verified</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
-          <a class="btn btn--ghost btn--lg" href="/pricing/"><span>See pricing</span></a>
+          <a class="arrow-link arrow-link--lg" href="/pricing/"><span>See pricing</span><i aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M6 3.5l4.5 4.5L6 12.5"/></svg></i></a>
         </div>
       </div>
     </section>

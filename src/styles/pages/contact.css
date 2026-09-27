@@ -1,7 +1,8 @@
 @layer pages {
   .chero__inner, .channels__inner, .write__inner, .cemail__inner { position: relative; z-index: 1; max-width: var(--max); margin: 0 auto; padding: var(--sect-y) var(--gutter); }
-  .chero__inner { display: grid; gap: 20px; padding-top: clamp(40px, 6vw, 96px); padding-bottom: clamp(36px, 5vw, 64px); }
-  .chero h1 { font-size: var(--fs-1); }
+  .chero__inner { display: grid; gap: 22px; padding-top: clamp(48px, 6vw, 104px); padding-bottom: clamp(40px, 5vw, 72px); }
+  .chero h1 { font-size: clamp(3rem, 1.6rem + 5vw, 7rem); }
+  .chero .lead { max-width: 40ch; }
   .chero__meta { font-size: var(--fs-meta); color: var(--fg-soft); }
 
   /* ── Channels: four people to write to, chosen like radio buttons ── */
@@ -9,20 +10,23 @@
   .channels h2 { font-size: var(--fs-2); }
   .channels__grid { display: grid; gap: 12px; }
   @media (min-width: 760px) { .channels__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  .channel { display: grid; gap: 8px; align-content: start; padding: clamp(22px, 2.6vw, 30px); text-align: left; transition: box-shadow var(--t-hover) var(--e-out); }
-  .channel:hover { box-shadow: inset 0 0 0 1px var(--line-3); }
-  .channel[aria-checked="true"] { box-shadow: inset 0 0 0 2px var(--blue-ink); }
+  .channel { position: relative; display: grid; gap: 8px; align-content: start; padding: clamp(24px, 2.6vw, 32px); text-align: left; background: var(--ice-2); box-shadow: none; transition: box-shadow var(--t-hover) var(--e-out), background var(--t-hover), transform var(--t-state) var(--e-out); }
+  .channel:hover { background: var(--ice); }
+  .channel::after { content: ""; position: absolute; right: 22px; top: 24px; width: 22px; height: 22px; border-radius: 50%; background: #FFFFFF; box-shadow: inset 0 0 0 1.5px var(--line-3); transition: box-shadow var(--t-state) var(--e-out), background var(--t-state); }
+  .channel[aria-checked="true"] { background: #FFFFFF; box-shadow: inset 0 0 0 2px #1464DC, 0 20px 40px -28px rgba(20, 100, 220, .6); }
+  .channel[aria-checked="true"]::after { background: #1464DC; box-shadow: inset 0 0 0 6px #1464DC, inset 0 0 0 11px #FFFFFF; }
   .channel:focus-visible { outline: 2px solid var(--blue-ink); outline-offset: 3px; border-radius: var(--r-card); }
-  .channel__title { font-size: var(--fs-3); font-weight: 600; letter-spacing: -.024em; line-height: 1.15; }
+  .channel__title { padding-right: 36px; font-size: var(--fs-3); font-weight: 450; letter-spacing: -.028em; line-height: 1.15; }
   .channel__desc { color: var(--fg-soft); }
   .channel__mail { margin-top: 6px; font-family: var(--f-mono); font-size: var(--fs-meta); color: var(--blue-ink); }
 
   /* ── The letter ───────────────────────────────────────────────── */
-  .write__inner { padding-block: clamp(48px, 6vw, 96px); }
-  .letter { max-width: 860px; margin-inline: auto; padding: clamp(24px, 4vw, 48px); }
+  .write { margin: 0; }
+  .write__inner { max-width: 940px; margin: 0 auto; padding: clamp(40px, 6vw, 96px) clamp(20px, 4vw, 56px); }
+  .letter { max-width: 860px; margin-inline: auto; }
   .letter__form { display: grid; gap: 20px; }
   .letter__head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
-  .letter__head h2 { font-size: var(--fs-3); }
+  .letter__head h2 { font-size: var(--fs-2); font-weight: 450; letter-spacing: -.04em; }
   .letter__to { font-size: var(--fs-meta); color: var(--fg-soft); }
   .letter__to b { font-family: var(--f-mono); font-weight: 500; color: var(--fg); }
   .letter__grid { display: grid; gap: 20px; }
@@ -42,7 +46,7 @@
   @media (min-width: 900px) { .cemail__inner { grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); } }
   .cemail h2 { font-size: var(--fs-2); }
   .cemail__note { margin-top: 16px; max-width: 40ch; color: var(--fg-soft); }
-  .cemail__ledger { padding: 6px 24px; border-radius: var(--r-card); background: var(--surface); box-shadow: inset 0 0 0 1px var(--line); font-size: 1rem; }
+  .cemail__ledger { padding: 6px 24px; border-radius: var(--r-card); background: var(--ice-2); font-size: 1rem; }
   .cemail__ledger .ledger__row { padding: 14px 0; }
   @media (max-width: 520px) { .cemail__ledger .ledger__row { flex-direction: column; gap: 2px; } .cemail__ledger .ledger__row > i { display: none; } .cemail__ledger .ledger__row > b { text-align: left; } }
 }

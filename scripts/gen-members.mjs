@@ -23,7 +23,7 @@ function page(m) {
   const description = clip([`${m.name}${role ? `, ${[m.role, m.company].filter(Boolean).join(' at ') || role}` : ''}${place ? ` in ${place}` : ''}.`, 'A Trulinq Verified member.', m.bio].filter(Boolean).join(' '), 300);
   return tpl
     .replaceAll('{{id}}', esc(m.id))
-    .replaceAll('{{title}}', esc(`${m.name} — Verified on Trulinq`))
+    .replaceAll('{{title}}', esc(`${m.name} · Verified on Trulinq`))
     .replaceAll('{{description}}', esc(description))
     .replaceAll('{{name}}', esc(m.name))
     .replaceAll('{{role}}', esc(role));
@@ -38,7 +38,7 @@ for (const m of MEMBERS) {
 }
 mkdirSync(join(out, 'profile'), { recursive: true });
 writeFileSync(join(out, 'profile', 'index.html'), tpl
-  .replaceAll('{{id}}', '__dynamic__').replaceAll('{{title}}', 'Member — Trulinq').replaceAll('{{description}}', 'A member of Trulinq, the verified network for entrepreneurs.')
+  .replaceAll('{{id}}', '__dynamic__').replaceAll('{{title}}', 'Member · Trulinq').replaceAll('{{description}}', 'A member of Trulinq, the verified network for entrepreneurs.')
   .replaceAll('{{name}}', '').replaceAll('{{role}}', '')
   .replace('<meta name="description"', '<meta name="robots" content="noindex">\n  <meta name="description"'));
 

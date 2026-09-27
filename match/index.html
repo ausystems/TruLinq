@@ -2,7 +2,7 @@
 <html lang="en" class="no-js">
 <head>
   <!--@include(partials/head.html)-->
-  <title>Search and match — Trulinq</title>
+  <title>Search and match · Trulinq</title>
   <meta name="description" content="Find verified members by what they can offer and what they are looking for. Mutual fits rise to the top.">
   <script type="module" src="/src/js/pages/match.js"></script>
 </head>
@@ -10,17 +10,16 @@
   <!--@include(partials/nav.html)-->
   <main id="main" class="page">
 
-    <section class="panel panel--cream xhero" aria-labelledby="match-title">
+    <section class="panel panel--ice xhero" aria-labelledby="match-title">
       <div class="xhero__inner">
-        <p class="eyebrow">Match</p>
-        <h1 id="match-title" class="display">Search and match.</h1>
+        <h1 id="match-title" class="display">Search and <span class="hl">match.</span></h1>
         <p class="lead">Find verified members by what they can offer and what they are looking for. Mutual fits rise to the top.</p>
         <div class="xsearch" role="search" aria-label="Search by offer and need">
           <label class="xsearch__field">
             <span class="xsearch__label">They offer</span>
             <input class="xsearch__input" type="search" placeholder="capital, distribution, logistics…" autocomplete="off" enterkeyhint="search" data-offer>
           </label>
-          <span class="xsearch__link" aria-hidden="true"></span>
+          <span class="xsearch__link" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3 5.5h9.5M10 3l2.5 2.5L10 8M13 10.5H3.5M6 8l-2.5 2.5L6 13"/></svg></span>
           <label class="xsearch__field">
             <span class="xsearch__label">They’re looking for</span>
             <input class="xsearch__input" type="search" placeholder="suppliers, a co-founder, tenants…" autocomplete="off" enterkeyhint="search" data-looking>
@@ -33,7 +32,7 @@
       </div>
     </section>
 
-    <section class="panel panel--white fits" id="fits" aria-labelledby="fits-title">
+    <section class="panel panel--paper fits" id="fits" aria-labelledby="fits-title">
       <div class="fits__inner">
         <div class="fits__head">
           <h2 id="fits-title" class="display">Mutual fits.</h2>
@@ -47,7 +46,7 @@
       </div>
     </section>
 
-    <section class="panel panel--cream people" id="people" aria-labelledby="people-title">
+    <section class="panel panel--mist people" id="people" aria-labelledby="people-title">
       <div class="people__inner">
         <h2 id="people-title" class="display">Everyone, by what they bring.</h2>
         <div class="people__grid" data-people></div>
@@ -59,7 +58,7 @@
       </div>
     </section>
 
-    <section class="panel panel--ink xhow" aria-labelledby="xhow-title">
+    <section class="panel panel--navy xhow" aria-labelledby="xhow-title">
       <div class="xhow__inner">
         <h2 id="xhow-title" class="display">How matching works.</h2>
         <ul class="ledger xhow__ledger">

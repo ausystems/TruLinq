@@ -28,7 +28,7 @@ function show(m, focus = true) {
   document.querySelectorAll('[data-mode]').forEach((b) => { const on = b.dataset.mode === m; b.classList.toggle('is-active', on); b.setAttribute('aria-pressed', String(on)); });
   forms.signin.hidden = m !== 'signin'; forms.signup.hidden = m !== 'signup';
   const u = new URL(location.href); u.searchParams.set('mode', m); history.replaceState(null, '', u);
-  document.title = `${m === 'signin' ? (resetToken ? 'Set a new password' : 'Sign in') : 'Create account'} — Trulinq`;
+  document.title = `${m === 'signin' ? (resetToken ? 'Set a new password' : 'Sign in') : 'Create account'} · Trulinq`;
   if (focus) forms[m].querySelector('input').focus({ preventScroll: true });
 }
 

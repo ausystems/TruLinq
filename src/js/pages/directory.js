@@ -47,9 +47,9 @@ function rowHTML(m) {
   const s = scoreOfM(m), g = gradeOf(s);
   return `<a class="reg-row" href="${href(`/members/${m.id}/`)}" aria-label="${esc(m.name)}${m.company ? `, ${esc(m.company)}` : ''}${isVerified(m) ? ', Trulinq Verified' : `, ${statusOf(m).label}`}">
     <span class="reg-row__who">${portrait(m, { size: 40, cls: 'avatar' })}<span><b>${esc(m.name)}</b><span>${esc(m.role || m.headline || '')}</span></span></span>
-    <span class="reg-row__cell">${esc(m.company || '—')}</span>
-    <span class="reg-row__cell">${esc(m.industry || '—')}</span>
-    <span class="reg-row__cell">${esc(m.city || m.country || '—')}</span>
+    <span class="reg-row__cell">${esc(m.company || 'Not listed')}</span>
+    <span class="reg-row__cell">${esc(m.industry || 'Not listed')}</span>
+    <span class="reg-row__cell">${esc(m.city || m.country || 'Not listed')}</span>
     <span class="reg-row__score"><b>${g.grade}</b><span>${s}</span></span>
     <span class="reg-row__date">${isVerified(m) ? fmtDate(m.verifiedOn) : esc(statusOf(m).label)}</span>
     <span class="reg-row__go" aria-hidden="true">${arrowIcon()}</span>

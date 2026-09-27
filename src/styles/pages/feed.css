@@ -1,8 +1,8 @@
 @layer pages {
   .fhero__inner, .feed__inner { position: relative; z-index: 1; max-width: var(--max); margin: 0 auto; padding: var(--sect-y) var(--gutter); }
-  .fhero__inner { display: grid; gap: 20px; padding-top: clamp(40px, 6vw, 96px); padding-bottom: clamp(36px, 5vw, 64px); }
-  .fhero h1 { font-size: var(--fs-1); }
-  .fhero .lead { max-width: 48ch; }
+  .fhero__inner { display: grid; gap: 22px; padding-top: clamp(48px, 6vw, 104px); padding-bottom: clamp(40px, 5vw, 72px); }
+  .fhero h1 { font-size: var(--fs-1); max-width: 12ch; }
+  .fhero .lead { max-width: 46ch; }
   .fhero__gate { font-size: .9375rem; color: var(--fg-soft); }
 
   .feed__inner { display: grid; gap: clamp(32px, 4vw, 56px); align-items: start; padding-top: clamp(28px, 3vw, 44px); }
@@ -18,9 +18,9 @@
   .composer__foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; min-width: 0; }
   .composer__foot .segmented { min-width: 0; }
   .composer .segmented button[disabled] { cursor: default; }
-  .composer__lock { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 12px; padding: 20px; text-align: center; background: rgba(255, 255, 255, .9); border-radius: var(--r-card); }
+  .composer__lock { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 14px; padding: 20px; text-align: center; background: rgba(241, 246, 254, .92); border-radius: var(--r-card); }
   .composer__lock[hidden] { display: none; }
-  .composer__lock p { font-weight: 550; }
+  .composer__lock p { font-weight: 500; }
 
   .feed__count { font-size: var(--fs-meta); color: var(--fg-soft); }
   .feed__list { display: grid; border-top: 1px solid var(--line-2); }
@@ -31,20 +31,21 @@
 
   .feed__rail { display: grid; gap: 12px; }
   .rail-card { display: grid; gap: 12px; justify-items: start; }
-  .rail-card h2 { font-size: var(--fs-4); letter-spacing: -.016em; }
+  .rail-card h2 { font-size: var(--fs-4); letter-spacing: -.02em; }
+  .rail-card.card--blue > p { color: #EEF4FF; }
   .rail-card > p { font-size: .9375rem; color: var(--fg-soft); }
   .rail-card__lines { display: grid; gap: 8px; font-size: .9375rem; color: var(--fg-soft); }
   .rail-card__people, .rail-card__rooms { display: grid; width: 100%; }
   .person-row { display: grid; grid-template-columns: 36px minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
   .person-row:last-child { border-bottom: 0; }
   .person-row .avatar { width: 36px; height: 36px; }
-  .person-row b { display: block; font-size: .9375rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .person-row b { display: block; font-size: .9375rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .person-row:hover b { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; }
   .person-row span span { display: block; font-size: var(--fs-meta); color: var(--fg-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .person-row time { font-family: var(--f-mono); font-size: var(--fs-micro); color: var(--fg-mute); }
   .room-row { display: grid; gap: 2px; padding: 10px 0; border-bottom: 1px solid var(--line); }
   .room-row:last-child { border-bottom: 0; }
-  .room-row b { font-size: .9375rem; font-weight: 600; }
+  .room-row b { font-size: .9375rem; font-weight: 500; }
   .room-row:hover b { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; }
   .room-row span { font-size: var(--fs-meta); color: var(--fg-soft); }
 }

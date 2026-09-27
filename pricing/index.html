@@ -2,7 +2,7 @@
 <html lang="en" class="no-js">
 <head>
   <!--@include(partials/head.html)-->
-  <title>Pricing — One stamp, priced like a stamp — Trulinq</title>
+  <title>Pricing · One stamp, priced like a stamp · Trulinq</title>
   <meta name="description" content="Trulinq pricing: a free Member profile, the Verified Business stamp at {{price.yearlyPerMonth}} per month billed yearly, and Enterprise verification for teams and marketplaces.">
   <script type="module" src="/src/js/pages/pricing.js"></script>
 </head>
@@ -10,18 +10,17 @@
   <!--@include(partials/nav.html)-->
   <main id="main" class="page">
 
-    <section class="panel panel--peach phero-p" aria-labelledby="pricing-title">
+    <section class="panel panel--ice phero-p" aria-labelledby="pricing-title">
       <div class="phero-p__inner">
         <div class="phero-p__copy">
-          <p class="eyebrow">Pricing</p>
-          <h1 id="pricing-title" class="display">One stamp. Priced like <span class="accent">a stamp</span>.</h1>
+          <h1 id="pricing-title" class="display">One stamp. Priced like <span class="hl">a stamp.</span></h1>
           <p class="lead">A free stamp is a worthless stamp. Paid review funds real human checks on documents and business registries. No tiers of trust, no add-ons.</p>
           <div class="phero-p__toggle">
             <div class="segmented" role="group" aria-label="Billing period" data-billing>
               <button type="button" class="is-active" data-period="yearly" aria-pressed="true">Yearly</button>
               <button type="button" data-period="monthly" aria-pressed="false">Monthly</button>
             </div>
-            <p class="phero-p__note" data-saves>Billed yearly, you save {{price.yearlySaves}}</p>
+            <p class="phero-p__note scribble scribble--inline" data-saves><svg class="scribble__pen" style="--pen-w:42px" viewBox="0 0 80 48" aria-hidden="true"><path pathLength="1" d="M76 22c-20-10-44-10-66 2"/><path pathLength="1" d="M20 12l-10 12 13 4"/></svg><span class="scribble__text">billed yearly, you save {{price.yearlySaves}}</span></p>
           </div>
         </div>
         <div class="phero-p__stage" data-stamp-stage aria-hidden="true">
@@ -31,7 +30,7 @@
       </div>
     </section>
 
-    <section class="panel panel--cream plans" id="plans" aria-label="Plans">
+    <section class="panel panel--mist plans" id="plans" aria-label="Plans">
       <div class="plans__inner">
         <div class="plans__grid">
           <article class="plan card" aria-labelledby="plan-member">
@@ -40,7 +39,7 @@
               <p class="plan__for">For anyone who wants to be found.</p>
             </div>
             <p class="plan__price"><span class="plan__amount">Free</span></p>
-            <a class="btn btn--ghost btn--block" href="/auth/?mode=signup"><span>Create account</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
+            <a class="btn btn--tint btn--block" href="/auth/?mode=signup"><span>Create account</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
             <h3 class="plan__included">What’s included</h3>
             <ul class="plan__list">
               <li>Public Trulinq profile</li>
@@ -50,7 +49,7 @@
             </ul>
           </article>
 
-          <article class="plan plan--hero card card--orange" aria-labelledby="plan-verified">
+          <article class="plan plan--hero card card--blue" aria-labelledby="plan-verified">
             <span class="seal seal--md plan__seal" role="img" aria-label="Trulinq Verified"></span>
             <div class="plan__head">
               <h2 id="plan-verified">Verified Business</h2>
@@ -92,7 +91,7 @@
       </div>
     </section>
 
-    <section class="panel panel--white pays" aria-labelledby="pays-title">
+    <section class="panel panel--paper pays" aria-labelledby="pays-title">
       <div class="pays__inner">
         <div class="pays__copy">
           <h2 id="pays-title" class="display">What the {{price.yearlyPerMonth}} pays for.</h2>
@@ -109,7 +108,7 @@
       </div>
     </section>
 
-    <section class="panel panel--cream compare" aria-labelledby="compare-title">
+    <section class="panel panel--mist compare" aria-labelledby="compare-title">
       <div class="compare__inner">
         <div class="section-head section-head--split">
           <h2 id="compare-title" class="display">Side by side, line by line.</h2>
@@ -139,7 +138,7 @@
       </div>
     </section>
 
-    <section class="panel panel--white pfaq" aria-labelledby="pfaq-title">
+    <section class="panel panel--paper pfaq" aria-labelledby="pfaq-title">
       <div class="pfaq__inner">
         <div class="pfaq__side">
           <h2 id="pfaq-title" class="display">Straight answers.</h2>
@@ -166,12 +165,12 @@
       </div>
     </section>
 
-    <section class="panel panel--peach pcta" aria-labelledby="pcta-title">
+    <section class="panel panel--blue pcta" aria-labelledby="pcta-title">
       <div class="pcta__inner">
         <h2 id="pcta-title" class="display">Apply today. A person reviews it within {{review.businessDays}} business days.</h2>
         <div class="btn-row">
-          <a class="btn btn--primary btn--lg" href="/verify/"><span>Start verification</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
-          <a class="btn btn--ghost btn--lg" href="/trust/"><span>Read the Trust Centre</span></a>
+          <a class="btn btn--white btn--lg" href="/verify/"><span>Start verification</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
+          <a class="btn btn--ghost-light btn--lg" href="/trust/"><span>Read the Trust Centre</span></a>
         </div>
       </div>
     </section>

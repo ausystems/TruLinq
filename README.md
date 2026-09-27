@@ -30,7 +30,10 @@ npm test           # backend test suite
 * **People.** The roster is the verified members on the live Trulinq product plus Ahmad Khalid, nobody else. Their
   portraits show initials until member photos are approved for use (`scripts/build-portraits.mjs` prepares approved
   photos). The dashboard's demo mode, shown only when accounts can't be reached, uses a nameless placeholder account.
-* **Design guide.** `DESIGN.md` documents the visual system, components, motion rules and quality bar.
+* **Design guide.** `DESIGN.md` documents the visual system (blue ink on a verification desk: Lexend, the navy bezel,
+  the reviewer's margin notes), components, motion rules and quality bar.
+* **Globe data.** `src/data/land.js` is a small bitmask of land points generated from Natural Earth by
+  `scripts/gen-land.mjs`; it only needs regenerating if the grid changes (see the script's header).
 
 ## Deploy
 

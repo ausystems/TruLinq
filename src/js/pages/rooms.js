@@ -56,7 +56,7 @@ async function open(slug) {
   try { messages = await loadRoomMessages(r); }
   catch { if (current === r) msgs.innerHTML = '<div class="room__empty"><b>Messages couldn’t be loaded.</b><p>Check your connection and choose the room again.</p></div>'; return; }
   if (current === r) paint(messages);
-  document.title = `${r.name} — Rooms — Trulinq`;
+  document.title = `${r.name} · Rooms · Trulinq`;
 }
 
 /* Verified members can speak and the composer becomes a real one. Everyone else keeps the read-only room with an

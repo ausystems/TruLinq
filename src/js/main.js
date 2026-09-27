@@ -196,6 +196,15 @@ document.querySelectorAll('[data-newsletter]').forEach((form) => {
   });
 });
 
+/* The reviewer's notes write themselves once, the first time each is on screen: the words, then the pen stroke
+   that points at what they are about. With reduced motion they are simply there. */
+export function initScribbles(scope = document) {
+  scope.querySelectorAll('.scribble:not(.is-written):not([data-manual])').forEach((el) => {
+    if (reduced) { el.classList.add('is-written'); return; }
+    whenVisible(el, () => el.classList.add('is-written'), { rootMargin: '0px 0px -18% 0px' });
+  });
+}
+
 /* Images fade in once decoded, so nothing pops. */
 export function initImages(scope = document) {
   scope.querySelectorAll('img[data-fade]').forEach((img) => {
@@ -221,6 +230,7 @@ export async function boot(pageInit, heroInit) {
   hydrateSeals();
   initAccordions();
   initImages();
+  initScribbles();
   html.classList.add('is-ready');
   if (typeof heroInit === 'function') {
     try { await Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 1200))]); heroInit(); }

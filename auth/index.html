@@ -2,7 +2,7 @@
 <html lang="en" class="no-js">
 <head>
   <!--@include(partials/head.html)-->
-  <title>Sign in — Trulinq</title>
+  <title>Sign in · Trulinq</title>
   <meta name="description" content="Sign in to manage your Trulinq profile and verification, or create an account with an invitation code.">
   <meta name="robots" content="noindex">
   <script type="module" src="/src/js/pages/auth.js"></script>
@@ -11,7 +11,7 @@
   <!--@include(partials/nav.html)-->
   <main id="main" class="page">
     <div class="auth">
-      <section class="auth__main panel panel--cream" aria-label="Account">
+      <section class="auth__main panel panel--ice" aria-label="Account">
         <div class="auth__main-inner">
           <div class="segmented auth__modes" role="group" aria-label="Sign in or create an account" data-modes>
             <button type="button" data-mode="signin" aria-pressed="true" class="is-active">Sign in</button>
@@ -70,10 +70,10 @@
         </div>
       </section>
 
-      <section class="auth__side panel panel--ink" aria-label="Who’s on Trulinq">
+      <section class="auth__side panel panel--navy" aria-label="Who’s on Trulinq">
         <div class="auth__side-inner">
           <div class="auth__stack" data-stack></div>
-          <p class="auth__note">Every card here belongs to a verified member.</p>
+          <p class="auth__note scribble scribble--inline"><svg class="scribble__pen" style="--pen-w:40px" viewBox="0 0 80 48" aria-hidden="true"><path pathLength="1" d="M8 44c14-4 30-16 44-36"/><path pathLength="1" d="M40 12l13-5 3 13"/></svg><span class="scribble__text">every card here is a verified member</span></p>
           <ul class="ledger auth__ledger">
             <li class="ledger__row"><span>People on Trulinq</span><i></i><b data-stat="people">{{stats.people}}</b></li>
             <li class="ledger__row"><span>Verified profiles</span><i></i><b data-stat="verified">{{stats.verified}}</b></li>

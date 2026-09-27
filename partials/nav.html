@@ -45,26 +45,28 @@
   </div>
 </header>
 <div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Menu" data-menu hidden>
-  <div class="menu__head">
-    <a class="nav__logo" href="/" aria-label="Trulinq, home">
-      <svg class="wordmark" viewBox="0 0 176 40" aria-hidden="true">
-        <use href="#tq-mark-dark" x="1" y="1" width="38" height="38"/>
-        <text x="48" y="29" class="wordmark__text">Trulinq</text>
-      </svg>
-    </a>
-    <button class="menu__close" type="button" aria-label="Close menu" data-menu-close></button>
-  </div>
-  <nav class="menu__links" aria-label="Menu">
-    <a href="/directory/"><span>Directory</span><em>Every member, checked</em></a>
-    <a href="/match/"><span>Match</span><em>Offers meet needs</em></a>
-    <a href="/rooms/"><span>Rooms</span><em>Verified voices only</em></a>
-    <a href="/feed/"><span>Feed</span><em>Newest first, no ads</em></a>
-    <a href="/pricing/"><span>Pricing</span><em>{{price.yearlyPerMonth}} a month, billed yearly</em></a>
-    <a href="/trust/"><span>Trust Centre</span><em>What the stamp means</em></a>
-    <a href="/contact/"><span>Contact</span><em>A person replies</em></a>
-  </nav>
-  <div class="menu__foot">
-    <a class="btn btn--primary" href="/verify/"><span>Get verified</span></a>
-    <a class="btn btn--ghost" href="/auth/" data-account-link>Sign in</a>
+  <div class="menu__sheet">
+    <div class="menu__head">
+      <a class="nav__logo" href="/" aria-label="Trulinq, home">
+        <svg class="wordmark" viewBox="0 0 176 40" aria-hidden="true">
+          <use href="#tq-mark-dark" x="1" y="1" width="38" height="38"/>
+          <text x="48" y="29" class="wordmark__text">Trulinq</text>
+        </svg>
+      </a>
+      <button class="menu__close" type="button" aria-label="Close menu" data-menu-close></button>
+    </div>
+    <nav class="menu__links" aria-label="Menu">
+      <a href="/directory/" data-nav-link><span>Directory</span><em>Every member, checked</em></a>
+      <a href="/match/" data-nav-link><span>Match</span><em>Offers meet needs</em></a>
+      <a href="/rooms/" data-nav-link><span>Rooms</span><em>Verified voices only</em></a>
+      <a href="/feed/" data-nav-link><span>Feed</span><em>Newest first, no ads</em></a>
+      <a href="/pricing/" data-nav-link><span>Pricing</span><em>{{price.yearlyPerMonth}} a month, billed yearly</em></a>
+      <a href="/trust/" data-nav-link><span>Trust Centre</span><em>What the stamp means</em></a>
+      <a href="/contact/" data-nav-link><span>Contact</span><em>A person replies</em></a>
+    </nav>
+    <div class="menu__foot">
+      <a class="btn btn--primary btn--lg" href="/verify/"><span>Get verified</span></a>
+      <a class="btn btn--tint btn--lg" href="/auth/" data-account-link>Sign in</a>
+    </div>
   </div>
 </div>

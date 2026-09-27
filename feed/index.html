@@ -2,7 +2,7 @@
 <html lang="en" class="no-js">
 <head>
   <!--@include(partials/head.html)-->
-  <title>The feed — Chronological, ad-free — Trulinq</title>
+  <title>The feed · Chronological, ad-free · Trulinq</title>
   <meta name="description" content="A chronological, ad-free feed of updates, opportunities and wins from verified entrepreneurs. No algorithm, no engagement farming.">
   <script type="module" src="/src/js/pages/feed.js"></script>
 </head>
@@ -10,16 +10,15 @@
   <!--@include(partials/nav.html)-->
   <main id="main" class="page">
 
-    <section class="panel panel--cream fhero" aria-labelledby="feed-title">
+    <section class="panel panel--ice fhero" aria-labelledby="feed-title">
       <div class="fhero__inner">
-        <p class="eyebrow">Feed</p>
-        <h1 id="feed-title" class="display">The feed.</h1>
+        <h1 id="feed-title" class="display">The feed, <span class="hl">newest first.</span></h1>
         <p class="lead">Chronological. Ad-free. No algorithm deciding what you see, just verified founders, newest first.</p>
         <p class="fhero__gate">Reading is open to everyone. Verified members can post.</p>
       </div>
     </section>
 
-    <section class="panel panel--white feed" aria-label="Posts">
+    <section class="panel panel--paper feed" aria-label="Posts">
       <div class="feed__inner">
         <div class="feed__main">
           <form class="composer card" data-composer novalidate>
@@ -59,7 +58,7 @@
           <p class="feed__end" data-end hidden></p>
         </div>
         <aside class="feed__rail" aria-label="About the feed">
-          <div class="rail-card card card--ink">
+          <div class="rail-card card card--navy">
             <h2>Why there’s no algorithm</h2>
             <ul class="rail-card__lines"><li>Newest first, always.</li><li>No ads, no boosts, no engagement farming.</li><li>Every poster passed verification.</li></ul>
           </div>
@@ -72,10 +71,10 @@
             <h2>Rooms</h2>
             <div class="rail-card__rooms" data-rooms></div>
           </div>
-          <div class="rail-card card card--peach">
+          <div class="rail-card card card--blue">
             <h2>Not verified yet?</h2>
             <p>A person reviews your application within {{review.businessDays}} business days. Then you can post here.</p>
-            <a class="btn btn--primary btn--sm" href="/verify/"><span>Get verified</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
+            <a class="btn btn--white btn--sm" href="/verify/"><span>Get verified</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
           </div>
         </aside>
       </div>

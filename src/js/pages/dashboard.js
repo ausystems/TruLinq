@@ -97,7 +97,7 @@ function paintScore() {
 
 function paintDocuments() {
   const m = me.member, v = me.verification;
-  const row = (icon, title, detail, [label, cls], date) => `<li class="doc"><span class="doc__icon" aria-hidden="true">${icon}</span><span class="doc__body"><b>${esc(title)}</b><span>${detail}</span></span><span class="tag ${cls}">${esc(label)}</span><span class="doc__date">${date ? fmtDate(date) : '—'}</span></li>`;
+  const row = (icon, title, detail, [label, cls], date) => `<li class="doc"><span class="doc__icon" aria-hidden="true">${icon}</span><span class="doc__body"><b>${esc(title)}</b><span>${detail}</span></span><span class="tag ${cls}">${esc(label)}</span><span class="doc__date">${date ? fmtDate(date) : 'Not dated'}</span></li>`;
   const redacted = '<span class="redact" style="--w:9ch" aria-label="registration number hidden"></span>';
   const docs = [];
   if (v) {
@@ -165,7 +165,7 @@ function paintRail() {
   /* billing: only what is actually on record */
   const sub = me.subscription;
   const rows = sub
-    ? [['Plan', sub.plan === 'verified_business' ? PLANS.verified.name : sub.plan], ['Price', sub.period === 'monthly' ? `${BILLING.monthlyPerMonth} a month` : `${BILLING.yearlyPerYear} a year`], ['Renews', sub.current_period_end ? fmtDate(sub.current_period_end) : '—'], ['Card', sub.card_last4 ? `ending ${sub.card_last4}` : '—']]
+    ? [['Plan', sub.plan === 'verified_business' ? PLANS.verified.name : sub.plan], ['Price', sub.period === 'monthly' ? `${BILLING.monthlyPerMonth} a month` : `${BILLING.yearlyPerYear} a year`], ['Renews', sub.current_period_end ? fmtDate(sub.current_period_end) : 'Not set'], ['Card', sub.card_last4 ? `ending ${sub.card_last4}` : 'None on file']]
     : [['Plan', m.status === 'verified' ? PLANS.verified.name : PLANS.member.name], ['Charged so far', '$0']];
   const ledger = $('[data-billing]');
   ledger.innerHTML = rows.map(() => '<li class="ledger__row"><span></span><i></i><b></b></li>').join('');
