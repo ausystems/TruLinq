@@ -1,5 +1,5 @@
-/* Bundles the Vercel function (server/vercel.ts and everything it imports) into plain JavaScript at
-   api/[[...path]].js. Vercel then deploys a single ESM file: no TypeScript resolution at runtime, no .ts imports.
+/* Bundles the Vercel function (server/vercel.ts and everything it imports) into plain JavaScript at api/index.js;
+   vercel.json rewrites /api/:path* to it for every method. Vercel then deploys a single ESM file: no TypeScript resolution at runtime, no .ts imports.
    pg stays external (a real dependency Vercel traces); the embedded PGlite engine is never referenced statically. */
 import { build } from 'esbuild';
 import { mkdirSync } from 'node:fs';
@@ -7,7 +7,7 @@ import { mkdirSync } from 'node:fs';
 mkdirSync('api', { recursive: true });
 await build({
   entryPoints: ['server/vercel.ts'],
-  outfile: 'api/[[...path]].js',
+  outfile: 'api/index.js',
   bundle: true,
   platform: 'node',
   format: 'esm',

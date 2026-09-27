@@ -2,19 +2,60 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "vite",
   "buildCommand": "npm run vercel-build",
-  "functions": { "api/[[...path]].js": { "maxDuration": 15, "memory": 512 } },
+  "functions": {
+    "api/index.js": {
+      "maxDuration": 15,
+      "memory": 512
+    }
+  },
   "rewrites": [
-    { "source": "/join", "destination": "/join/index.html" },
-    { "source": "/members/:slug", "destination": "/members/profile/index.html" },
-    { "source": "/members/:slug/", "destination": "/members/profile/index.html" }
+    {
+      "source": "/api/:path*",
+      "destination": "/api/index?path=:path*"
+    },
+    {
+      "source": "/join",
+      "destination": "/join/index.html"
+    },
+    {
+      "source": "/members/:slug",
+      "destination": "/members/profile/index.html"
+    },
+    {
+      "source": "/members/:slug/",
+      "destination": "/members/profile/index.html"
+    }
   ],
   "headers": [
-    { "source": "/(.*)", "headers": [
-      { "key": "X-Content-Type-Options", "value": "nosniff" },
-      { "key": "X-Frame-Options", "value": "DENY" },
-      { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-      { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" }
-    ] },
-    { "source": "/api/(.*)", "headers": [ { "key": "Cache-Control", "value": "no-store" } ] }
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=()"
+        }
+      ]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    }
   ]
 }

@@ -21052,8 +21052,8 @@ async function handleRequest(req, deps) {
 function apiPath(req, url2) {
   const seg = req.query?.["path"] ?? url2.searchParams.get("path");
   url2.searchParams.delete("path");
-  if (seg !== void 0 && seg !== null && seg !== "") return "/" + (Array.isArray(seg) ? seg.join("/") : String(seg)).replace(/^\/+/, "");
-  if (/\[\[\.\.\.path\]\]/.test(url2.pathname)) return "/";
+  if (seg !== void 0 && seg !== null && seg !== "") return "/" + (Array.isArray(seg) ? seg.join("/") : String(seg)).replace(/,/g, "/").replace(/^\/+/, "");
+  if (/^\/api\/index\/?$/.test(url2.pathname)) return "/";
   return url2.pathname.replace(/^\/api/, "") || "/";
 }
 var env = loadEnv();

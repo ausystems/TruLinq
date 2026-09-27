@@ -8,12 +8,13 @@ import type { ApiRequest } from './http.ts';
 
 type VercelRequest = IncomingMessage & { body?: unknown; query?: Record<string, string | string[]> };
 
-/** Vercel rewrites /api/auth/login to /api/[[...path]]?path=auth/login; the real path lives in the query segment. */
+/** vercel.json rewrites /api/auth/login to /api/index?path=auth/login; the real path lives in the query segment.
+    Locally (server/dev.ts, the harness) the path is simply the URL. */
 function apiPath(req: VercelRequest, url: URL): string {
   const seg = req.query?.['path'] ?? url.searchParams.get('path');
   url.searchParams.delete('path');
-  if (seg !== undefined && seg !== null && seg !== '') return '/' + (Array.isArray(seg) ? seg.join('/') : String(seg)).replace(/^\/+/, '');
-  if (/\[\[\.\.\.path\]\]/.test(url.pathname)) return '/';
+  if (seg !== undefined && seg !== null && seg !== '') return '/' + (Array.isArray(seg) ? seg.join('/') : String(seg)).replace(/,/g, '/').replace(/^\/+/, '');
+  if (/^\/api\/index\/?$/.test(url.pathname)) return '/';
   return url.pathname.replace(/^\/api/, '') || '/';
 }
 const env = loadEnv();
