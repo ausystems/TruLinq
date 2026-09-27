@@ -1,78 +1,77 @@
 import '../../styles/main.css';
-import '../../styles/pages/member.css';
 import '../../styles/pages/feed.css';
-import { boot, gsap, ScrollTrigger, reduced, toast, suspend, restore, hydrateSeals } from '../main.js';
-import { Flip } from 'gsap/Flip';
-import { postHTML, photo, fmtDate, href } from '../ui.js';
+import { boot, busy, toast } from '../main.js';
+import { postHTML, portrait, esc, href, fmtDate, relTime } from '../ui.js';
 import { api, ApiError } from '../api.js';
 import { loadMembers, loadPosts, loadRooms, loadSession } from '../data.js';
 
-gsap.registerPlugin(Flip);
-const list = document.querySelector('[data-list]');
-const count = document.querySelector('[data-count]');
-let kind = 'All', first = true, session = { user: null, member: null };
+const $ = (s) => document.querySelector(s);
+const list = $('[data-list]');
+let kind = 'All', session = { user: null, member: null }, posts = [];
 
-const postEl = (p) => postHTML(p, p.author).replace('class="post"', `class="post" data-kind="${p.kind}"`);
-
-async function build() {
-  const [posts, { members }, rooms, s] = await Promise.all([loadPosts(50), loadMembers(), loadRooms(), loadSession()]);
-  session = s;
-  list.innerHTML = posts.map(postEl).join('');
-  const newest = [...members].sort((a, b) => (b.verifiedOn || '').localeCompare(a.verifiedOn || '')).slice(0, 4);
-  document.querySelector('[data-new-stamps]').innerHTML = newest.map((m) => `<a class="person-row" href="${href(`/members/${m.id}/`)}"><img class="avatar" src="${photo(m.photo, 96)}" alt=""><span><b>${m.name}</b><span>${m.company}</span></span><time datetime="${m.verifiedOn}">${fmtDate(m.verifiedOn).replace(/, \d{4}$/, '')}</time></a>`).join('');
-  document.querySelector('[data-live-rooms]').innerHTML = rooms.filter((r) => r.live).slice(0, 3).map((r) => `<a class="room-row" href="${href(`/rooms/#${r.slug}`)}"><span class="emoji" aria-hidden="true">${r.emoji}</span><span><b>${r.name}</b><span>${r.memberCount} members</span></span><em>Live</em></a>`).join('');
-  list.addEventListener('click', (e) => { if (e.target.closest('.post__foot span')) toast(session.user ? 'Replies are not open yet.' : 'Sign in to reply.'); });
-  document.querySelector('[data-older]').addEventListener('click', (e) => {
-    e.currentTarget.hidden = true; const note = document.querySelector('[data-end-note]'); note.hidden = false;
-    if (!reduced) gsap.from(note, { y: 16, opacity: 0, duration: .8, ease: 'expo.out' });
-  });
-  document.querySelector('[data-filters]').addEventListener('click', (e) => { const b = e.target.closest('[data-kind]'); if (!b) return; kind = b.dataset.kind; render(); });
-  composer();
+function render() {
+  const shown = posts.filter((p) => kind === 'All' || p.kind === kind);
+  list.innerHTML = shown.map((p) => postHTML(p, p.author)).join('');
+  $('[data-count]').textContent = posts.length ? `${shown.length} post${shown.length === 1 ? '' : 's'}${kind === 'All' ? '' : ` of ${posts.length}`} · newest first` : '';
+  $('[data-count]').hidden = !posts.length;
+  const empty = $('[data-empty]');
+  empty.hidden = shown.length > 0;
+  if (!shown.length && posts.length) { empty.querySelector('h3').textContent = 'Nothing in this filter yet.'; empty.querySelector('p').textContent = 'Choose All to see every post, newest first.'; }
+  const end = $('[data-end]');
+  end.hidden = !shown.length;
+  if (shown.length) end.textContent = `That’s every post since ${fmtDate(shown[shown.length - 1].at)}.`;
+  document.querySelectorAll('[data-kind]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.kind === kind)));
 }
 
 /* The composer opens for verified members; everyone else keeps the lock with an honest next step. */
 function composer() {
-  const box = document.querySelector('[data-composer]');
-  const lock = box.querySelector('.composer__lock');
+  const form = $('[data-composer]');
+  const lock = $('[data-composer-lock]');
   const m = session.member;
   if (!m || m.status !== 'verified') {
-    if (m) { const a = lock.querySelector('a'); a.href = href('/verify/'); a.querySelector('span').textContent = m.status === 'pending' ? 'Verification in review' : 'Get verified to post'; }
+    const a = lock.querySelector('a');
+    if (m) { a.href = href(m.status === 'pending' ? '/dashboard/' : '/verify/'); a.querySelector('span').textContent = m.status === 'pending' ? 'Verification in review' : 'Get verified to post'; }
     return;
   }
   lock.hidden = true;
-  const input = box.querySelector('.composer__input'), kinds = [...box.querySelectorAll('.segmented button')], send = box.querySelector('.btn');
+  const input = form.querySelector('textarea'), kinds = [...form.querySelectorAll('[data-kinds] button')], send = form.querySelector('button[type=submit]');
+  const field = input.closest('.field'), err = $('[data-composer-err]');
   input.disabled = false; kinds.forEach((b) => (b.disabled = false)); send.disabled = false;
-  box.querySelector('.composer__avatar').style.backgroundImage = `url("${photo(m.photo, 96)}")`;
-  box.querySelector('.composer__avatar').style.backgroundSize = 'cover';
+  $('[data-composer-avatar]').innerHTML = portrait(m, { size: 40 });
   let selected = 'Win';
-  kinds.forEach((b) => b.addEventListener('click', () => { selected = b.textContent.trim(); kinds.forEach((x) => x.classList.toggle('is-active', x === b)); }));
-  send.addEventListener('click', async () => {
+  kinds.forEach((b) => b.addEventListener('click', () => { selected = b.textContent.trim(); kinds.forEach((x) => { const on = x === b; x.classList.toggle('is-active', on); x.setAttribute('aria-pressed', String(on)); }); }));
+  input.addEventListener('input', () => field.classList.remove('is-invalid'));
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
     const body = input.value.trim();
-    if (!body) { input.focus(); return; }
-    send.disabled = true;
+    if (!body) { err.textContent = 'Write something first.'; field.classList.add('is-invalid'); input.focus(); return; }
+    busy(send, true);
     try {
       const { post } = await api.post('/posts', { kind: selected, body });
-      list.insertAdjacentHTML('afterbegin', postEl(post));
-      hydrateSeals(list);
+      posts.unshift(post);
       input.value = '';
+      kind = 'All';
       render();
       toast('Posted to the feed.');
-    } catch (e) { toast(e instanceof ApiError ? e.message : 'The post could not be saved.'); }
-    finally { send.disabled = false; }
+    } catch (e2) {
+      err.textContent = e2 instanceof ApiError && e2.status !== 0 && e2.status !== 503 ? e2.message : 'The post couldn’t be saved. Your text is still here; try again.';
+      field.classList.add('is-invalid');
+    } finally { busy(send, false); }
   });
 }
 
-function render() {
-  const posts = [...list.querySelectorAll('.post')];
-  const state = !reduced && !first ? Flip.getState(posts) : null;
-  posts.forEach((p) => (p.hidden = kind !== 'All' && p.dataset.kind !== kind));
-  const shown = posts.filter((p) => !p.hidden).length;
-  count.textContent = `${shown} post${shown === 1 ? '' : 's'} · newest first`;
-  document.querySelectorAll('[data-kind]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.kind === kind)));
-  if (state) { suspend(posts); Flip.from(state, { duration: .7, ease: 'expo.out', stagger: .02, absolute: true, onEnter: (els) => gsap.fromTo(els, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: .6 }), onLeave: (els) => gsap.to(els, { opacity: 0, duration: .3 }), onComplete: () => restore(posts) }); }
-  else if (!reduced && first) gsap.from(posts, { y: 30, opacity: 0, duration: 1, ease: 'expo.out', stagger: .05, delay: .2, clearProps: 'transform,opacity' });
-  first = false;
-  setTimeout(() => ScrollTrigger.refresh(), 800);
+async function build() {
+  const [loaded, { members }, rooms, s] = await Promise.all([loadPosts(50).catch(() => []), loadMembers(), loadRooms().catch(() => []), loadSession()]);
+  session = s;
+  posts = [...loaded].sort((a, b) => b.at.localeCompare(a.at));
+  render();
+
+  const newest = [...members].filter((m) => m.verifiedOn).sort((a, b) => b.verifiedOn.localeCompare(a.verifiedOn) || a.name.localeCompare(b.name)).slice(0, 4);
+  $('[data-new-stamps]').innerHTML = newest.map((m) => `<a class="person-row" href="${href(`/members/${m.id}/`)}">${portrait(m, { size: 36, cls: 'avatar' })}<span><b>${esc(m.name)}</b><span>${esc(m.company || m.headline || '')}</span></span><time datetime="${esc(m.verifiedOn)}">${fmtDate(m.verifiedOn, { day: 'numeric', month: 'short' })}</time></a>`).join('');
+  $('[data-rooms]').innerHTML = rooms.map((r) => `<a class="room-row" href="${href(`/rooms/#${r.slug}`)}"><b>${esc(r.name)}</b><span>${r.lastMessageAt ? `Last message ${relTime(r.lastMessageAt)}` : 'No messages yet'}</span></a>`).join('') || '<p class="meta">Rooms couldn’t be loaded.</p>';
+
+  $('[data-filters]').addEventListener('click', (e) => { const b = e.target.closest('[data-kind]'); if (!b) return; kind = b.dataset.kind; render(); });
+  composer();
 }
 
-boot(build, render);
+boot(build).catch(() => toast('The feed couldn’t be loaded.'));

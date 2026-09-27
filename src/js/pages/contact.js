@@ -1,67 +1,81 @@
 import '../../styles/main.css';
 import '../../styles/pages/contact.css';
-import { boot, gsap, reduced, stamp, toast } from '../main.js';
+import { boot, stamp, busy, setInvalid, clearOnEdit } from '../main.js';
 import { api, ApiError } from '../api.js';
+import { SITE } from '../../data/site.js';
 
-const TO = { support: 'support@trulinq.com', fraud: 'trust@trulinq.com', privacy: 'privacy@trulinq.com', enterprise: 'sales@trulinq.com' };
+const TO = { support: SITE.email.support, fraud: SITE.email.trust, privacy: SITE.email.privacy, enterprise: SITE.email.sales };
+const $ = (s) => document.querySelector(s);
 const channels = [...document.querySelectorAll('[data-topic]')];
-const select = document.querySelector('[data-topic-select]');
-const toLine = document.querySelector('[data-to-line]');
+const select = $('[data-topic-select]');
 
-function setTopic(t) {
+/* One topic is chosen at a time; the channel cards and the select stay in step. */
+function setTopic(t, focus = false) {
   if (!TO[t]) t = 'support';
-  channels.forEach((c) => c.setAttribute('aria-checked', String(c.dataset.topic === t)));
-  select.value = t; toLine.textContent = TO[t];
+  channels.forEach((c) => { const on = c.dataset.topic === t; c.setAttribute('aria-checked', String(on)); c.tabIndex = on ? 0 : -1; if (on && focus) c.focus(); });
+  select.value = t;
+  $('[data-to-line]').textContent = TO[t];
 }
 
 function build() {
   const params = new URLSearchParams(location.search);
   let t = params.get('topic') || 'support';
-  if (t === 'invite') { t = 'support'; document.querySelector('#c-msg').value = 'I’d like an invitation code.'; }
+  if (t === 'invite') { t = 'support'; $('#c-msg').value = 'I’d like an invitation code.'; }
   setTopic(t);
-  document.querySelector('[data-channels]').addEventListener('click', (e) => { const c = e.target.closest('[data-topic]'); if (!c) return; setTopic(c.dataset.topic); if (!reduced) gsap.fromTo(c, { scale: .985 }, { scale: 1, duration: .5, ease: 'back.out(2)', clearProps: 'transform' }); });
-  document.querySelector('[data-channels]').addEventListener('keydown', (e) => {
+  $('[data-channels]').addEventListener('click', (e) => { const c = e.target.closest('[data-topic]'); if (c) setTopic(c.dataset.topic); });
+  $('[data-channels]').addEventListener('keydown', (e) => {
     const i = channels.findIndex((c) => c.getAttribute('aria-checked') === 'true');
-    if (['ArrowRight', 'ArrowDown'].includes(e.key)) { e.preventDefault(); const n = channels[(i + 1) % channels.length]; setTopic(n.dataset.topic); n.focus(); }
-    if (['ArrowLeft', 'ArrowUp'].includes(e.key)) { e.preventDefault(); const n = channels[(i - 1 + channels.length) % channels.length]; setTopic(n.dataset.topic); n.focus(); }
+    const step = ['ArrowRight', 'ArrowDown'].includes(e.key) ? 1 : ['ArrowLeft', 'ArrowUp'].includes(e.key) ? -1 : 0;
+    if (!step) return;
+    e.preventDefault();
+    setTopic(channels[(i + step + channels.length) % channels.length].dataset.topic, true);
   });
   select.addEventListener('change', () => setTopic(select.value));
-  const member = document.querySelector('[data-member]'), profile = document.querySelector('[data-profile]');
-  member.addEventListener('change', () => { profile.hidden = !member.checked; if (member.checked) profile.querySelector('input').focus(); });
 
-  const form = document.querySelector('[data-letter]');
-  const sealed = form.querySelector('[data-sealed]');
-  const inv = (id, bad) => form.querySelector(id).closest('.field').classList.toggle('is-invalid', bad);
-  form.querySelectorAll('input, textarea').forEach((el) => el.addEventListener('input', () => el.closest('.field') && el.closest('.field').classList.remove('is-invalid')));
+  const member = $('[data-member]'), profileField = $('[data-profile]'), profile = $('#c-profile');
+  member.addEventListener('change', () => { profileField.hidden = !member.checked; if (member.checked) profile.focus(); });
+
+  const form = $('[data-letter]'), sealed = $('[data-sealed]'), error = $('[data-letter-error]');
+  const name = $('#c-name'), email = $('#c-email'), msg = $('#c-msg');
+  const submit = form.querySelector('button[type=submit]'), copy = form.querySelector('[name=copy]');
+  clearOnEdit(form);
+  form.addEventListener('input', () => { error.hidden = true; });
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const name = form.querySelector('#c-name'), email = form.querySelector('#c-email'), msg = form.querySelector('#c-msg');
-    const b1 = name.value.trim().length < 2, b2 = !email.validity.valid || !email.value, b3 = msg.value.trim().length < 8;
-    inv('#c-name', b1); inv('#c-email', b2); inv('#c-msg', b3);
-    if (b1) return name.focus(); if (b2) return email.focus(); if (b3) return msg.focus();
-    const submit = form.querySelector('button[type=submit]'); if (submit) submit.disabled = true;
+    const b1 = name.value.trim().length < 2, b2 = !email.value.trim() || !email.validity.valid, b3 = msg.value.trim().length < 8;
+    setInvalid(name, b1); setInvalid(email, b2); setInvalid(msg, b3);
+    if (b1) return name.focus();
+    if (b2) return email.focus();
+    if (b3) return msg.focus();
+    busy(submit, true);
     let r;
     try {
-      r = await api.post('/contact', { topic: select.value, name: name.value.trim(), email: email.value.trim(), message: msg.value.trim(), profile: member.checked ? (profile.querySelector('input').value.trim() || undefined) : undefined, copy: !!form.querySelector('[name=copy]')?.checked });
+      r = await api.post('/contact', { topic: select.value, name: name.value.trim(), email: email.value.trim(), message: msg.value.trim(), profile: member.checked ? (profile.value.trim() || undefined) : undefined, copy: copy.checked });
     } catch (err) {
-      if (submit) submit.disabled = false;
-      toast(err instanceof ApiError && err.status !== 0 && err.status !== 503 ? err.message : 'Your message could not be sent right now. Email ' + TO[select.value] + ' directly.');
+      /* the letter stays exactly as written */
+      error.textContent = err instanceof ApiError && err.status !== 0 && err.status !== 503
+        ? err.message
+        : `Your message couldn’t be sent right now. It’s still here, so you can try again, or email ${TO[select.value]} directly.`;
+      error.hidden = false;
       return;
-    }
-    if (submit) submit.disabled = false;
-    sealed.querySelector('[data-sealed-ledger]').innerHTML = [['To', r.to], ['From', email.value], ['Reference', r.reference], ['Expected reply', 'within one business day']].map(([k, v]) => `<li class="ledger__row"><span>${k}</span><i></i><b>${v}</b></li>`).join('');
-    sealed.hidden = false;
-    if (!reduced) gsap.from(sealed, { opacity: 0, scale: .98, duration: .6, ease: 'expo.out' });
-    stamp(sealed.querySelector('.seal'), { delay: .3, rotate: -8 });
-    toast(r.delivered ? 'Sealed and sent. Reference ' + r.reference : 'Saved for the team with reference ' + r.reference + '. Email delivery is not connected on this deployment yet.');
+    } finally { busy(submit, false); }
+    const rows = [
+      ['To', r.to], ['From', email.value.trim()], ['Reference', r.reference],
+      ['Delivery', r.delivered ? 'Delivered to the team' : 'Saved for the team; email delivery isn’t connected yet'],
+      ['Your copy', copy.checked ? (r.delivered ? 'Sent to you' : 'Not sent; email isn’t connected yet') : 'Not requested']
+    ];
+    const ledger = sealed.querySelector('[data-sealed-ledger]');
+    ledger.innerHTML = rows.map(() => '<li class="ledger__row"><span></span><i></i><b></b></li>').join('');
+    ledger.querySelectorAll('.ledger__row').forEach((li, i) => { li.querySelector('span').textContent = rows[i][0]; li.querySelector('b').textContent = rows[i][1]; });
+    form.hidden = true; sealed.hidden = false; sealed.focus();
+    stamp(sealed.querySelector('.seal'), { delay: .2, rotate: -8 });
   });
-  form.querySelector('[data-again]').addEventListener('click', () => { sealed.hidden = true; form.reset(); setTopic(select.value); profile.hidden = true; form.querySelector('#c-name').focus(); });
+  $('[data-again]').addEventListener('click', () => {
+    sealed.hidden = true; form.hidden = false;
+    msg.value = ''; profileField.hidden = !member.checked;
+    sealed.querySelector('.seal').classList.remove('is-stamped');
+    msg.focus();
+  });
 }
 
-function hero() {
-  if (reduced) return;
-  gsap.from('.channel', { y: 30, opacity: 0, duration: 1, ease: 'expo.out', stagger: .08, scrollTrigger: { trigger: '[data-channels]', start: 'top 85%', once: true }, clearProps: 'transform,opacity' });
-  gsap.from('.letter', { y: 40, opacity: 0, duration: 1.1, ease: 'expo.out', scrollTrigger: { trigger: '.write', start: 'top 80%', once: true }, clearProps: 'transform,opacity' });
-}
-
-boot(build, hero);
+boot(build);

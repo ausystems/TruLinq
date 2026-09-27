@@ -27,10 +27,11 @@ export async function createHarness(overrides: Record<string, string> = {}): Pro
   return { db, env, call };
 }
 
-export const KAI_CODE = 'CF3RFRGX';
+/** Tyler Shirakawa's referral code on the live product, kept by the seed. */
+export const TYLER_CODE = 'E9EAF5';
 
 /** pass code: null to sign up without an invitation code */
-export async function signup(h: Harness, email: string, name = 'Test User', code: string | null = KAI_CODE, extra: Record<string, unknown> = {}) {
+export async function signup(h: Harness, email: string, name = 'Test User', code: string | null = TYLER_CODE, extra: Record<string, unknown> = {}) {
   const { ip, ...rest } = extra;
   return h.call('POST', '/auth/signup', { body: { name, email, password: 'a long passphrase 42', ...(code ? { code } : {}), agree: true, ...rest }, ip: ip as string | undefined });
 }

@@ -7,33 +7,38 @@ The marketing and product site for Trulinq, the verified entrepreneur network fr
 
 ```bash
 npm install
-npm run dev        # http://localhost:5180 (also regenerates member pages)
-npm run build      # static output in dist/
+npm run dev        # http://localhost:5180 with the API on :5190 (also regenerates member pages)
+npm run build      # static output in dist/ plus the API bundle in api/
 npm run preview    # serve the production build on :4173
+npm test           # backend test suite
 ```
 
 ## How it is built
 
 * **Vite multi-page app.** Every route is a folder with an `index.html` (`directory/`, `pricing/`, `members/<slug>/` …).
-  Shared markup lives in `partials/` and is injected at build time by the tiny include plugin in `vite.config.js`
+  Shared markup lives in `partials/` and is injected at build time by the include plugin in `vite.config.js`
   (`<!--@include(partials/nav.html)-->`). Member pages are generated from `templates/member.html` by
   `scripts/gen-members.mjs`, which also writes `public/sitemap.xml` and `public/robots.txt`.
-* **Vanilla JS modules.** `src/js/main.js` is the shared engine: Lenis smooth scroll synced to GSAP ScrollTrigger,
-  the curtain preloader and page-to-page wipe, the floating nav, generic reveal choreography (`data-split`,
-  `data-reveal`, `data-stamp`, `data-counter` …), accordions, marquees, toasts. Each page has its own script in
-  `src/js/pages/` with its own choreography (Three.js globe on the homepage, Flip-driven filtering in the directory,
-  the pinned verification stage, the score gauge in `src/js/gauge.js`).
+* **One source for every shared fact.** Prices (`src/data/billing.js`), the site address and contact emails
+  (`src/data/site.js`), the roster (`src/data/members.js`) and the network statistics (`src/data/stats.js`) are written
+  once. Static HTML receives them at build time as tokens such as `{{price.yearlyPerMonth}}` or `{{stats.verified}}`;
+  an unknown token fails the build. Pages that reach the API refresh the statistics after load.
+* **Vanilla JS modules.** `src/js/main.js` is the small shared engine: the menu dialog, visibility helpers, the stamp,
+  form helpers, accordions, toasts and the page boot. Scrolling is native: nothing is sticky, pinned, smoothed or
+  tied to the scroll position. Each page has its own script in `src/js/pages/`.
 * **CSS layers.** `src/styles/tokens.css` → `base.css` → `components.css` → page files in `src/styles/pages/`.
-* **Data.** Demo members, endorsements, posts and rooms live in `src/data/`. The people are fictional.
+* **People.** The roster is the verified members on the live Trulinq product plus Ahmad Khalid, nobody else. Their
+  portraits show initials until member photos are approved for use (`scripts/build-portraits.mjs` prepares approved
+  photos). The dashboard's demo mode, shown only when accounts can't be reached, uses a nameless placeholder account.
 * **Design guide.** `DESIGN.md` documents the visual system, components, motion rules and quality bar.
 
 ## Deploy
 
-`npm run build` produces a fully static `dist/`. Serve it from any static host; `404.html` is the not-found page.
+**Vercel** (https://tru-linq.vercel.app) deploys `main` automatically: the static pages plus the API function.
+The canonical address is `SITE.url` in `src/data/site.js`; change it there if the site moves to another domain.
 
-**GitHub Pages** (live at https://ausystems.github.io/TruLinq/): `npm run deploy` builds with `BASE_PATH=/TruLinq/`
-and force-pushes `dist/` to the `gh-pages` branch, which Pages serves. Every internal link is base-path aware, so the
-same code also deploys to a root domain (`trulinqid.com`) with a plain `npm run build`.
+**GitHub Pages** (https://ausystems.github.io/TruLinq/): `npm run deploy` builds with `BASE_PATH=/TruLinq/` and
+force-pushes `dist/` to the `gh-pages` branch. Every internal link is base-path aware.
 
 ## Backend
 

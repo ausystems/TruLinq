@@ -1,17 +1,19 @@
-/* The Trulinq Score engine, the server-side source of truth for the number the site already shows.
-   Factors (from the product's own definition in src/js/ui.js): identity & business verification 45, profile
-   completeness 20, web presence 15, account history 10, standing since verification 10.
-   total = 300 + 5.5 × sum, so 300..850. Seeded demo members keep their seeded factors ("seed"); real members are
-   computed from trusted records only ("engine"), never from anything a browser sends. */
+/* The Trulinq Score engine, the server-side source of truth for the number the site shows.
+   Factors, as the live product defines them: identity & business verification 45, profile completeness 20, web
+   presence 15, account history 10 (one point per three months on Trulinq), standing since verification 10 (one point
+   per month the stamp has been held). total = 300 + 5.5 × sum, so 300..850.
+   Members imported with the live product's factors keep them ("seed"); everyone else is computed from trusted records
+   only ("engine"), never from anything a browser sends. */
 import type { Queryable } from '../db/client.ts';
 
 export interface Factors { identity: number; profile: number; web: number; history: number; standing: number }
 export const totalOf = (f: Factors): number => Math.round(300 + 5.5 * (f.identity + f.profile + f.web + f.history + f.standing));
+/* Bands as the live product labels them (746 → AA Excellent, 592–652 → B Fair). */
 export function gradeOf(score: number): { grade: string; band: string } {
   if (score >= 740) return { grade: 'AA', band: 'Excellent' };
-  if (score >= 700) return { grade: 'A', band: 'Very good' };
-  if (score >= 580) return { grade: 'B', band: 'Good' };
-  if (score >= 480) return { grade: 'C', band: 'Fair' };
+  if (score >= 700) return { grade: 'A', band: 'Good' };
+  if (score >= 580) return { grade: 'B', band: 'Fair' };
+  if (score >= 480) return { grade: 'C', band: 'Limited' };
   return { grade: 'D', band: 'Building' };
 }
 
@@ -19,7 +21,7 @@ export interface ScoreInput {
   verification_status: string; verified_on: Date | string | null; joined_on: Date | string;
   photo: string | null; bio: string; industry: string; city: string; website: string; website_verified: boolean; founded: number | null; offers: string; looking: string;
 }
-const monthsBetween = (from: Date, to: Date): number => Math.max(0, Math.floor((to.getTime() - from.getTime()) / (30.4375 * 864e5)));
+const monthsBetween = (from: Date, to: Date): number => Math.max(0, (to.getTime() - from.getTime()) / (30.4375 * 864e5));
 const asDate = (d: Date | string | null): Date | null => (d ? (d instanceof Date ? d : new Date(String(d).slice(0, 10) + 'T12:00:00Z')) : null);
 
 export function computeFactors(m: ScoreInput, now = new Date()): Factors {
@@ -31,8 +33,8 @@ export function computeFactors(m: ScoreInput, now = new Date()): Factors {
     identity: verified ? 45 : 0,
     profile: Math.round((details / 8) * 20),
     web: m.website ? (m.website_verified ? 15 : 10) : 0,
-    history: Math.min(10, monthsBetween(joined, now)),
-    standing: verified && verifiedOn ? Math.min(10, monthsBetween(verifiedOn, now)) : 0
+    history: Math.min(10, Math.round(monthsBetween(joined, now) / 3)),
+    standing: verified && verifiedOn ? Math.min(10, Math.round(monthsBetween(verifiedOn, now))) : 0
   };
 }
 

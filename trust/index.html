@@ -10,50 +10,48 @@
   <!--@include(partials/nav.html)-->
   <main id="main" class="page">
 
-    <section class="panel panel--cream thero">
+    <section class="panel panel--cream thero" aria-labelledby="trust-title">
       <div class="thero__inner">
-        <p class="eyebrow" data-reveal="fade">Trust Centre</p>
-        <h1 class="display" data-split>Here’s exactly what the stamp means. And what it doesn’t.</h1>
-        <p class="lead" data-reveal>Trulinq exists so entrepreneurs can deal with real people. This page is the whole standard, in plain language.</p>
-        <p class="thero__meta mono" data-reveal data-delay=".05">Standard v2 · last reviewed Sep 2026</p>
+        <p class="eyebrow">Trust Centre</p>
+        <h1 id="trust-title" class="display">Here’s exactly what the stamp means. And what it doesn’t.</h1>
+        <p class="lead">Trulinq exists so entrepreneurs can deal with real people. This page is the whole standard, in plain language.</p>
+        <p class="thero__meta">Last reviewed September 2026</p>
       </div>
     </section>
 
-    <section class="panel panel--white anatomy" id="anatomy">
+    <section class="panel panel--white anatomy" id="anatomy" aria-labelledby="anatomy-title">
       <div class="anatomy__inner">
-        <h2 class="display" data-split>The anatomy of a stamp.</h2>
-        <p class="lead" data-reveal>Four checks, in the order a reviewer runs them. All four pass, or the stamp is not issued.</p>
-        <div class="anatomy__diagram" data-diagram>
-          <svg class="anatomy__lines" viewBox="0 0 1000 600" preserveAspectRatio="none" aria-hidden="true">
-            <path data-line d="M500 300 C 420 300, 380 150, 250 130"/>
-            <path data-line d="M500 300 C 580 300, 620 150, 750 130"/>
-            <path data-line d="M500 300 C 420 300, 380 450, 250 470"/>
-            <path data-line d="M500 300 C 580 300, 620 450, 750 470"/>
-          </svg>
-          <div class="anatomy__seal"><span class="seal seal--xl" data-stamp role="img" aria-label="Trulinq Verified"></span></div>
-          <article class="pillar pillar--1 card" data-reveal="left"><span class="pillar__n mono">01</span><h3>Identity</h3><p>A government ID is matched to the person behind the account.</p></article>
-          <article class="pillar pillar--2 card" data-reveal="right"><span class="pillar__n mono">02</span><h3>Business</h3><p>Registration numbers are checked against public business registries.</p></article>
-          <article class="pillar pillar--3 card" data-reveal="left" data-delay=".1"><span class="pillar__n mono">03</span><h3>Presence</h3><p>Website, domain and business contact details are confirmed as active.</p></article>
-          <article class="pillar pillar--4 card" data-reveal="right" data-delay=".1"><span class="pillar__n mono">04</span><h3>Review</h3><p>A human reviewer signs off before the stamp is issued.</p><span class="note pillar__note">a person, not a model</span></article>
+        <div class="anatomy__head">
+          <h2 id="anatomy-title" class="display">The anatomy of a stamp.</h2>
+          <p class="lead">Four checks, in the order a reviewer runs them. All four pass, or the stamp is not issued.</p>
+        </div>
+        <div class="anatomy__diagram">
+          <div class="anatomy__seal"><span class="seal seal--xl" role="img" aria-label="The Trulinq Verified seal"></span></div>
+          <ol class="anatomy__pillars">
+            <li class="pillar card"><h3>Identity</h3><p>A government ID is matched to the person behind the account.</p></li>
+            <li class="pillar card"><h3>Business</h3><p>Registration numbers are checked against public business registries.</p></li>
+            <li class="pillar card"><h3>Presence</h3><p>Website, domain and business contact details are confirmed as active.</p></li>
+            <li class="pillar card"><h3>Review</h3><p>A person on the review team signs off before the stamp is issued. Not a model.</p></li>
+          </ol>
         </div>
       </div>
     </section>
 
-    <section class="panel panel--peach means" id="means">
+    <section class="panel panel--peach means" id="means" aria-labelledby="means-title">
       <div class="means__inner">
-        <h2 class="display" data-split>What the stamp means.</h2>
-        <p class="lead means__lead" data-reveal>A Trulinq Verified stamp means we confirmed the person’s identity and the existence of their business at the time of review.</p>
+        <h2 id="means-title" class="display">What the stamp means.</h2>
+        <p class="lead means__lead">A Trulinq Verified stamp means we confirmed the person’s identity and the existence of their business at the time of review.</p>
         <div class="means__cols">
-          <div class="means__col card" data-reveal>
+          <div class="means__col card">
             <h3>It means</h3>
             <ul class="means__list means__list--yes">
               <li>We confirmed the person’s identity at the time of review</li>
               <li>We confirmed the business exists and is linked to them</li>
-              <li>A human signed off</li>
+              <li>A person signed off</li>
               <li>It can be revoked at any time</li>
             </ul>
           </div>
-          <div class="means__col card card--ink" data-reveal data-delay=".08">
+          <div class="means__col card card--ink">
             <h3>It does not mean</h3>
             <ul class="means__list means__list--no">
               <li>A guarantee of business performance</li>
@@ -63,68 +61,89 @@
             </ul>
           </div>
         </div>
-        <p class="means__rule display" data-split>Always use your own judgment and written contracts.</p>
+        <p class="means__rule">Always use your own judgment and written contracts.</p>
       </div>
     </section>
 
-    <section class="panel panel--white tdata" id="data">
+    <section class="panel panel--white tdata" id="data" aria-labelledby="data-title">
       <div class="tdata__inner">
         <div class="tdata__copy">
-          <h2 class="display" data-split>Your data. Who can see what.</h2>
-          <p class="lead" data-reveal>Verification documents live in a private bucket with per-user access rules. Only you and the review team can open them.</p>
-          <ul class="ledger tdata__promises" data-reveal data-delay=".05">
+          <h2 id="data-title" class="display">Your data. Who can see what.</h2>
+          <p class="lead">Verification documents are stored privately, with access limited to you and the review team.</p>
+          <ul class="ledger tdata__promises">
             <li class="ledger__row"><span>ID documents</span><i></i><b>never public</b></li>
-            <li class="ledger__row"><span>Submissions</span><i></i><b>you + review team</b></li>
-            <li class="ledger__row"><span>Public profile</span><i></i><b>only chosen details</b></li>
+            <li class="ledger__row"><span>Submissions</span><i></i><b>you and the review team</b></li>
+            <li class="ledger__row"><span>Public profile</span><i></i><b>only the details you choose</b></li>
             <li class="ledger__row"><span>Deletion</span><i></i><b>on request, any time</b></li>
           </ul>
-          <a class="arrow-link" href="/privacy/">Read the privacy policy <i><svg viewBox="0 0 16 16"><path d="M4 12L12 4M6 4h6v6"/></svg></i></a>
+          <a class="arrow-link" href="/privacy/"><span>Read the privacy policy</span><i aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></i></a>
         </div>
-        <div class="matrix" role="table" aria-label="Who can see what" data-matrix>
-          <div class="matrix__head" role="row"><span role="columnheader">Data</span><span role="columnheader">You</span><span role="columnheader">Review team</span><span role="columnheader">Public</span></div>
-          <div class="matrix__row" role="row"><span role="cell">Government ID document</span><span role="cell" data-yes></span><span role="cell" data-yes></span><span role="cell" data-no></span></div>
-          <div class="matrix__row" role="row"><span role="cell">Registration number</span><span role="cell" data-yes></span><span role="cell" data-yes></span><span role="cell" data-no></span></div>
-          <div class="matrix__row" role="row"><span role="cell">Reviewer notes</span><span role="cell" data-yes></span><span role="cell" data-yes></span><span role="cell" data-no></span></div>
-          <div class="matrix__row" role="row"><span role="cell">Business name &amp; role</span><span role="cell" data-yes></span><span role="cell" data-yes></span><span role="cell" data-yes></span></div>
-          <div class="matrix__row" role="row"><span role="cell">Industry &amp; location</span><span role="cell" data-yes></span><span role="cell" data-yes></span><span role="cell" data-yes></span></div>
-          <div class="matrix__row" role="row"><span role="cell">Website</span><span role="cell" data-yes></span><span role="cell" data-yes></span><span role="cell" data-yes></span></div>
-          <div class="matrix__row" role="row"><span role="cell">Verification status</span><span role="cell" data-yes></span><span role="cell" data-yes></span><span role="cell" data-yes></span></div>
-          <div class="matrix__row" role="row"><span role="cell">Trulinq Score</span><span role="cell" data-yes></span><span role="cell" data-yes></span><span role="cell" data-yes></span></div>
+        <div class="matrix-wrap">
+          <table class="matrix">
+            <caption class="sr-only">Who can see each piece of your data</caption>
+            <thead><tr><th scope="col">Data</th><th scope="col">You</th><th scope="col">Review team</th><th scope="col">Public</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Government ID document</th><td><i class="yes"></i><span class="sr-only">Yes</span></td><td><i class="yes"></i><span class="sr-only">Yes</span></td><td><i class="no"></i><span class="sr-only">No</span></td></tr>
+              <tr><th scope="row">Registration number</th><td><i class="yes"></i><span class="sr-only">Yes</span></td><td><i class="yes"></i><span class="sr-only">Yes</span></td><td><i class="no"></i><span class="sr-only">No</span></td></tr>
+              <tr><th scope="row">Reviewer notes</th><td><i class="yes"></i><span class="sr-only">Yes</span></td><td><i class="yes"></i><span class="sr-only">Yes</span></td><td><i class="no"></i><span class="sr-only">No</span></td></tr>
+              <tr><th scope="row">Business name and role</th><td><i class="yes"></i><span class="sr-only">Yes</span></td><td><i class="yes"></i><span class="sr-only">Yes</span></td><td><i class="yes"></i><span class="sr-only">Yes</span></td></tr>
+              <tr><th scope="row">Industry and location</th><td><i class="yes"></i><span class="sr-only">Yes</span></td><td><i class="yes"></i><span class="sr-only">Yes</span></td><td><i class="yes"></i><span class="sr-only">Yes</span></td></tr>
+              <tr><th scope="row">Website</th><td><i class="yes"></i><span class="sr-only">Yes</span></td><td><i class="yes"></i><span class="sr-only">Yes</span></td><td><i class="yes"></i><span class="sr-only">Yes</span></td></tr>
+              <tr><th scope="row">Verification status</th><td><i class="yes"></i><span class="sr-only">Yes</span></td><td><i class="yes"></i><span class="sr-only">Yes</span></td><td><i class="yes"></i><span class="sr-only">Yes</span></td></tr>
+              <tr><th scope="row">Trulinq Score</th><td><i class="yes"></i><span class="sr-only">Yes</span></td><td><i class="yes"></i><span class="sr-only">Yes</span></td><td><i class="yes"></i><span class="sr-only">Yes</span></td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </section>
 
-    <section class="panel panel--ink report" id="report">
+    <section class="panel panel--ink report" id="report" aria-labelledby="report-title">
       <div class="report__inner">
         <div class="report__copy">
-          <h2 class="display" data-split>Spot a fake? Tell us the same day.</h2>
-          <p class="report__lead" data-reveal>Fraudulent accounts or impersonation should be reported. Verification can be revoked at any time, and a person reads every report.</p>
-          <p class="report__mail" data-reveal data-delay=".05">Prefer email? <a href="mailto:trust@trulinq.com">trust@trulinq.com</a></p>
+          <h2 id="report-title" class="display">Spot a fake? Tell us the same day.</h2>
+          <p class="report__lead">Fraudulent accounts and impersonation should be reported. A stamp can be revoked at any time, and a person reads every report.</p>
+          <p class="report__mail">Prefer email? <a class="link" href="mailto:{{email.trust}}">{{email.trust}}</a></p>
         </div>
-        <form class="report__form card" data-report novalidate data-reveal="right">
-          <div class="field"><label class="field__label" for="r-link">Profile link</label><input class="input" id="r-link" type="url" placeholder="trulinqid.com/members/…" inputmode="url"><p class="field__err">Paste the link to the profile you’re reporting.</p></div>
-          <div class="field"><label class="field__label" for="r-what">What happened</label><textarea class="input" id="r-what" placeholder="Tell us what you saw, as specifically as you can."></textarea><p class="field__err">A sentence or two helps the reviewer act quickly.</p></div>
-          <div class="field"><label class="field__label" for="r-email">Your email <small>so we can follow up</small></label><input class="input" id="r-email" type="email" autocomplete="email" placeholder="you@yourbusiness.com"><p class="field__err">Enter a working email so we can follow up.</p></div>
-          <button type="submit" class="btn btn--primary"><span>Send report</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></button>
-          <div class="report__done" data-report-done hidden>
-            <span class="seal seal--md" data-stamp data-manual role="img" aria-label="Received"></span>
-            <b>Report received.</b>
-            <p>A reviewer will look today. Nothing you wrote is shared with the profile.</p>
+        <div class="report__box card">
+          <form class="report__form" data-report novalidate>
+            <div class="field">
+              <label class="field__label" for="r-link">Profile link</label>
+              <input class="input" id="r-link" name="link" type="text" placeholder="{{site.host}}/members/…" inputmode="url" autocomplete="off" aria-describedby="r-link-err">
+              <p class="field__err" id="r-link-err">Paste the link to the profile you’re reporting.</p>
+            </div>
+            <div class="field">
+              <label class="field__label" for="r-what">What happened</label>
+              <textarea class="input" id="r-what" name="details" placeholder="Tell us what you saw, as specifically as you can." maxlength="4000" aria-describedby="r-what-err"></textarea>
+              <p class="field__err" id="r-what-err">A sentence or two helps the reviewer act quickly.</p>
+            </div>
+            <div class="field">
+              <label class="field__label" for="r-email">Your email <small>so we can follow up</small></label>
+              <input class="input" id="r-email" name="email" type="email" autocomplete="email" placeholder="you@yourbusiness.com" aria-describedby="r-email-err">
+              <p class="field__err" id="r-email-err">Enter a working email so we can follow up.</p>
+            </div>
+            <p class="form-error" data-report-error role="alert" hidden></p>
+            <button type="submit" class="btn btn--primary"><span>Send report</span></button>
+          </form>
+          <div class="report__done" data-report-done hidden tabindex="-1">
+            <span class="seal seal--md" data-manual role="img" aria-label="Received"></span>
+            <h3>Report received.</h3>
+            <p>A person on the review team reads it. Nothing you wrote is shared with the profile.</p>
+            <ul class="ledger" data-report-ledger></ul>
           </div>
-        </form>
+        </div>
       </div>
     </section>
 
-    <section class="panel panel--cream tshort" id="terms">
+    <section class="panel panel--cream tshort" id="terms" aria-labelledby="tshort-title">
       <div class="tshort__inner">
-        <h2 class="display" data-split>Terms in short.</h2>
-        <div class="tshort__grid" data-reveal-group data-stagger=".1">
+        <h2 id="tshort-title" class="display">Terms in short.</h2>
+        <div class="tshort__grid">
           <div class="card"><h3>Submit accurate information</h3><p>Your name, your business, your documents. Nothing borrowed, nothing invented.</p></div>
           <div class="card"><h3>No impersonation or directory misuse</h3><p>No pretending to be someone else, no scraping, no spam, no harassment.</p></div>
-          <div class="card"><h3>Fees are non-refundable once review starts</h3><p>Paid review pays for a human’s time. That time is spent whether you pass or not.</p></div>
+          <div class="card"><h3>Fees are non-refundable once review starts</h3><p>Paid review pays for a person’s time. That time is spent whether you pass or not.</p></div>
         </div>
-        <p class="tshort__consequence" data-reveal>Breaking these means permanent stamp and account removal.</p>
-        <div class="btn-row" data-reveal data-delay=".05">
+        <p class="tshort__consequence">Breaking these means permanent stamp and account removal.</p>
+        <div class="btn-row">
           <a class="btn btn--primary btn--lg" href="/verify/"><span>Start your verification</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
           <a class="btn btn--ghost btn--lg" href="/terms/"><span>Read the full terms</span></a>
         </div>

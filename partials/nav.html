@@ -1,11 +1,10 @@
-<!-- Brand defs shared by every page: the Trulinq mark (traced from the trulinqid.com logo) and the seal's gradients. -->
+<!-- Brand definitions shared by every page: the Trulinq mark (traced from the product logo) and the seal's gradients. -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <defs>
     <linearGradient id="tq-mark-t" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FCFCFC"/><stop offset="1" stop-color="#C6C6C6"/></linearGradient>
     <linearGradient id="tq-mark-d" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0080FF"/><stop offset="1" stop-color="#003CAC"/></linearGradient>
     <radialGradient id="tq-seal-face" cx="38%" cy="30%" r="85%"><stop offset="0" stop-color="#1A2E4C"/><stop offset=".55" stop-color="#06132A"/><stop offset="1" stop-color="#020511"/></radialGradient>
     <linearGradient id="tq-seal-rim" x1="20%" y1="0%" x2="80%" y2="100%"><stop offset="0" stop-color="#77D9FF"/><stop offset=".5" stop-color="#007DF3"/><stop offset="1" stop-color="#4FC1FF"/></linearGradient>
-    <radialGradient id="tq-seal-glow" cx="50%" cy="50%" r="50%"><stop offset=".7" stop-color="#4AB3FF" stop-opacity="0"/><stop offset=".92" stop-color="#4AB3FF" stop-opacity=".45"/><stop offset="1" stop-color="#4AB3FF" stop-opacity="0"/></radialGradient>
     <linearGradient id="tq-mark-t-dark" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1B2740"/><stop offset="1" stop-color="#0C1526"/></linearGradient>
     <symbol id="tq-mark" viewBox="0 0 1080 1080">
       <path fill="url(#tq-mark-t)" d="M28 139H775L654 289H406V938H271V289H28Z"/>
@@ -19,35 +18,12 @@
   </defs>
 </svg>
 <a class="skip" href="#main">Skip to content</a>
-<div class="curtain" aria-hidden="true" data-curtain>
-  <div class="curtain__label"><span class="curtain__label-inner" data-curtain-label></span></div>
-  <div class="curtain__seal">
-    <svg viewBox="0 0 100 100" aria-hidden="true">
-      <defs><path id="curtain-ring" d="M50,50 m-37,0 a37,37 0 1,1 74,0 a37,37 0 1,1 -74,0"/></defs>
-      <circle cx="50" cy="50" r="49" fill="url(#tq-seal-glow)"/>
-      <circle cx="50" cy="50" r="47" fill="url(#tq-seal-face)"/>
-      <circle cx="50" cy="50" r="46" fill="none" stroke="url(#tq-seal-rim)" stroke-width="2.6"/>
-      <text class="seal__ring" font-size="9.4" font-weight="600" letter-spacing="1.35" fill="#36ACFF"><textPath href="#curtain-ring" textLength="232" lengthAdjust="spacingAndGlyphs">TRULINQ · VERIFIED · ENTREPRENEUR ·</textPath></text>
-      <circle cx="50" cy="50" r="28.5" fill="none" stroke="#36ACFF" stroke-opacity=".45" stroke-width="1.2"/>
-      <use href="#tq-mark" x="32" y="32" width="36" height="36"/>
-      <!-- The preloader's draw: the same stroke-dashoffset tween now traces the monogram (pathLength keeps the 60-unit dash) -->
-      <g class="curtain__check" fill="none" stroke="#F9FCFF" stroke-width="42" stroke-linecap="round" stroke-linejoin="round" transform="translate(32 32) scale(.0333333)">
-        <path pathLength="60" d="M28 139H775L654 289H406V938H271V289H28Z"/>
-        <path pathLength="60" d="M473 362H600V487H668V362H763A288 288 0 0 1 763 938H473ZM600 487H763A163 163 0 0 1 763 813H600Z"/>
-      </g>
-    </svg>
-  </div>
-</div>
-<script>
-  /* Runs before first paint: if we arrived through a page transition, show the destination label the previous page was already showing. */
-  (function () { try { var to = sessionStorage.getItem('tq-to'); if (sessionStorage.getItem('tq-transition') === '1' && to) { var c = document.querySelector('[data-curtain]'); c.classList.add('is-transition'); c.querySelector('[data-curtain-label]').textContent = to; } } catch (e) {} })();
-</script>
-<header class="nav" data-nav>
-  <div class="nav__pill">
-    <a class="nav__logo" href="/" aria-label="Trulinq home">
+<!-- The header is part of the page: it scrolls away with everything else. -->
+<header class="nav">
+  <div class="nav__bar">
+    <a class="nav__logo" href="/" aria-label="Trulinq, home">
       <svg class="wordmark" viewBox="0 0 176 40" aria-hidden="true">
-        <use class="wordmark__mark wordmark__mark--dark" href="#tq-mark-dark" x="1" y="1" width="38" height="38"/>
-        <use class="wordmark__mark wordmark__mark--light" href="#tq-mark" x="1" y="1" width="38" height="38"/>
+        <use href="#tq-mark-dark" x="1" y="1" width="38" height="38"/>
         <text x="48" y="29" class="wordmark__text">Trulinq</text>
       </svg>
     </a>
@@ -60,7 +36,7 @@
       <a href="/trust/" data-nav-link>Trust</a>
     </nav>
     <div class="nav__actions">
-      <a class="nav__signin" href="/auth/">Sign in</a>
+      <a class="nav__signin" href="/auth/" data-account-link>Sign in</a>
       <a class="btn btn--primary btn--sm" href="/verify/"><span>Get verified</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
       <button class="nav__burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu" data-burger>
         <span></span><span></span>
@@ -68,20 +44,27 @@
     </div>
   </div>
 </header>
-<div class="menu" id="menu" data-menu aria-hidden="true">
-  <div class="menu__inner">
-    <nav class="menu__links" aria-label="Mobile">
-      <a href="/directory/"><span>Directory</span><em>Every face, checked</em></a>
-      <a href="/match/"><span>Match</span><em>Offers meet needs</em></a>
-      <a href="/rooms/"><span>Rooms</span><em>Verified voices only</em></a>
-      <a href="/feed/"><span>Feed</span><em>Chronological, ad-free</em></a>
-      <a href="/pricing/"><span>Pricing</span><em>One stamp, $19 a month</em></a>
-      <a href="/trust/"><span>Trust Centre</span><em>What the stamp means</em></a>
-      <a href="/contact/"><span>Contact</span><em>A real person replies</em></a>
-    </nav>
-    <div class="menu__foot">
-      <a class="btn btn--primary" href="/verify/"><span>Get verified</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
-      <a class="btn btn--ghost" href="/auth/"><span>Sign in</span></a>
-    </div>
+<div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Menu" data-menu hidden>
+  <div class="menu__head">
+    <a class="nav__logo" href="/" aria-label="Trulinq, home">
+      <svg class="wordmark" viewBox="0 0 176 40" aria-hidden="true">
+        <use href="#tq-mark-dark" x="1" y="1" width="38" height="38"/>
+        <text x="48" y="29" class="wordmark__text">Trulinq</text>
+      </svg>
+    </a>
+    <button class="menu__close" type="button" aria-label="Close menu" data-menu-close></button>
+  </div>
+  <nav class="menu__links" aria-label="Menu">
+    <a href="/directory/"><span>Directory</span><em>Every member, checked</em></a>
+    <a href="/match/"><span>Match</span><em>Offers meet needs</em></a>
+    <a href="/rooms/"><span>Rooms</span><em>Verified voices only</em></a>
+    <a href="/feed/"><span>Feed</span><em>Newest first, no ads</em></a>
+    <a href="/pricing/"><span>Pricing</span><em>{{price.yearlyPerMonth}} a month, billed yearly</em></a>
+    <a href="/trust/"><span>Trust Centre</span><em>What the stamp means</em></a>
+    <a href="/contact/"><span>Contact</span><em>A person replies</em></a>
+  </nav>
+  <div class="menu__foot">
+    <a class="btn btn--primary" href="/verify/"><span>Get verified</span></a>
+    <a class="btn btn--ghost" href="/auth/" data-account-link>Sign in</a>
   </div>
 </div>

@@ -18,6 +18,7 @@ create table members (
   slug text not null unique check (slug ~ '^[a-z0-9]+(-[a-z0-9]+)*$' and length(slug) between 2 and 64),
   name text not null check (length(name) between 2 and 80),
   first_name text not null check (length(first_name) between 1 and 40),
+  headline text not null default '' check (length(headline) <= 160),
   role text not null default '' check (length(role) <= 60),
   company text not null default '' check (length(company) <= 120),
   city text not null default '' check (length(city) <= 80),

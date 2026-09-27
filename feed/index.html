@@ -10,66 +10,71 @@
   <!--@include(partials/nav.html)-->
   <main id="main" class="page">
 
-    <section class="panel panel--cream fhero">
+    <section class="panel panel--cream fhero" aria-labelledby="feed-title">
       <div class="fhero__inner">
-        <p class="eyebrow" data-reveal="fade">Feed</p>
-        <h1 class="display" data-split>The feed.</h1>
-        <p class="lead" data-reveal>Chronological. Ad-free. No algorithm deciding what you see, just verified founders, newest first.</p>
-        <p class="fhero__gate" data-reveal data-delay=".05">Sign in to post, reply and connect. Reading is open to everyone.</p>
+        <p class="eyebrow">Feed</p>
+        <h1 id="feed-title" class="display">The feed.</h1>
+        <p class="lead">Chronological. Ad-free. No algorithm deciding what you see, just verified founders, newest first.</p>
+        <p class="fhero__gate">Reading is open to everyone. Verified members can post.</p>
       </div>
     </section>
 
-    <section class="panel panel--white feed">
+    <section class="panel panel--white feed" aria-label="Posts">
       <div class="feed__inner">
         <div class="feed__main">
-          <div class="composer card" data-composer>
+          <form class="composer card" data-composer novalidate>
             <div class="composer__row">
-              <span class="composer__avatar" aria-hidden="true"></span>
-              <textarea class="input composer__input" placeholder="Share a win, an ask, or an opportunity…" rows="3" aria-label="New post" disabled></textarea>
+              <span class="composer__avatar" aria-hidden="true" data-composer-avatar></span>
+              <div class="field">
+                <label class="sr-only" for="post-body">New post</label>
+                <textarea class="input composer__input" id="post-body" placeholder="Share a win, an ask, or an opportunity…" rows="3" maxlength="2000" disabled></textarea>
+                <p class="field__err" data-composer-err>Write something first.</p>
+              </div>
             </div>
             <div class="composer__foot">
-              <div class="segmented" role="group" aria-label="Post type"><button type="button" class="is-active" disabled>Win</button><button type="button" disabled>Hiring</button><button type="button" disabled>Offer</button><button type="button" disabled>Update</button><button type="button" disabled>Ask</button></div>
-              <button type="button" class="btn btn--ink btn--sm" disabled><span>Post</span></button>
+              <div class="segmented" role="group" aria-label="Post type" data-kinds>
+                <button type="button" class="is-active" aria-pressed="true" disabled>Win</button><button type="button" aria-pressed="false" disabled>Hiring</button><button type="button" aria-pressed="false" disabled>Offer</button><button type="button" aria-pressed="false" disabled>Update</button><button type="button" aria-pressed="false" disabled>Ask</button>
+              </div>
+              <button type="submit" class="btn btn--ink btn--sm" disabled><span>Post</span></button>
             </div>
-            <div class="composer__lock">
-              <p>Verified members only</p>
-              <a class="btn btn--primary btn--sm" href="/auth/"><span>Sign in to post</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
+            <div class="composer__lock" data-composer-lock>
+              <p>Only verified members can post</p>
+              <a class="btn btn--primary btn--sm" href="/auth/?next=/feed/"><span>Sign in to post</span></a>
             </div>
+          </form>
+          <div class="chip-row feed__filters" role="group" aria-label="Filter posts" data-filters>
+            <button type="button" class="chip" data-kind="All" aria-pressed="true">All</button>
+            <button type="button" class="chip" data-kind="Win" aria-pressed="false">Wins</button>
+            <button type="button" class="chip" data-kind="Hiring" aria-pressed="false">Hiring</button>
+            <button type="button" class="chip" data-kind="Offer" aria-pressed="false">Offers</button>
+            <button type="button" class="chip" data-kind="Update" aria-pressed="false">Updates</button>
+            <button type="button" class="chip" data-kind="Ask" aria-pressed="false">Asks</button>
           </div>
-          <div class="feed__filters" role="group" aria-label="Filter posts" data-filters>
-            <button type="button" class="pill pill--sm" data-kind="All" aria-pressed="true">All</button>
-            <button type="button" class="pill pill--sm" data-kind="Win" aria-pressed="false">Wins</button>
-            <button type="button" class="pill pill--sm" data-kind="Hiring" aria-pressed="false">Hiring</button>
-            <button type="button" class="pill pill--sm" data-kind="Offer" aria-pressed="false">Offers</button>
-            <button type="button" class="pill pill--sm" data-kind="Update" aria-pressed="false">Updates</button>
-            <button type="button" class="pill pill--sm" data-kind="Ask" aria-pressed="false">Asks</button>
-          </div>
-          <p class="feed__count mono" data-count aria-live="polite"></p>
+          <p class="feed__count" data-count aria-live="polite">Loading posts…</p>
           <div class="feed__list" data-list></div>
-          <div class="feed__end" data-end>
-            <button type="button" class="btn btn--ghost" data-older><span>Load older posts</span></button>
-            <div class="feed__end-note" data-end-note hidden>
-              <span class="seal seal--md is-static" data-quiet role="img" aria-label="Trulinq Verified"></span>
-              <p>That’s everything since Sep 9. We never faked momentum.</p>
-            </div>
+          <div class="empty feed__empty" data-empty hidden>
+            <h3>Nothing posted yet.</h3>
+            <p>The feed is chronological, so the first post from a verified member will sit right here, at the top.</p>
           </div>
+          <p class="feed__end" data-end hidden></p>
         </div>
-        <aside class="feed__rail">
-          <div class="rail-card card card--ink" data-reveal>
-            <h3>Why there’s no algorithm</h3>
+        <aside class="feed__rail" aria-label="About the feed">
+          <div class="rail-card card card--ink">
+            <h2>Why there’s no algorithm</h2>
             <ul class="rail-card__lines"><li>Newest first, always.</li><li>No ads, no boosts, no engagement farming.</li><li>Every poster passed verification.</li></ul>
           </div>
-          <div class="rail-card card" data-reveal data-delay=".05">
-            <h3>New stamps this month</h3>
+          <div class="rail-card card">
+            <h2>Newest stamps</h2>
             <div class="rail-card__people" data-new-stamps></div>
+            <a class="arrow-link" href="/directory/"><span>See the directory</span><i aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></i></a>
           </div>
-          <div class="rail-card card" data-reveal data-delay=".1">
-            <h3>Rooms live now</h3>
-            <div class="rail-card__rooms" data-live-rooms></div>
+          <div class="rail-card card">
+            <h2>Rooms</h2>
+            <div class="rail-card__rooms" data-rooms></div>
           </div>
-          <div class="rail-card card card--peach" data-reveal data-delay=".15">
-            <h3>Not verified yet?</h3>
-            <p>Two business days from now you could be posting here.</p>
+          <div class="rail-card card card--peach">
+            <h2>Not verified yet?</h2>
+            <p>A person reviews your application within {{review.businessDays}} business days. Then you can post here.</p>
             <a class="btn btn--primary btn--sm" href="/verify/"><span>Get verified</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
           </div>
         </aside>

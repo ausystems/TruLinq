@@ -3,13 +3,13 @@ import { errors, HttpError, json } from '../http.ts';
 import type { Ctx } from '../context.ts';
 import { isUniqueViolation } from '../db/client.ts';
 import { audit } from '../lib/audit.ts';
-import { memberBySlug, monogramDataUri } from '../lib/members.ts';
+import { memberBySlug } from '../lib/members.ts';
 import { rateLimit } from '../lib/ratelimit.ts';
 import { endorsementSchema, feedQuerySchema, messageSchema, postSchema, slug as slugSchema } from '../lib/validate.ts';
 import { parse, requireVerified } from './_util.ts';
 
 interface PostRow { id: string; kind: string; body: string; reply_count: number; created_at: Date; slug: string; name: string; company: string; role: string; photo: string | null }
-const post = (p: PostRow) => ({ id: p.id, by: p.slug, kind: p.kind, text: p.body, replies: p.reply_count, at: p.created_at.toISOString(), author: { id: p.slug, name: p.name, company: p.company, role: p.role, photo: p.photo || monogramDataUri(p.name) } });
+const post = (p: PostRow) => ({ id: p.id, by: p.slug, kind: p.kind, text: p.body, replies: p.reply_count, at: p.created_at.toISOString(), author: { id: p.slug, name: p.name, company: p.company, role: p.role, photo: p.photo || null } });
 const POST_SELECT = `select p.id, p.kind, p.body, p.reply_count, p.created_at, m.slug, m.name, m.company, m.role, m.photo from posts p join members m on m.id = p.member_id`;
 
 export async function listPosts(req: ApiRequest, ctx: Ctx): Promise<ApiResponse> {
@@ -33,19 +33,20 @@ export async function createPost(req: ApiRequest, ctx: Ctx): Promise<ApiResponse
   return json({ post: post(rows[0]!) }, 201);
 }
 
-interface RoomRow { slug: string; name: string; emoji: string; topic: string; live: boolean; members: { id: string; photo: string | null; name: string }[] | string; member_count: string }
+interface RoomRow { slug: string; name: string; topic: string; last_message_at: Date | null; members: { id: string; photo: string | null; name: string }[] | string; member_count: string }
 export async function listRooms(_req: ApiRequest, ctx: Ctx): Promise<ApiResponse> {
   const { rows } = await ctx.db.query<RoomRow>(
-    `select r.slug, r.name, r.emoji, r.topic, r.live,
+    `select r.slug, r.name, r.topic,
+            (select max(x.created_at) from room_messages x where x.room_slug = r.slug) as last_message_at,
             (select count(*)::text from room_members rm where rm.room_slug = r.slug) as member_count,
             (select coalesce(json_agg(json_build_object('id', m.slug, 'photo', m.photo, 'name', m.name) order by rm.joined_at), '[]'::json)
                from (select * from room_members rm2 where rm2.room_slug = r.slug order by rm2.joined_at limit 3) rm join members m on m.id = rm.member_id) as members
        from rooms r order by r.sort, r.name`);
-  return json({ rooms: rows.map((r) => { const members = typeof r.members === 'string' ? JSON.parse(r.members) as { id: string; photo: string | null; name: string }[] : r.members; return { slug: r.slug, name: r.name, emoji: r.emoji, topic: r.topic, live: r.live, memberCount: Number(r.member_count), members: members.map((m) => ({ id: m.id, photo: m.photo || monogramDataUri(m.name) })) }; }) });
+  return json({ rooms: rows.map((r) => { const members = typeof r.members === 'string' ? JSON.parse(r.members) as { id: string; photo: string | null; name: string }[] : r.members; return { slug: r.slug, name: r.name, topic: r.topic, lastMessageAt: r.last_message_at ? new Date(r.last_message_at).toISOString() : null, memberCount: Number(r.member_count), members: members.map((m) => ({ id: m.id, name: m.name, photo: m.photo || null })) }; }) });
 }
 
 interface MessageRow { id: string; body: string; created_at: Date; slug: string; name: string; photo: string | null }
-const message = (m: MessageRow) => ({ id: m.id, by: m.slug, text: m.body, at: m.created_at.toISOString(), author: { id: m.slug, name: m.name, photo: m.photo || monogramDataUri(m.name) } });
+const message = (m: MessageRow) => ({ id: m.id, by: m.slug, text: m.body, at: m.created_at.toISOString(), author: { id: m.slug, name: m.name, photo: m.photo || null } });
 const MSG_SELECT = `select x.id, x.body, x.created_at, m.slug, m.name, m.photo from room_messages x join members m on m.id = x.member_id`;
 
 export async function roomMessages(req: ApiRequest, ctx: Ctx, params: Record<string, string>): Promise<ApiResponse> {
@@ -83,7 +84,7 @@ export async function createEndorsement(req: ApiRequest, ctx: Ctx, params: Recor
   try {
     const row = (await ctx.db.query<{ id: string; created_at: Date }>('insert into endorsements (to_member_id, from_member_id, body) values ($1, $2, $3) returning id, created_at', [target.id, member.id, input.body])).rows[0]!;
     await audit(ctx.db, { action: 'endorsement.created', subjectType: 'member', subjectId: target.id, actorUserId: session.user_id, actorMemberId: member.id, data: { endorsement: row.id }, ipHash: ctx.ipHash });
-    return json({ endorsement: { id: row.id, text: input.body, date: row.created_at.toISOString().slice(0, 10), from: { id: member.slug, name: member.name, role: member.role, company: member.company, photo: member.photo || monogramDataUri(member.name) } } }, 201);
+    return json({ endorsement: { id: row.id, text: input.body, date: row.created_at.toISOString().slice(0, 10), from: { id: member.slug, name: member.name, role: member.role, company: member.company, photo: member.photo || null } } }, 201);
   } catch (e) {
     if (isUniqueViolation(e)) throw errors.conflict('already_endorsed', 'You have already endorsed this member. One per person, always public.');
     throw e;

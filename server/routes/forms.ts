@@ -6,8 +6,10 @@ import { sendEmail } from '../lib/email.ts';
 import { rateLimit } from '../lib/ratelimit.ts';
 import { contactSchema, newsletterSchema, reportSchema } from '../lib/validate.ts';
 import { parse } from './_util.ts';
+import { SITE } from '../../src/data/site.js';
 
-export const CONTACT_TO: Record<string, string> = { support: 'support@trulinq.com', fraud: 'trust@trulinq.com', privacy: 'privacy@trulinq.com', enterprise: 'sales@trulinq.com' };
+/* Where each topic goes: the addresses are written once, in src/data/site.js, and shared with the pages. */
+export const CONTACT_TO: Record<string, string> = { support: SITE.email.support, fraud: SITE.email.trust, privacy: SITE.email.privacy, enterprise: SITE.email.sales };
 
 export async function contact(req: ApiRequest, ctx: Ctx): Promise<ApiResponse> {
   await rateLimit(ctx.db, `contact:ip:${ctx.ipHash}`, 10, 3600);

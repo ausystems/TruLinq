@@ -1,54 +1,54 @@
-<footer class="footer panel panel--ink" data-footer>
-    <div class="footer__inner">
+<footer class="footer panel panel--ink">
+  <div class="footer__inner">
     <div class="footer__top">
       <div class="footer__brand">
-        <svg class="wordmark wordmark--light" viewBox="0 0 176 40" aria-hidden="true">
+        <svg class="wordmark" viewBox="0 0 176 40" role="img" aria-label="Trulinq">
           <use href="#tq-mark" x="1" y="1" width="38" height="38"/>
           <text x="48" y="29" class="wordmark__text">Trulinq</text>
         </svg>
-        <p class="footer__tag">A trusted network for entrepreneurs, built around verified identities and verified businesses. Made in Hilo, Hawaiʻi.</p>
-        <p class="footer__honest">We never faked momentum. We built it.</p>
+        <p class="footer__tag">A trusted network for entrepreneurs, built around verified identities and verified businesses.</p>
+        <p class="footer__place">Made in {{site.place}}</p>
       </div>
       <nav class="footer__cols" aria-label="Footer">
         <div>
-          <h4>Network</h4>
+          <h2>Network</h2>
           <a href="/directory/">Directory</a>
           <a href="/match/">Match</a>
           <a href="/rooms/">Rooms</a>
           <a href="/feed/">Feed</a>
         </div>
         <div>
-          <h4>Stamp</h4>
+          <h2>Stamp</h2>
           <a href="/verify/">Get verified</a>
           <a href="/pricing/">Pricing</a>
           <a href="/trust/">Trust Centre</a>
           <a href="/dashboard/">Dashboard</a>
         </div>
         <div>
-          <h4>Company</h4>
+          <h2>Company</h2>
           <a href="/contact/">Contact</a>
           <a href="/privacy/">Privacy</a>
           <a href="/terms/">Terms</a>
-          <a href="mailto:trust@trulinq.com">Report a fake</a>
+          <a href="mailto:{{email.trust}}">Report a fake</a>
         </div>
       </nav>
       <div class="footer__news">
-        <h4>The verified dispatch</h4>
-        <p>One email a month. Real wins, real deals, no engagement farming.</p>
+        <h2>The verified dispatch</h2>
+        <p>One email a month about new members and changes to the network. Nothing else.</p>
         <form class="footer__form" data-newsletter novalidate>
           <label class="sr-only" for="news-email">Email address</label>
-          <input id="news-email" type="email" name="email" placeholder="you@yourbusiness.com" autocomplete="email" required>
-          <button class="btn btn--primary btn--sm" type="submit"><span>Subscribe</span></button>
-          <p class="footer__form-msg" aria-live="polite"></p>
+          <input class="input" id="news-email" type="email" name="email" placeholder="you@yourbusiness.com" autocomplete="email" required>
+          <button class="btn btn--primary" type="submit"><span>Subscribe</span></button>
+          <p class="footer__form-msg" data-newsletter-msg aria-live="polite"></p>
         </form>
       </div>
     </div>
     <div class="footer__bottom">
-      <p>© 2022–2026 Trulinq. Verified connections only.</p>
+      <p>© {{year}} Trulinq</p>
       <div class="footer__legal">
         <a href="/terms/">Terms</a>
         <a href="/privacy/">Privacy</a>
-        <a href="/trust/">Trust</a>
+        <a href="/trust/">Trust Centre</a>
       </div>
     </div>
   </div>

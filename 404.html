@@ -9,35 +9,31 @@
 <body>
   <!--@include(partials/nav.html)-->
   <main id="main" class="page">
-    <section class="panel panel--peach nf">
+    <section class="panel panel--peach nf" aria-labelledby="nf-title">
       <div class="nf__inner">
         <div class="nf__stage" aria-hidden="true">
-          <div class="nf__code">
-            <span class="nf__digit display" data-digit>4</span>
-            <span class="nf__digit display" data-digit>0</span>
-            <span class="nf__digit display" data-digit>4</span>
-          </div>
-          <div class="nf__stamp" data-nf-stamp><span class="nf__stamp-inner">Not verified</span></div>
+          <div class="nf__code"><span>4</span><span>0</span><span>4</span></div>
+          <div class="nf__stamp">Not verified</div>
         </div>
         <div class="nf__copy">
-          <h1 class="display" data-split>This page isn’t real.</h1>
-          <p class="lead" data-reveal>Which is sort of the point of Trulinq. The page you asked for doesn’t exist, was removed, or never passed verification.</p>
-          <ul class="ledger nf__ledger" data-nf-ledger>
-            <li class="ledger__row"><span>Path</span><i></i><b data-nf-path>/</b></li>
+          <h1 id="nf-title" class="display">This page isn’t real.</h1>
+          <p class="lead">Which is sort of the point of Trulinq. The page you asked for doesn’t exist, was moved, or never passed verification.</p>
+          <ul class="ledger nf__ledger" aria-label="What we checked">
+            <li class="ledger__row"><span>Address</span><i></i><b data-nf-path>/</b></li>
             <li class="ledger__row"><span>Status</span><i></i><b>Not found</b></li>
-            <li class="ledger__row"><span>Checked</span><i></i><b data-nf-time>just now</b></li>
             <li class="ledger__row"><span>Verified by</span><i></i><b>No one</b></li>
           </ul>
-          <form class="nf__search" data-nf-search data-reveal data-delay=".05">
-            <label class="sr-only" for="nf-q">Search the directory</label>
-            <input class="input" id="nf-q" type="search" placeholder="Search verified members…" autocomplete="off">
+          <form class="nf__search" data-nf-search role="search">
+            <label class="sr-only" for="nf-q">Search verified members</label>
+            <input class="input" id="nf-q" type="search" placeholder="Search verified members…" autocomplete="off" enterkeyhint="search">
             <button type="submit" class="btn btn--ink"><span>Search</span></button>
           </form>
-          <div class="nf__links" data-reveal data-delay=".1">
-            <a class="pill" href="/directory/">Directory</a>
-            <a class="pill" href="/verify/">Get verified</a>
-            <a class="pill" href="/contact/">Contact</a>
-          </div>
+          <ul class="nf__links">
+            <li><a class="chip" href="/">Home</a></li>
+            <li><a class="chip" href="/directory/">Directory</a></li>
+            <li><a class="chip" href="/verify/">Get verified</a></li>
+            <li><a class="chip" href="/contact/">Contact</a></li>
+          </ul>
         </div>
       </div>
     </section>

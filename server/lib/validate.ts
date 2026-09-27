@@ -1,7 +1,7 @@
 /* Every user-controlled field is validated here, on the server, before it touches a query. */
 import { z } from 'zod';
 
-export const INDUSTRIES = ['Consulting', 'Direct sales/service', 'Energy', 'Logistics', 'Marketing', 'Real Estate', 'Restaurant', 'Technology'] as const;
+export const INDUSTRIES = ['Consulting', 'Direct sales/service', 'Energy', 'Marketing', 'Real Estate', 'Restaurant', 'Technology'] as const;
 export const POST_KINDS = ['Win', 'Hiring', 'Offer', 'Update', 'Ask'] as const;
 
 const trimmed = (max: number, min = 0) => z.string().trim().min(min).max(max);
@@ -28,6 +28,7 @@ export const resetConfirmSchema = z.object({ token: z.string().min(20).max(200),
 
 export const profilePatchSchema = z.object({
   name: trimmed(80, 2).optional(),
+  headline: trimmed(160).optional(),
   role: trimmed(60).optional(),
   company: trimmed(120).optional(),
   city: trimmed(80).optional(),
@@ -46,6 +47,7 @@ export const memberListSchema = z.object({
   q: z.string().trim().max(80).optional(),
   industry: z.string().trim().max(40).optional(),
   sort: z.enum(['newest', 'score', 'az']).default('newest'),
+  status: z.enum(['verified', 'all']).default('verified'),
   page: z.coerce.number().int().min(1).max(1000).default(1),
   limit: z.coerce.number().int().min(1).max(50).default(50)
 });

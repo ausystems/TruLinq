@@ -1,182 +1,221 @@
 import '../../styles/main.css';
 import '../../styles/pages/verify.css';
-import { boot, gsap, ScrollTrigger, reduced, stamp, toast, scrollTo, go as navigate } from '../main.js';
+import { boot, busy, go, stamp, setInvalid, clearOnEdit, reduced } from '../main.js';
 import { INDUSTRIES, loadSession } from '../data.js';
 import { api, ApiError } from '../api.js';
-import { href } from '../ui.js';
+import { href, esc, fmtDate } from '../ui.js';
+import { SITE } from '../../data/site.js';
 
-let fileObj = null; /* the chosen document, kept in memory until the application is submitted */
-
+/* The application is kept in this tab's session storage while it is being written, so a reload or the detour to
+   create an account never loses it. It is cleared the moment the application is submitted. The ID document itself
+   is never stored; it stays in memory until it is uploaded. */
 const KEY = 'tq-verify';
-const state = JSON.parse(sessionStorage.getItem(KEY) || '{"step":0,"values":{},"idtype":"Passport","file":""}');
-const save = () => sessionStorage.setItem(KEY, JSON.stringify(state));
+const blank = () => ({ step: 0, values: {}, idtype: 'Passport' });
+function readState() { try { const s = JSON.parse(sessionStorage.getItem(KEY) || 'null'); return s && typeof s === 'object' ? { ...blank(), ...s, values: { ...(s.values || {}) } } : blank(); } catch { return blank(); } }
+const state = readState();
+const save = () => { try { sessionStorage.setItem(KEY, JSON.stringify(state)); } catch { /* private mode: the form still works, it just won't survive a reload */ } };
+let fileObj = null;
 
-const stage = document.querySelector('[data-stage]');
-const cards = [...stage.querySelectorAll('[data-step]')];
-const stepItems = document.querySelectorAll('[data-step-item]');
-const arcs = document.querySelectorAll('[data-arc]');
-const stepNum = document.querySelector('[data-step-num]');
-const check = document.querySelector('.dossier__check');
+const $ = (s) => document.querySelector(s);
+const cards = [...document.querySelectorAll('[data-step]')];
+const card = (i) => cards.find((c) => c.dataset.step === String(i));
+const MAX_FILE = 10 * 1024 * 1024;
+const FILE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'];
+const adultBy = (() => { const d = new Date(); d.setFullYear(d.getFullYear() - 18); return d.toISOString().slice(0, 10); })();
+const normalize = (v) => (v || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+const codeOK = (v) => { const n = normalize(v).replace(/^TL(?=[A-Z0-9]{6,})/, ''); return n.length >= 6 && n.length <= 12; };
+const websiteOK = (v) => !v.trim() || /^(https?:\/\/)?[a-z0-9-]+(\.[a-z0-9-]+)+(\/\S*)?$/i.test(v.trim());
+const dobOK = (v) => /^\d{4}-\d{2}-\d{2}$/.test(v) && v <= adultBy && v >= '1900-01-01';
 
-function card(i) { return cards.find((c) => c.dataset.step === String(i)); }
-
-function fmtCode(v) {
-  const raw = v.toUpperCase().replace(/[^A-Z0-9]/g, '').replace(/^TL/, '').slice(0, 8);
-  let out = 'TL';
-  if (raw.length) out += '-' + raw.slice(0, 4);
-  if (raw.length > 4) out += '-' + raw.slice(4, 8);
-  return out;
-}
-
-function setInvalid(field, bad) { field.classList.toggle('is-invalid', bad); }
-function validate(i) {
-  const c = card(i); let ok = true;
-  const req = (sel, test = (v) => v.trim().length > 1) => { const el = c.querySelector(sel); const bad = !test(el.value || ''); setInvalid(el.closest('.field'), bad); if (bad && ok) { el.focus(); } ok = ok && !bad; };
-  if (i === 0) req('#v-code', (v) => /^TL-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(v));
-  if (i === 1) {
-    req('#v-first'); req('#v-last');
-    req('#v-dob', (v) => v && new Date(v) <= new Date('2008-09-18'));
-    req('#v-country', (v) => v.length > 0);
-    const f = c.querySelector('[data-file]'); const bad = !state.file; setInvalid(f.closest('.field'), bad); ok = ok && !bad;
-  }
-  if (i === 2) {
-    req('#v-biz'); req('#v-reg', (v) => v.trim().length > 3); req('#v-state');
-    req('#v-site', (v) => !v.trim() || /^(https?:\/\/)?[a-z0-9-]+(\.[a-z0-9-]+)+(\/.*)?$/i.test(v.trim()));
-    req('#v-ind', (v) => v.length > 0); req('#v-role');
-    const a = c.querySelector('[data-auth]'); const bad = !a.checked; setInvalid(a.closest('.field'), bad); ok = ok && !bad;
-  }
-  if (i === 3) { const t = c.querySelector('[data-terms]'); const bad = !t.checked; setInvalid(t.closest('.field'), bad); ok = ok && !bad; }
-  return ok;
-}
+/* What each step needs, checked against the values the step holds. */
+const RULES = {
+  0: [['code', (v) => codeOK(v || '')]],
+  1: [['first', (v) => (v || '').trim().length >= 1], ['last', (v) => (v || '').trim().length >= 1], ['dob', (v) => dobOK(v || '')], ['country', (v) => !!v]],
+  2: [['business', (v) => (v || '').trim().length >= 2], ['registration', (v) => (v || '').trim().length >= 4], ['state', (v) => (v || '').trim().length >= 2], ['website', (v) => websiteOK(v || '')], ['industry', (v) => !!v], ['role', (v) => (v || '').trim().length >= 2], ['authorised', (v) => v === true]],
+  3: [['terms', (v) => v === true]]
+};
 
 function collect(i) {
-  card(i).querySelectorAll('input[name], select[name]').forEach((el) => { state.values[el.name] = el.type === 'checkbox' ? el.checked : el.value; });
+  const c = card(i); if (!c || c.tagName !== 'FORM') return;
+  c.querySelectorAll('input[name], select[name]').forEach((el) => {
+    if (el.type === 'file') return;
+    if (el.type === 'radio') { if (el.checked) state.idtype = el.value; return; }
+    state.values[el.name] = el.type === 'checkbox' ? el.checked : el.value;
+  });
   save();
 }
 function restore() {
-  cards.forEach((c) => c.querySelectorAll('input[name], select[name]').forEach((el) => { if (state.values[el.name] === undefined) return; if (el.type === 'checkbox') el.checked = !!state.values[el.name]; else el.value = state.values[el.name]; }));
-  if (state.file) { const n = document.querySelector('[data-file-name]'); n.hidden = false; n.textContent = state.file; }
-  document.querySelectorAll('[data-idtype-btn]').forEach((b) => { const on = b.dataset.idtypeBtn === state.idtype; b.classList.toggle('is-active', on); b.setAttribute('aria-pressed', String(on)); });
+  cards.forEach((c) => c.querySelectorAll('input[name], select[name]').forEach((el) => {
+    if (el.type === 'file') return;
+    if (el.type === 'radio') { el.checked = el.value === state.idtype; return; }
+    const v = state.values[el.name];
+    if (v === undefined) return;
+    if (el.type === 'checkbox') el.checked = !!v; else el.value = v;
+  }));
+}
+
+function validate(i) {
+  const c = card(i); let first = null;
+  for (const [name, test] of RULES[i]) {
+    const el = c.querySelector(`[name="${name}"]`);
+    const ok = test(el.type === 'checkbox' ? el.checked : el.value);
+    setInvalid(el, !ok);
+    if (!ok && !first) first = el;
+  }
+  if (i === 1) {
+    const f = c.querySelector('[data-file]');
+    const bad = !fileObj ? 'Add a photo or scan of your ID so a reviewer can match it.' : !FILE_TYPES.includes(fileObj.type) ? 'Use a JPG, PNG, WebP or PDF file.' : fileObj.size > MAX_FILE ? 'That file is over 10 MB. Try a smaller photo or scan.' : '';
+    setInvalid(f, !!bad, bad || undefined);
+    if (bad && !first) first = f;
+  }
+  if (first) first.focus();
+  return !first;
+}
+/* The first step whose saved values are incomplete (after a reload or the account detour). */
+const firstIncomplete = () => [0, 1, 2].find((i) => RULES[i].some(([name, test]) => !test(state.values[name])));
+
+function paint(i) {
+  document.querySelectorAll('[data-step-item]').forEach((li, j) => { li.toggleAttribute('aria-current', j === i); li.classList.toggle('is-done', j < i); });
+  document.querySelectorAll('[data-arc]').forEach((a, j) => a.classList.toggle('is-done', j < i));
+  $('[data-step-num]').textContent = Math.min(i + 1, 4);
+  $('[data-progress-text]').setAttribute('aria-label', i >= 4 ? 'Application submitted' : `Step ${i + 1} of 4`);
 }
 
 function summary() {
   const v = state.values;
   const rows = [
-    ['Invitation', v.code, 0], ['Name', `${v.first || ''} ${v.last || ''}`.trim(), 1], ['ID', `${state.idtype} · ${v.country || ''}`, 1], ['Document', state.file, 1],
-    ['Business', v.business, 2], ['Registration', `${v.registration || ''} · ${v.state || ''}`, 2], ['Website', v.website || 'none yet', 2], ['Industry', v.industry, 2], ['Role', v.role, 2]
+    ['Invitation code', normalize(v.code), 0], ['Name', `${v.first || ''} ${v.last || ''}`.trim(), 1], ['Date of birth', v.dob ? fmtDate(v.dob) : '', 1],
+    ['ID', [state.idtype, v.country].filter(Boolean).join(' · '), 1], ['Document', fileObj ? fileObj.name : '', 1],
+    ['Business', v.business, 2], ['Registration', [v.registration, v.state].filter(Boolean).join(' · '), 2], ['Website', v.website || 'None', 2], ['Industry', v.industry, 2], ['Your role', v.role, 2]
   ];
-  document.querySelector('[data-summary]').innerHTML = rows.map(([k, val, s]) => `<li class="ledger__row"><span>${k}</span><i></i><b>${val || '—'} <a href="#" data-goto="${s}">Edit</a></b></li>`).join('');
+  $('[data-summary]').innerHTML = rows.map(([k, val, s]) => `<li class="ledger__row"><span>${k}</span><i></i><b>${val ? esc(val) : `<span class="is-missing">${k === 'Document' ? 'Not attached' : 'Missing'}</span>`}<button type="button" class="dossier__edit" data-goto="${s}" aria-label="Edit ${k.toLowerCase()}">Edit</button></b></li>`).join('');
 }
 
-function paint(i) {
-  stepItems.forEach((li, j) => { li.toggleAttribute('aria-current', j === i); li.classList.toggle('is-done', j < i); });
-  arcs.forEach((a, j) => a.classList.toggle('is-done', j < i));
-  stepNum.textContent = Math.min(i + 1, 4);
+let current = 0;
+function show(i, { focus = true } = {}) {
+  cards.forEach((c) => (c.hidden = c.dataset.step !== String(i)));
+  current = i;
+  if (typeof i === 'number') { state.step = i; save(); }
+  if (i === 3) summary();
+  paint(i === 'done' ? 4 : i);
+  if (!focus) return;
+  const head = card(i).querySelector('h2');
+  head.focus({ preventScroll: true });
+  const top = $('[data-stage]').getBoundingClientRect().top;
+  if (top < 0 || top > innerHeight * .6) $('[data-stage]').scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
 }
 
-let current = state.step;
-function go(next, dir = 1) {
-  if (next === current && card(next) && !card(next).hidden) return;
-  const from = card(current), to = card(next);
-  if (next === 3) summary();
-  const show = () => {
-    to.hidden = false;
-    const first = to.querySelector('input:not([disabled]):not([type=file]), select, button');
-    if (reduced) { paint(next); first && first.focus({ preventScroll: true }); return; }
-    gsap.fromTo(to, { y: 40 * dir, opacity: 0 }, { y: 0, opacity: 1, duration: .9, ease: 'expo.out', clearProps: 'transform', onComplete: () => first && first.focus({ preventScroll: true }) });
-    paint(next);
-  };
-  if (from && !from.hidden && !reduced) gsap.to(from, { y: -30 * dir, opacity: 0, duration: .4, ease: 'power2.in', onComplete: () => { from.hidden = true; gsap.set(from, { clearProps: 'all' }); show(); } });
-  else { if (from) from.hidden = true; show(); }
-  current = next; state.step = typeof next === 'number' ? next : 3; save();
-  if (window.scrollY > stage.getBoundingClientRect().top + window.scrollY - 120) scrollTo(stage, { offset: -110 });
+async function checkCode(input, { focus = true } = {}) {
+  try {
+    const r = await api.get(`/referrals/${encodeURIComponent(normalize(input.value))}`);
+    $('[data-code-hint]').innerHTML = `Invited by <b>${esc(r.referrer.name)}</b>.`;
+    return true;
+  } catch (e) {
+    if (e instanceof ApiError && (e.status === 404 || e.status === 400)) { setInvalid(input, true, 'That invitation code isn’t valid. Check it with the member who gave it to you.'); if (focus) input.focus(); return false; }
+    return true; /* the backend can't be reached: the code is checked again when the application is submitted */
+  }
 }
 
-async function finish() {
+async function submit(btn) {
+  const error = $('[data-submit-error]');
+  error.hidden = true;
   collect(3);
+  if (!validate(3)) return;
+  const gap = firstIncomplete();
+  if (gap !== undefined) { show(gap); validate(gap); return; }
   const v = state.values;
-  const session = await loadSession();
+  busy(btn, true);
+  const session = await loadSession(true);
   if (!session.user) {
-    toast('Create your account to submit the application.');
-    navigate(href(`/auth/?mode=signup&next=${encodeURIComponent('/verify/')}&ref=${encodeURIComponent(v.code || '')}`), 'Create account');
+    busy(btn, false);
+    if (session.offline) { error.textContent = `Applications can’t be sent right now because accounts can’t be reached. Everything you entered is saved in this tab; try again in a moment or write to ${SITE.email.support}.`; error.hidden = false; return; }
+    /* an account is needed first; the application waits in this tab and picks up where it left off */
+    go(href(`/auth/?mode=signup&next=${encodeURIComponent(href('/verify/'))}&ref=${encodeURIComponent(normalize(v.code))}`));
     return;
   }
   const payload = {
-    identity: { first: v.first, last: v.last, dob: v.dob, country: v.country, idType: state.idtype },
-    business: { name: v.business, registration: v.registration, registeredIn: v.state, website: v.website || '', industry: v.industry, role: v.role, authorised: !!v.authorised },
+    identity: { first: v.first.trim(), last: v.last.trim(), dob: v.dob, country: v.country, idType: state.idtype },
+    business: { name: v.business.trim(), registration: v.registration.trim(), registeredIn: v.state.trim(), website: (v.website || '').trim(), industry: v.industry, role: v.role.trim(), authorised: !!v.authorised },
     terms: !!v.terms
   };
   let req;
   try { req = (await api.post('/me/verification', payload)).request; }
   catch (e) {
-    if (e instanceof ApiError && e.code === 'request_open') req = { reference: e.details.reference, submittedAt: new Date().toISOString() };
-    else if (e instanceof ApiError && e.code === 'already_verified') { toast('Your profile is already verified.'); return; }
-    else { toast(e instanceof ApiError && e.status !== 0 && e.status !== 503 ? e.message : 'The application could not be submitted right now. Try again in a moment.'); return; }
+    busy(btn, false);
+    if (e instanceof ApiError && e.code === 'request_open') { error.textContent = `You already have an application in review (reference ${e.details && e.details.reference ? e.details.reference : 'on file'}). Its status is on your dashboard.`; error.hidden = false; return; }
+    if (e instanceof ApiError && e.code === 'already_verified') { error.textContent = 'Your profile is already verified. Your stamp is active.'; error.hidden = false; return; }
+    error.textContent = e instanceof ApiError && e.status !== 0 && e.status !== 503 ? e.message : 'The application couldn’t be sent right now. Everything you entered is still here; try again in a moment.';
+    error.hidden = false; return;
   }
-  let docNote = '';
+  let docLine = fileObj ? 'Uploaded' : 'Not attached; a reviewer will ask for it by email';
   if (fileObj && req.id) {
     try { await api.put(`/me/verification/${req.id}/documents?kind=identity&name=${encodeURIComponent(fileObj.name)}`, fileObj, { 'content-type': fileObj.type || 'application/octet-stream' }); }
-    catch (e) { docNote = e instanceof ApiError && e.code === 'storage_not_configured' ? ' Document storage is not connected yet, so a reviewer will ask for your ID by email.' : ' The document could not be uploaded; a reviewer will ask for it by email.'; }
+    catch (e) { docLine = e instanceof ApiError && e.code === 'storage_not_configured' ? 'Not stored yet; a reviewer will ask for it by email' : 'Upload failed; a reviewer will ask for it by email'; }
   }
-  const ref = req.reference;
-  const now = new Date(req.submittedAt);
-  const eta = new Date(now); let add = 2; while (add > 0) { eta.setDate(eta.getDate() + 1); if (eta.getDay() % 6) add--; }
-  const fmt = (d) => d.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
-  document.querySelector('[data-done-ledger]').innerHTML = [
-    ['Reference no.', ref], ['Submitted', fmt(now)], ['Estimated decision', fmt(eta)], ['Status', 'In review']
-  ].map(([k, v]) => `<li class="ledger__row"><span>${k}</span><i></i><b>${v}</b></li>`).join('');
-  const done = card('done');
-  const from = card(3);
-  const reveal = () => {
-    from.hidden = true; done.hidden = false;
-    paint(4); arcs.forEach((a) => a.classList.add('is-done'));
-    if (reduced) { done.querySelector('.seal').classList.add('is-stamped'); gsap.set(check, { strokeDashoffset: 0 }); gsap.set('.dossier__progress-num', { opacity: 0 }); return; }
-    gsap.fromTo(done, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: .9, ease: 'expo.out', clearProps: 'transform' });
-    stamp(done.querySelector('.seal'), { delay: .5, rotate: -8 });
-    gsap.to(check, { strokeDashoffset: 0, duration: .8, ease: 'power2.inOut', delay: .3 });
-    gsap.to('.dossier__progress-num', { opacity: 0, duration: .3, delay: .3 });
-  };
-  if (reduced) reveal(); else gsap.to(from, { y: -30, opacity: 0, duration: .4, ease: 'power2.in', onComplete: reveal });
-  sessionStorage.removeItem(KEY);
-  toast('Application received. Reference ' + ref + '.' + docNote);
+  busy(btn, false);
+  const submitted = new Date(req.submittedAt || Date.now());
+  const eta = new Date(submitted); let add = SITE.review.businessDays; while (add > 0) { eta.setDate(eta.getDate() + 1); if (eta.getDay() % 6) add--; }
+  const rows = [['Reference', req.reference], ['Submitted', fmtDate(submitted.toISOString())], ['Decision expected by', fmtDate(eta.toISOString())], ['Status', 'In review'], ['ID document', docLine]];
+  const ledger = $('[data-done-ledger]');
+  ledger.innerHTML = rows.map(() => '<li class="ledger__row"><span></span><i></i><b></b></li>').join('');
+  ledger.querySelectorAll('.ledger__row').forEach((li, i) => { li.querySelector('span').textContent = rows[i][0]; li.querySelector('b').textContent = rows[i][1]; });
+  try { sessionStorage.removeItem(KEY); } catch { /* nothing stored */ }
+  show('done');
+  stamp(card('done').querySelector('.seal'), { delay: .25, rotate: -8 });
 }
 
 function wire() {
-  document.querySelector('[data-industries]').innerHTML += INDUSTRIES.map((i) => `<option>${i}</option>`).join('');
-  const code = document.querySelector('#v-code');
-  code.addEventListener('input', () => { const pos = code.selectionStart; code.value = fmtCode(code.value); });
-  code.addEventListener('focus', () => { if (!code.value) code.value = 'TL-'; });
-  const ref = new URLSearchParams(location.search).get('ref'); if (ref && !code.value) { code.value = fmtCode(ref); state.values.code = code.value; save(); }
-  document.querySelector('[data-google]').addEventListener('click', () => toast('Google sign-in is not set up yet. Use your email and password.'));
-  document.querySelectorAll('[data-idtype-btn]').forEach((b) => b.addEventListener('click', () => { state.idtype = b.dataset.idtypeBtn; save(); restore(); }));
-  const drop = document.querySelector('[data-drop]'), file = drop.querySelector('[data-file]'), name = drop.querySelector('[data-file-name]');
-  const setFile = (f) => { if (!f) return; fileObj = f; state.file = f.name; save(); name.hidden = false; name.textContent = f.name + ' · ' + Math.max(1, Math.round(f.size / 1024)) + ' KB'; setInvalid(drop.closest('.field'), false); };
+  $('[data-industries]').insertAdjacentHTML('beforeend', INDUSTRIES.map((i) => `<option value="${esc(i)}">${esc(i)}</option>`).join(''));
+  const dob = $('#v-dob'); dob.max = adultBy; dob.min = '1900-01-01';
+  const code = $('#v-code');
+  code.addEventListener('input', () => { const pos = code.selectionStart, before = code.value; code.value = before.toUpperCase().replace(/[^A-Z0-9-]/g, ''); if (code.value.length === before.length) code.setSelectionRange(pos, pos); });
+  const ref = new URLSearchParams(location.search).get('ref');
+  if (ref && !state.values.code) { state.values.code = ref.toUpperCase().replace(/[^A-Z0-9-]/g, ''); save(); }
+
+  const drop = $('[data-drop]'), file = drop.querySelector('[data-file]'), name = drop.querySelector('[data-file-name]');
+  const setFile = (f) => {
+    if (!f) return;
+    fileObj = f;
+    drop.classList.add('has-file');
+    name.textContent = `${f.name} · ${Math.max(1, Math.round(f.size / 1024))} KB`;
+    setInvalid(file, false);
+  };
   file.addEventListener('change', () => setFile(file.files[0]));
   ['dragenter', 'dragover'].forEach((ev) => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.add('is-over'); }));
   ['dragleave', 'drop'].forEach((ev) => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.remove('is-over'); }));
   drop.addEventListener('drop', (e) => setFile(e.dataTransfer.files[0]));
+
   cards.forEach((c) => {
     if (c.tagName !== 'FORM') return;
     const i = +c.dataset.step;
+    clearOnEdit(c);
+    c.addEventListener('change', () => collect(i));
     c.addEventListener('submit', async (e) => {
-      e.preventDefault(); if (!validate(i)) return; collect(i);
-      if (i === 0) {
-        /* the invitation code must belong to a real member */
-        try { await api.get(`/referrals/${encodeURIComponent(code.value.replace(/[^A-Z0-9]/gi, ''))}`); }
-        catch (err) { if (err instanceof ApiError && (err.status === 404 || err.status === 400)) { setInvalid(code.closest('.field'), true); code.focus(); return; } }
-      }
-      if (i === 3) finish(); else go(i + 1, 1);
+      e.preventDefault();
+      const btn = c.querySelector('button[type=submit]');
+      if (i === 3) { submit(btn); return; }
+      collect(i);
+      if (!validate(i)) return;
+      if (i === 0) { busy(btn, true); const ok = await checkCode(code); busy(btn, false); if (!ok) return; }
+      show(i + 1);
     });
-    c.querySelectorAll('.input, select').forEach((el) => el.addEventListener('input', () => setInvalid(el.closest('.field'), false)));
-    c.querySelectorAll('input[type=checkbox]').forEach((el) => el.addEventListener('change', () => setInvalid(el.closest('.field'), false)));
-    const back = c.querySelector('[data-back]'); back && back.addEventListener('click', () => { collect(i); go(i - 1, -1); });
+    const back = c.querySelector('[data-back]');
+    if (back) back.addEventListener('click', () => { collect(i); show(i - 1); });
   });
-  stage.addEventListener('click', (e) => { const a = e.target.closest('[data-goto]'); if (!a) return; e.preventDefault(); go(+a.dataset.goto, -1); });
+  $('[data-stage]').addEventListener('click', (e) => { const b = e.target.closest('[data-goto]'); if (b) show(+b.dataset.goto); });
 }
 
-boot(async () => { wire(); restore(); }, () => {
-  cards.forEach((c) => (c.hidden = true));
-  const c = card(state.step) || card(0); c.hidden = false; paint(state.step); current = state.step;
-  if (!reduced) gsap.from(c, { y: 40, opacity: 0, duration: 1, ease: 'expo.out', delay: .2, clearProps: 'transform' });
-  if (!reduced) gsap.from('.dossier__progress', { scale: .8, opacity: 0, duration: 1, ease: 'back.out(1.6)', delay: .1 });
+boot(async () => {
+  wire(); restore();
+  const session = await loadSession();
+  const m = session.member;
+  if (m && (m.status === 'verified' || m.status === 'pending')) {
+    const note = document.createElement('p');
+    note.className = 'form-note';
+    note.innerHTML = m.status === 'verified' ? `Your profile is already verified. <a class="link" href="${href('/dashboard/')}">Open your dashboard</a>` : `Your application is in review. <a class="link" href="${href('/dashboard/')}">See its status</a>`;
+    card(0).querySelector('.dossier__card-head').appendChild(note);
+  }
+  const start = Math.min(state.step || 0, 3);
+  show(start === 3 && firstIncomplete() !== undefined ? firstIncomplete() : start, { focus: false });
+  if (state.values.code && codeOK(state.values.code)) checkCode($('#v-code'), { focus: false });
 });

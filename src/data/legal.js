@@ -1,16 +1,19 @@
-/* Legal clauses, verbatim from trulinqid.com, with plain-language summaries. */
+/* Legal clauses, verbatim from the live Trulinq product, with plain-language summaries. Contact addresses come from
+   src/data/site.js. */
+import { SITE } from './site.js';
+
 export const PRIVACY = {
   title: 'Privacy policy',
   summary: 'We collect what we need to verify you and show your public profile, keep your documents private, never sell data, and delete everything when you ask.',
-  email: 'privacy@trulinq.com',
+  email: SITE.email.privacy,
   sections: [
     { h: 'What we collect', short: 'Your account details, the business details you choose to publish, and the documents you submit for verification.', body: 'Account details (email, name), business details you choose to publish (business name, role, industry, location, website, bio), and verification materials you submit (legal name, registration number, government ID document).' },
     { h: 'How we use it', short: 'To run your account, review your application, issue or revoke the stamp, show your profile, and stop fraud.', body: 'To create your account, review your verification application, issue or revoke the Trulinq Verified stamp, display your public profile in the directory, and protect members from impersonation and fraud.' },
     { h: 'What is public', short: 'Your profile fields and verification status. Never your ID, registration number or reviewer notes.', body: 'Only your profile fields and verification status appear publicly. Government ID documents, registration numbers and reviewer notes are never shown publicly and are readable only by you and the Trulinq review team.' },
     { h: 'Storage and security', short: 'Documents sit in a private bucket with per-user access. The database uses row-level security.', body: 'Verification documents are stored in a private storage bucket with per-user access rules. Database access is protected by row-level security so members can only read their own private records.' },
     { h: 'Sharing', short: 'We do not sell personal data. Only the providers that run the platform, and the law, ever see it.', body: 'We do not sell personal data. We share information only with service providers required to run the platform (hosting, database, authentication) and where required by law.' },
-    { h: 'Retention and deletion', short: 'Documents stay only as long as your verified status needs them. Ask and we delete your account and documents.', body: 'Verification documents are kept only as long as needed to support your verified status and to resolve disputes. You can request deletion of your account and documents at any time by emailing privacy@trulinq.com.' },
-    { h: 'Your rights', short: 'Access, correct, export or delete your data. We answer within 30 days.', body: 'You can access, correct, export or delete your data. Email privacy@trulinq.com and we will respond within 30 days.' },
+    { h: 'Retention and deletion', short: 'Documents stay only as long as your verified status needs them. Ask and we delete your account and documents.', body: `Verification documents are kept only as long as needed to support your verified status and to resolve disputes. You can request deletion of your account and documents at any time by emailing ${SITE.email.privacy}.` },
+    { h: 'Your rights', short: 'Access, correct, export or delete your data. We answer within 30 days.', body: `You can access, correct, export or delete your data. Email ${SITE.email.privacy} and we will respond within 30 days.` },
     { h: 'Cookies', short: 'Only what keeps you signed in. No advertising trackers.', body: 'We use only the storage strictly necessary to keep you signed in. We do not run third-party advertising trackers.' }
   ]
 };
@@ -18,7 +21,7 @@ export const PRIVACY = {
 export const TERMS = {
   title: 'Terms of service',
   summary: 'Be 18 and honest, understand the stamp is a point-in-time check rather than a guarantee, know we can revoke it, and accept that review fees pay for a person’s time.',
-  email: 'support@trulinq.com',
+  email: SITE.email.support,
   sections: [
     { h: 'Your account', short: 'Be at least 18, tell the truth, and keep your password to yourself.', body: 'You must be at least 18 and provide accurate information. You are responsible for activity on your account and for keeping your password secure.' },
     { h: 'Verification', short: 'Applying does not mean approval. The stamp confirms a check at a point in time, not a guarantee.', body: 'Submitting an application does not guarantee approval. The Trulinq Verified stamp confirms that we checked an identity and a business at a point in time. It is not an endorsement, guarantee of performance, or financial advice.' },

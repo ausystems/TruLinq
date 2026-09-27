@@ -10,7 +10,14 @@ export class ApiError extends Error {
   field(path) { const issues = this.details && this.details.issues; if (!issues) return null; const hit = issues.find((i) => i.path === path); return hit ? hit.message : null; }
 }
 
+/* When the deployment has no database, the API answers 503 database_unavailable to everything. The tab remembers
+   that for a minute, so pages go straight to their fallback instead of repeating requests that cannot succeed. */
+const DOWN_KEY = 'tq-api-down', DOWN_MS = 60_000;
+const knownDown = () => { try { return Date.now() - Number(sessionStorage.getItem(DOWN_KEY) || 0) < DOWN_MS; } catch { return false; } };
+const markDown = () => { try { sessionStorage.setItem(DOWN_KEY, String(Date.now())); } catch { /* storage unavailable */ } };
+
 async function request(method, path, { body, raw, headers } = {}) {
+  if (knownDown()) throw new ApiError(503, 'database_unavailable', 'The backend has no database available right now.');
   const init = { method, credentials: 'include', headers: { 'x-requested-with': 'fetch', ...(headers || {}) } };
   if (raw !== undefined) init.body = raw;
   else if (body !== undefined) { init.headers['content-type'] = 'application/json'; init.body = JSON.stringify(body); }
@@ -22,6 +29,7 @@ async function request(method, path, { body, raw, headers } = {}) {
   if (text) { try { data = JSON.parse(text); } catch { data = null; } }
   if (!res.ok) {
     const e = (data && data.error) || {};
+    if (res.status === 503 && e.code === 'database_unavailable') markDown();
     throw new ApiError(res.status, e.code || 'error', e.message || `Request failed (${res.status}).`, e.details);
   }
   return data;
@@ -35,4 +43,4 @@ export const api = {
 };
 
 /** True when the API answered with a "database not configured" style failure, i.e. the deployment has no backend yet. */
-export const isBackendUnavailable = (e) => e instanceof ApiError && (e.status === 0 || e.status === 503 || e.status === 404 && e.code === 'error');
+export const isBackendUnavailable = (e) => e instanceof ApiError && (e.status === 0 || e.status === 503 || e.status === 502 || e.status === 504 || (e.status === 404 && e.code === 'error'));

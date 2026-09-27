@@ -1,5 +1,6 @@
 /* Environment: parsed once, server-only. Nothing here is ever sent to the browser. */
 import { z } from 'zod';
+import { SITE } from '../src/data/site.js';
 
 const schema = z.object({
   NODE_ENV: z.string().default('development'),
@@ -7,7 +8,7 @@ const schema = z.object({
   PGLITE_DIR: z.string().default('.data/pglite'),
   ALLOWED_ORIGINS: z.string().default(''),
   ADMIN_EMAILS: z.string().default(''),
-  APP_ORIGIN: z.string().default(''),
+  APP_ORIGIN: z.string().default(SITE.url),
   RESEND_API_KEY: z.string().optional(),
   EMAIL_FROM: z.string().default('Trulinq <no-reply@trulinq.com>'),
   BLOB_READ_WRITE_TOKEN: z.string().optional(),

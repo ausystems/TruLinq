@@ -14,13 +14,14 @@ const PUBLIC_WHERE = `m.visibility = 'public' and m.verification_status = 'verif
 
 export async function listMembers(req: ApiRequest, _ctx: Ctx): Promise<ApiResponse> {
   const q = parse(memberListSchema, Object.fromEntries(req.query.entries()));
-  const where: string[] = [PUBLIC_WHERE];
+  /* "Verified only" off: public members still in review are listed too. Revoked stamps are never listed. */
+  const where: string[] = [q.status === 'all' ? `m.visibility = 'public' and m.verification_status in ('verified', 'pending', 'unverified')` : PUBLIC_WHERE];
   const params: unknown[] = [];
   if (q.industry && q.industry !== 'All') { params.push(q.industry); where.push(`m.industry = $${params.length}`); }
   if (q.q) {
     for (const word of q.q.toLowerCase().split(/\s+/).filter(Boolean).slice(0, 6)) {
       params.push(`%${word.replace(/[%_\\]/g, '\\$&')}%`);
-      where.push(`lower(concat_ws(' ', m.name, m.company, m.city, m.region, m.country, m.industry, m.role, m.offers, m.looking)) like $${params.length} escape '\\'`);
+      where.push(`lower(concat_ws(' ', m.name, m.headline, m.company, m.city, m.region, m.country, m.industry, m.role, m.offers, m.looking)) like $${params.length} escape '\\'`);
     }
   }
   const order = q.sort === 'score' ? 'coalesce(s.total, 300) desc, m.name asc' : q.sort === 'az' ? 'm.name asc' : 'm.verified_on desc nulls last, m.created_at desc';
@@ -50,14 +51,13 @@ export async function getMember(req: ApiRequest, ctx: Ctx, params: Record<string
          from ordered o, me where o.rn in ((select rn from me) - 1, (select rn from me) + 1)`, [slug])
   ]);
   const { serializeMember: ser } = await import('../lib/members.ts');
-  const { monogramDataUri } = await import('../lib/members.ts');
   const first = (await ctx.db.query<{ slug: string }>(`select slug from members m where ${PUBLIC_WHERE} order by joined_on, slug limit 1`)).rows[0]?.slug ?? slug;
   const last = (await ctx.db.query<{ slug: string }>(`select slug from members m where ${PUBLIC_WHERE} order by joined_on desc, slug desc limit 1`)).rows[0]?.slug ?? slug;
   const prev = neighbours.rows.find((n) => n.pos === 'prev')?.slug ?? last;
   const next = neighbours.rows.find((n) => n.pos === 'next')?.slug ?? first;
   return json({
     member: ser(row),
-    endorsements: endorsements.rows.map((e) => ({ id: e.id, text: e.body, date: e.created_at.toISOString().slice(0, 10), from: { id: e.from_slug, name: e.from_name, role: e.from_role, company: e.from_company, photo: e.from_photo || monogramDataUri(e.from_name) } })),
+    endorsements: endorsements.rows.map((e) => ({ id: e.id, text: e.body, date: e.created_at.toISOString().slice(0, 10), from: { id: e.from_slug, name: e.from_name, role: e.from_role, company: e.from_company, photo: e.from_photo || null } })),
     posts: posts.rows.map((p) => ({ id: p.id, by: row.slug, kind: p.kind, text: p.body, replies: p.reply_count, at: p.created_at.toISOString() })),
     prev, next
   });
@@ -80,19 +80,18 @@ export async function getMe(_req: ApiRequest, ctx: Ctx): Promise<ApiResponse> {
     ctx.db.query<PostRow>('select id, kind, body, reply_count, created_at from posts where member_id = $1 order by created_at desc limit 20', [member.id])
   ]);
   const v = verification.rows[0];
-  const { monogramDataUri } = await import('../lib/members.ts');
   return json({
     user: publicUser(session),
     member: { ...privateMember(fresh, ctx.env), email: session.email, completeness: completeness(fresh), createdAt: fresh.created_at.toISOString() },
     verification: v ? { id: v.id, reference: v.reference, status: v.status, submittedAt: v.submitted_at.toISOString(), reviewStartedAt: v.review_started_at?.toISOString() ?? null, decidedAt: v.decided_at?.toISOString() ?? null, note: v.decision_note, identity: { idType: v.identity['idType'] ?? null, country: v.identity['country'] ?? null }, business: { name: v.business['name'] ?? null, registration: v.business['registration'] ?? null, registeredIn: v.business['registeredIn'] ?? null, website: v.business['website'] ?? null }, documents: Number(v.documents) } : null,
     subscription: subscription.rows[0] ? { ...subscription.rows[0], current_period_end: subscription.rows[0].current_period_end ? String(subscription.rows[0].current_period_end).slice(0, 10) : null } : null,
     referrals: { count: Number(referrals.rows[0]?.n ?? 0), referredBy: referrer.rows[0] ? { id: referrer.rows[0].slug, name: referrer.rows[0].name } : null },
-    endorsements: endorsements.rows.map((e) => ({ id: e.id, text: e.body, date: e.created_at.toISOString().slice(0, 10), from: { id: e.from_slug, name: e.from_name, role: e.from_role, company: e.from_company, photo: e.from_photo || monogramDataUri(e.from_name) } })),
+    endorsements: endorsements.rows.map((e) => ({ id: e.id, text: e.body, date: e.created_at.toISOString().slice(0, 10), from: { id: e.from_slug, name: e.from_name, role: e.from_role, company: e.from_company, photo: e.from_photo || null } })),
     posts: posts.rows.map((p) => ({ id: p.id, by: fresh.slug, kind: p.kind, text: p.body, replies: p.reply_count, at: p.created_at.toISOString() }))
   });
 }
 
-const PATCHABLE = ['name', 'role', 'company', 'city', 'region', 'country', 'industry', 'bio', 'offers', 'looking', 'website', 'founded', 'visibility'] as const;
+const PATCHABLE = ['name', 'headline', 'role', 'company', 'city', 'region', 'country', 'industry', 'bio', 'offers', 'looking', 'website', 'founded', 'visibility'] as const;
 
 export async function patchMe(req: ApiRequest, ctx: Ctx): Promise<ApiResponse> {
   const { session, member } = requireMember(ctx);

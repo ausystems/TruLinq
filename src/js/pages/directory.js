@@ -1,132 +1,124 @@
 import '../../styles/main.css';
 import '../../styles/pages/directory.css';
-import { boot, gsap, ScrollTrigger, reduced, hydrateSeals, initStamps, toast, suspend, restore } from '../main.js';
-import { Flip } from 'gsap/Flip';
-import { idCard, industryPill, INDUSTRY, scoreOf, gradeOf, photo, fmtDate, sealSVG, href } from '../ui.js';
+import { boot } from '../main.js';
+import { idCard, portrait, seal, esc, href, scoreOf, gradeOf, fmtDate, isVerified, statusOf, arrowIcon } from '../ui.js';
 import { loadMembers, loadStats, INDUSTRIES } from '../data.js';
 
-let MEMBERS = []; /* verified, public members from GET /api/members */
-
-gsap.registerPlugin(Flip);
-
-const state = { q: '', industry: 'All', verified: true, sort: 'newest', view: 'cards' };
-const grid = document.querySelector('[data-grid]');
-const regWrap = document.querySelector('[data-register]');
-const regRows = document.querySelector('[data-register-rows]');
-const countEl = document.querySelector('[data-count]');
-const emptyEl = document.querySelector('[data-empty]');
-const resets = document.querySelectorAll('[data-reset]');
-let cardEls = new Map(), rowEls = new Map();
+/* The list the page shows: verified, public members, or everyone public when "Verified only" is switched off.
+   Revoked profiles are never listed. */
+let MEMBERS = [];
+const state = { q: '', industry: 'All', all: false, sort: 'newest', view: 'cards' };
+const $ = (s) => document.querySelector(s);
+const grid = $('[data-grid]'), regWrap = $('[data-register]'), regRows = $('[data-register-rows]');
+const countEl = $('[data-count]'), emptyEl = $('[data-empty]');
 
 function readURL() {
   const u = new URL(location.href);
   state.q = u.searchParams.get('q') || '';
-  state.industry = u.searchParams.get('industry') || 'All';
-  state.sort = u.searchParams.get('sort') || 'newest';
-  state.view = u.searchParams.get('view') || 'cards';
+  const ind = u.searchParams.get('industry') || 'All';
+  state.industry = ind === 'All' || INDUSTRIES.includes(ind) ? ind : 'All';
+  state.sort = ['newest', 'score', 'az'].includes(u.searchParams.get('sort')) ? u.searchParams.get('sort') : 'newest';
+  state.view = u.searchParams.get('view') === 'register' ? 'register' : 'cards';
+  state.all = u.searchParams.get('all') === '1';
 }
 function writeURL() {
   const u = new URL(location.href);
   const set = (k, v, def) => (v && v !== def ? u.searchParams.set(k, v) : u.searchParams.delete(k));
-  set('q', state.q, ''); set('industry', state.industry, 'All'); set('sort', state.sort, 'newest'); set('view', state.view, 'cards');
-  history.replaceState(null, '', u.pathname + (u.search || '') + u.hash);
+  set('q', state.q, ''); set('industry', state.industry, 'All'); set('sort', state.sort, 'newest'); set('view', state.view, 'cards'); set('all', state.all ? '1' : '', '');
+  history.replaceState(null, '', u.pathname + u.search + u.hash);
 }
 
 function matches(m) {
   if (state.industry !== 'All' && m.industry !== state.industry) return false;
   if (!state.q) return true;
-  const hay = [m.name, m.company, m.city, m.region, m.country, m.industry, m.role, m.offers, m.looking].join(' ').toLowerCase();
-  return state.q.toLowerCase().split(/\s+/).every((w) => hay.includes(w));
+  const hay = [m.name, m.headline, m.company, m.role, m.city, m.region, m.country, m.industry, m.offers, m.looking].join(' ').toLowerCase();
+  return state.q.toLowerCase().split(/\s+/).filter(Boolean).every((w) => hay.includes(w));
 }
+const scoreOfM = (m) => m.score ?? scoreOf(m.factors);
 function sorted(list) {
   const l = [...list];
-  if (state.sort === 'newest') l.sort((a, b) => b.verifiedOn.localeCompare(a.verifiedOn));
-  if (state.sort === 'score') l.sort((a, b) => scoreOf(b.factors) - scoreOf(a.factors));
+  if (state.sort === 'newest') l.sort((a, b) => (b.verifiedOn || '').localeCompare(a.verifiedOn || '') || (b.joined || '').localeCompare(a.joined || '') || a.name.localeCompare(b.name));
+  if (state.sort === 'score') l.sort((a, b) => scoreOfM(b) - scoreOfM(a) || a.name.localeCompare(b.name));
   if (state.sort === 'az') l.sort((a, b) => a.name.localeCompare(b.name));
   return l;
 }
 
 function rowHTML(m) {
-  const s = scoreOf(m.factors), g = gradeOf(s);
-  return `<a class="reg-row" href="${href(`/members/${m.id}/`)}" data-flip-id="row-${m.id}" data-id="${m.id}">
-    <div class="reg-row__who"><img class="avatar" src="${photo(m.photo, 96)}" alt="" loading="lazy"><div><b>${m.name}</b><span>${m.role}</span></div></div>
-    <div class="reg-row__cell">${m.company}</div>
-    <div class="reg-row__cell">${INDUSTRY[m.industry]?.emoji || ''} ${m.industry}</div>
-    <div class="reg-row__cell">${m.city}</div>
-    <div class="reg-row__score"><b>${g.grade}</b><span>${s}</span></div>
-    <div class="reg-row__date">${fmtDate(m.verifiedOn)}</div>
-    <span class="reg-row__go" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span>
+  const s = scoreOfM(m), g = gradeOf(s);
+  return `<a class="reg-row" href="${href(`/members/${m.id}/`)}" aria-label="${esc(m.name)}${m.company ? `, ${esc(m.company)}` : ''}${isVerified(m) ? ', Trulinq Verified' : `, ${statusOf(m).label}`}">
+    <span class="reg-row__who">${portrait(m, { size: 40, cls: 'avatar' })}<span><b>${esc(m.name)}</b><span>${esc(m.role || m.headline || '')}</span></span></span>
+    <span class="reg-row__cell">${esc(m.company || '—')}</span>
+    <span class="reg-row__cell">${esc(m.industry || '—')}</span>
+    <span class="reg-row__cell">${esc(m.city || m.country || '—')}</span>
+    <span class="reg-row__score"><b>${g.grade}</b><span>${s}</span></span>
+    <span class="reg-row__date">${isVerified(m) ? fmtDate(m.verifiedOn) : esc(statusOf(m).label)}</span>
+    <span class="reg-row__go" aria-hidden="true">${arrowIcon()}</span>
   </a>`;
 }
 
-function buildOnce() {
-  grid.innerHTML = MEMBERS.map((m) => idCard(m, { stamp: true }).replace('class="idcard', `data-flip-id="${m.id}" data-id="${m.id}" class="idcard`)).join('');
-  regRows.innerHTML = MEMBERS.map(rowHTML).join('');
-  grid.querySelectorAll('.idcard').forEach((el) => cardEls.set(el.dataset.id, el));
-  regRows.querySelectorAll('.reg-row').forEach((el) => rowEls.set(el.dataset.id, el));
-  hydrateSeals(grid);
-
-  const ind = document.querySelector('[data-industries]');
-  ind.innerHTML = ['All', ...INDUSTRIES].map((name) => name === 'All'
-    ? `<button type="button" class="pill pill--sm" data-industry="All" aria-pressed="true">All industries</button>`
-    : `<button type="button" class="pill pill--sm" data-industry="${name}" aria-pressed="false"><span class="emoji" aria-hidden="true">${INDUSTRY[name].emoji}</span>${name}</button>`).join('');
-
-  const faces = document.querySelector('[data-faces]');
-  faces.innerHTML = MEMBERS.map((m) => `<span class="face"><img src="${photo(m.photo, 128)}" alt="" loading="lazy"><span class="seal seal--sm is-static" data-quiet>${sealSVG()}</span></span>`).join('');
-
-  document.querySelector('[data-stat="cities"]').textContent = new Set(MEMBERS.map((m) => m.city).filter(Boolean)).size;
-  document.querySelector('[data-stat="industries"]').textContent = new Set(MEMBERS.map((m) => m.industry).filter(Boolean)).size;
-  document.querySelector('[data-stat="people"]').textContent = MEMBERS.length;
-  loadStats().then((st) => { document.querySelector('[data-stat="people"]').textContent = st.verified; document.querySelector('[data-stat="cities"]').textContent = st.cities; document.querySelector('[data-stat="industries"]').textContent = st.industries; }).catch(() => {});
+function paintChips() {
+  const counts = {};
+  MEMBERS.forEach((m) => { if (m.industry) counts[m.industry] = (counts[m.industry] || 0) + 1; });
+  $('[data-industries]').innerHTML = ['All', ...INDUSTRIES].map((name) => {
+    const n = name === 'All' ? MEMBERS.length : counts[name] || 0;
+    return `<button type="button" class="chip" data-industry="${esc(name)}" aria-pressed="${state.industry === name}">${name === 'All' ? 'All industries' : esc(name)} <small>${n}</small></button>`;
+  }).join('');
 }
 
-let first = true;
 function render() {
   const list = sorted(MEMBERS.filter(matches));
-  const ids = list.map((m) => m.id);
-  const container = state.view === 'cards' ? grid : regRows;
-  const map = state.view === 'cards' ? cardEls : rowEls;
-  const other = state.view === 'cards' ? regWrap : grid;
-  const wrap = state.view === 'cards' ? grid : regWrap;
-  const animate = !reduced && !first;
-  const flipState = animate ? Flip.getState(container.children, { props: 'opacity' }) : null;
-
-  wrap.hidden = false; other.hidden = true;
-  map.forEach((el, id) => { el.hidden = !ids.includes(id); });
-  ids.forEach((id) => container.appendChild(map.get(id)));
-
-  countEl.textContent = `${list.length} of ${MEMBERS.length} members · ${list.length} verified`;
+  const verified = list.filter(isVerified).length;
+  grid.removeAttribute('aria-busy');
+  if (state.view === 'cards') { grid.innerHTML = list.map((m) => idCard(m)).join(''); regRows.innerHTML = ''; }
+  else { regRows.innerHTML = list.map(rowHTML).join(''); grid.innerHTML = ''; }
+  grid.hidden = state.view !== 'cards' || !list.length;
+  regWrap.hidden = state.view !== 'register' || !list.length;
   emptyEl.hidden = list.length > 0;
-  const filtered = state.q || state.industry !== 'All';
-  resets.forEach((r) => (r.hidden = !filtered && r.closest('.dir__meta') !== null));
+  countEl.textContent = state.all
+    ? `${list.length} member${list.length === 1 ? '' : 's'} shown · ${verified} verified`
+    : `${list.length} verified member${list.length === 1 ? '' : 's'}${list.length !== MEMBERS.length ? ` of ${MEMBERS.length}` : ''}`;
+  $('.dir__meta [data-reset]').hidden = !(state.q || state.industry !== 'All');
   document.querySelectorAll('[data-industry]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.industry === state.industry)));
   document.querySelectorAll('[data-view-btn]').forEach((b) => { const on = b.dataset.viewBtn === state.view; b.classList.toggle('is-active', on); b.setAttribute('aria-pressed', String(on)); });
-  document.querySelector('[data-sort]').value = state.sort;
+  $('[data-sort]').value = state.sort;
+  $('[data-verified]').checked = !state.all;
   writeURL();
+}
 
-  if (animate) {
-    const all = [...container.children];
-    suspend(all);
-    Flip.from(flipState, { duration: .8, ease: 'expo.out', stagger: .015, absolute: true, scale: true, onComplete: () => restore(all),
-      onEnter: (els) => gsap.fromTo(els, { opacity: 0, scale: .9, y: 16 }, { opacity: 1, scale: 1, y: 0, duration: .7, ease: 'expo.out', stagger: .03 }),
-      onLeave: (els) => gsap.to(els, { opacity: 0, scale: .92, duration: .35, ease: 'power2.in' }) });
-  } else if (!reduced && first) {
-    gsap.from(container.querySelectorAll(':scope > :not([hidden])'), { y: 40, opacity: 0, duration: 1.1, ease: 'expo.out', stagger: .05, delay: .2, clearProps: 'transform,opacity' });
-  }
-  first = false;
-  setTimeout(() => ScrollTrigger.refresh(), 900);
+async function load() {
+  ({ members: MEMBERS } = await loadMembers({ all: state.all }));
+  MEMBERS = MEMBERS.filter((m) => m.status !== 'revoked');
+  paintChips();
+  $('[data-faces]').innerHTML = MEMBERS.filter(isVerified).map((m) => `<span class="face">${portrait(m, { size: 56 })}${seal({ size: 'xs' })}</span>`).join('');
 }
 
 function wire() {
-  const search = document.querySelector('[data-search]');
+  const search = $('[data-search]');
   search.value = state.q;
-  let t; search.addEventListener('input', () => { clearTimeout(t); t = setTimeout(() => { state.q = search.value.trim(); render(); }, 160); });
-  document.addEventListener('keydown', (e) => { if (e.key === '/' && document.activeElement !== search && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) { e.preventDefault(); search.focus(); } });
-  document.querySelector('[data-industries]').addEventListener('click', (e) => { const b = e.target.closest('[data-industry]'); if (!b) return; state.industry = b.dataset.industry; render(); });
-  document.querySelector('[data-view]').addEventListener('click', (e) => { const b = e.target.closest('[data-view-btn]'); if (!b) return; state.view = b.dataset.viewBtn; render(); });
-  document.querySelector('[data-sort]').addEventListener('change', (e) => { state.sort = e.target.value; render(); });
-  document.querySelector('[data-verified]').addEventListener('change', (e) => { state.verified = e.target.checked; if (!e.target.checked) toast('Every member here is verified, so the list stays the same.'); });
-  resets.forEach((r) => r.addEventListener('click', () => { state.q = ''; state.industry = 'All'; search.value = ''; render(); }));
+  let t;
+  search.addEventListener('input', () => { clearTimeout(t); t = setTimeout(() => { state.q = search.value.trim(); render(); }, 120); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== '/' || e.metaKey || e.ctrlKey || e.altKey) return;
+    const a = document.activeElement;
+    if (a && (a.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(a.tagName))) return;
+    e.preventDefault(); search.focus();
+  });
+  $('[data-industries]').addEventListener('click', (e) => { const b = e.target.closest('[data-industry]'); if (!b) return; state.industry = b.dataset.industry; render(); });
+  $('[data-view]').addEventListener('click', (e) => { const b = e.target.closest('[data-view-btn]'); if (!b) return; state.view = b.dataset.viewBtn; render(); });
+  $('[data-sort]').addEventListener('change', (e) => { state.sort = e.target.value; render(); });
+  $('[data-verified]').addEventListener('change', async (e) => {
+    state.all = !e.target.checked;
+    countEl.textContent = 'Loading members…';
+    await load(); render();
+  });
+  document.querySelectorAll('[data-reset]').forEach((r) => r.addEventListener('click', () => { state.q = ''; state.industry = 'All'; search.value = ''; render(); search.focus(); }));
 }
 
-boot(async () => { ({ members: MEMBERS } = await loadMembers()); readURL(); buildOnce(); wire(); }, () => { render(); initStamps(grid); });
+boot(async () => {
+  readURL();
+  await load();
+  wire(); render();
+  loadStats().then((st) => {
+    ['verified', 'industries', 'cities', 'revoked'].forEach((k) => { const el = $(`[data-stat="${k}"]`); if (el && st[k] != null) el.textContent = st[k]; });
+  }).catch(() => {});
+});

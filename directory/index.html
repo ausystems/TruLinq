@@ -10,77 +10,85 @@
   <!--@include(partials/nav.html)-->
   <main id="main" class="page">
 
-    <section class="panel panel--cream dhero">
+    <section class="panel panel--cream dhero" aria-labelledby="dir-title">
       <div class="dhero__inner">
-        <p class="breadcrumb" data-reveal="fade"><a href="/">Trulinq</a><i></i><span>Directory</span></p>
-        <h1 class="display" data-split>The verified <span class="accent">directory</span></h1>
-        <p class="lead" data-reveal>Every profile below belongs to a real person and a real business. Check the stamp before you send money, sign, or partner.</p>
-        <ul class="dhero__ledger ledger" data-reveal data-delay=".1">
-          <li class="ledger__row"><span>Real people</span><i></i><b data-stat="people">16</b></li>
-          <li class="ledger__row"><span>Industries</span><i></i><b data-stat="industries">8</b></li>
-          <li class="ledger__row"><span>Cities</span><i></i><b data-stat="cities">16</b></li>
-          <li class="ledger__row"><span>Stamps revoked</span><i></i><b>0</b></li>
+        <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Trulinq</a><i aria-hidden="true"></i><span aria-current="page">Directory</span></nav>
+        <h1 id="dir-title" class="display">The verified <span class="accent">directory</span></h1>
+        <p class="lead">Every profile below belongs to a real person and a real business. Check the stamp before you send money, sign, or partner.</p>
+        <ul class="dhero__ledger ledger" aria-label="The directory in numbers">
+          <li class="ledger__row"><span>Verified members</span><i></i><b data-stat="verified">{{stats.verified}}</b></li>
+          <li class="ledger__row"><span>Industries</span><i></i><b data-stat="industries">{{stats.industries}}</b></li>
+          <li class="ledger__row"><span>Cities</span><i></i><b data-stat="cities">{{stats.cities}}</b></li>
+          <li class="ledger__row"><span>Stamps revoked</span><i></i><b data-stat="revoked">{{stats.revoked}}</b></li>
         </ul>
       </div>
-      <div class="dhero__faces marquee" aria-hidden="true">
-        <div class="marquee__track" data-marquee data-faces></div>
-      </div>
+      <div class="dhero__faces" aria-hidden="true" data-faces></div>
     </section>
 
-    <section class="panel panel--white dir" id="list">
+    <section class="panel panel--white dir" id="list" aria-labelledby="list-title">
       <div class="dir__inner">
-        <div class="dir__controls" data-controls data-reveal>
-          <label class="dir__search">
+        <h2 id="list-title" class="sr-only">Members</h2>
+        <div class="dir__controls">
+          <div class="dir__search">
             <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-            <span class="sr-only">Search members</span>
-            <input type="search" placeholder="Search name, business, industry or city" autocomplete="off" data-search>
+            <label class="sr-only" for="dir-q">Search members</label>
+            <input id="dir-q" type="search" placeholder="Search name, business, industry or city" autocomplete="off" enterkeyhint="search" data-search>
             <kbd aria-hidden="true">/</kbd>
-          </label>
-          <div class="dir__industries" role="group" aria-label="Filter by industry" data-industries></div>
+          </div>
+          <div class="chip-row dir__industries" role="group" aria-label="Filter by industry" data-industries></div>
           <div class="dir__tools">
             <label class="switch"><input type="checkbox" checked data-verified><i></i>Verified only</label>
-            <div class="segmented" role="group" aria-label="View" data-view>
-              <button type="button" class="is-active" data-view-btn="cards" aria-pressed="true">Cards</button>
-              <button type="button" data-view-btn="register" aria-pressed="false">Register</button>
-            </div>
-            <div class="select dir__sort">
-              <label class="sr-only" for="dir-sort">Sort</label>
-              <select id="dir-sort" class="input" data-sort>
-                <option value="newest">Newest stamps</option>
-                <option value="score">Highest score</option>
-                <option value="az">A to Z</option>
-              </select>
+            <div class="dir__tools-end">
+              <div class="segmented" role="group" aria-label="View" data-view>
+                <button type="button" class="is-active" data-view-btn="cards" aria-pressed="true">Cards</button>
+                <button type="button" data-view-btn="register" aria-pressed="false">Register</button>
+              </div>
+              <div class="select dir__sort">
+                <label class="sr-only" for="dir-sort">Sort</label>
+                <select id="dir-sort" class="input" data-sort>
+                  <option value="newest">Newest stamps</option>
+                  <option value="score">Highest score</option>
+                  <option value="az">A to Z</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
         <div class="dir__meta">
-          <p class="dir__count mono" data-count aria-live="polite"></p>
+          <p class="dir__count" data-count aria-live="polite">Loading members…</p>
           <button type="button" class="dir__reset" data-reset hidden>Clear filters</button>
         </div>
-        <div class="dir__grid" data-grid></div>
+        <div class="dir__grid" data-grid aria-busy="true">
+          <span class="skeleton-card" aria-hidden="true"><span class="skeleton"></span><span><span class="skeleton" style="width:62%"></span><span class="skeleton" style="width:84%"></span><span class="skeleton" style="width:48%"></span></span></span>
+          <span class="skeleton-card" aria-hidden="true"><span class="skeleton"></span><span><span class="skeleton" style="width:54%"></span><span class="skeleton" style="width:78%"></span><span class="skeleton" style="width:40%"></span></span></span>
+          <span class="skeleton-card" aria-hidden="true"><span class="skeleton"></span><span><span class="skeleton" style="width:66%"></span><span class="skeleton" style="width:72%"></span><span class="skeleton" style="width:52%"></span></span></span>
+          <span class="skeleton-card" aria-hidden="true"><span class="skeleton"></span><span><span class="skeleton" style="width:58%"></span><span class="skeleton" style="width:88%"></span><span class="skeleton" style="width:44%"></span></span></span>
+          <span class="skeleton-card" aria-hidden="true"><span class="skeleton"></span><span><span class="skeleton" style="width:50%"></span><span class="skeleton" style="width:80%"></span><span class="skeleton" style="width:46%"></span></span></span>
+          <span class="skeleton-card" aria-hidden="true"><span class="skeleton"></span><span><span class="skeleton" style="width:64%"></span><span class="skeleton" style="width:70%"></span><span class="skeleton" style="width:38%"></span></span></span>
+        </div>
         <div class="reg" data-register hidden>
-          <div class="reg__head mono" aria-hidden="true"><span>Member</span><span>Business</span><span>Industry</span><span>City</span><span>Score</span><span>Verified</span><span></span></div>
+          <div class="reg__head" aria-hidden="true"><span>Member</span><span>Business</span><span>Industry</span><span>City</span><span>Score</span><span>Verified</span><span></span></div>
           <div data-register-rows></div>
         </div>
         <div class="empty dir__empty" data-empty hidden>
-          <span class="seal seal--md is-static" data-quiet aria-hidden="true"></span>
           <h3>No one matches that yet.</h3>
-          <p>Try another industry or a shorter search. Or invite them: every new member gets checked the same way.</p>
+          <p>Try another industry or a shorter search. Every new member is checked the same way, so the list grows one real person at a time.</p>
           <button type="button" class="btn btn--ink btn--sm" data-reset><span>Clear filters</span></button>
         </div>
       </div>
     </section>
 
-    <section class="panel panel--peach dcta">
+    <section class="panel panel--peach dcta" aria-labelledby="dcta-title">
       <div class="dcta__inner">
-        <div class="dcta__col" data-reveal>
-          <h2 class="display">Your stamp is two business days away.</h2>
+        <div class="dcta__col">
+          <h2 id="dcta-title" class="display">Get your stamp.</h2>
+          <p>A person reviews every application within {{review.businessDays}} business days.</p>
           <a class="btn btn--primary" href="/verify/"><span>Get verified</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
         </div>
-        <div class="dcta__col dcta__col--report card" data-reveal data-delay=".1">
-          <h3>Report a profile and a human looks the same day.</h3>
-          <p>Fraudulent accounts and impersonation lose the stamp, and usually the account. Nothing you report is shared with the profile.</p>
-          <a class="arrow-link" href="mailto:trust@trulinq.com">Write to trust@trulinq.com <i><svg viewBox="0 0 16 16"><path d="M4 12L12 4M6 4h6v6"/></svg></i></a>
+        <div class="dcta__col dcta__col--report card">
+          <h3>See a profile that isn’t what it claims?</h3>
+          <p>Report it and a person reviews it. Fraudulent accounts and impersonation lose the stamp, and usually the account. Nothing you report is shared with the profile.</p>
+          <a class="arrow-link" href="/trust/#report"><span>Report a profile</span><i aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></i></a>
         </div>
       </div>
     </section>

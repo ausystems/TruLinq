@@ -1,7 +1,8 @@
 /* The Trulinq rubber stamp in Three.js: a turned navy handle, a blue rubber base and the seal on its face. Shared by
-   the pricing hero and the homepage hero. The caller drives `press.t` (0 = hovering, 1 = pressed onto the desk) and
-   `setPointer()`; the module owns the scene, the idle motion and the render loop. */
-import { isTouch, reduced } from './main.js';
+   the pricing hero and the homepage hero. It stands still; it only moves when it presses (on load, or when someone
+   clicks it), and it renders only while it moves. The caller tweens `press.t` (0 = resting, 1 = pressed onto the
+   desk) and calls `play()` for the duration of the tween. */
+import { isTouch } from './main.js';
 
 function sealTexture(T) {
   const size = 1024, c = document.createElement('canvas'); c.width = c.height = size;
@@ -33,8 +34,7 @@ export async function createStamp(canvas, host, o = {}) {
   const T = await import('./three-stamp.js');
   const opt = {
     fov: 28, camPos: [0, .9, 9.4], look: [0, .45, 0],
-    rest: { x: -.55, y: -.5, z: .12 }, restY: .55, dropY: 1.7, bob: .08, spin: .12, idleTilt: .06,
-    pointer: { x: .45, y: .22, z: .08 },
+    rest: { x: -.55, y: -.5, z: .12 }, restY: .55, dropY: 1.7,
     /* 'tip' leans the stamp forward as it presses (pricing); 'straight' squares it up so the face lands flat (hero) */
     mode: 'tip', shadowY: -1.9, shadowOpacity: .14, position: [0, 0, 0], scale: 1,
     ...o
@@ -72,33 +72,27 @@ export async function createStamp(canvas, host, o = {}) {
   const shadow = new T.Mesh(new T.CylinderGeometry(1.35, 1.35, .01, 64), new T.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: opt.shadowOpacity }));
   shadow.position.set(opt.position[0], opt.shadowY, opt.position[2]); scene.add(shadow);
 
-  function resize() { const w = host.clientWidth, h = host.clientHeight || w; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
-  resize(); new ResizeObserver(resize).observe(host);
-
-  const pointer = { x: 0, y: 0 }, target = { x: 0, y: 0 };
   const press = { t: 0 };
-  let t0 = performance.now(), raf = null;
   const lerp = (a, b, k) => a + (b - a) * k;
-  function render(now = performance.now()) {
-    const t = (now - t0) / 1000;
-    pointer.x += (target.x - pointer.x) * .06; pointer.y += (target.y - pointer.y) * .06;
-    const idle = reduced ? 0 : Math.sin(t * 1.1) * opt.idleTilt;
-    const spin = reduced ? 0 : t * opt.spin;
-    const rx = opt.rest.x + pointer.y * opt.pointer.y + idle * .5, ry = opt.rest.y + pointer.x * opt.pointer.x + spin, rz = opt.rest.z + pointer.x * opt.pointer.z;
-    if (opt.mode === 'tip') { group.rotation.set(rx + press.t * 1.2, ry, rz); }
-    else { group.rotation.set(lerp(rx, 0, press.t), lerp(ry, Math.round(ry / (Math.PI * 2)) * Math.PI * 2 - .35, press.t), lerp(rz, 0, press.t)); }
-    group.position.y = opt.restY + (reduced ? 0 : Math.sin(t * .9) * opt.bob) - press.t * opt.dropY;
+  function render() {
+    const { x: rx, y: ry, z: rz } = opt.rest;
+    if (opt.mode === 'tip') group.rotation.set(rx + press.t * 1.2, ry, rz);
+    else group.rotation.set(lerp(rx, 0, press.t), lerp(ry, -.35, press.t), lerp(rz, 0, press.t));
+    group.position.y = opt.restY - press.t * opt.dropY;
     shadow.scale.setScalar(opt.scale * (1 - press.t * .25)); shadow.material.opacity = opt.shadowOpacity + press.t * .3;
     renderer.render(scene, camera);
   }
-  const loop = (now) => { render(now); raf = requestAnimationFrame(loop); };
-  const start = () => { if (!raf) raf = requestAnimationFrame(loop); };
-  const stop = () => { if (raf) { cancelAnimationFrame(raf); raf = null; } };
-  render();
+  function resize() { const w = host.clientWidth, h = host.clientHeight || w; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); render(); }
+  resize(); new ResizeObserver(resize).observe(host);
+
+  /* render every frame only while a press is playing */
+  let raf = null, until = 0;
+  const loop = () => { render(); raf = performance.now() < until ? requestAnimationFrame(loop) : null; };
+  const play = (seconds) => { until = Math.max(until, performance.now() + seconds * 1000 + 100); if (!raf) raf = requestAnimationFrame(loop); };
 
   /* screen position (host pixels) of a world point, for lining DOM up with the stamp's landing spot */
   const v = new T.Vector3();
   const project = (x = opt.position[0], y = 0, z = opt.position[2]) => { v.set(x, y, z).project(camera); return { x: (v.x * .5 + .5) * host.clientWidth, y: (-v.y * .5 + .5) * host.clientHeight }; };
 
-  return { T, renderer, scene, camera, group, shadow, press, render, start, stop, resize, project, setPointer: (x, y) => { target.x = x; target.y = y; }, nudgeSpin: (dx) => { t0 -= dx; } };
+  return { T, renderer, scene, camera, group, shadow, press, render, play, resize, project };
 }

@@ -1,24 +1,30 @@
-/* Data loaders for the pages. Everything comes from the backend; the demo roster in src/data/ is the same content
-   the database is seeded with and is used only when the API cannot be reached (a static host with no backend
-   configured), so read-only pages still render. Nothing that writes ever falls back. */
+/* Data loaders for the pages. Everything comes from the backend. When the API cannot be reached at all (a static
+   host with no backend configured), read-only pages fall back to the roster the database is seeded with, so they
+   still show real members. Nothing that writes ever falls back. */
 import { api, isBackendUnavailable } from './api.js';
+import { scoreOf, gradeOf } from './ui.js';
+import { statsOf } from '../data/stats.js';
 
-let warned = false;
-function warn(e) { if (!warned) { warned = true; console.warn('[trulinq] backend unavailable, showing the seed roster:', e && e.message); } }
+let offline = false;
+export const isOffline = () => offline;
+function fallback(e) {
+  if (!isBackendUnavailable(e)) throw e;
+  if (!offline) { offline = true; console.info('[trulinq] API unavailable; showing the seeded roster'); }
+}
 
-export const INDUSTRIES = ['Consulting', 'Direct sales/service', 'Energy', 'Logistics', 'Marketing', 'Real Estate', 'Restaurant', 'Technology'];
+export { INDUSTRIES } from '../data/industries.js';
 
 const index = (members) => ({ members, byId: Object.fromEntries(members.map((m) => [m.id, m])) });
+const complete = (m) => { const score = scoreOf(m.factors), g = gradeOf(score); return { ...m, status: 'verified', score, grade: g.grade, band: g.band }; };
 
 let membersPromise = null;
-/** Verified, public members (first 50) with the field names the pages already use. */
-export function loadMembers() {
+/* Public members with the field names the pages use. `all` includes members whose verification is still pending. */
+export function loadMembers({ all = false } = {}) {
+  if (all) return api.get('/members?limit=50&status=all').then((d) => index(d.members)).catch(async (e) => { fallback(e); return loadMembers(); });
   if (!membersPromise) membersPromise = api.get('/members?limit=50').then((d) => index(d.members)).catch(async (e) => {
-    if (!isBackendUnavailable(e)) throw e;
-    warn(e);
+    fallback(e);
     const { MEMBERS } = await import('../data/members.js');
-    const { scoreOf, gradeOf } = await import('./ui.js');
-    return index(MEMBERS.map((m) => ({ ...m, status: 'verified', score: scoreOf(m.factors), grade: gradeOf(scoreOf(m.factors)).grade })));
+    return index(MEMBERS.map(complete));
   });
   return membersPromise;
 }
@@ -26,18 +32,19 @@ export function loadMembers() {
 export async function loadMember(slug) {
   try { return await api.get(`/members/${encodeURIComponent(slug)}`); }
   catch (e) {
-    if (!isBackendUnavailable(e)) throw e;
-    warn(e);
-    const { byId, VOUCHES, MEMBERS } = await import('../data/members.js');
+    if (e && e.status === 404) return null;
+    fallback(e);
+    const { MEMBERS, byId, VOUCHES } = await import('../data/members.js');
     const { POSTS } = await import('../data/feed.js');
     const m = byId[slug];
     if (!m) return null;
-    const i = MEMBERS.findIndex((x) => x.id === slug), n = MEMBERS.length;
+    const list = MEMBERS.map(complete);
+    const i = list.findIndex((x) => x.id === slug), n = list.length;
     return {
-      member: m,
-      endorsements: (VOUCHES[slug] || []).map((v, k) => ({ id: `${slug}-${k}`, text: v.text, date: v.date, from: byId[v.from] })),
+      member: complete(m),
+      endorsements: (VOUCHES[slug] || []).map((v, k) => ({ id: `${slug}-${k}`, text: v.text, date: v.date, from: complete(byId[v.from]) })),
       posts: POSTS.filter((p) => p.by === slug),
-      prev: MEMBERS[(i - 1 + n) % n].id, next: MEMBERS[(i + 1) % n].id
+      prev: list[(i - 1 + n) % n].id, next: list[(i + 1) % n].id
     };
   }
 }
@@ -45,8 +52,7 @@ export async function loadMember(slug) {
 export async function loadPosts(limit = 50) {
   try { return (await api.get(`/posts?limit=${limit}`)).posts; }
   catch (e) {
-    if (!isBackendUnavailable(e)) throw e;
-    warn(e);
+    fallback(e);
     const { POSTS } = await import('../data/feed.js');
     const { byId } = await loadMembers();
     return POSTS.map((p) => ({ ...p, author: byId[p.by] }));
@@ -56,11 +62,9 @@ export async function loadPosts(limit = 50) {
 export async function loadRooms() {
   try { return (await api.get('/rooms')).rooms; }
   catch (e) {
-    if (!isBackendUnavailable(e)) throw e;
-    warn(e);
+    fallback(e);
     const { ROOMS } = await import('../data/rooms.js');
-    const { byId } = await loadMembers();
-    return ROOMS.map((r) => ({ slug: r.slug, name: r.name, emoji: r.emoji, topic: r.topic, live: r.live, memberCount: r.members.length, members: r.members.slice(0, 3).map((id) => byId[id]), _messages: r.messages.map((m, i) => ({ id: `${r.slug}-${i}`, by: m.by, text: m.text, at: m.at, author: byId[m.by] })) }));
+    return ROOMS.map((r) => ({ slug: r.slug, name: r.name, topic: r.topic, memberCount: r.members.length, members: [], lastMessageAt: null, _messages: r.messages }));
   }
 }
 
@@ -72,16 +76,16 @@ export async function loadRoomMessages(room) {
 export async function loadStats() {
   try { return await api.get('/stats'); }
   catch (e) {
-    if (!isBackendUnavailable(e)) throw e;
-    warn(e);
-    const { members } = await loadMembers();
-    return { people: members.length, verified: members.length, posts: 12, deals: 0, cities: new Set(members.map((m) => m.city)).size, industries: new Set(members.map((m) => m.industry)).size };
+    fallback(e);
+    const { MEMBERS } = await import('../data/members.js');
+    const { POSTS } = await import('../data/feed.js');
+    return statsOf(MEMBERS, POSTS);
   }
 }
 
 let sessionPromise = null;
-/** The signed-in user and member, or { user: null, member: null }. Never throws: no backend means no session. */
+/* The signed-in user and member, or { user: null, member: null, offline }. Never throws. */
 export function loadSession(force = false) {
-  if (!sessionPromise || force) sessionPromise = api.get('/auth/session').catch(() => ({ user: null, member: null }));
+  if (!sessionPromise || force) sessionPromise = api.get('/auth/session').then((s) => ({ ...s, offline: false })).catch((e) => ({ user: null, member: null, offline: isBackendUnavailable(e) }));
   return sessionPromise;
 }

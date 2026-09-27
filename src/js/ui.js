@@ -1,123 +1,156 @@
-/* Shared UI templates: seal, ID cards, pills, score helpers. Pure functions returning markup. */
+/* Shared templates: the seal, portraits, the member card, posts, and the small formatting rules everything uses.
+   Everything a member wrote is escaped before it touches markup. */
 
 export const RING = 'TRULINQ · VERIFIED · ENTREPRENEUR ·';
 /* Site base path ('/' locally, '/TruLinq/' on GitHub Pages). Every JS-built internal link goes through href(). */
 export const BASE = import.meta.env.BASE_URL || '/';
 export const href = (path) => BASE + String(path).replace(/^\//, '');
 
-export function sealSVG({ ring = RING, id = 'r' + Math.random().toString(36).slice(2, 7) } = {}) {
-  /* The Trulinq seal as on trulinqid.com: a navy face, a sky-to-royal rim, the ring text (still rotating) and the mark.
-     Gradients and the mark symbol are defined once in partials/nav.html. */
-  return `<svg viewBox="0 0 100 100" aria-hidden="true">
+const ESC = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+export const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ESC[c]);
+
+/* ── The seal ──────────────────────────────────────────────────── */
+/* Full: the navy face, the sky-to-royal rim, the turning ring text and the TD mark. Compact (under 56px): no ring
+   text, a heavier rim and a larger mark, so the seal stays crisp at avatar size. Gradients and the mark symbol are
+   defined once in partials/nav.html. */
+let sealN = 0;
+export function sealSVG({ compact = false, ring = RING } = {}) {
+  if (compact) {
+    return `<svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+      <circle class="seal__disc" cx="50" cy="50" r="48"/>
+      <circle cx="50" cy="50" r="44.5" fill="none" stroke="url(#tq-seal-rim)" stroke-width="7"/>
+      <use class="seal__mark" href="#tq-mark" x="24" y="24" width="52" height="52"/>
+    </svg>`;
+  }
+  const id = `seal-ring-${++sealN}`;
+  return `<svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">
     <defs><path id="${id}" d="M50,50 m-37,0 a37,37 0 1,1 74,0 a37,37 0 1,1 -74,0"/></defs>
-    <circle class="seal__glow" cx="50" cy="50" r="49" fill="url(#tq-seal-glow)"/>
-    <circle class="seal__disc" cx="50" cy="50" r="47"/>
-    <circle class="seal__rim" cx="50" cy="50" r="46" fill="none" stroke="url(#tq-seal-rim)" stroke-width="2.6"/>
-    <g class="seal__rot"><text class="seal__ring" font-size="9.4" letter-spacing="1.35" fill="var(--seal-ring)"><textPath href="#${id}" textLength="232" lengthAdjust="spacingAndGlyphs">${ring}</textPath></text></g>
-    <circle cx="50" cy="50" r="28.5" fill="none" stroke="var(--seal-ring)" stroke-opacity=".45" stroke-width="1.2"/>
+    <circle class="seal__disc" cx="50" cy="50" r="48"/>
+    <circle cx="50" cy="50" r="46.5" fill="none" stroke="url(#tq-seal-rim)" stroke-width="3"/>
+    <g><text class="seal__ring" font-size="9.4" letter-spacing="1.35" fill="var(--seal-ring)"><textPath href="#${id}" textLength="232" lengthAdjust="spacingAndGlyphs">${ring}</textPath></text></g>
+    <circle cx="50" cy="50" r="28.5" fill="none" stroke="var(--seal-ring)" stroke-opacity=".4" stroke-width="1"/>
     <use class="seal__mark" href="#tq-mark" x="32" y="32" width="36" height="36"/>
   </svg>`;
 }
-
-export function seal({ size = 'md', variant = '', stamp = true, cls = '', label = 'Trulinq Verified' } = {}) {
-  return `<span class="seal seal--${size} ${variant ? 'seal--' + variant : ''} ${cls}" ${stamp ? 'data-stamp' : ''} role="img" aria-label="${label}">${sealSVG()}</span>`;
+export function seal({ size = 'md', cls = '', label = 'Trulinq Verified', manual = false } = {}) {
+  const compact = size === 'sm' || size === 'xs';
+  return `<span class="seal seal--${size} ${cls}" ${manual ? 'data-manual' : ''} role="img" aria-label="${esc(label)}">${sealSVG({ compact })}</span>`;
 }
 
-export const INDUSTRY = {
-  'Consulting':           { emoji: '💼', tone: 'violet' },
-  'Direct sales/service': { emoji: '🤝', tone: 'peach' },
-  'Energy':               { emoji: '⚡', tone: 'mint' },
-  'Marketing':            { emoji: '📣', tone: 'violet' },
-  'Real Estate':          { emoji: '🏠', tone: 'peach' },
-  'Restaurant':           { emoji: '🍽️', tone: 'mint' },
-  'Technology':           { emoji: '💻', tone: 'violet' },
-  'Logistics':            { emoji: '🚚', tone: 'peach' }
-};
-
-export function industryPill(name, extra = '') {
-  const m = INDUSTRY[name] || { emoji: '•', tone: 'sand' };
-  return `<span class="pill pill--${m.tone} pill--sm ${extra}"><span class="emoji" aria-hidden="true">${m.emoji}</span>${name}</span>`;
+/* ── Portraits ─────────────────────────────────────────────────── */
+export function initials(name) {
+  const parts = String(name || '').trim().split(/\s+/).filter((w) => /^[\p{L}]/u.test(w) && !/^(jr|sr|ii|iii)\.?$/i.test(w));
+  return ((parts[0] || 'T')[0] + (parts.length > 1 ? parts[parts.length - 1][0] : '')).toUpperCase();
 }
+/* Four tones, fixed per member, so a directory of monograms reads as a set of individuals. */
+export function toneOf(key) {
+  let h = 0; for (const c of String(key || '')) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+  return h % 4;
+}
+const PORTRAIT_SIZES = [96, 240, 480, 960];
+export function photoSrc(photo, w) {
+  if (/^(https?:|data:)/.test(photo)) return photo;
+  const size = PORTRAIT_SIZES.find((s) => s >= w) || 960;
+  return href(`${photo}-${size}.webp`);
+}
+/* A member's portrait: their photo when one is published, otherwise a monogram in one of the four tones. */
+export function portrait(m, { size = 96, cls = '', decorative = true } = {}) {
+  const label = decorative ? 'aria-hidden="true"' : `role="img" aria-label="${esc(m.name)}"`;
+  /* a placeholder belongs to no one: a neutral figure, never initials that could read as a real person's */
+  if (m.placeholder) return `<span class="portrait portrait--sample ${cls}" aria-hidden="true"><span class="silhouette"></span></span>`;
+  if (m.photo) {
+    const src2 = photoSrc(m.photo, size * 2);
+    return `<img class="portrait ${cls}" src="${photoSrc(m.photo, size)}" srcset="${photoSrc(m.photo, size)} 1x, ${src2} 2x" width="${size}" height="${size}" alt="${decorative ? '' : esc(m.name)}" loading="lazy" decoding="async" data-fade>`;
+  }
+  return `<span class="portrait portrait--mono ${cls}" data-tone="${toneOf(m.id || m.name)}" ${label}><span>${esc(initials(m.name))}</span></span>`;
+}
+
+/* ── Status, score and the lines a member card shows ───────────── */
+export function statusOf(m) {
+  const s = m.status || 'verified';
+  return { verified: { key: 'verified', label: 'Trulinq Verified' }, pending: { key: 'pending', label: 'In review' }, revoked: { key: 'revoked', label: 'Stamp revoked' } }[s] || { key: 'unverified', label: 'Not verified' };
+}
+export const isVerified = (m) => (m.status || 'verified') === 'verified';
 
 export const FACTORS = [
-  { key: 'identity', label: 'Identity & business verification', max: 45, note: 'ID and business documents reviewed and approved' },
-  { key: 'profile',  label: 'Profile completeness',              max: 20, note: 'Profile details provided' },
-  { key: 'web',      label: 'Web presence',                      max: 15, note: 'Secure business website linked' },
-  { key: 'history',  label: 'Account history',                   max: 10, note: 'Time on Trulinq' },
-  { key: 'standing', label: 'Standing since verification',       max: 10, note: 'Stamp held with no revocation' }
+  { key: 'identity', label: 'Identity & business verification', max: 45 },
+  { key: 'profile', label: 'Profile completeness', max: 20 },
+  { key: 'web', label: 'Web presence', max: 15 },
+  { key: 'history', label: 'Account history', max: 10 },
+  { key: 'standing', label: 'Standing since verification', max: 10 }
 ];
-
 export function pointsOf(factors) { return factors.reduce((a, b) => a + b, 0); }
 export function scoreOf(factors) { return Math.round(300 + 5.5 * pointsOf(factors)); }
+/* Bands as the live product labels them. */
 export function gradeOf(score) {
   if (score >= 740) return { grade: 'AA', band: 'Excellent' };
-  if (score >= 700) return { grade: 'A',  band: 'Very good' };
-  if (score >= 580) return { grade: 'B',  band: 'Good' };
-  if (score >= 480) return { grade: 'C',  band: 'Fair' };
+  if (score >= 700) return { grade: 'A', band: 'Good' };
+  if (score >= 580) return { grade: 'B', band: 'Fair' };
+  if (score >= 480) return { grade: 'C', band: 'Limited' };
   return { grade: 'D', band: 'Building' };
 }
 export function pct(score) { return Math.round(((score - 300) / 550) * 100); }
 
-export function photo(id, w = 400, h = w) {
-  if (!id) return href('/avatars/default.svg');
-  if (typeof id === 'string' && id.startsWith('/')) return href(id); /* a portrait served from public/ */
-  if (typeof id === 'string' && /^(https?:|data:)/.test(id)) return id; /* a resolved URL or a generated monogram */
-  return `https://images.unsplash.com/photo-${id}?w=${w}&h=${h}&fit=crop&crop=faces&q=80&auto=format`;
-}
+export const roleLine = (m) => [m.role, m.company].filter(Boolean).join(' · ') || m.headline || '';
+export const placeLine = (m) => [m.city, m.region].filter(Boolean).join(', ') || m.country || '';
+export const metaLine = (m) => [m.industry, m.city || m.country].filter(Boolean).join(' · ');
 
-export function idCard(m, { tilt = null, href = true, stamp = true, cls = '' } = {}) {
-  const hrefTo = (p) => BASE + p.replace(/^\//, '');
-  const score = scoreOf(m.factors);
+/* ── The member card ───────────────────────────────────────────── */
+/* The card is the record in miniature: portrait with the stamp on it, name, role, where and what, and the score. */
+export function idCard(m, { link = true, stamp = 'static', cls = '', sealSize = 'sm' } = {}) {
+  const score = m.score ?? scoreOf(m.factors);
   const g = gradeOf(score);
-  const tag = href ? 'a' : 'div';
-  const link = href ? `href="${hrefTo(`/members/${m.id}/`)}"` : '';
-  const style = tilt !== null ? `style="--tilt:${tilt}deg"` : '';
-  return `<${tag} class="idcard ${tilt !== null ? 'idcard--tilt' : ''} ${cls}" ${link} ${style} data-member="${m.id}">
-    <div class="idcard__photo">
-      <img src="${photo(m.photo, 240)}" alt="${m.name}, ${m.role} at ${m.company}" width="96" height="96" loading="lazy" decoding="async">
-      ${seal({ size: 'sm', stamp })}
-    </div>
-    <div class="idcard__body">
-      <div class="idcard__name">${m.name}</div>
-      <div class="idcard__role">${m.role} · ${m.company}</div>
-      <div class="idcard__meta">${industryPill(m.industry)}<span class="pill pill--sand pill--sm">${m.city}</span></div>
-      <div class="idcard__score">
-        <div class="idcard__grade">${g.grade}<small>GRADE</small></div>
-        <div>
-          <div class="idcard__bar"><i style="--pct:${pct(score)}%" data-bar></i></div>
-          <div class="idcard__band"><span>${g.band}</span><span class="mono">${score}</span></div>
-        </div>
-      </div>
-    </div>
+  const tag = link ? 'a' : 'div';
+  const attrs = link ? `href="${href(`/members/${m.id}/`)}" aria-label="${esc(m.name)}${roleLine(m) ? ', ' + esc(roleLine(m)) : ''}${isVerified(m) ? ', Trulinq Verified' : ''}"` : '';
+  const sealHTML = isVerified(m) && stamp !== 'none' ? seal({ size: sealSize, manual: stamp === 'manual' }) : '';
+  return `<${tag} class="idcard ${cls}" ${attrs} data-member="${esc(m.id)}">
+    <span class="idcard__photo">${portrait(m, { size: 96 })}${sealHTML}</span>
+    <span class="idcard__body">
+      <span class="idcard__name">${esc(m.name)}</span>
+      <span class="idcard__role">${esc(roleLine(m)) || '&nbsp;'}</span>
+      <span class="idcard__meta">${[esc(metaLine(m)), isVerified(m) ? '' : statusOf(m).label].filter(Boolean).join(' · ') || statusOf(m).label}</span>
+      <span class="idcard__score"><b class="idcard__grade">${g.grade}</b><span class="idcard__bar" aria-hidden="true"><i style="--pct:${pct(score)}%"></i></span><span class="idcard__num">${score}</span></span>
+    </span>
   </${tag}>`;
 }
 
-export function arrowIcon() {
-  return `<span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span>`;
+/* ── Dates ─────────────────────────────────────────────────────── */
+export function fmtDate(iso, opts = { day: 'numeric', month: 'short', year: 'numeric' }) {
+  if (!iso) return '';
+  const d = new Date(String(iso).length <= 10 ? iso + 'T12:00:00' : iso);
+  return Number.isNaN(d.getTime()) ? '' : d.toLocaleDateString('en-US', opts);
 }
-
-export function fmtDate(iso) {
-  const d = new Date(iso + 'T12:00:00');
-  return d.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
-}
-
 export function relTime(iso) {
-  const d = new Date(iso); const now = new Date('2026-09-18T09:00:00');
-  const h = Math.max(1, Math.round((now - d) / 36e5));
-  if (h < 24) return `${h}h ago`;
-  const days = Math.round(h / 24);
-  if (days < 30) return `${days}d ago`;
-  return fmtDate(iso.slice(0, 10));
+  const d = new Date(iso); const mins = Math.max(1, Math.round((Date.now() - d.getTime()) / 6e4));
+  if (mins < 60) return `${mins} min ago`;
+  const h = Math.round(mins / 60); if (h < 24) return `${h} h ago`;
+  const days = Math.round(h / 24); if (days < 7) return `${days} d ago`;
+  return fmtDate(iso);
+}
+export function durationSince(iso, now = new Date()) {
+  const days = Math.max(0, Math.floor((now - new Date(String(iso).slice(0, 10) + 'T12:00:00')) / 864e5));
+  if (days < 1) return 'less than a day';
+  if (days < 45) return `${days} day${days === 1 ? '' : 's'}`;
+  const months = Math.round(days / 30.4375);
+  return `${months} month${months === 1 ? '' : 's'}`;
 }
 
-export const KIND_TONE = { Win: 'mint', Hiring: 'violet', Offer: 'peach', Update: 'sand', Ask: 'sky' };
-export function postHTML(p, m) {
-  return `<article class="post" data-post="${p.id}">
-    <a href="${href(`/members/${m.id}/`)}"><img class="avatar" src="${photo(m.photo, 96)}" alt="" loading="lazy"></a>
-    <div>
-      <div class="post__head"><a class="post__who" href="${href(`/members/${m.id}/`)}">${m.name}<span class="seal seal--sm is-static" data-quiet aria-label="Verified">${sealSVG()}</span></a><span class="post__meta">${m.company} · ${relTime(p.at)}</span><span class="pill pill--sm pill--${KIND_TONE[p.kind] || 'sand'} post__kind">${p.kind}</span></div>
-      <p class="post__text">${p.text}</p>
-      <div class="post__foot"><span><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-8 8H8l-5 3 1.2-4.2A8 8 0 1 1 21 12z"/></svg>${p.replies} repl${p.replies === 1 ? 'y' : 'ies'}</span><span><svg viewBox="0 0 24 24"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 4v12M8 8l4-4 4 4"/></svg>Share</span></div>
+/* ── Posts ─────────────────────────────────────────────────────── */
+export function postHTML(p, author) {
+  const a = author || p.author;
+  return `<article class="post" data-post="${esc(p.id)}" data-kind="${esc(p.kind)}">
+    <a class="post__avatar" href="${href(`/members/${a.id}/`)}" tabindex="-1" aria-hidden="true">${portrait(a, { size: 44 })}</a>
+    <div class="post__main">
+      <header class="post__head">
+        <a class="post__who" href="${href(`/members/${a.id}/`)}">${esc(a.name)}</a>${isVerified(a) ? seal({ size: 'xs', label: 'Trulinq Verified' }) : ''}
+        <span class="post__meta">${a.company ? esc(a.company) + ' · ' : ''}<time datetime="${esc(p.at)}">${relTime(p.at)}</time></span>
+        <span class="tag post__kind">${esc(p.kind)}</span>
+      </header>
+      <p class="post__text">${esc(p.text)}</p>
     </div>
   </article>`;
+}
+
+export function arrowIcon() {
+  return `<svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 4l4 4-4 4"/></svg>`;
 }

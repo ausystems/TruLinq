@@ -10,63 +10,64 @@
   <!--@include(partials/nav.html)-->
   <main id="main" class="page">
 
-    <section class="panel panel--cream xhero">
+    <section class="panel panel--cream xhero" aria-labelledby="match-title">
       <div class="xhero__inner">
-        <p class="eyebrow" data-reveal="fade">Match</p>
-        <h1 class="display" data-split>Search and match.</h1>
-        <p class="lead" data-reveal>Find verified members by what they can offer and what they are looking for. Mutual fits rise to the top.</p>
-        <div class="xsearch" data-xsearch>
-          <label class="xsearch__field xsearch__field--a" data-side="a">
+        <p class="eyebrow">Match</p>
+        <h1 id="match-title" class="display">Search and match.</h1>
+        <p class="lead">Find verified members by what they can offer and what they are looking for. Mutual fits rise to the top.</p>
+        <div class="xsearch" role="search" aria-label="Search by offer and need">
+          <label class="xsearch__field">
             <span class="xsearch__label">They offer</span>
-            <input class="xsearch__input" type="search" placeholder="capital, distribution, logistics…" autocomplete="off" data-offer>
+            <input class="xsearch__input" type="search" placeholder="capital, distribution, logistics…" autocomplete="off" enterkeyhint="search" data-offer>
           </label>
           <span class="xsearch__link" aria-hidden="true"></span>
-          <label class="xsearch__field xsearch__field--b" data-side="b">
+          <label class="xsearch__field">
             <span class="xsearch__label">They’re looking for</span>
-            <input class="xsearch__input" type="search" placeholder="suppliers, co-founder, tenants…" autocomplete="off" data-looking>
+            <input class="xsearch__input" type="search" placeholder="suppliers, a co-founder, tenants…" autocomplete="off" enterkeyhint="search" data-looking>
           </label>
         </div>
-        <div class="xtools" data-reveal data-delay=".15">
+        <div class="xtools">
           <div class="select xtools__select"><label class="sr-only" for="x-ind">Industry</label><select id="x-ind" class="input" data-industry><option value="All">All industries</option></select></div>
-          <label class="switch"><input type="checkbox" checked data-verified><i></i>Verified only</label>
-          <p class="xtools__count mono" data-count aria-live="polite"></p>
+          <p class="xtools__count" data-count aria-live="polite">Loading members…</p>
         </div>
       </div>
     </section>
 
-    <section class="panel panel--white fits" id="fits">
+    <section class="panel panel--white fits" id="fits" aria-labelledby="fits-title">
       <div class="fits__inner">
-        <h2 class="display" data-split>Mutual fits.</h2>
-        <p class="lead" data-reveal>Where what one member offers is exactly what another is looking for. Both directions checked, both people verified.</p>
+        <div class="fits__head">
+          <h2 id="fits-title" class="display">Mutual fits.</h2>
+          <p class="lead">Where what one member offers is what another is looking for. Both directions checked, both people verified.</p>
+        </div>
         <div class="fits__grid" data-fits></div>
-        <div class="fits__oneway" data-oneway-wrap>
+        <div class="fits__oneway" data-oneway-wrap hidden>
           <h3 class="fits__sub">One-way fits</h3>
-          <div class="fits__grid fits__grid--small" data-oneway></div>
+          <div class="fits__grid" data-oneway></div>
         </div>
       </div>
     </section>
 
-    <section class="panel panel--cream people" id="people">
+    <section class="panel panel--cream people" id="people" aria-labelledby="people-title">
       <div class="people__inner">
-        <h2 class="display" data-split>Everyone, by what they bring.</h2>
+        <h2 id="people-title" class="display">Everyone, by what they bring.</h2>
         <div class="people__grid" data-people></div>
         <div class="empty people__empty" data-empty hidden>
           <h3>No one matches that yet.</h3>
-          <p>Try fewer words, or a different industry. New members are verified every week.</p>
+          <p>Try fewer words, or a different industry.</p>
           <button type="button" class="btn btn--ink btn--sm" data-reset><span>Clear search</span></button>
         </div>
       </div>
     </section>
 
-    <section class="panel panel--ink xhow">
+    <section class="panel panel--ink xhow" aria-labelledby="xhow-title">
       <div class="xhow__inner">
-        <h2 class="display" data-split>How matching works.</h2>
-        <ul class="ledger ledger--light xhow__ledger" data-reveal>
+        <h2 id="xhow-title" class="display">How matching works.</h2>
+        <ul class="ledger xhow__ledger">
           <li class="ledger__row"><span>Say what you offer</span><i></i><b>on your profile</b></li>
           <li class="ledger__row"><span>Say what you’re looking for</span><i></i><b>one line is enough</b></li>
           <li class="ledger__row"><span>Mutual fits rise to the top</span><i></i><b>both directions checked</b></li>
         </ul>
-        <p class="xhow__note" data-reveal data-delay=".05">We never show unverified profiles here.</p>
+        <p class="xhow__note">Only verified members appear in Match.</p>
       </div>
     </section>
 

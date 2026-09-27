@@ -1,138 +1,252 @@
 import '../../styles/main.css';
-import '../../styles/pages/member.css';
 import '../../styles/pages/dashboard.css';
-import { boot, gsap, ScrollTrigger, reduced, toast, stamp, go } from '../main.js';
-import { idCard, photo, fmtDate, sealSVG, postHTML, href } from '../ui.js';
+import { boot, busy, go, toast, stamp, setInvalid, clearOnEdit, whenVisible, reduced, gsap } from '../main.js';
+import { idCard, postHTML, portrait, seal, esc, href, fmtDate, scoreOf } from '../ui.js';
 import { gaugeHTML, factorsHTML, runGauge } from '../gauge.js';
-import { api, ApiError } from '../api.js';
-import { loadSession } from '../data.js';
+import { api, ApiError, isBackendUnavailable } from '../api.js';
+import { loadSession, INDUSTRIES } from '../data.js';
+import { BILLING, PLANS } from '../../data/billing.js';
+import { SITE } from '../../data/site.js';
+import { demoAccount } from '../../data/demo.js';
 
-let me = null; /* { user, member, verification, subscription, referrals, endorsements, posts } from GET /api/me */
-const addYear = (iso) => { const d = new Date(iso + 'T12:00:00'); d.setFullYear(d.getFullYear() + 1); return d.toISOString().slice(0, 10); };
-const day = (iso) => (iso || '').slice(0, 10);
+const $ = (s) => document.querySelector(s);
+const MONTH = 30.4375 * 864e5; /* the score engine's month (server/lib/score.ts) */
+const dayOf = (iso) => (iso || '').slice(0, 10);
+const addDays = (iso, days) => new Date(new Date(dayOf(iso) + 'T12:00:00').getTime() + days * 864e5).toISOString().slice(0, 10);
+const addMonths = (iso, n) => { const d = new Date(dayOf(iso) + 'T12:00:00'); d.setMonth(d.getMonth() + n); return d.toISOString().slice(0, 10); };
 const today = () => new Date().toISOString().slice(0, 10);
-const STATUS_LABEL = { verified: 'Verified · stamp active', pending: 'Pending · in review', unverified: 'Unverified · not yet applied', revoked: 'Stamp revoked' };
-const STATUS_PILL = { verified: 'pill--mint', pending: 'pill--sky', unverified: 'pill--sand', revoked: 'pill--rose' };
-const REQ_LABEL = { submitted: 'Submitted', in_review: 'In review', approved: 'Approved', rejected: 'Declined', withdrawn: 'Withdrawn' };
-const REQ_PILL = { submitted: 'pill--sky', in_review: 'pill--sky', approved: 'pill--mint', rejected: 'pill--rose', withdrawn: 'pill--sand' };
+const businessDaysAfter = (iso, n) => { const d = new Date(dayOf(iso) + 'T12:00:00'); while (n > 0) { d.setDate(d.getDate() + 1); if (d.getDay() % 6) n--; } return d.toISOString().slice(0, 10); };
+const STATUS = { verified: ['Verified · stamp active', 'tag--verified'], pending: ['In review', 'tag--pending'], unverified: ['Not verified yet', ''], revoked: ['Stamp revoked', 'tag--danger'] };
+const REQ = { submitted: ['Submitted', 'tag--pending'], in_review: ['In review', 'tag--pending'], approved: ['Approved', 'tag--verified'], rejected: ['Declined', 'tag--danger'], withdrawn: ['Withdrawn', ''] };
+const DETAIL = { photo: 'a profile photo', bio: 'a bio', industry: 'your industry', city: 'your city', website: 'your website', founded: 'the year you founded', offers: 'what you offer', looking: 'what you’re looking for' };
+const ICON = {
+  id: '<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><circle cx="9" cy="12" r="2.2"/><path d="M14 10h4M14 14h3"/></svg>',
+  reg: '<svg viewBox="0 0 24 24"><path d="M6 3h9l5 5v13H6z"/><path d="M14 3v6h6M9 13h7M9 17h7"/></svg>',
+  web: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>'
+};
 
-async function build() {
+let me = null;
+
+/* ── Load: the signed-in record, or the labelled demo when accounts can't be reached ── */
+async function load() {
   const s = await loadSession();
-  if (!s.user) { location.replace(href('/auth/?next=' + encodeURIComponent('/dashboard/'))); return; }
-  try { me = await api.get('/me'); }
-  catch (e) { toast(e instanceof ApiError && e.status === 401 ? 'Your session ended. Sign in again.' : 'Your dashboard could not be loaded.'); location.replace(href('/auth/?next=' + encodeURIComponent('/dashboard/'))); return; }
-  const m = me.member, v = me.verification, verified = m.status === 'verified';
+  if (s.offline) return demoAccount();
+  if (!s.user) { location.replace(href(`/auth/?next=${encodeURIComponent(href('/dashboard/'))}`)); return null; }
+  try { return await api.get('/me'); }
+  catch (e) {
+    if (isBackendUnavailable(e)) return demoAccount();
+    if (e instanceof ApiError && e.status === 401) { location.replace(href(`/auth/?next=${encodeURIComponent(href('/dashboard/'))}`)); return null; }
+    throw e;
+  }
+}
 
-  const preview = document.querySelector('.dhead__preview'); preview.hidden = true; preview.style.display = 'none'; /* the demo caption; the CSS display rule beats [hidden] */
+function paintHead() {
+  const m = me.member, verified = m.status === 'verified';
+  $('[data-demo]').hidden = !me.demo;
   const h = new Date().getHours();
-  document.querySelector('[data-greeting]').textContent = h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';
-  document.querySelector('[data-first]').textContent = m.first;
-  const pill = document.querySelector('.dhead__status .pill');
-  pill.textContent = STATUS_LABEL[m.status] || m.status; pill.className = `pill ${STATUS_PILL[m.status] || 'pill--sand'}`;
-  const renew = verified ? fmtDate(addYear(m.verifiedOn)) : '—';
-  document.querySelectorAll('[data-renew]').forEach((el) => (el.textContent = renew));
-  document.querySelector('.dhead__status .verified-line').hidden = !verified;
-  const edit = document.querySelector('.dhead__actions a.btn--ink'); if (edit) edit.href = href(`/members/${m.id}/`);
-  const mount = document.querySelector('[data-idcard-mount]');
-  mount.innerHTML = idCard(m, { href: false, stamp: verified });
-  if (!verified) mount.querySelector('.seal')?.remove();
-
-  /* the record, from what actually happened */
-  const events = [['Account created', day(m.createdAt), verified ? 'Profile published to the directory as a verified member.' : 'Profile created. It appears in the directory once verified.']];
-  if (v) {
-    events.push(['Application submitted', day(v.submittedAt), `Reference ${v.reference}. ${v.documents ? `${v.documents} document${v.documents === 1 ? '' : 's'} on file.` : 'No document on file yet.'}`]);
-    if (v.reviewStartedAt) events.push(['Human review started', day(v.reviewStartedAt), 'Assigned to a reviewer. Registry and DNS checks run.']);
-    if (v.status === 'rejected' && v.decidedAt) events.push(['Application declined', day(v.decidedAt), v.note || 'The reason is in your email. You can apply again once it is fixed.']);
-  }
-  if (verified) { events.push(['Stamp issued', m.verifiedOn, 'Trulinq Verified stamp added to your photo. Score activated.'], ['Next re-verification', addYear(m.verifiedOn), 'We check again so stamps never outlive a business.']); }
-  else if (!v || v.status === 'rejected') events.push(['Verification', '', 'Start your application from Get verified to earn the stamp.']);
-  const tl = document.querySelector('[data-timeline]');
-  events.forEach(([title, date, note]) => {
-    const cls = date && date <= today() ? 'is-done' : 'is-future';
-    tl.insertAdjacentHTML('beforeend', `<li class="tl ${cls}" data-tl><span class="tl__title">${title}</span><time class="tl__date" datetime="${date}">${date ? fmtDate(date) : 'Not started'}</time><span class="tl__note">${note}</span></li>`);
-  });
-  const done = [...tl.querySelectorAll('.tl.is-done')]; if (done.length) done[done.length - 1].classList.add('is-now');
-
-  document.querySelector('[data-gauge-mount]').innerHTML = gaugeHTML({ caption: `${m.name} · ${m.company || 'No business yet'}` });
-  document.querySelector('[data-factors-mount]').innerHTML = factorsHTML(m);
-
-  /* documents on file, from the latest application */
-  const docs = document.querySelectorAll('.docs .doc');
-  const setDoc = (li, detail, label, pillClass, date) => { li.querySelector('.doc__body span').textContent = detail; const p = li.querySelector('.pill'); p.textContent = label; p.className = `pill ${pillClass} pill--sm`; li.querySelector('.doc__date').textContent = date ? fmtDate(day(date)) : '—'; };
-  if (v) {
-    setDoc(docs[0], `${v.identity.idType || 'ID'} · ${v.identity.country || ''}`.replace(/ · $/, ''), v.documents ? REQ_LABEL[v.status] : 'Not uploaded', v.documents ? REQ_PILL[v.status] : 'pill--sand', v.submittedAt);
-    setDoc(docs[1], [v.business.name, v.business.registration].filter(Boolean).join(' · ') || '—', REQ_LABEL[v.status], REQ_PILL[v.status], v.submittedAt);
-  } else {
-    setDoc(docs[0], 'Not submitted yet', 'Missing', 'pill--sand', null);
-    setDoc(docs[1], 'Not submitted yet', 'Missing', 'pill--sand', null);
-  }
-  const webPts = m.factors[2];
-  setDoc(docs[2], m.website || 'No website linked', m.website ? (webPts === 15 ? 'Confirmed' : 'Linked') : 'None', m.website ? (webPts === 15 ? 'pill--mint' : 'pill--sky') : 'pill--sand', verified ? m.verifiedOn : (v && v.submittedAt) || null);
-
-  const vouches = me.endorsements || [];
-  document.querySelector('[data-vouch-count]').textContent = `(${vouches.length})`;
-  document.querySelector('[data-vouches]').innerHTML = vouches.map((e) => `<figure class="vouch-card"><blockquote>${e.text}</blockquote><figcaption><a href="${href(`/members/${e.from.id}/`)}"><img class="avatar" src="${photo(e.from.photo, 96)}" alt=""><span><b>${e.from.name}</b>${e.from.role}, ${e.from.company}</span></a><span class="seal seal--sm is-static" data-quiet>${sealSVG()}</span><time datetime="${e.date}">${fmtDate(e.date)}</time></figcaption></figure>`).join('') || `<div class="empty"><h3>No endorsements yet.</h3><p>Ask someone you’ve worked with to vouch for you.</p></div>`;
-  document.querySelector('[data-posts]').innerHTML = (me.posts || []).map((p) => postHTML(p, m)).join('') || `<div class="empty"><h3>No posts yet.</h3><p>The feed is chronological. Your first post goes straight to the top.</p></div>`;
-
-  /* profile completeness, from the record */
-  const keys = ['photo', 'bio', 'industry', 'city', 'website', 'founded', 'offers', 'looking'];
-  document.querySelectorAll('[data-checklist] li').forEach((li, i) => li.toggleAttribute('data-done', !!(m.completeness || {})[keys[i]]));
-
-  /* billing, only what is known */
-  const sub = me.subscription;
-  const rows = document.querySelectorAll('.rail__ledger .ledger__row b');
-  if (rows.length >= 4) {
-    rows[0].textContent = sub ? ({ verified_business: 'Verified Business', member: 'Member', enterprise: 'Enterprise' })[sub.plan] || sub.plan : 'No plan yet';
-    rows[1].textContent = sub ? (sub.period === 'monthly' ? '$24 / month' : '$228 / year') : '—';
-    rows[2].textContent = sub && sub.current_period_end ? fmtDate(sub.current_period_end) : '—';
-    rows[3].textContent = sub && sub.card_last4 ? `•••• ${sub.card_last4}` : '—';
-  }
-
-  document.querySelector('[data-letter]').addEventListener('click', () => toast(verified ? 'Verification letters are not generated yet. Write to support@trulinq.com and a person sends one.' : 'A verification letter is issued once your stamp is active.'));
-  document.querySelector('[data-card]').addEventListener('click', () => toast('Billing is not connected on this deployment yet.'));
-  document.querySelectorAll('[data-replace]').forEach((b) => b.addEventListener('click', () => toast(`Replacing your ${b.dataset.replace} starts a fresh review. Submit a new application from Get verified.`)));
-  const confirm = document.querySelector('[data-confirm]');
-  document.querySelector('[data-cancel]').addEventListener('click', () => { confirm.hidden = false; if (!reduced) gsap.from(confirm, { y: -8, opacity: 0, duration: .5, ease: 'expo.out' }); });
-  document.querySelector('[data-confirm-no]').addEventListener('click', () => (confirm.hidden = true));
-  document.querySelector('[data-confirm-yes]').addEventListener('click', () => { confirm.hidden = true; toast(sub ? `Noted. Your stamp stays active until ${renew}.` : 'There is no plan to cancel yet.'); });
-
-  /* sign out lives with the other account links */
-  const privacy = document.querySelector('.rail.card--ink');
-  privacy.insertAdjacentHTML('beforeend', `<a class="rail__link" href="${href('/')}" data-signout>Sign out <i>→</i></a>`);
-  privacy.querySelector('[data-signout]').addEventListener('click', async (e) => { e.preventDefault(); try { await api.post('/auth/logout'); } catch { /* the cookie is cleared server-side or already gone */ } go(href('/'), 'Trulinq'); });
+  $('[data-title]').textContent = me.demo ? 'A sample verification record.' : `${h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening'}, ${m.first || m.name}.`;
+  const [label, cls] = STATUS[m.status] || STATUS.unverified;
+  const tag = $('[data-status]'); tag.textContent = label; tag.className = `tag ${cls}`;
+  $('[data-renew-line]').hidden = !verified;
+  if (verified) $('[data-renew]').textContent = fmtDate(addMonths(m.verifiedOn, SITE.reverifyMonths));
+  const pub = $('[data-public]');
+  if (me.demo) pub.hidden = true; else pub.href = href(`/members/${m.id}/`);
+  $('[data-idcard-mount]').innerHTML = idCard({ ...m, score: scoreOf(m.factors) }, { link: false, stamp: verified ? 'manual' : 'none' });
 }
 
-function hero() {
-  if (!me) return;
+function paintTimeline() {
+  const m = me.member, v = me.verification, verified = m.status === 'verified';
+  const events = [['Account created', dayOf(m.createdAt || m.joined), verified ? 'Profile published to the directory as a verified member.' : 'Profile created. It appears in the directory once it’s verified.']];
+  if (v) {
+    events.push(['Application submitted', dayOf(v.submittedAt), `Reference ${v.reference}. ${v.documents ? `${v.documents} document${v.documents === 1 ? '' : 's'} on file.` : 'No document on file yet; a reviewer will ask for it by email.'}`]);
+    if (v.reviewStartedAt) events.push(['Review started', dayOf(v.reviewStartedAt), 'A reviewer is checking your documents, the registry and your domain.']);
+    if (v.status === 'rejected' && v.decidedAt) events.push(['Application declined', dayOf(v.decidedAt), v.note || 'The reason was sent by email. You can apply again once it’s fixed.']);
+    if (v.status === 'submitted' || v.status === 'in_review') events.push(['Decision expected', businessDaysAfter(v.submittedAt, SITE.review.businessDays), 'A reviewer approves the stamp or tells you exactly what needs fixing.']);
+  }
+  if (verified) events.push(['Stamp issued', m.verifiedOn, 'The Trulinq Verified stamp was added to your profile.'], ['Re-verification', addMonths(m.verifiedOn, SITE.reverifyMonths), 'We check again so a stamp never outlives a business.']);
+  else if (!v || v.status === 'rejected') events.push(['Verification', '', 'Start an application from Get verified to earn the stamp.']);
+  const now = today();
+  const tl = $('[data-timeline]');
+  tl.innerHTML = events.map(([title, date, note]) => `<li class="tl ${date && date <= now ? 'is-done' : 'is-future'}"><span class="tl__title">${esc(title)}</span><time class="tl__date"${date ? ` datetime="${date}"` : ''}>${date ? fmtDate(date) : 'Not started'}</time><span class="tl__note">${esc(note)}</span></li>`).join('');
+  const done = tl.querySelectorAll('.is-done'); if (done.length) done[done.length - 1].classList.add('is-now');
+}
+
+/* The next things that would move the score, with the exact change, from the same rules the engine uses. */
+function nextSteps(m) {
+  const base = scoreOf(m.factors), out = [];
+  const gain = (i, v) => { const f = [...m.factors]; f[i] = v; return scoreOf(f) - base; };
+  const [identity, , web, history, standing] = m.factors;
+  if (!identity) out.push(['Complete verification', gain(0, 45)]);
+  const missing = Object.entries(m.completeness || {}).filter(([k, v]) => !v && k !== 'photo').map(([k]) => k);
+  const have = Object.values(m.completeness || {}).filter(Boolean).length;
+  if (missing.length) out.push([`Add ${DETAIL[missing[0]]}`, gain(1, Math.round(((have + 1) / 8) * 20))]);
+  if (web < 15) out.push([m.website ? 'Have your domain confirmed' : 'Link your business website', gain(2, m.website ? 15 : 10)]);
+  if (history < 10) out.push([`Stay on Trulinq past ${fmtDate(new Date(new Date(dayOf(m.joined) + 'T12:00:00').getTime() + (3 * history + 1.5) * MONTH).toISOString())}`, gain(3, history + 1)]);
+  if (identity && m.verifiedOn && standing < 10) out.push([`Hold your stamp past ${fmtDate(new Date(new Date(m.verifiedOn + 'T12:00:00').getTime() + (standing + .5) * MONTH).toISOString())}`, gain(4, standing + 1)]);
+  return out.filter(([, g]) => g > 0).slice(0, 4);
+}
+
+function paintScore() {
   const m = me.member;
-  const items = document.querySelectorAll('[data-tl]');
-  const line = document.querySelector('[data-timeline-line]');
-  const doneCount = document.querySelectorAll('.tl.is-done').length;
-  if (!reduced) {
-    ScrollTrigger.create({ trigger: '[data-timeline]', start: 'top 80%', once: true, onEnter: () => {
-      gsap.to(line, { scaleY: Math.min(1, Math.max(0, (doneCount - .5) / Math.max(1, items.length - 1))), duration: 1.6, ease: 'power2.inOut' });
-      items.forEach((it, i) => gsap.fromTo(it, { x: -14, opacity: 0 }, { x: 0, opacity: 1, duration: .9, ease: 'expo.out', delay: i * .18, clearProps: 'opacity,transform' }));
-    } });
-    gsap.set(items, { opacity: 0 });
+  $('[data-gauge-mount]').innerHTML = gaugeHTML({ caption: [m.name, m.company].filter(Boolean).join(' · ') });
+  $('[data-factors-mount]').innerHTML = factorsHTML(m);
+  const hints = nextSteps(m);
+  $('[data-hints-wrap]').hidden = !hints.length;
+  $('[data-hints]').innerHTML = hints.map(([what, g]) => `<li class="ledger__row"><span>${esc(what)}</span><i></i><b>+${g}</b></li>`).join('');
+}
+
+function paintDocuments() {
+  const m = me.member, v = me.verification;
+  const row = (icon, title, detail, [label, cls], date) => `<li class="doc"><span class="doc__icon" aria-hidden="true">${icon}</span><span class="doc__body"><b>${esc(title)}</b><span>${detail}</span></span><span class="tag ${cls}">${esc(label)}</span><span class="doc__date">${date ? fmtDate(date) : '—'}</span></li>`;
+  const redacted = '<span class="redact" style="--w:9ch" aria-label="registration number hidden"></span>';
+  const docs = [];
+  if (v) {
+    docs.push(row(ICON.id, 'Government ID', esc([v.identity.idType, v.identity.country].filter(Boolean).join(' · ') || 'ID'), v.documents ? REQ[v.status] || ['On file', ''] : ['Not uploaded', 'tag--pending'], v.submittedAt));
+    docs.push(row(ICON.reg, 'Business registration', v.business.registration ? esc([v.business.name, v.business.registration].filter(Boolean).join(' · ')) : `${esc(v.business.name || 'Business')} · ${redacted}`, REQ[v.status] || ['On file', ''], v.submittedAt));
+  } else {
+    docs.push(row(ICON.id, 'Government ID', 'Not submitted yet', ['Missing', ''], null));
+    docs.push(row(ICON.reg, 'Business registration', 'Not submitted yet', ['Missing', ''], null));
   }
-  ScrollTrigger.create({ trigger: '[data-timeline]', start: 'top 80%', once: true, onEnter: () => items.forEach((it, i) => setTimeout(() => it.classList.add('is-seen'), reduced ? 0 : 200 + i * 180)) });
+  const web = m.factors[2];
+  docs.push(row(ICON.web, 'Website', esc(m.website || 'No website linked'), m.website ? (web >= 15 ? ['Confirmed', 'tag--verified'] : ['Linked', 'tag--pending']) : ['None', ''], m.website ? (m.verifiedOn || (v && v.submittedAt)) : null));
+  $('[data-docs]').innerHTML = docs.join('');
+}
 
-  const seal = document.querySelector('[data-idcard-mount] .seal');
-  if (seal) { seal.setAttribute('data-manual', ''); stamp(seal, { delay: .6, rotate: -6 }); }
-  runGauge(document.querySelector('[data-gauge-root]'), m.factors, { trigger: '#score' });
+function paintActivity() {
+  const m = me.member;
+  const vouches = me.endorsements || [];
+  $('[data-vouch-count]').textContent = `(${vouches.length})`;
+  $('[data-vouches]').innerHTML = vouches.map((e) => `<figure class="vouch-card"><blockquote>${esc(e.text)}</blockquote><figcaption><a href="${href(`/members/${e.from.id}/`)}">${portrait(e.from, { size: 32, cls: 'avatar' })}<span><b>${esc(e.from.name)}</b>${esc([e.from.role, e.from.company].filter(Boolean).join(', '))}</span></a>${seal({ size: 'xs' })}<time datetime="${esc(e.date)}">${fmtDate(e.date)}</time></figcaption></figure>`).join('')
+    || `<div class="empty"><h3>No endorsements yet.</h3><p>Ask someone you’ve worked with to vouch for you. Each member can write one, and it’s always public.</p></div>`;
+  $('[data-posts]').innerHTML = (me.posts || []).map((p) => postHTML(p, m)).join('')
+    || `<div class="empty"><h3>No posts yet.</h3><p>The feed is chronological, so your first post goes straight to the top.</p>${me.demo ? '' : `<a class="btn btn--ink btn--sm" href="${href('/feed/')}"><span>Open the feed</span></a>`}</div>`;
+}
 
-  const doneItems = document.querySelectorAll('[data-checklist] [data-done]').length, total = document.querySelectorAll('[data-checklist] li').length;
-  const pctDone = Math.round((doneItems / total) * 100);
-  const fill = document.querySelector('[data-ring-fill]'), num = document.querySelector('[data-ring-num]');
-  const st = { v: 0 };
-  const paint = () => { fill.style.strokeDashoffset = 100 - st.v; num.textContent = Math.round(st.v) + '%'; };
-  if (reduced) { st.v = pctDone; paint(); }
-  else ScrollTrigger.create({ trigger: '[data-ring]', start: 'top 90%', once: true, onEnter: () => gsap.to(st, { v: pctDone, duration: 1.6, ease: 'expo.out', onUpdate: paint }) });
+/* The completeness ring fills once when it is first seen, then moves from where it is whenever the profile changes. */
+const ring = {
+  now: 0, to: 0, seen: false, watching: false,
+  paint(v) { $('[data-ring-fill]').style.strokeDashoffset = 100 - v; $('[data-ring-num]').textContent = `${Math.round(v)}%`; },
+  run() { const st = { v: ring.now }; gsap.to(st, { v: ring.to, duration: 1, ease: 'expo.out', overwrite: true, onUpdate: () => ring.paint(st.v), onComplete: () => { ring.now = ring.to; } }); }
+};
+function paintCompleteness() {
+  const m = me.member;
+  const c = m.completeness || {};
+  const items = [...document.querySelectorAll('[data-checklist] li')];
+  items.forEach((li) => li.classList.toggle('is-done', !!c[li.dataset.key]));
+  ring.to = Math.round((items.filter((li) => c[li.dataset.key]).length / items.length) * 100);
+  $('[data-ring]').setAttribute('aria-label', `${ring.to}% of your profile is complete`);
+  if (reduced) { ring.paint(ring.to); ring.now = ring.to; }
+  else if (!ring.watching) { ring.watching = true; whenVisible($('[data-ring]'), () => { ring.seen = true; ring.run(); }); }
+  else if (ring.seen) ring.run();
+  $('[data-photo-note]').hidden = !!c.photo;
+}
 
-  document.querySelectorAll('.rail--jump a').forEach((a) => {
-    const sec = document.querySelector(a.getAttribute('href'));
-    ScrollTrigger.create({ trigger: sec, start: 'top 45%', end: 'bottom 45%', onToggle: (s) => a.classList.toggle('is-active', s.isActive) });
+function paintRail() {
+  const m = me.member;
+  paintCompleteness();
+
+  /* invitation code: real accounts only */
+  const invite = me.referrals || { count: 0 };
+  if (!me.demo && m.referralLink) {
+    $('[data-invite-box]').hidden = false;
+    $('[data-invite-code]').textContent = m.referralCode;
+    const copy = $('[data-copy]');
+    copy.addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(m.referralLink); copy.querySelector('span').textContent = 'Link copied'; setTimeout(() => (copy.querySelector('span').textContent = 'Copy invite link'), 2400); }
+      catch { toast(`Your invite link: ${m.referralLink}`, { ms: 8000 }); }
+    });
+    $('[data-invite-count]').textContent = invite.count ? `${invite.count} ${invite.count === 1 ? 'person has' : 'people have'} joined with your code.` : 'No one has joined with your code yet.';
+  } else {
+    $('[data-invite-text]').textContent = 'Signed-in members get an invitation code to share with people they trust.';
+    $('[data-invite-count]').textContent = '';
+  }
+  if (invite.referredBy) $('[data-invite-count]').insertAdjacentHTML('beforeend', ` You were invited by <a class="link" href="${href(`/members/${invite.referredBy.id}/`)}">${esc(invite.referredBy.name)}</a>.`);
+
+  /* billing: only what is actually on record */
+  const sub = me.subscription;
+  const rows = sub
+    ? [['Plan', sub.plan === 'verified_business' ? PLANS.verified.name : sub.plan], ['Price', sub.period === 'monthly' ? `${BILLING.monthlyPerMonth} a month` : `${BILLING.yearlyPerYear} a year`], ['Renews', sub.current_period_end ? fmtDate(sub.current_period_end) : '—'], ['Card', sub.card_last4 ? `ending ${sub.card_last4}` : '—']]
+    : [['Plan', m.status === 'verified' ? PLANS.verified.name : PLANS.member.name], ['Charged so far', '$0']];
+  const ledger = $('[data-billing]');
+  ledger.innerHTML = rows.map(() => '<li class="ledger__row"><span></span><i></i><b></b></li>').join('');
+  ledger.querySelectorAll('.ledger__row').forEach((li, i) => { li.querySelector('span').textContent = rows[i][0]; li.querySelector('b').textContent = rows[i][1]; });
+  $('[data-billing-note]').textContent = sub ? `To change or cancel your plan, write to ${SITE.email.support}.` : `Card payments aren’t connected yet, so nothing has been charged. The Verified Business plan will be ${BILLING.yearlyPerMonth} a month, billed yearly.`;
+
+  const signout = $('[data-signout]');
+  if (me.demo) signout.hidden = true;
+  else signout.addEventListener('click', async () => { busy(signout, true); try { await api.post('/auth/logout'); } catch { /* the session is cleared server-side or already gone */ } go(href('/')); });
+}
+
+/* ── The profile editor: PATCH /api/me, field errors from the server land on their fields ── */
+const FIELDS = ['name', 'headline', 'role', 'company', 'city', 'region', 'country', 'industry', 'founded', 'website', 'bio', 'offers', 'looking'];
+function editor() {
+  const dialog = $('[data-editor]'), form = $('[data-editor-form]'), error = $('[data-editor-error]');
+  const vis = form.querySelector('[data-visibility]');
+  $('[data-editor-industries]').insertAdjacentHTML('beforeend', INDUSTRIES.map((i) => `<option value="${esc(i)}">${esc(i)}</option>`).join(''));
+  const bio = form.querySelector('#p-bio'), bioCount = form.querySelector('[data-count-for="p-bio"]');
+  const count = () => { bioCount.textContent = `${bio.value.length} of 600`; };
+  bio.addEventListener('input', count);
+  clearOnEdit(form);
+  const fill = () => {
+    const m = me.member;
+    FIELDS.forEach((k) => { const el = form.elements[k]; if (el) el.value = m[k] == null ? '' : String(m[k]); });
+    vis.checked = (m.visibility || 'public') === 'public';
+    error.hidden = true; count();
+    form.querySelectorAll('.field.is-invalid').forEach((f) => f.classList.remove('is-invalid'));
+  };
+  const open = () => {
+    if (me.demo) { toast('Editing is off in the demo. Sign in to edit your own profile.'); return; }
+    fill(); dialog.showModal(); form.elements.name.focus();
+  };
+  document.querySelectorAll('[data-edit]').forEach((b) => b.addEventListener('click', open));
+  dialog.querySelectorAll('[data-editor-close]').forEach((b) => b.addEventListener('click', () => dialog.close()));
+  dialog.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); });
+  if (location.hash === '#profile' && !me.demo) open();
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    error.hidden = true;
+    const name = form.elements.name, founded = form.elements.founded, website = form.elements.website;
+    const badName = name.value.trim().length < 2;
+    const badYear = !!founded.value.trim() && !/^\d{4}$/.test(founded.value.trim());
+    const badSite = !!website.value.trim() && !/^(https?:\/\/)?[a-z0-9-]+(\.[a-z0-9-]+)+(\/\S*)?$/i.test(website.value.trim());
+    setInvalid(name, badName); setInvalid(founded, badYear); setInvalid(website, badSite);
+    const first = [[badName, name], [badYear, founded], [badSite, website]].find(([b]) => b);
+    if (first) { first[1].focus(); return; }
+    const body = {};
+    FIELDS.forEach((k) => { const v = form.elements[k].value.trim(); body[k] = k === 'founded' ? (v ? Number(v) : null) : v; });
+    body.visibility = vis.checked ? 'public' : 'private';
+    const btn = form.querySelector('button[type=submit]');
+    busy(btn, true);
+    try {
+      const r = await api.patch('/me', body);
+      me.member = { ...me.member, ...r.member };
+      dialog.close();
+      render({ restamp: false });
+      paintCompleteness();
+      toast('Profile saved.');
+    } catch (err) {
+      let placed = false;
+      if (err instanceof ApiError) FIELDS.forEach((k) => { const msg = err.field(k); if (msg) { setInvalid(form.elements[k], true, msg); if (!placed) form.elements[k].focus(); placed = true; } });
+      if (!placed) { error.textContent = err instanceof ApiError && err.status !== 0 && err.status !== 503 ? err.message : 'Your changes couldn’t be saved right now. They’re still in the form; try again.'; error.hidden = false; }
+    } finally { busy(btn, false); }
   });
 }
 
-boot(build, hero);
+function render({ restamp = true } = {}) {
+  paintHead(); paintTimeline(); paintScore(); paintDocuments(); paintActivity();
+  const seal = $('[data-idcard-mount] .seal');
+  if (seal) { if (restamp) stamp(seal, { delay: .4, rotate: -6 }); else seal.classList.add('is-stamped'); }
+  runGauge($('[data-gauge-root]'), me.member.factors, { trigger: $('#score') });
+}
+
+boot(async () => {
+  try { me = await load(); }
+  catch (e) {
+    console.error('[trulinq] dashboard', e);
+    const tag = $('[data-status]'); tag.textContent = 'Your record couldn’t be loaded. Refresh the page to try again.'; tag.className = 'tag tag--danger';
+    return;
+  }
+  if (!me) return;
+  render(); paintRail(); editor();
+  $('[data-dash]').removeAttribute('aria-busy');
+});

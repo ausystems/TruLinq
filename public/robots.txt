@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 Disallow: /dashboard/
-Sitemap: https://trulinqid.com/sitemap.xml
+Disallow: /auth/
+Sitemap: https://tru-linq.vercel.app/sitemap.xml
