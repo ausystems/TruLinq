@@ -1,7 +1,11 @@
 import '../../styles/main.css';
 import '../../styles/pages/verify.css';
-import { boot, gsap, ScrollTrigger, reduced, stamp, toast, scrollTo } from '../main.js';
-import { INDUSTRIES } from '../../data/members.js';
+import { boot, gsap, ScrollTrigger, reduced, stamp, toast, scrollTo, go as navigate } from '../main.js';
+import { INDUSTRIES, loadSession } from '../data.js';
+import { api, ApiError } from '../api.js';
+import { href } from '../ui.js';
+
+let fileObj = null; /* the chosen document, kept in memory until the application is submitted */
 
 const KEY = 'tq-verify';
 const state = JSON.parse(sessionStorage.getItem(KEY) || '{"step":0,"values":{},"idtype":"Passport","file":""}');
@@ -88,10 +92,34 @@ function go(next, dir = 1) {
   if (window.scrollY > stage.getBoundingClientRect().top + window.scrollY - 120) scrollTo(stage, { offset: -110 });
 }
 
-function finish() {
+async function finish() {
   collect(3);
-  const ref = 'TQ-2026-0918-' + Math.random().toString(36).slice(2, 6).toUpperCase();
-  const now = new Date();
+  const v = state.values;
+  const session = await loadSession();
+  if (!session.user) {
+    toast('Create your account to submit the application.');
+    navigate(href(`/auth/?mode=signup&next=${encodeURIComponent('/verify/')}&ref=${encodeURIComponent(v.code || '')}`), 'Create account');
+    return;
+  }
+  const payload = {
+    identity: { first: v.first, last: v.last, dob: v.dob, country: v.country, idType: state.idtype },
+    business: { name: v.business, registration: v.registration, registeredIn: v.state, website: v.website || '', industry: v.industry, role: v.role, authorised: !!v.authorised },
+    terms: !!v.terms
+  };
+  let req;
+  try { req = (await api.post('/me/verification', payload)).request; }
+  catch (e) {
+    if (e instanceof ApiError && e.code === 'request_open') req = { reference: e.details.reference, submittedAt: new Date().toISOString() };
+    else if (e instanceof ApiError && e.code === 'already_verified') { toast('Your profile is already verified.'); return; }
+    else { toast(e instanceof ApiError && e.status !== 0 && e.status !== 503 ? e.message : 'The application could not be submitted right now. Try again in a moment.'); return; }
+  }
+  let docNote = '';
+  if (fileObj && req.id) {
+    try { await api.put(`/me/verification/${req.id}/documents?kind=identity&name=${encodeURIComponent(fileObj.name)}`, fileObj, { 'content-type': fileObj.type || 'application/octet-stream' }); }
+    catch (e) { docNote = e instanceof ApiError && e.code === 'storage_not_configured' ? ' Document storage is not connected yet, so a reviewer will ask for your ID by email.' : ' The document could not be uploaded; a reviewer will ask for it by email.'; }
+  }
+  const ref = req.reference;
+  const now = new Date(req.submittedAt);
   const eta = new Date(now); let add = 2; while (add > 0) { eta.setDate(eta.getDate() + 1); if (eta.getDay() % 6) add--; }
   const fmt = (d) => d.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
   document.querySelector('[data-done-ledger]').innerHTML = [
@@ -110,7 +138,7 @@ function finish() {
   };
   if (reduced) reveal(); else gsap.to(from, { y: -30, opacity: 0, duration: .4, ease: 'power2.in', onComplete: reveal });
   sessionStorage.removeItem(KEY);
-  toast('Application received. Reference ' + ref);
+  toast('Application received. Reference ' + ref + '.' + docNote);
 }
 
 function wire() {
@@ -118,10 +146,11 @@ function wire() {
   const code = document.querySelector('#v-code');
   code.addEventListener('input', () => { const pos = code.selectionStart; code.value = fmtCode(code.value); });
   code.addEventListener('focus', () => { if (!code.value) code.value = 'TL-'; });
-  document.querySelector('[data-google]').addEventListener('click', () => toast('Google sign-in is switched off in this preview.'));
+  const ref = new URLSearchParams(location.search).get('ref'); if (ref && !code.value) { code.value = fmtCode(ref); state.values.code = code.value; save(); }
+  document.querySelector('[data-google]').addEventListener('click', () => toast('Google sign-in is not set up yet. Use your email and password.'));
   document.querySelectorAll('[data-idtype-btn]').forEach((b) => b.addEventListener('click', () => { state.idtype = b.dataset.idtypeBtn; save(); restore(); }));
   const drop = document.querySelector('[data-drop]'), file = drop.querySelector('[data-file]'), name = drop.querySelector('[data-file-name]');
-  const setFile = (f) => { if (!f) return; state.file = f.name; save(); name.hidden = false; name.textContent = f.name + ' · ' + Math.max(1, Math.round(f.size / 1024)) + ' KB'; setInvalid(drop.closest('.field'), false); };
+  const setFile = (f) => { if (!f) return; fileObj = f; state.file = f.name; save(); name.hidden = false; name.textContent = f.name + ' · ' + Math.max(1, Math.round(f.size / 1024)) + ' KB'; setInvalid(drop.closest('.field'), false); };
   file.addEventListener('change', () => setFile(file.files[0]));
   ['dragenter', 'dragover'].forEach((ev) => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.add('is-over'); }));
   ['dragleave', 'drop'].forEach((ev) => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.remove('is-over'); }));
@@ -129,7 +158,15 @@ function wire() {
   cards.forEach((c) => {
     if (c.tagName !== 'FORM') return;
     const i = +c.dataset.step;
-    c.addEventListener('submit', (e) => { e.preventDefault(); if (!validate(i)) return; collect(i); if (i === 3) finish(); else go(i + 1, 1); });
+    c.addEventListener('submit', async (e) => {
+      e.preventDefault(); if (!validate(i)) return; collect(i);
+      if (i === 0) {
+        /* the invitation code must belong to a real member */
+        try { await api.get(`/referrals/${encodeURIComponent(code.value.replace(/[^A-Z0-9]/gi, ''))}`); }
+        catch (err) { if (err instanceof ApiError && (err.status === 404 || err.status === 400)) { setInvalid(code.closest('.field'), true); code.focus(); return; } }
+      }
+      if (i === 3) finish(); else go(i + 1, 1);
+    });
     c.querySelectorAll('.input, select').forEach((el) => el.addEventListener('input', () => setInvalid(el.closest('.field'), false)));
     c.querySelectorAll('input[type=checkbox]').forEach((el) => el.addEventListener('change', () => setInvalid(el.closest('.field'), false)));
     const back = c.querySelector('[data-back]'); back && back.addEventListener('click', () => { collect(i); go(i - 1, -1); });

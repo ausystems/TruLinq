@@ -87,6 +87,14 @@ at build time with `<!--@include(partials/nav.html)-->`.
   Contact addresses: support@trulinq.com, trust@trulinq.com, privacy@trulinq.com, sales@trulinq.com. Pricing: Member (free),
   Verified Business ($19 per month, billed yearly), Enterprise (custom). Reviews finish within two business days.
 
+## Data and the backend
+
+Pages render from the API (`src/js/api.js`, `src/js/data.js`): members, profiles, posts, rooms, stats and the session
+come from `/api/*`, served by the Vercel function in `api/` over Postgres (see `docs/BACKEND.md`). `src/data/members.js`,
+`feed.js` and `rooms.js` are the seed roster the database is filled with; the pages only fall back to them when the API
+is unreachable, and never for anything that writes. Verification status, the score and the stamp are server state: a
+seal is rendered only for members the backend reports as verified.
+
 ## Page skeleton
 
 ```html

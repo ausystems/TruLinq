@@ -38,15 +38,16 @@ export function ticksPath() {
 }
 
 export function factorNotes(m) {
-  const months = Math.max(1, Math.round((new Date('2026-09-18') - new Date(m.joined)) / (30.4 * 864e5)));
-  const held = Math.max(0, Math.round((new Date('2026-09-18') - new Date(m.verifiedOn)) / (30.4 * 864e5)));
-  const [, profile, web] = m.factors;
+  const now = new Date();
+  const months = Math.max(0, Math.round((now - new Date(m.joined)) / (30.4 * 864e5)));
+  const held = m.verifiedOn ? Math.max(0, Math.round((now - new Date(m.verifiedOn)) / (30.4 * 864e5))) : 0;
+  const [identity, profile, web] = m.factors;
   return [
-    'ID and business documents reviewed and approved',
+    identity ? 'ID and business documents reviewed and approved' : m.status === 'pending' ? 'Application in review' : 'Identity and business not yet verified',
     `${Math.round((profile / 20) * 8)} of 8 profile details provided`,
     web === 15 ? 'Secure business website linked' : web > 0 ? 'Website linked, domain not yet confirmed' : 'No business website linked yet',
-    `On Trulinq for ${months} month${months === 1 ? '' : 's'}`,
-    `Stamp held for ${held} month${held === 1 ? '' : 's'} with no revocation`
+    months ? `On Trulinq for ${months} month${months === 1 ? '' : 's'}` : 'Joined this month',
+    m.verifiedOn ? `Stamp held for ${held} month${held === 1 ? '' : 's'} with no revocation` : 'No stamp held yet'
   ];
 }
 

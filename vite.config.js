@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite';
 import { fileURLToPath } from 'node:url';
-import { readdirSync, statSync, readFileSync } from 'node:fs';
+import { readdirSync, statSync, readFileSync, existsSync } from 'node:fs';
 import { join, relative, resolve } from 'node:path';
 
 const root = fileURLToPath(new URL('.', import.meta.url));
@@ -44,15 +44,33 @@ function includePartials() {
   };
 }
 
+/** Development parity with the Vercel rewrites in vercel.json: /join → join/index.html, and /members/<slug>/ for a
+ *  member without a generated page → the generic profile page. */
+function devRewrites() {
+  return {
+    name: 'trulinq-dev-rewrites',
+    configureServer(server) {
+      server.middlewares.use((req, _res, next) => {
+        const url = new URL(req.url || '/', 'http://localhost');
+        if (url.pathname === '/join') req.url = '/join/index.html' + url.search;
+        const m = /^\/members\/([a-z0-9-]+)\/?$/.exec(url.pathname);
+        if (m && m[1] !== 'profile' && !existsSync(join(root, 'members', m[1], 'index.html'))) req.url = '/members/profile/index.html' + url.search;
+        next();
+      });
+    }
+  };
+}
+
 export default defineConfig({
   base: BASE,
   appType: 'mpa',
-  plugins: [includePartials()],
+  plugins: [includePartials(), devRewrites()],
   build: {
     target: 'es2022',
     rollupOptions: { input: collectPages(root) },
     assetsInlineLimit: 0
   },
   optimizeDeps: { include: ['gsap', 'gsap/ScrollTrigger', 'gsap/SplitText', 'gsap/Flip', 'gsap/DrawSVGPlugin', 'gsap/MorphSVGPlugin', 'gsap/TextPlugin', 'lenis', 'three'] },
-  server: { port: 5180, strictPort: true, host: true }
+  /* the API runs beside Vite in development (npm run dev starts both); /api is proxied to it */
+  server: { port: 5180, strictPort: true, host: true, proxy: { '/api': { target: `http://localhost:${process.env.API_PORT || 5190}`, changeOrigin: false } } }
 });

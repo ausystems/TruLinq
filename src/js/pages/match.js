@@ -3,7 +3,9 @@ import '../../styles/pages/match.css';
 import { boot, gsap, ScrollTrigger, reduced, suspend, restore } from '../main.js';
 import { Flip } from 'gsap/Flip';
 import { industryPill, photo, sealSVG, href } from '../ui.js';
-import { MEMBERS, INDUSTRIES } from '../../data/members.js';
+import { loadMembers, INDUSTRIES } from '../data.js';
+
+let MEMBERS = []; /* verified, public members from GET /api/members */
 
 gsap.registerPlugin(Flip);
 const STOP = new Set(['and', 'the', 'for', 'with', 'that', 'this', 'from', 'your', 'our', 'partners', 'partner', 'companies', 'company', 'services', 'projects', 'general', 'help', 'info', 'experts', 'expert', 'potential', 'business']);
@@ -58,7 +60,8 @@ function matches(m) {
   return ok1 && ok2;
 }
 
-function build() {
+async function build() {
+  ({ members: MEMBERS } = await loadMembers());
   document.querySelector('[data-industry]').innerHTML += INDUSTRIES.map((i) => `<option>${i}</option>`).join('');
   const { mutual, oneway } = pairs();
   document.querySelector('[data-fits]').innerHTML = mutual.map(fitHTML).join('') || `<div class="empty"><h3>No mutual fits yet.</h3><p>Add what you offer and what you’re looking for to your profile and they appear here.</p></div>`;

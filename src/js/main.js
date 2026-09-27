@@ -3,7 +3,9 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 import Lenis from 'lenis';
-import { sealSVG } from './ui.js';
+import { sealSVG, href } from './ui.js';
+import { api } from './api.js';
+import { loadSession } from './data.js';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
@@ -426,11 +428,26 @@ document.querySelectorAll('[data-newsletter]').forEach((form) => {
     const input = form.querySelector('input[type=email]');
     const msg = form.querySelector('.footer__form-msg');
     if (!input.validity.valid || !input.value) { msg.textContent = 'Enter a working email so the dispatch can reach you.'; msg.style.color = 'var(--danger)'; input.focus(); return; }
-    msg.style.color = ''; msg.textContent = 'You are on the list. The next dispatch lands early next month.';
-    form.querySelector('button').disabled = true; input.value = '';
-    toast('Subscribed to the verified dispatch.');
+    const btn = form.querySelector('button'); btn.disabled = true;
+    api.post('/newsletter', { email: input.value }).then(() => {
+      msg.style.color = ''; msg.textContent = 'You are on the list. The next dispatch lands early next month.';
+      input.value = '';
+      toast('Subscribed to the verified dispatch.');
+    }).catch((err) => { btn.disabled = false; msg.style.color = 'var(--danger)'; msg.textContent = err.status === 0 || err.status === 503 ? 'The list is not reachable right now. Try again later.' : err.message; });
   });
 });
+
+/* Session-aware chrome: a signed-in member sees "Dashboard" where a visitor sees "Sign in". Never blocks the page. */
+export async function applySession() {
+  const s = await loadSession();
+  if (!s.user) return s;
+  document.querySelectorAll('.nav__signin, .menu__foot .btn--ghost').forEach((a) => {
+    a.href = href('/dashboard/');
+    const label = a.querySelector('span') || a;
+    label.textContent = 'Dashboard';
+  });
+  return s;
+}
 
 /* Image fade-in */
 export function initImages(scope = document) {
@@ -451,6 +468,7 @@ export async function boot(pageInit, heroInit) {
   await document.fonts.ready;
   initMarquees();
   const ctx = { gsap, ScrollTrigger, SplitText, lenis, reduced, isTouch };
+  applySession().catch(() => {});
   if (typeof pageInit === 'function') await pageInit(ctx);
   await hydrateSeals();
   ScrollTrigger.refresh();

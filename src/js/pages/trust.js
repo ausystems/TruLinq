@@ -1,6 +1,7 @@
 import '../../styles/main.css';
 import '../../styles/pages/trust.css';
 import { boot, gsap, ScrollTrigger, reduced, stamp, toast } from '../main.js';
+import { api } from '../api.js';
 
 function diagram() {
   const lines = document.querySelectorAll('[data-line]');
@@ -24,10 +25,13 @@ function report() {
     const badLink = !/^(https?:\/\/)?[^\s]+\.[^\s]+/.test(link.value.trim()), badWhat = what.value.trim().length < 12, badMail = !mail.validity.valid || !mail.value;
     invalid('#r-link', badLink); invalid('#r-what', badWhat); invalid('#r-email', badMail);
     if (badLink) return link.focus(); if (badWhat) return what.focus(); if (badMail) return mail.focus();
-    done.hidden = false;
-    if (!reduced) gsap.from(done, { opacity: 0, duration: .5 });
-    stamp(done.querySelector('.seal'), { delay: .2, rotate: -8 });
-    toast('Report received. A reviewer will look today.');
+    const submit = form.querySelector('button[type=submit]'); if (submit) submit.disabled = true;
+    api.post('/reports', { link: link.value.trim(), details: what.value.trim(), email: mail.value.trim() }).then((r) => {
+      done.hidden = false;
+      if (!reduced) gsap.from(done, { opacity: 0, duration: .5 });
+      stamp(done.querySelector('.seal'), { delay: .2, rotate: -8 });
+      toast('Report received. Reference ' + r.reference + '. A reviewer will look today.');
+    }).catch((err) => { if (submit) submit.disabled = false; toast(err.status === 0 || err.status === 503 ? 'The report could not be sent right now. Email trust@trulinq.com directly.' : err.message); });
   });
   form.querySelectorAll('.input').forEach((el) => el.addEventListener('input', () => el.closest('.field').classList.remove('is-invalid')));
 }

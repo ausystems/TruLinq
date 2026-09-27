@@ -59,7 +59,9 @@ export function gradeOf(score) {
 export function pct(score) { return Math.round(((score - 300) / 550) * 100); }
 
 export function photo(id, w = 400, h = w) {
+  if (!id) return href('/avatars/default.svg');
   if (typeof id === 'string' && id.startsWith('/')) return href(id); /* a portrait served from public/ */
+  if (typeof id === 'string' && /^(https?:|data:)/.test(id)) return id; /* a resolved URL or a generated monogram */
   return `https://images.unsplash.com/photo-${id}?w=${w}&h=${h}&fit=crop&crop=faces&q=80&auto=format`;
 }
 

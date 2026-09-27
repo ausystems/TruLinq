@@ -2,13 +2,20 @@ import '../../styles/main.css';
 import '../../styles/pages/home.css';
 import { boot, gsap, ScrollTrigger, stamp, reduced, isTouch, hydrateSeals, popIn, suspend, scrollTo } from '../main.js';
 import { idCard, photo } from '../ui.js';
-import { byId, SCENES } from '../../data/members.js';
+import { SCENES } from '../../data/members.js';
+import { loadMembers, loadStats } from '../data.js';
+
+let byId = {}, members = [], kai = null;
 import { gaugeHTML, factorsHTML, runGauge } from '../gauge.js';
 import { createStamp } from '../stamp3d.js';
 
 /* ── Build DOM that depends on data ──────────────────────────── */
-function build() {
-  const kai = byId['kai-nakamura'], ahmad = byId['ahmad-khalid'], leilani = byId['leilani-akana'];
+async function build() {
+  const stats = await loadStats().catch(() => null);
+  ({ members, byId } = await loadMembers());
+  kai = byId['kai-nakamura'] || members[0];
+  const ahmad = byId['ahmad-khalid'] || members.find((m) => m !== kai) || kai, leilani = byId['leilani-akana'] || members.find((m) => m !== kai && m !== ahmad) || kai;
+  if (stats) { const set = (sel, v) => { const el = document.querySelector(sel); if (el) el.dataset.counter = String(v); }; const stat = document.querySelectorAll('.hero__stats [data-counter]'); if (stat[0]) stat[0].dataset.counter = stats.people; if (stat[1]) stat[1].dataset.counter = stats.verified; if (stat[2]) stat[2].dataset.counter = stats.posts; if (stat[3]) stat[3].dataset.counter = stats.deals; void set; }
 
   const heroCard = document.querySelector('[data-hero-card]');
   heroCard.innerHTML = idCard(kai, { href: false, stamp: true });
@@ -269,7 +276,11 @@ async function globe() {
   const THREE = await import('../three-lite.js');
 
   const PIN_IDS = ['kai-nakamura', 'leilani-akana', 'noa-kahale', 'amara-cole', 'daniel-reyes', 'grace-okafor', 'marcus-hale', 'priya-raman', 'mia-chen', 'sofia-marin'];
-  const members = PIN_IDS.map((id) => byId[id]);
+  const placed = (m) => m && m.lat != null && m.lng != null;
+  let pinned = PIN_IDS.map((id) => byId[id]).filter(placed);
+  if (pinned.length < 4) pinned = members.filter(placed).slice(0, 10);
+  if (!pinned.length) { wrap.hidden = true; return; }
+  const members = pinned;
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, isTouch ? 1.5 : 2));
@@ -380,7 +391,7 @@ async function globe() {
 /* ── Score gauge ─────────────────────────────────────────────── */
 function score() {
   /* every animation in the section (headline, lead, dial, bars) starts on the same moment: the dial reaching 62% of the viewport */
-  runGauge(document.querySelector('[data-gauge-root]'), byId['kai-nakamura'].factors, { trigger: '[data-gauge]', start: 'top 62%' });
+  runGauge(document.querySelector('[data-gauge-root]'), kai.factors, { trigger: '[data-gauge]', start: 'top 62%' });
 }
 
 /* ── Smaller choreographies ──────────────────────────────────── */
@@ -416,6 +427,6 @@ function extras() {
 }
 
 boot(
-  async () => { build(); score(); },
+  async () => { await build(); score(); },
   () => { hero(); how(); extras(); globe(); }
 );

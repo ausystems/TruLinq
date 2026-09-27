@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Join Trulinq</title>
+  <script>
+    /* /join?ref=CODE is the shareable referral link. It carries the code into the sign-up form; the referral itself is
+       recorded once, on the server, when the account is created. */
+    (function () {
+      var ref = new URLSearchParams(location.search).get('ref') || '';
+      var base = location.pathname.replace(/join\/?(index\.html)?$/, '');
+      var to = base + 'auth/?mode=signup' + (ref ? '&ref=' + encodeURIComponent(ref) : '');
+      location.replace(to);
+    })();
+  </script>
+</head>
+<body></body>
+</html>

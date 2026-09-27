@@ -34,3 +34,10 @@ npm run preview    # serve the production build on :4173
 **GitHub Pages** (live at https://ausystems.github.io/TruLinq/): `npm run deploy` builds with `BASE_PATH=/TruLinq/`
 and force-pushes `dist/` to the `gh-pages` branch, which Pages serves. Every internal link is base-path aware, so the
 same code also deploys to a root domain (`trulinqid.com`) with a plain `npm run build`.
+
+## Backend
+
+The site runs on a real backend: a Vercel Serverless Function (`api/`) over Postgres, with sign-in, member profiles,
+referral codes and links, human-reviewed verification, the Trulinq Score, the feed, rooms, endorsements and the forms.
+`npm run dev` starts it locally against an embedded Postgres (no setup), `npm test` runs the backend suite, and
+`docs/BACKEND.md` explains the architecture, data model, security model, environment variables, migrations and deployment.

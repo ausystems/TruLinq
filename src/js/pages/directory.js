@@ -3,7 +3,9 @@ import '../../styles/pages/directory.css';
 import { boot, gsap, ScrollTrigger, reduced, hydrateSeals, initStamps, toast, suspend, restore } from '../main.js';
 import { Flip } from 'gsap/Flip';
 import { idCard, industryPill, INDUSTRY, scoreOf, gradeOf, photo, fmtDate, sealSVG, href } from '../ui.js';
-import { MEMBERS, INDUSTRIES } from '../../data/members.js';
+import { loadMembers, loadStats, INDUSTRIES } from '../data.js';
+
+let MEMBERS = []; /* verified, public members from GET /api/members */
 
 gsap.registerPlugin(Flip);
 
@@ -72,9 +74,10 @@ function buildOnce() {
   const faces = document.querySelector('[data-faces]');
   faces.innerHTML = MEMBERS.map((m) => `<span class="face"><img src="${photo(m.photo, 128)}" alt="" loading="lazy"><span class="seal seal--sm is-static" data-quiet>${sealSVG()}</span></span>`).join('');
 
-  document.querySelector('[data-stat="cities"]').textContent = new Set(MEMBERS.map((m) => m.city)).size;
-  document.querySelector('[data-stat="industries"]').textContent = new Set(MEMBERS.map((m) => m.industry)).size;
+  document.querySelector('[data-stat="cities"]').textContent = new Set(MEMBERS.map((m) => m.city).filter(Boolean)).size;
+  document.querySelector('[data-stat="industries"]').textContent = new Set(MEMBERS.map((m) => m.industry).filter(Boolean)).size;
   document.querySelector('[data-stat="people"]').textContent = MEMBERS.length;
+  loadStats().then((st) => { document.querySelector('[data-stat="people"]').textContent = st.verified; document.querySelector('[data-stat="cities"]').textContent = st.cities; document.querySelector('[data-stat="industries"]').textContent = st.industries; }).catch(() => {});
 }
 
 let first = true;
@@ -126,4 +129,4 @@ function wire() {
   resets.forEach((r) => r.addEventListener('click', () => { state.q = ''; state.industry = 'All'; search.value = ''; render(); }));
 }
 
-boot(async () => { readURL(); buildOnce(); wire(); }, () => { render(); initStamps(grid); });
+boot(async () => { ({ members: MEMBERS } = await loadMembers()); readURL(); buildOnce(); wire(); }, () => { render(); initStamps(grid); });

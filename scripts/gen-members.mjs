@@ -9,7 +9,8 @@ const tplPath = join(root, 'templates/member.html');
 if (!existsSync(tplPath)) { console.log('member template not found yet, skipping'); process.exit(0); }
 const tpl = readFileSync(tplPath, 'utf8');
 const out = join(root, 'members');
-if (existsSync(out)) for (const d of readdirSync(out)) if (d !== 'index.html') rmSync(join(out, d), { recursive: true, force: true });
+/* members/profile/ is the generic page served for members created after the build; keep it */
+if (existsSync(out)) for (const d of readdirSync(out)) if (d !== 'index.html' && d !== 'profile') rmSync(join(out, d), { recursive: true, force: true });
 mkdirSync(out, { recursive: true });
 
 for (const m of MEMBERS) {

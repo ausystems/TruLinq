@@ -1,6 +1,7 @@
 import '../../styles/main.css';
 import '../../styles/pages/contact.css';
 import { boot, gsap, reduced, stamp, toast } from '../main.js';
+import { api, ApiError } from '../api.js';
 
 const TO = { support: 'support@trulinq.com', fraud: 'trust@trulinq.com', privacy: 'privacy@trulinq.com', enterprise: 'sales@trulinq.com' };
 const channels = [...document.querySelectorAll('[data-topic]')];
@@ -32,18 +33,27 @@ function build() {
   const sealed = form.querySelector('[data-sealed]');
   const inv = (id, bad) => form.querySelector(id).closest('.field').classList.toggle('is-invalid', bad);
   form.querySelectorAll('input, textarea').forEach((el) => el.addEventListener('input', () => el.closest('.field') && el.closest('.field').classList.remove('is-invalid')));
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const name = form.querySelector('#c-name'), email = form.querySelector('#c-email'), msg = form.querySelector('#c-msg');
     const b1 = name.value.trim().length < 2, b2 = !email.validity.valid || !email.value, b3 = msg.value.trim().length < 8;
     inv('#c-name', b1); inv('#c-email', b2); inv('#c-msg', b3);
     if (b1) return name.focus(); if (b2) return email.focus(); if (b3) return msg.focus();
-    const ref = 'TQ-CT-' + Math.random().toString(36).slice(2, 6).toUpperCase();
-    sealed.querySelector('[data-sealed-ledger]').innerHTML = [['To', TO[select.value]], ['From', email.value], ['Reference', ref], ['Expected reply', 'within one business day']].map(([k, v]) => `<li class="ledger__row"><span>${k}</span><i></i><b>${v}</b></li>`).join('');
+    const submit = form.querySelector('button[type=submit]'); if (submit) submit.disabled = true;
+    let r;
+    try {
+      r = await api.post('/contact', { topic: select.value, name: name.value.trim(), email: email.value.trim(), message: msg.value.trim(), profile: member.checked ? (profile.querySelector('input').value.trim() || undefined) : undefined, copy: !!form.querySelector('[name=copy]')?.checked });
+    } catch (err) {
+      if (submit) submit.disabled = false;
+      toast(err instanceof ApiError && err.status !== 0 && err.status !== 503 ? err.message : 'Your message could not be sent right now. Email ' + TO[select.value] + ' directly.');
+      return;
+    }
+    if (submit) submit.disabled = false;
+    sealed.querySelector('[data-sealed-ledger]').innerHTML = [['To', r.to], ['From', email.value], ['Reference', r.reference], ['Expected reply', 'within one business day']].map(([k, v]) => `<li class="ledger__row"><span>${k}</span><i></i><b>${v}</b></li>`).join('');
     sealed.hidden = false;
     if (!reduced) gsap.from(sealed, { opacity: 0, scale: .98, duration: .6, ease: 'expo.out' });
     stamp(sealed.querySelector('.seal'), { delay: .3, rotate: -8 });
-    toast('Sealed and sent. Reference ' + ref);
+    toast(r.delivered ? 'Sealed and sent. Reference ' + r.reference : 'Saved for the team with reference ' + r.reference + '. Email delivery is not connected on this deployment yet.');
   });
   form.querySelector('[data-again]').addEventListener('click', () => { sealed.hidden = true; form.reset(); setTopic(select.value); profile.hidden = true; form.querySelector('#c-name').focus(); });
 }
