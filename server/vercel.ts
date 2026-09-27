@@ -7,6 +7,15 @@ import { handleRequest } from './index.ts';
 import type { ApiRequest } from './http.ts';
 
 type VercelRequest = IncomingMessage & { body?: unknown; query?: Record<string, string | string[]> };
+
+/** Vercel rewrites /api/auth/login to /api/[[...path]]?path=auth/login; the real path lives in the query segment. */
+function apiPath(req: VercelRequest, url: URL): string {
+  const seg = req.query?.['path'] ?? url.searchParams.get('path');
+  url.searchParams.delete('path');
+  if (seg !== undefined && seg !== null && seg !== '') return '/' + (Array.isArray(seg) ? seg.join('/') : String(seg)).replace(/^\/+/, '');
+  if (/\[\[\.\.\.path\]\]/.test(url.pathname)) return '/';
+  return url.pathname.replace(/^\/api/, '') || '/';
+}
 const env = loadEnv();
 
 export default async function handler(req: VercelRequest, res: ServerResponse): Promise<void> {
@@ -20,16 +29,10 @@ export default async function handler(req: VercelRequest, res: ServerResponse): 
   else if (typeof b === 'string') { rawBody = Buffer.from(b); if (type === 'application/json') { try { body = JSON.parse(b); } catch { body = undefined; } } }
   else if (b && typeof b === 'object') body = b;
   const forwarded = headers['x-forwarded-for'] || headers['x-real-ip'] || req.socket?.remoteAddress || '0.0.0.0';
-  const apiReq: ApiRequest = { method: (req.method || 'GET').toUpperCase(), path: url.pathname.replace(/^\/api/, '') || '/', query: url.searchParams, headers, body, rawBody, ip: forwarded.split(',')[0]!.trim() };
-  let out;
-  try {
-    const db = await getDb(env);
-    out = await handleRequest(apiReq, { env, db });
-  } catch (e) {
-    /* no DATABASE_URL on this deployment (or the pool cannot be created): say so cleanly, never a crash page */
-    console.error('[api] database unavailable:', e instanceof Error ? e.message : e);
-    out = { status: 503, headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' }, body: { error: { code: 'database_unavailable', message: 'The backend has no database configured yet.' } } };
-  }
+  const path = apiPath(req, url);
+  const apiReq: ApiRequest = { method: (req.method || 'GET').toUpperCase(), path, query: url.searchParams, headers, body, rawBody, ip: forwarded.split(',')[0]!.trim() };
+  /* the router opens the database only for a matched route; a missing DATABASE_URL becomes a clean 503 there */
+  const out = await handleRequest(apiReq, { env, db: () => getDb(env) });
   for (const [k, v] of Object.entries(out.headers)) res.setHeader(k, v);
   res.statusCode = out.status;
   res.end(out.body === null || out.body === undefined ? undefined : Buffer.isBuffer(out.body) ? out.body : JSON.stringify(out.body));

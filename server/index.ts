@@ -83,10 +83,10 @@ function errorResponse(e: unknown, path: string): ApiResponse {
   return json({ error: { code: 'internal_error', message: 'Something went wrong on our side. Try again in a moment.' } }, 500);
 }
 
-export interface Deps { env: Env; db: Db; now?: () => Date }
+export interface Deps { env: Env; /** a client, or a getter so unknown routes 404 without touching the database */ db: Db | (() => Promise<Db>); now?: () => Date }
 
 export async function handleRequest(req: ApiRequest, deps: Deps): Promise<ApiResponse> {
-  const { env, db } = deps;
+  const { env } = deps;
   const cors = corsHeaders(req, env);
   const finish = (res: ApiResponse, cookies: string[] = []): ApiResponse => ({
     ...res,
@@ -94,8 +94,17 @@ export async function handleRequest(req: ApiRequest, deps: Deps): Promise<ApiRes
   });
   if (req.method === 'OPTIONS') return finish({ status: 204, headers: {}, body: null });
 
-  try { await ensureMigrated(db); }
-  catch (e) { console.error('[db] not ready', e instanceof Error ? e.message : e); return finish(json({ error: { code: 'database_unavailable', message: 'The database is not available right now.' } }, 503)); }
+  /* route first: an unknown path is a 404 whatever the state of the database */
+  let route: Route | null = null, params: Record<string, string> = {};
+  for (const r of ROUTES) { const p = matchPath(r.pattern, req.path); if (p && r.method === req.method) { route = r; params = p; break; } }
+  if (!route) {
+    const known = ROUTES.some((r) => matchPath(r.pattern, req.path));
+    return finish(errorResponse(new HttpError(known ? 405 : 404, known ? 'method_not_allowed' : 'not_found', known ? 'Method not allowed.' : 'No such endpoint.'), req.path));
+  }
+
+  let db: Db;
+  try { db = typeof deps.db === 'function' ? await deps.db() : deps.db; await ensureMigrated(db); }
+  catch (e) { console.error('[db] not ready', e instanceof Error ? e.message : e); return finish(json({ error: { code: 'database_unavailable', message: 'The backend has no database available right now.' } }, 503)); }
 
   const cookies = parseCookies(req.headers['cookie']);
   const secure = (req.headers['x-forwarded-proto'] || '').startsWith('https') || env.isProd;
@@ -112,15 +121,8 @@ export async function handleRequest(req: ApiRequest, deps: Deps): Promise<ApiRes
       if (origin && !originAllowed(origin, req, env)) throw new HttpError(403, 'csrf', 'Origin not allowed.');
     }
 
-    for (const r of ROUTES) {
-      if (r.method !== req.method) continue;
-      const params = matchPath(r.pattern, req.path);
-      if (!params) continue;
-      const res = await r.handler(req, ctx, params);
-      return finish(res, ctx.cookies);
-    }
-    const known = ROUTES.some((r) => matchPath(r.pattern, req.path));
-    throw new HttpError(known ? 405 : 404, known ? 'method_not_allowed' : 'not_found', known ? 'Method not allowed.' : 'No such endpoint.');
+    const res = await route.handler(req, ctx, params);
+    return finish(res, ctx.cookies);
   } catch (e) {
     return finish(errorResponse(e, req.path), ctx.cookies);
   }

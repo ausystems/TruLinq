@@ -21002,18 +21002,33 @@ function errorResponse(e, path) {
   return json2({ error: { code: "internal_error", message: "Something went wrong on our side. Try again in a moment." } }, 500);
 }
 async function handleRequest(req, deps) {
-  const { env: env2, db } = deps;
+  const { env: env2 } = deps;
   const cors = corsHeaders(req, env2);
   const finish = (res, cookies2 = []) => ({
     ...res,
     headers: { "cache-control": "no-store", "x-content-type-options": "nosniff", ...cors, ...res.headers, ...cookies2.length ? { "set-cookie": cookies2 } : {} }
   });
   if (req.method === "OPTIONS") return finish({ status: 204, headers: {}, body: null });
+  let route = null, params = {};
+  for (const r of ROUTES) {
+    const p = matchPath(r.pattern, req.path);
+    if (p && r.method === req.method) {
+      route = r;
+      params = p;
+      break;
+    }
+  }
+  if (!route) {
+    const known = ROUTES.some((r) => matchPath(r.pattern, req.path));
+    return finish(errorResponse(new HttpError(known ? 405 : 404, known ? "method_not_allowed" : "not_found", known ? "Method not allowed." : "No such endpoint."), req.path));
+  }
+  let db;
   try {
+    db = typeof deps.db === "function" ? await deps.db() : deps.db;
     await ensureMigrated(db);
   } catch (e) {
     console.error("[db] not ready", e instanceof Error ? e.message : e);
-    return finish(json2({ error: { code: "database_unavailable", message: "The database is not available right now." } }, 503));
+    return finish(json2({ error: { code: "database_unavailable", message: "The backend has no database available right now." } }, 503));
   }
   const cookies = parseCookies(req.headers["cookie"]);
   const secure = (req.headers["x-forwarded-proto"] || "").startsWith("https") || env2.isProd;
@@ -21026,21 +21041,21 @@ async function handleRequest(req, deps) {
       const origin = req.headers["origin"];
       if (origin && !originAllowed(origin, req, env2)) throw new HttpError(403, "csrf", "Origin not allowed.");
     }
-    for (const r of ROUTES) {
-      if (r.method !== req.method) continue;
-      const params = matchPath(r.pattern, req.path);
-      if (!params) continue;
-      const res = await r.handler(req, ctx, params);
-      return finish(res, ctx.cookies);
-    }
-    const known = ROUTES.some((r) => matchPath(r.pattern, req.path));
-    throw new HttpError(known ? 405 : 404, known ? "method_not_allowed" : "not_found", known ? "Method not allowed." : "No such endpoint.");
+    const res = await route.handler(req, ctx, params);
+    return finish(res, ctx.cookies);
   } catch (e) {
     return finish(errorResponse(e, req.path), ctx.cookies);
   }
 }
 
 // server/vercel.ts
+function apiPath(req, url2) {
+  const seg = req.query?.["path"] ?? url2.searchParams.get("path");
+  url2.searchParams.delete("path");
+  if (seg !== void 0 && seg !== null && seg !== "") return "/" + (Array.isArray(seg) ? seg.join("/") : String(seg)).replace(/^\/+/, "");
+  if (/\[\[\.\.\.path\]\]/.test(url2.pathname)) return "/";
+  return url2.pathname.replace(/^\/api/, "") || "/";
+}
 var env = loadEnv();
 async function handler(req, res) {
   const url2 = new URL(req.url || "/", "http://localhost");
@@ -21071,15 +21086,9 @@ async function handler(req, res) {
     }
   } else if (b && typeof b === "object") body = b;
   const forwarded = headers["x-forwarded-for"] || headers["x-real-ip"] || req.socket?.remoteAddress || "0.0.0.0";
-  const apiReq = { method: (req.method || "GET").toUpperCase(), path: url2.pathname.replace(/^\/api/, "") || "/", query: url2.searchParams, headers, body, rawBody, ip: forwarded.split(",")[0].trim() };
-  let out;
-  try {
-    const db = await getDb(env);
-    out = await handleRequest(apiReq, { env, db });
-  } catch (e) {
-    console.error("[api] database unavailable:", e instanceof Error ? e.message : e);
-    out = { status: 503, headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" }, body: { error: { code: "database_unavailable", message: "The backend has no database configured yet." } } };
-  }
+  const path = apiPath(req, url2);
+  const apiReq = { method: (req.method || "GET").toUpperCase(), path, query: url2.searchParams, headers, body, rawBody, ip: forwarded.split(",")[0].trim() };
+  const out = await handleRequest(apiReq, { env, db: () => getDb(env) });
   for (const [k, v] of Object.entries(out.headers)) res.setHeader(k, v);
   res.statusCode = out.status;
   res.end(out.body === null || out.body === void 0 ? void 0 : Buffer.isBuffer(out.body) ? out.body : JSON.stringify(out.body));
