@@ -22,14 +22,17 @@ window.__gsap = gsap; // lets automated checks drive the ticker when a tab is hi
    glides into the header and turns navy exactly where the edge passes it, and the page settles into place.
    Everything that plays "the first time it is seen" waits for `introDone`, so no moment happens behind the cover. */
 const introEl = document.querySelector('[data-intro]');
-let introResolve, pageReadyResolve;
+let introResolve, revealResolve, pageReadyResolve;
 export const introDone = new Promise((resolve) => (introResolve = resolve));
+/* the moment the page itself starts to arrive: as the intro's cover lifts, or at once when there is no intro */
+export const pageRevealed = new Promise((resolve) => (revealResolve = resolve));
 const pageReady = new Promise((resolve) => (pageReadyResolve = resolve));
 const INTRO_WHOLE = 1000; // ms after the first paint at which the last letter has landed
 
 function introFinish() {
   html.classList.remove('has-intro');
   if (introEl) introEl.remove();
+  revealResolve();
   introResolve();
 }
 function runIntro() {
@@ -62,6 +65,7 @@ function runIntro() {
     }
     /* the page arrives just behind the logo, so the flight never crosses the content */
     if (main) tl.fromTo(main, { y: 72, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: 'expo.out', clearProps: 'transform,opacity' }, .46);
+    tl.call(revealResolve, null, .5);
   };
   /* a click, a key, a scroll or a swipe means "let me in": the cover lifts at once */
   ['pointerdown', 'keydown', 'wheel', 'touchmove'].forEach((type) => addEventListener(type, lift, { passive: true, signal: listening.signal }));

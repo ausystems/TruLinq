@@ -8,7 +8,16 @@
   .hero__inner { position: relative; z-index: 1; width: 100%; max-width: var(--max); margin: 0 auto; display: grid; grid-template-areas: "title" "copy" "stage"; gap: clamp(24px, 3vw, 40px) clamp(32px, 4vw, 72px); align-content: center; padding: clamp(36px, 5vw, 80px) var(--gutter) clamp(28px, 3.4vw, 48px); }
   @media (min-width: 1024px) { .hero__inner { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); grid-template-rows: minmax(0, 1fr) auto; grid-template-areas: "title stage" "copy stage"; } .hero__title { align-self: end; } .hero__copy { align-self: start; } }
   .hero__title { grid-area: title; font-size: clamp(3rem, 1.1rem + 6.4vw, 7.75rem); font-weight: 400; line-height: .95; letter-spacing: -.055em; max-width: 8.6ch; }
-  .hero__title .hl { padding-right: .02em; }
+  /* The title writes itself: each letter rises out of its word, fast, leaning back into place, and then the seal
+     presses the full stop. The words are the masks; they reach a little past the glyphs so nothing is clipped at
+     rest. The letters wait (hidden) for the page to be revealed; if the script never comes, they rise anyway. */
+  .hero__split .w { display: inline-block; overflow: clip; vertical-align: top; padding: 0 .07em .16em; margin: 0 -.07em -.16em; }
+  /* letters set one by one lose the font's kerning, so the pairs that need it (Ev, ve, yo, re) carry it back as --k */
+  .hero__split .c { display: inline-block; margin-right: var(--k, 0); transform-origin: 0 100%; }
+  html.anim .hero__split .c { animation: hero-rise-late .82s cubic-bezier(.16, 1, .3, 1) calc(3.2s + var(--i) * 18ms) both; }
+  html.anim .hero__split.is-go .c { animation-name: hero-rise; animation-delay: calc(var(--i) * 18ms); }
+  @keyframes hero-rise { from { transform: translateY(112%) rotate(8deg); } }
+  @keyframes hero-rise-late { from { transform: translateY(112%) rotate(8deg); } }
   .hero__stop { display: inline-block; width: .3em; margin-left: .025em; vertical-align: baseline; }
   .hero__stop .seal { --seal-size: .27em; vertical-align: -.015em; }
   .hero__stop .seal svg { filter: drop-shadow(0 1px 1px rgba(2, 8, 23, .25)); }
@@ -58,7 +67,6 @@
   .who__line { color: var(--fg-mute); }
   .who__line a { color: var(--fg); white-space: nowrap; text-decoration: underline; text-decoration-thickness: max(1px, .025em); text-underline-offset: .16em; text-decoration-color: var(--line-3); border-radius: 4px; transition: color var(--t-hover) var(--e-out), text-decoration-color var(--t-hover); }
   .who__line a:hover { color: var(--blue-ink); text-decoration-color: currentColor; }
-  .who__count { display: inline-block; margin: 0 -.1em 0 .1em; font-family: var(--f-mono); font-size: .28em; font-weight: 500; letter-spacing: 0; line-height: 0; vertical-align: 2.1em; color: var(--blue-ink); text-decoration: none; }
   .who__line .who__any { color: var(--blue-ink); text-decoration: none; white-space: nowrap; }
   .who__line .who__any:hover { text-decoration: underline; text-decoration-thickness: .06em; }
   .who__inner { max-width: min(var(--max), 1240px); margin-inline: auto; }

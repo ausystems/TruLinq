@@ -1,6 +1,6 @@
 import '../../styles/main.css';
 import '../../styles/pages/home.css';
-import { boot, gsap, stamp, reduced, isTouch, whenVisible, introDone } from '../main.js';
+import { boot, gsap, stamp, reduced, isTouch, whenVisible, pageRevealed } from '../main.js';
 import { idCard, portrait, seal, esc, href, fmtDate, relTime } from '../ui.js';
 import { loadMembers, loadStats, loadRooms } from '../data.js';
 import { FEATURED, QUOTES } from '../../data/editorial.js';
@@ -34,16 +34,6 @@ async function build() {
   ({ members, byId } = data);
   if (stats) paintStats(stats);
 
-  /* how many verified members work in each industry */
-  const counts = {};
-  members.forEach((m) => { if (m.industry) counts[m.industry] = (counts[m.industry] || 0) + 1; });
-  document.querySelectorAll('[data-industry-tag]').forEach((a) => {
-    const n = counts[a.dataset.industryTag] || 0;
-    if (!n) return;
-    a.insertAdjacentHTML('beforeend', `<span class="who__count" aria-hidden="true">${n}</span>`);
-    a.setAttribute('aria-label', `${a.textContent.replace(/\d+$/, '').trim()}, ${n} verified member${n === 1 ? '' : 's'}`);
-  });
-
   const lead = byId[FEATURED.hero] || members[0];
   if (lead) {
     document.querySelector('[data-hero-card]').innerHTML = idCard(lead, { link: false, stamp: 'manual', sealSize: 'md' }) + HERO_NOTE;
@@ -72,6 +62,12 @@ async function build() {
 
 /* ── Hero: the stamp presses the seal onto a real member's card ── */
 async function hero() {
+  /* the title writes itself as the page arrives, and the seal presses its full stop as the last letter lands */
+  pageRevealed.then(() => {
+    const split = document.querySelector('.hero__split');
+    if (split) split.classList.add('is-go');
+    stamp(document.querySelector('[data-hero-stop]'), { delay: .78, rotate: -12 });
+  });
   const stage = document.querySelector('[data-hero-stage]');
   const desk = stage.querySelector('.hero__desk');
   const cardWrap = stage.querySelector('[data-hero-card]');
@@ -83,8 +79,7 @@ async function hero() {
   const stacked = matchMedia('(max-width: 1023px)');
   const write = () => note && note.classList.add('is-written');
 
-  /* the headline's full stop is the seal, pressed as the page arrives (after the intro, when there is one) */
-  introDone.then(() => stamp(document.querySelector('[data-hero-stop]'), { delay: .1, rotate: -12 }));
+
 
   /* the card lies on the desk */
   gsap.set(card, { rotationX: 34, rotationZ: -6, rotationY: 4, transformPerspective: 1400, transformOrigin: '50% 50%' });

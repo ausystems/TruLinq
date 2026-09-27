@@ -7,12 +7,15 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300..700&family=Caveat:wght@500..700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script>
-  /* The intro plays when someone arrives from outside the site or reloads, never when moving between its pages, never with
-     reduced motion (and not in ?nomotion reviews). Decided here, before the first paint, so nothing flashes. */
+  /* Decided here, before the first paint, so nothing flashes. html.anim: motion is welcome (not with reduced motion,
+     not in ?nomotion reviews), so entrances such as the hero title may start hidden. html.has-intro: the intro plays,
+     which it does when someone arrives from outside the site or reloads, never when moving between its pages. */
   (function () {
     try {
-      var d = document.documentElement;
-      if (/[?&](nomotion|nointro)(=|&|$)/.test(location.search) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var d = document.documentElement, q = location.search;
+      if (/[?&]nomotion(=|&|$)/.test(q) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      d.classList.add('anim');
+      if (/[?&]nointro(=|&|$)/.test(q)) return;
       var nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
       var type = nav ? nav.type : 'navigate';
       if (type === 'back_forward') return;

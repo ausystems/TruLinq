@@ -74,6 +74,11 @@ premium product page: few elements per viewport, very large light type, generous
    fills. Sizes `xs` (16), `sm` (32), `md` (64), `lg` (112), `xl`. Under 56px the compact seal drops the ring text.
    `data-manual` seals stay hidden until `stamp(el)` issues them. The homepage headline ends with a seal instead of a
    full stop (`.hero__stop`), pressed as the page arrives.
+   The headline itself writes in as the page is revealed (`pageRevealed` in `src/js/main.js`): each letter rises out
+   of its word 18ms after the last, leaning back into place, and the seal presses the full stop as the last letter
+   lands. Screen readers get one sentence (`.sr-only`); the split letters are `aria-hidden`. Letters set one by one
+   lose the font's kerning, so the pairs that need it carry it back as `--k` (read from Lexend 400). `html.anim`,
+   set before the first paint when motion is welcome, is what lets the letters start hidden.
 2. **The reviewer's notes.** `.scribble`: a few words in blue ink with a hand-drawn pen stroke
    (`.scribble__pen`, two paths with `pathLength="1"`) pointing at what they are about. Rules: one note per section
    at most, never on every page head, it states one true thing that the page also says in text (so it can be
@@ -133,7 +138,7 @@ session storage until it is submitted (never the ID document itself).
 
 ## Motion
 
-Motion is feedback, not decoration. Allowed: the intro on arrival, the stamp being issued (the 3D press, the seal
+Motion is feedback, not decoration. Allowed: the intro on arrival, the hero title writing itself, the stamp being issued (the 3D press, the seal
 full stop), the reviewer's notes writing themselves once, the score being read once when first seen, the how-it-works
 application moving through its three checks once, the feature scenes on hover, state changes (menu, dialogs, toggles,
 chips, filters, busy buttons, the disc turning on hover), the globe turning while dragged, and the completeness ring. Not allowed: fade-ups on every
