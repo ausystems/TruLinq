@@ -31,12 +31,10 @@
   .hero__card .idcard { transition: none; transform-style: preserve-3d; box-shadow: 0 34px 64px -26px rgba(12,21,38,.3), 0 2px 4px rgba(12,21,38,.06); }
   .hero__card .idcard:hover { transform: none; }
   .hero__card .idcard__photo .seal { --seal-size: 72px; right: -30px; bottom: -30px; }
-  .hero__mascot { position: absolute; left: -2%; bottom: -2%; width: clamp(150px, 32%, 200px); z-index: 3; }
-  .hero__mascot svg { display: block; width: 100%; height: auto; overflow: visible; }
   .hero__note-1 { top: 1%; right: 2%; }
   @media (max-width: 600px) { .hero__cta .btn { width: 100%; justify-content: space-between; } }
   @media (max-width: 480px) { .hero__title { font-size: clamp(2rem, 10.6vw, 3rem); } .hero__wordmark { font-size: 40vw; } }
-  @media (max-width: 1023px) { .hero__stage { min-height: 440px; margin-top: 8px; } .hero__card { width: min(80%, 360px); } .hero__mascot { width: clamp(120px, 30%, 160px); left: 0; } .hero__note-1 { top: 0; right: 2%; } .pin em { display: none; } .pin { font-size: .72rem; padding: 3px 10px 3px 3px; } .pin img { width: 26px; height: 26px; } }
+  @media (max-width: 1023px) { .hero__stage { min-height: 440px; margin-top: 8px; } .hero__card { width: min(80%, 360px); } .hero__note-1 { top: 0; right: 2%; } .pin em { display: none; } .pin { font-size: .72rem; padding: 3px 10px 3px 3px; } .pin img { width: 26px; height: 26px; } }
   @media (max-width: 600px) { .hero__stage { min-height: 420px; } .hero__card { width: min(80%, 320px); } .hero__card .idcard__name { font-size: 1.08rem; } .hero__card .idcard__photo .seal { --seal-size: 64px; right: -26px; bottom: -26px; } }
   @media (max-width: 400px) { .hero__ledger-title, .hero__ledger-motto { white-space: normal; } }
   .hero__ledger { background: rgba(255,255,255,.7); }
@@ -131,12 +129,9 @@
   @media (max-width: 480px) { .registry__rows li { font-size: .8rem; gap: 8px; } .registry__rows li b { font-size: .72rem; } .registry { padding: 16px 16px 8px; } .iddoc { padding: 14px 16px 16px; } .iddoc__body { grid-template-columns: 80px 1fr; gap: 14px; } .iddoc__photo { width: 80px; height: 100px; } }
   .registry__ok { width: 20px; height: 20px; flex: none; display: grid; place-items: center; transform: scale(0); }
   .registry__ok::after { content: ""; width: 10px; height: 5px; border-left: 2px solid var(--sky); border-bottom: 2px solid var(--sky); transform: rotate(-45deg); margin-top: -3px; }
-  .scene--stamp .idcard { width: min(100%, 420px); transform: rotate(-3deg); }
+  .scene--stamp .idcard { width: min(100%, 460px); transform: rotate(-3deg); }
   .scene--stamp .idcard .seal { --seal-size: 64px; right: -20px; bottom: -20px; }
-  .how__mascot { position: absolute; left: 5%; bottom: -1%; width: clamp(130px, 30%, 210px); z-index: 2; }
-  .how__mascot [data-m-shadow] { fill: #4AB3FF; } /* on the navy stage the seal sits in a soft sky glow, not a shadow */
-  .how__mascot svg { display: block; width: 100%; height: auto; overflow: visible; }
-  @media (max-width: 1023px) { .how__frame { aspect-ratio: auto; min-height: 0; padding: 20px; display: grid; gap: 20px; } .scene { position: relative; padding: 0; opacity: 1 !important; transform: none !important; } .scene--stamp { padding-bottom: clamp(150px, 30%, 220px); } .how__mascot { left: 0; } .how__step { opacity: .5; background: var(--surface-2); box-shadow: var(--sh-card); } .how__step.is-active { opacity: 1; } .how__step.is-active ~ .how__step { opacity: .5; } html.reduced-motion .how__step { opacity: 1; } }
+  @media (max-width: 1023px) { .how__frame { aspect-ratio: auto; min-height: 0; padding: 20px; display: grid; gap: 20px; } .scene { position: relative; padding: 0; opacity: 1 !important; transform: none !important; } .how__step { opacity: .5; background: var(--surface-2); box-shadow: var(--sh-card); } .how__step.is-active { opacity: 1; } .how__step.is-active ~ .how__step { opacity: .5; } html.reduced-motion .how__step { opacity: 1; } }
   @media (max-width: 400px) { .how__frame { padding: 14px; gap: 14px; } }
 
   /* ── WORLD ────────────────────────────────────────────────────── */
@@ -247,8 +242,6 @@
   .faq__side h2 { font-size: var(--fs-2); max-width: 8ch; }
   .faq__sub { margin-top: 18px; color: var(--fg-soft); }
   .faq__sub a { color: var(--glow); font-weight: 600; text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
-  .faq__mascot { margin-top: clamp(24px, 3vw, 48px); width: min(100%, 300px); }
-  .faq__mascot svg { display: block; width: 100%; height: auto; overflow: visible; }
 
   /* ── CTA ──────────────────────────────────────────────────────── */
   .cta { overflow: hidden; }

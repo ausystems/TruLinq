@@ -12,12 +12,7 @@
   .nf__stamp-inner { display: block; }
   html.reduced-motion .nf__stamp { opacity: 1; }
 
-  /* The reviewer: sits on the floor at the bottom-left of the record, tucked into the notch of the first 4. The stage
-     reserves the drop with a margin (not padding) so the stamp mark keeps its place over the digits. */
-  .nf__stage { --digit: clamp(7.5rem, 24vw, 21rem); --seal-w: calc(var(--digit) * .73); --seal-x: calc(var(--digit) * 1.27); --seal-drop: calc(var(--digit) * .25); margin-bottom: var(--seal-drop); }
-  .nf__mascot { position: absolute; left: calc(50% - var(--seal-x)); bottom: calc(-1 * var(--seal-drop)); width: var(--seal-w); cursor: pointer; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; will-change: transform; }
-  .nf__mascot svg { display: block; width: 100%; height: auto; overflow: visible; }
-  .nf__mascot [data-m-q] text { user-select: none; }
+  .nf__stage { --digit: clamp(7.5rem, 24vw, 21rem); }
 
   .nf__copy { display: grid; gap: 22px; justify-items: start; }
   .nf h1 { font-size: var(--fs-1); }
@@ -29,5 +24,5 @@
   .nf__search .input:focus-visible { box-shadow: none; }
   .nf__search .btn { min-height: 46px; }
   .nf__links { display: flex; flex-wrap: wrap; gap: 8px; }
-  @media (max-width: 1023px) { .nf__stage { order: -1; --digit: clamp(6.5rem, 30vw, 12rem); --seal-w: calc(var(--digit) * .93); --seal-x: calc(var(--digit) * 1.63); --seal-drop: calc(var(--digit) * .41); } }
+  @media (max-width: 1023px) { .nf__stage { order: -1; --digit: clamp(6.5rem, 30vw, 12rem); } }
 }

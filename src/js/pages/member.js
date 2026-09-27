@@ -18,11 +18,11 @@ function build() {
   img.srcset = `${photo(m.photo, 480)} 480w, ${photo(m.photo, 800)} 800w, ${photo(m.photo, 1200)} 1200w`;
   img.sizes = '(min-width: 900px) 400px, 90vw';
 
-  document.querySelector('[data-pills]').innerHTML = industryPill(m.industry) + `<span class="pill pill--sand pill--sm">${m.city}, ${m.region}</span><span class="pill pill--sm pill--ink mono">${g.grade} · ${score}</span>`;
+  document.querySelector('[data-pills]').innerHTML = industryPill(m.industry) + `<span class="pill pill--sand pill--sm">${[m.city, m.region].filter(Boolean).join(', ')}</span><span class="pill pill--sm pill--ink mono">${g.grade} · ${score}</span>`;
   document.querySelector('[data-verified-line]').innerHTML = `Verified on <b>${fmtDate(m.verifiedOn)}</b> by the Trulinq review team`;
   document.querySelector('[data-social]').textContent = `${m.followers} followers · ${m.following} following`;
   document.querySelector('[data-details]').innerHTML = [
-    ['Industry', m.industry], ['Location', `${m.city}, ${m.country}`], ['Founded', m.founded || '—'],
+    ['Industry', m.industry], ['Location', [m.city, m.country].filter(Boolean).join(', ')], ['Founded', m.founded || '—'],
     ['Website', m.website ? `<a href="https://${m.website}" target="_blank" rel="noopener">${m.website}</a>` : '—'],
     ['Member since', fmtDate(m.joined)], ['Re-verification due', fmtDate(nextYear(m.verifiedOn))]
   ].map(([k, v]) => `<li class="ledger__row"><span>${k}</span><i></i><b>${v}</b></li>`).join('');

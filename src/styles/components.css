@@ -268,16 +268,9 @@
   .footer__form input::placeholder { color: rgba(244,247,251,.45); }
   .footer__form input:focus-visible { box-shadow: none; outline: 2px solid var(--primary); outline-offset: -2px; border-radius: var(--r-pill); }
   .footer__form-msg { position: absolute; left: 20px; top: calc(100% + 8px); font-size: .82rem; color: var(--glow); width: 100%; }
-  .footer__bottom { position: relative; margin-top: clamp(48px, 6vw, 88px); padding-top: 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 28px; font-size: .86rem; color: rgba(244,247,251,.6); min-height: 96px; }
+  .footer__bottom { position: relative; margin-top: clamp(48px, 6vw, 88px); padding-top: 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 28px; font-size: .86rem; color: rgba(244,247,251,.6); }
   .footer__legal { display: flex; gap: 18px; }
   .footer__legal a:hover { color: var(--fg); }
-  .footer__mascot { position: absolute; right: 8px; bottom: -6px; width: clamp(120px, 14vw, 180px); pointer-events: none; }
-  @media (max-width: 520px) { .footer__bottom { padding-right: 110px; } .footer__mascot { width: 100px; right: 0; } }
-  .mascot { width: 100%; height: auto; }
-
-  /* ── Mascot (the Trulinq monk seal) ──────────────────────────── */
-  .mascot--full { width: 100%; height: auto; }
-
   /* ── Reveal primitives (JS sets final state) ─────────────────── */
   [data-reveal] { opacity: 0; }
   html.no-js [data-reveal], html.reduced-motion [data-reveal] { opacity: 1; }
@@ -313,7 +306,7 @@
   .empty { display: grid; justify-items: center; text-align: center; gap: 14px; padding: clamp(40px, 5vw, 72px) 24px; border-radius: var(--r-card); background: var(--bg); }
   .empty h3 { font-size: var(--fs-4); }
   .empty p { color: var(--fg-soft); max-width: 36ch; }
-  .empty .mascot { width: 130px; }
+  .empty .seal { --seal-size: 72px; }
 
   /* Page-hero shared (internal pages) */
   .phero { position: relative; }

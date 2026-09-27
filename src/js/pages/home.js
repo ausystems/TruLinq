@@ -4,28 +4,22 @@ import { boot, gsap, ScrollTrigger, stamp, reduced, isTouch, hydrateSeals, popIn
 import { idCard, photo } from '../ui.js';
 import { byId, SCENES } from '../../data/members.js';
 import { gaugeHTML, factorsHTML, runGauge } from '../gauge.js';
-import { mascotSVG, mascotParts, prime, review, idle, liveIdle } from '../mascot.js';
 import { createStamp } from '../stamp3d.js';
 
 /* ── Build DOM that depends on data ──────────────────────────── */
 function build() {
-  const kai = byId['kai-nakamura'], leilani = byId['leilani-akana'], grace = byId['grace-okafor'];
+  const kai = byId['kai-nakamura'], ahmad = byId['ahmad-khalid'], leilani = byId['leilani-akana'];
 
   const heroCard = document.querySelector('[data-hero-card]');
   heroCard.innerHTML = idCard(kai, { href: false, stamp: true });
   heroCard.querySelector('.seal').setAttribute('data-manual', '');
   heroCard.querySelectorAll('img').forEach((img) => { img.loading = 'eager'; img.fetchPriority = 'high'; });
 
-  /* one mascot, three appearances: the hero desk, the stamped scene, the FAQ */
-  document.querySelector('[data-hero-mascot]').innerHTML = mascotSVG({ marks: false });
-  document.querySelector('[data-how-mascot]').innerHTML = mascotSVG({ marks: false });
-  document.querySelector('[data-faq-mascot]').innerHTML = `<div class="mascot-root" data-faq-root>${mascotSVG({ marks: true })}</div>`;
-
   const howCard = document.querySelector('[data-how-card]');
   howCard.innerHTML = idCard(kai, { href: false, stamp: true });
   howCard.querySelector('.seal').setAttribute('data-manual', '');
 
-  document.querySelector('[data-world-cards]').innerHTML = idCard(leilani) + idCard(grace);
+  document.querySelector('[data-world-cards]').innerHTML = idCard(ahmad) + idCard(leilani);
 
   const masked = document.querySelector('[data-masked]');
   masked.style.setProperty('--mask-img', `url(${photo(SCENES.team, 1600, 1000)})`);
@@ -42,7 +36,6 @@ async function hero() {
   const card = cardWrap.querySelector('.idcard');
   const seal = card.querySelector('.seal');
   const canvas = heroEl.querySelector('[data-hero-stamp]');
-  const p = mascotParts(heroEl.querySelector('[data-hero-mascot]'));
   const stacked = matchMedia('(max-width: 1023px)');
 
   /* the card lies on the desk */
@@ -98,7 +91,6 @@ async function hero() {
   gsap.set(['.hero__lead', '.hero__cta'], { y: 24 });
   gsap.set(cardWrap, { opacity: 0, y: 60 });
   gsap.set(canvas, { opacity: 0, y: -80 });
-  prime(p);
   S.start();
   gsap.timeline({ defaults: { ease: 'expo.out' } })
     .to('.hero__eyebrow', { opacity: 1, duration: .9 }, 0)
@@ -115,8 +107,6 @@ async function hero() {
     .add(thud, 1.48)
     .to(S.press, { t: 0, duration: 1.1, ease: 'elastic.out(1, .45)' }, 1.62)
     .add(() => gsap.to(cardWrap, { y: -6, duration: 3.8, ease: 'sine.inOut', yoyo: true, repeat: -1 }), 2.7);
-  /* the reviewer thumps its own stamp in the same beat */
-  review(desk, p, { land: 1.48 });
   if (stage.getBoundingClientRect().top < innerHeight * .6) gsap.delayedCall(.5, () => desk.play());
   else ScrollTrigger.create({ trigger: stage, start: 'top 60%', once: true, onEnter: () => desk.play() });
 
@@ -136,12 +126,11 @@ async function hero() {
   /* press the desk again: a mouse on press, a finger on tap (so a scroll that starts here never fires it) */
   let pressing = false;
   stage.addEventListener(isTouch ? 'click' : 'pointerdown', (e) => {
-    if (e.button || pressing || desk.isActive() || !desk.progress() || e.target.closest('[data-hero-mascot]')) return;
+    if (e.button || pressing || desk.isActive() || !desk.progress()) return;
     pressing = true;
     gsap.timeline({ onComplete: () => (pressing = false) })
       .to(S.press, { t: 1, duration: .3, ease: 'power3.in' })
       .add(thud, .3)
-      .add(() => { gsap.timeline().to(p.eyes, { scaleY: 1.18, scaleX: 1.08, duration: .1 }).to(p.eyes, { scaleY: 1, scaleX: 1, duration: .5, ease: 'elastic.out(1, .5)' }); gsap.timeline().to(p.body, { scaleY: .94, scaleX: 1.04, duration: .09 }).to(p.body, { scaleY: 1, scaleX: 1, duration: .7, ease: 'elastic.out(1, .4)' }); }, .3)
       .to(S.press, { t: 0, duration: 1, ease: 'elastic.out(1, .45)' }, .42);
   });
   stage.style.cursor = 'pointer';
@@ -175,28 +164,19 @@ function sceneRegistry() {
   });
   return tl;
 }
-/* The stamped scene plays in real time (never scrubbed): the card rises, the seal slams, the reviewer pops up and
-   thumps in the same beat, then lives on the stage until the scene leaves. */
-function sceneStamp({ offset = true } = {}) {
+/* The stamped scene plays in real time (never scrubbed): the card rises and the seal slams onto it. */
+function sceneStamp() {
   const s = document.querySelector('[data-scene="2"]');
   const card = s.querySelector('.idcard');
   const seal = s.querySelector('.seal');
-  const p = mascotParts(s.querySelector('[data-how-mascot]'));
   const tl = gsap.timeline({ paused: true });
-  /* on the pinned stage the card sits up and to the right so the seal thumps toward it; stacked, it stays in its slot */
-  gsap.set(card, offset ? { xPercent: 6, yPercent: -10 } : { xPercent: 0, yPercent: 0 });
   tl.fromTo(card, { y: 60, rotate: -8, opacity: 0 }, { y: 0, rotate: -3, opacity: 1, duration: 1, ease: 'expo.out' })
     .fromTo(seal, { opacity: 0, scale: 2.2, rotate: -26 }, { opacity: 1, scale: 1, rotate: -8, duration: .55, ease: 'power4.in' }, .9)
     .to(card, { rotate: -1.5, y: 6, duration: .18, ease: 'power2.out' }, 1.42)
     .to(card, { y: 0, duration: .8, ease: 'elastic.out(1, .4)' }, 1.6)
     .to(seal, { scale: 1.04, duration: .8, ease: 'elastic.out(1, .4)' }, 1.45);
-  if (p) {
-    prime(p);
-    review(tl, p, { land: 1.45, idle: false });
-    tl.eventCallback('onComplete', () => { tl.life = liveIdle(p); });
-  }
-  /* leaving the scene: stop the idle loops and put everything back to the start, ready to replay */
-  tl.reset = () => { if (tl.life) { tl.life.kill(); tl.life = null; } tl.pause(0); };
+  /* leaving the scene: put everything back to the start, ready to replay */
+  tl.reset = () => tl.pause(0);
   return tl;
 }
 
@@ -268,7 +248,7 @@ function how() {
 
   /* Mobile & tablet: scenes stack; each plays once as it enters */
   mm.add('(max-width: 1023px)', () => {
-    const a = sceneId(), b = sceneRegistry(), c = sceneStamp({ offset: false });
+    const a = sceneId(), b = sceneRegistry(), c = sceneStamp();
     const tls = [a, b, c]; const triggers = [];
     if (reduced) { setStep(-1); setRail(1); tls.forEach((t) => t.progress(1)); return () => { c.reset(); tls.forEach((t) => t.kill()); gsap.set(scenes, { clearProps: 'all' }); }; }
     tls.forEach((t, i) => triggers.push(ScrollTrigger.create({ trigger: scenes[i], start: 'top 80%', once: true, onEnter: () => t.play() })));
@@ -433,10 +413,6 @@ function extras() {
     p.addEventListener('pointerenter', () => card.classList.add('is-hot'));
     p.addEventListener('pointerleave', () => card.classList.remove('is-hot'));
   });
-
-  /* the FAQ mascot lives: breathes, blinks, follows you, hops when tapped */
-  const faq = mascotParts(document.querySelector('[data-faq-root]'));
-  if (faq) idle(faq, { hop: true });
 }
 
 boot(

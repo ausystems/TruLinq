@@ -1,7 +1,6 @@
 import '../../styles/main.css';
 import '../../styles/pages/notfound.css';
 import { boot, gsap, reduced, go } from '../main.js';
-import { mascotParts, prime, review } from '../mascot.js';
 import { href, BASE } from '../ui.js';
 
 function build() {
@@ -17,7 +16,6 @@ function hero() {
   const stamp = document.querySelector('[data-nf-stamp]');
   const rows = document.querySelectorAll('[data-nf-ledger] .ledger__row');
   if (reduced) { input.focus({ preventScroll: true }); return; }
-  const p = mascotParts(document.querySelector('[data-nf-mascot]'));
   gsap.set(rows, { opacity: 0, x: -10 });
   const tl = gsap.timeline({ onComplete: () => input.focus({ preventScroll: true }) })
     .from(digits, { y: -90, opacity: 0, duration: 1.1, ease: 'elastic.out(1, .55)', stagger: .12 }, .1)
@@ -28,11 +26,6 @@ function hero() {
     .to(stamp, { scale: 1.03, rotate: -12, x: 0, y: 0, xPercent: -50, yPercent: -50, duration: .8, ease: 'elastic.out(1, .45)' }, 1.4)
     /* the record fills in */
     .to(rows, { opacity: 1, x: 0, duration: .6, ease: 'expo.out', stagger: .1 }, 1.5);
-
-  if (!p) return;
-  /* The reviewer arrives, sizes up the record, and thumps its stamp in the same beat the mark lands (1.4s). */
-  prime(p);
-  review(tl, p, { land: 1.4 });
 }
 
 boot(build, hero);

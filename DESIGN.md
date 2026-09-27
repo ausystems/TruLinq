@@ -66,16 +66,9 @@ at build time with `<!--@include(partials/nav.html)-->`.
   4. Pill boards: `.pill` with emoji, tones `pill--peach|mint|violet|sky|rose|sand|ink|outline` (historical names:
      `--peach` the `--accent` field, `--violet` `--deep-2` with `--sky` text, `--mint` the `--glow-soft` field with
      `--glow` text, `--ink` an inverted navy pill: `--fg` with `--on-fg` text). Straight, evenly spaced.
-  5. The mascot: a flat royal-blue monk seal with an off-white belly, navy-black pupils and a sky blush (see the FAQ on the
-     homepage or `.empty` in the directory) for FAQ, empty states, 404. Its artwork colours are literal and stay the same
-     on light and deep surfaces (it also peeks over the ink footer); only the parts that touch the page, the ground shadow
-     and the stamp handle, are navy-black (`#0C1526`) so they read on light panels.
-     It lives in `src/js/mascot.js`: `mascotSVG()` draws it (every part a `data-m-*` group), `mascotParts()` sets the pivots,
-     `prime()` + `review(tl, parts, { land })` add the reviewer choreography to any timeline (pop up, eye the record, squint,
-     wind up, thump so the impact lands at `land` seconds, recoil, look at you, smile, double-blink) and `idle()` gives it
-     life (breathing, the stamp's tap, random blinks, cursor-following eyes, a hop on click). It appears on the homepage
-     hero (watching the 3D stamp press the seal), on the "Earn the stamp" scene of How it works, in the FAQ and on the 404,
-     always the same drawing and behaviours. The 404 positions it from the stage centre in units of the digit size (`--digit`).
+  5. No mascot, no cartoon character, anywhere. The monk seal was removed on 2026-09-26 at the owner's request and must
+     not come back in any form (hero, stages, FAQ, empty states, 404, footer). Empty states and the 404 are carried by the
+     seal mark and typography alone.
   6. The 3D rubber stamp: `createStamp(canvas, host, options)` in `src/js/stamp3d.js` (Three.js; navy handle, blue rubber
      base, the seal on its face). The caller drives `press.t` (0 hovering, 1 pressed) and `setPointer()`; `project()` gives
      the landing spot in host pixels so DOM can be lined up under it. Used by the pricing hero (`mode: 'tip'`) and the
@@ -180,7 +173,7 @@ open) and 740×360 (landscape). No console errors. No horizontal overflow. Every
   stack and play once as they enter.
 * **Headlines re-split on resize.** `[data-split]` uses `SplitText.create({ autoSplit: true })`, so a rotated phone never
   wraps a line inside its mask; once the reveal has played, fresh lines sit at rest.
-* **Touch never triggers on scroll-start.** Tap reactions (the desk press, the seal's hop) listen for `click` on touch
+* **Touch never triggers on scroll-start.** Tap reactions (the desk press) listen for `click` on touch
   devices and `pointerdown` with a mouse; every drag (globe, pricing stamp) also ends on `pointercancel`.
 * **Grids never let a child dictate their width.** Grid and flex children get `min-width: 0` (components.css), long
   pills wrap under 400px, nowrap ledger lines wrap under 400px.

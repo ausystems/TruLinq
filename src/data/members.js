@@ -1,5 +1,9 @@
-/* Demo roster for the redesign. Real member data lives in the Trulinq database; these are fictional. */
+/* Demo roster for the redesign. Real member data lives in the Trulinq database; apart from Ahmad Khalid (the site's
+   owner, a real verified member) these are fictional. A `photo` that starts with "/" is served from public/. */
 export const MEMBERS = [
+  { id: 'ahmad-khalid', name: 'Ahmad Khalid', first: 'Ahmad', role: 'Owner', company: 'Skybound Scaling', city: 'Online', region: '', country: '', lat: null, lng: null, industry: 'Marketing', factors: [45, 20, 15, 1, 0], verifiedOn: '2026-09-24', joined: '2026-09-20', website: 'skyboundscaling.com', founded: 2025, followers: 3, following: 5, photo: '/avatars/ahmad-khalid.svg',
+    bio: 'Owner of Skybound Scaling. Web development and digital marketing: websites built to bring in customers, and the SEO and paid campaigns that keep them coming.',
+    offers: 'Web development, digital marketing (SEO, Google and Meta ads)', looking: 'Founders and owners who want a site that brings in customers', endorsements: [] },
   { id: 'kai-nakamura', name: 'Kai Nakamura', first: 'Kai', role: 'Founder', company: 'Pacific Reef Ventures', city: 'Hilo', region: 'Hawaiʻi', country: 'United States', lat: 19.72, lng: -155.09, industry: 'Technology', factors: [45, 20, 15, 9, 4], verifiedOn: '2025-11-04', joined: '2025-10-20', website: 'pacificreef.ventures', founded: 2021, followers: 41, following: 18, photo: '1531427186611-ecfd6d936c79',
     bio: 'Building software for island logistics. Hilo born, Hilo based. If you ship between the islands, we should talk.',
     offers: 'Inter-island freight software, logistics data', looking: 'Distribution partners in Maui and Kauaʻi, engineering partners', endorsements: ['leilani-akana', 'noa-kahale', 'marcus-hale'] },
