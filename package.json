@@ -9,7 +9,7 @@
     "preview": "vite preview --port 4173",
     "gen": "node scripts/gen-members.mjs",
     "predev": "npm run gen && npm run db:bundle",
-    "prebuild": "npm run gen && npm run db:bundle",
+    "prebuild": "npm run gen && npm run db:bundle && npm run build:api",
     "deploy": "node scripts/deploy-pages.mjs",
     "dev:api": "tsx server/dev.ts",
     "db:bundle": "node scripts/bundle-migrations.mjs",
@@ -21,7 +21,8 @@
     "test": "vitest run",
     "pretest": "npm run db:bundle",
     "admin": "tsx scripts/admin.ts",
-    "dev:web": "vite --port 5180 --strictPort"
+    "dev:web": "vite --port 5180 --strictPort",
+    "build:api": "node scripts/build-api.mjs"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.8",
@@ -36,6 +37,7 @@
     "@eslint/js": "^10.0.1",
     "@types/node": "^26.6.3",
     "@types/pg": "^8.23.1",
+    "esbuild": "^0.28.2",
     "eslint": "^10.11.0",
     "tsx": "^4.23.15",
     "typescript": "^6.0.3",

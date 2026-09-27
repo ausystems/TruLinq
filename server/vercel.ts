@@ -1,9 +1,10 @@
-/* Vercel Serverless Function: every /api/* request lands here and is handed to the shared router. */
+/* Vercel Serverless Function: bundled by scripts/build-api.mjs into api/[[...path]].js, so every /api/* request lands
+   here and is handed to the shared router. */
 import type { IncomingMessage, ServerResponse } from 'node:http';
-import { loadEnv } from '../server/env.ts';
-import { getDb } from '../server/db/client.ts';
-import { handleRequest } from '../server/index.ts';
-import type { ApiRequest } from '../server/http.ts';
+import { loadEnv } from './env.ts';
+import { getDb } from './db/client.ts';
+import { handleRequest } from './index.ts';
+import type { ApiRequest } from './http.ts';
 
 type VercelRequest = IncomingMessage & { body?: unknown; query?: Record<string, string | string[]> };
 const env = loadEnv();
@@ -20,8 +21,15 @@ export default async function handler(req: VercelRequest, res: ServerResponse): 
   else if (b && typeof b === 'object') body = b;
   const forwarded = headers['x-forwarded-for'] || headers['x-real-ip'] || req.socket?.remoteAddress || '0.0.0.0';
   const apiReq: ApiRequest = { method: (req.method || 'GET').toUpperCase(), path: url.pathname.replace(/^\/api/, '') || '/', query: url.searchParams, headers, body, rawBody, ip: forwarded.split(',')[0]!.trim() };
-  const db = await getDb(env);
-  const out = await handleRequest(apiReq, { env, db });
+  let out;
+  try {
+    const db = await getDb(env);
+    out = await handleRequest(apiReq, { env, db });
+  } catch (e) {
+    /* no DATABASE_URL on this deployment (or the pool cannot be created): say so cleanly, never a crash page */
+    console.error('[api] database unavailable:', e instanceof Error ? e.message : e);
+    out = { status: 503, headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' }, body: { error: { code: 'database_unavailable', message: 'The backend has no database configured yet.' } } };
+  }
   for (const [k, v] of Object.entries(out.headers)) res.setHeader(k, v);
   res.statusCode = out.status;
   res.end(out.body === null || out.body === undefined ? undefined : Buffer.isBuffer(out.body) ? out.body : JSON.stringify(out.body));

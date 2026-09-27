@@ -1,13 +1,14 @@
 # Trulinq backend
 
-The site is a Vite multi-page app. Its backend is a single Vercel Serverless Function (`api/[[...path]].ts`) that hands
-every `/api/*` request to a framework-agnostic router in `server/`, backed by Postgres. Locally the same router runs in a
+The site is a Vite multi-page app. Its backend is a single Vercel Serverless Function (`api/[[...path]].js`, bundled
+by `scripts/build-api.mjs` from `server/vercel.ts` on every build) that hands every `/api/*` request to a
+framework-agnostic router in `server/`, backed by Postgres. Locally the same router runs in a
 Node process (`server/dev.ts`) against an embedded Postgres (PGlite), so `npm run dev` needs no external services.
 
 ## Architecture
 
 ```
-browser ── /api/* ──▶ api/[[...path]].ts (Vercel)  ─┐
+browser ── /api/* ──▶ api/[[...path]].js (Vercel)  ─┐
                       server/dev.ts (local, :5190) ─┴─▶ server/index.ts (router, CORS, sessions, CSRF, errors)
                                                           ├─ server/routes/*      one module per area
                                                           ├─ server/lib/*        validation, scoring, referral codes, rate limits, audit, email, storage

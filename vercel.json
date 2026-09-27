@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "vite",
   "buildCommand": "npm run vercel-build",
-  "functions": { "api/[[...path]].ts": { "maxDuration": 15, "memory": 512 } },
+  "functions": { "api/[[...path]].js": { "maxDuration": 15, "memory": 512 } },
   "rewrites": [
     { "source": "/join", "destination": "/join/index.html" },
     { "source": "/members/:slug", "destination": "/members/profile/index.html" },

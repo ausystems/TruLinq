@@ -49,7 +49,9 @@ async function createPg(url: string): Promise<Db> {
 }
 
 async function createPglite(dir: string | undefined): Promise<Db> {
-  const { PGlite } = await import('@electric-sql/pglite');
+  /* the specifier is kept out of the static import graph so the serverless bundle never pulls the WASM engine in */
+  const moduleName = '@electric-sql/pglite';
+  const { PGlite } = (await import(moduleName)) as typeof import('@electric-sql/pglite');
   if (dir) { const { mkdirSync } = await import('node:fs'); mkdirSync(dir, { recursive: true }); }
   const lite = dir ? new PGlite(dir) : new PGlite();
   await lite.waitReady;
@@ -72,6 +74,7 @@ async function createPglite(dir: string | undefined): Promise<Db> {
 const g = globalThis as unknown as { __trulinqDb?: Promise<Db> };
 export function getDb(env: Env, opts: { memory?: boolean } = {}): Promise<Db> {
   if (opts.memory) return createPglite(undefined);
+  if (!env.DATABASE_URL && (env.isProd || process.env['VERCEL'])) return Promise.reject(new Error('DATABASE_URL is not set; the embedded database is for local development only'));
   if (!g.__trulinqDb) g.__trulinqDb = env.DATABASE_URL ? createPg(env.DATABASE_URL) : createPglite(env.PGLITE_DIR);
   return g.__trulinqDb;
 }
