@@ -250,8 +250,33 @@ function globe() {
   }).join('');
   const pinEls = [...pinsEl.querySelectorAll('[data-pin]')];
   /* each pin is anchored at the middle of its faces, wherever its label sits */
-  let anchors = [];
-  const measure = () => { anchors = pinEls.map((el) => { const f = el.firstElementChild; return [f.offsetLeft + f.offsetWidth / 2, f.offsetTop + f.offsetHeight / 2]; }); pinEls.forEach((el, i) => (el.style.transformOrigin = `${anchors[i][0]}px ${anchors[i][1]}px`)); };
+  let anchors = [], sizes = [];
+  const measure = () => {
+    anchors = pinEls.map((el) => { const f = el.firstElementChild; return [f.offsetLeft + f.offsetWidth / 2, f.offsetTop + f.offsetHeight / 2]; });
+    sizes = pinEls.map((el) => { const f = el.firstElementChild, l = el.lastElementChild; return { fw: f.offsetWidth, fh: f.offsetHeight, lw: l.offsetWidth, lh: l.offsetHeight }; });
+    pinEls.forEach((el, i) => (el.style.transformOrigin = `${anchors[i][0]}px ${anchors[i][1]}px`));
+  };
+  /* A single member's label sits beside their face: to the right, else to the left, else below, whichever covers no
+     other pin and stays inside the globe's frame. */
+  const overlap = (a, b) => Math.max(0, Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x)) * Math.max(0, Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y));
+  const placeLabels = (spots) => {
+    const taken = spots.filter((p) => p.vis).map((p) => ({ x: p.fx - p.s.fw / 2, y: p.fy - p.s.fh / 2, w: p.s.fw, h: p.s.fh, owner: p.i }));
+    spots.filter((p) => p.vis && p.g.hq).forEach((p) => taken.push({ x: p.fx - p.s.lw / 2, y: p.fy + p.s.fh / 2 + 6, w: p.s.lw, h: p.s.lh, owner: p.i }));
+    spots.filter((p) => p.vis && !p.g.hq).forEach((p) => {
+      const y = p.fy - p.s.lh / 2, gap = 8;
+      const sides = {
+        right: { x: p.fx + p.s.fw / 2 + gap, y, w: p.s.lw, h: p.s.lh },
+        left: { x: p.fx - p.s.fw / 2 - gap - p.s.lw, y, w: p.s.lw, h: p.s.lh },
+        below: { x: p.fx - p.s.lw / 2, y: p.fy + p.s.fh / 2 + 6, w: p.s.lw, h: p.s.lh }
+      };
+      const outside = (r) => Math.max(0, -r.x) + Math.max(0, r.x + r.w - W) + Math.max(0, -r.y) + Math.max(0, r.y + r.h - W);
+      const cost = (r) => taken.reduce((a, t) => a + (t.owner === p.i ? 0 : overlap(r, t)), 0) + outside(r) * r.h * 4;
+      const side = Object.keys(sides).reduce((best, k) => (cost(sides[k]) < cost(sides[best]) - 1 ? k : best), 'right');
+      pinEls[p.i].classList.toggle('pin--left', side === 'left');
+      pinEls[p.i].classList.toggle('pin--below', side === 'below');
+      taken.push({ ...sides[side], owner: p.i });
+    });
+  };
 
   /* face the middle of the groups */
   const view = { lng: groups.reduce((a, g) => a + g.lng, 0) / groups.length, lat: Math.max(-40, Math.min(40, groups.reduce((a, g) => a + g.lat, 0) / groups.length - 6)) };
@@ -301,17 +326,19 @@ function globe() {
     /* the rim */
     ctx.strokeStyle = 'rgba(10, 22, 51, .08)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(cx, cy, R - .5, 0, Math.PI * 2); ctx.stroke();
     /* the members */
-    groups.forEach((g, i) => {
+    const spots = groups.map((g, i) => {
       const [x, y, z] = project(Math.sin(g.lat * RAD), Math.cos(g.lat * RAD), g.lng * RAD);
       const el = pinEls[i], vis = z > .15, [ax, ay] = anchors[i];
-      const px = cx + x * R - ax, py = cy - y * R - ay;
-      el.style.transform = `translate(${px.toFixed(1)}px, ${py.toFixed(1)}px) scale(${vis ? (.86 + z * .14).toFixed(3) : .6})`;
+      const fx = cx + x * R, fy = cy - y * R;
+      el.style.transform = `translate(${(fx - ax).toFixed(1)}px, ${(fy - ay).toFixed(1)}px) scale(${vis ? (.86 + z * .14).toFixed(3) : .6})`;
       el.style.opacity = vis ? Math.min(1, (z - .15) * 5).toFixed(2) : 0;
       el.style.zIndex = Math.round(z * 100);
+      return { g, i, fx, fy, vis, s: sizes[i] };
     });
+    placeLabels(spots);
   }
   const resize = () => {
-    W = sphere.clientWidth; R = W * .44; dpr = Math.min(window.devicePixelRatio || 1, 2); measure();
+    W = sphere.clientWidth; R = W * (W < 480 ? .49 : .44); dpr = Math.min(window.devicePixelRatio || 1, 2); measure();
     canvas.width = Math.round(W * dpr); canvas.height = Math.round(W * dpr);
     draw();
   };

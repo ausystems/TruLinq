@@ -89,7 +89,7 @@ export const MEMBERS = [
   {
     id: 'ahmad-khalid', uid: null,
     name: 'Ahmad Khalid', first: 'Ahmad', headline: '', role: 'Owner', company: 'Skybound Scaling',
-    city: '', region: '', country: '', lat: null, lng: null,
+    city: 'Toronto', region: '', country: 'Canada', lat: 43.6532, lng: -79.3832,
     industry: 'Marketing', factors: [45, 15, 15, 0, 0], verifiedOn: '2026-09-24', joined: '2026-09-20',
     website: 'skyboundscaling.com', founded: 2025, followers: 0, following: 0, photo: null,
     bio: 'Owner of Skybound Scaling. Web development and digital marketing: websites built to bring in customers, and the SEO and paid campaigns that keep them coming.',
