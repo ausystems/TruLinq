@@ -8,8 +8,7 @@
   .hero__inner { position: relative; z-index: 1; width: 100%; max-width: var(--max); margin: 0 auto; display: grid; grid-template-areas: "title" "copy" "stage"; gap: clamp(24px, 3vw, 40px) clamp(32px, 4vw, 72px); align-content: center; padding: clamp(36px, 5vw, 80px) var(--gutter) clamp(28px, 3.4vw, 48px); }
   @media (min-width: 1024px) { .hero__inner { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); grid-template-rows: minmax(0, 1fr) auto; grid-template-areas: "title stage" "copy stage"; } .hero__title { align-self: end; } .hero__copy { align-self: start; } }
   .hero__title { grid-area: title; font-size: clamp(3rem, 1.1rem + 6.4vw, 7.75rem); font-weight: 400; line-height: .95; letter-spacing: -.055em; max-width: 8.6ch; }
-  /* The title writes itself: each letter rises out of its word, fast, leaning back into place, and then the seal
-     presses the full stop. The words are the masks; they reach a little past the glyphs so nothing is clipped at
+  /* The title writes itself: each letter rises out of its word, fast, leaning back into place. The words are the masks; they reach a little past the glyphs so nothing is clipped at
      rest. The letters wait (hidden) for the page to be revealed; if the script never comes, they rise anyway. */
   .hero__split .w { display: inline-block; overflow: clip; vertical-align: top; padding: 0 .07em .16em; margin: 0 -.07em -.16em; }
   /* letters set one by one lose the font's kerning, so the pairs that need it (Ev, ve, yo, re) carry it back as --k */
@@ -18,9 +17,6 @@
   html.anim .hero__split.is-go .c { animation-name: hero-rise; animation-delay: calc(var(--i) * 18ms); }
   @keyframes hero-rise { from { transform: translateY(112%) rotate(8deg); } }
   @keyframes hero-rise-late { from { transform: translateY(112%) rotate(8deg); } }
-  .hero__stop { display: inline-block; width: .3em; margin-left: .025em; vertical-align: baseline; }
-  .hero__stop .seal { --seal-size: .27em; vertical-align: -.015em; }
-  .hero__stop .seal svg { filter: drop-shadow(0 1px 1px rgba(2, 8, 23, .25)); }
   .hero__copy { grid-area: copy; display: grid; gap: clamp(22px, 2.6vw, 34px); justify-items: start; }
   .hero__lead { max-width: 39ch; }
   .hero__cta { gap: 14px 28px; }
@@ -158,7 +154,15 @@
   .registry__rows span { color: var(--fg-soft); white-space: nowrap; }
   .registry__rows b { font-weight: 500; text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .idcard--sample { width: min(100%, 400px); transform: rotate(-2deg); box-shadow: 0 30px 60px -28px rgba(4, 22, 70, .55), 0 2px 4px rgba(4, 22, 70, .12); }
-  .idcard--sample .idcard__photo .seal { --seal-size: 52px; right: -16px; bottom: -16px; }
+  .idcard--sample .idcard__photo .seal { --seal-size: 60px; right: -18px; bottom: -18px; }
+  /* the sample's placeholder lines wrap rather than trail off on a phone */
+  .idcard--sample .idcard__role, .idcard--sample .idcard__meta { white-space: normal; }
+  /* the rubber stamp that issues it: a transparent stage lined up by script so the stamp lands on the seal, and a ring
+     of ink that spreads from the seal as the rubber meets the card */
+  .how__press { position: absolute; left: 0; top: 0; z-index: 2; width: 240px; height: 416px; opacity: 0; visibility: hidden; pointer-events: none; }
+  .how__press.is-on { visibility: visible; }
+  .how__press canvas { display: block; width: 100%; height: 100%; }
+  .how__ink { position: absolute; right: -18px; bottom: -18px; width: 60px; height: 60px; border-radius: 50%; box-shadow: 0 0 0 1.5px var(--blue), 0 0 18px 2px rgba(41, 129, 251, .35); opacity: 0; pointer-events: none; }
   .idcard__status { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: var(--fs-meta); font-weight: 500; color: var(--blue-ink); }
   .idcard__status.is-pending { color: var(--fg-mute); }
   /* before the sequence plays (it plays once, when the section is first on screen) */
@@ -166,7 +170,7 @@
   html.js:not(.reduced-motion) .how:not(.is-played) .registry__rows li { opacity: .35; }
   html.js:not(.reduced-motion) .how:not(.is-played) .registry__rows .tick { transform: scale(0); }
   @media (max-width: 480px) { .iddoc__body { grid-template-columns: 64px minmax(0, 1fr); gap: 14px; } .iddoc .silhouette { width: 64px; } .registry__rows li { gap: 8px; font-size: .75rem; } .how__scene { padding-inline: 14px; } }
-  @media (max-width: 1023px) { .how__step:first-child .how__scene { padding-top: 76px; } .how__label { left: 14px; top: 16px; font-size: 1.1875rem; } .how__label .scribble__pen { display: none; } }
+  @media (max-width: 1023px) { .how__step:first-child .how__scene { padding-top: 76px; } .how__step:last-child .how__scene { padding-top: 84px; } .how__label { left: 14px; top: 16px; font-size: 1.1875rem; } .how__label .scribble__pen { display: none; } }
 
   /* ── Real people, real places: a navy cover, the members inside it ── */
   .world__inner { position: relative; max-width: var(--max); margin: 0 auto; display: grid; gap: clamp(40px, 5vw, 72px); align-items: center; padding: clamp(64px, 7vw, 124px) var(--gutter) clamp(112px, 10vw, 150px); }

@@ -17,17 +17,18 @@ gsap.defaults({ ease: 'expo.out', duration: .6 });
 window.__gsap = gsap; // lets automated checks drive the ticker when a tab is hidden
 
 /* ── The intro ─────────────────────────────────────────────────── */
-/* partials/head.html decides before the first paint whether the intro plays (html.has-intro), and CSS assembles the logo
-   from the first frame. Once the logo is whole and the page is ready, the cover lifts: its edge sweeps up, the logo
-   glides into the header and turns navy exactly where the edge passes it, and the page settles into place.
-   Everything that plays "the first time it is seen" waits for `introDone`, so no moment happens behind the cover. */
+/* The loader is the one on trulinqid.com, played the same way: a navy panel with a soft pulsing glow, the mark fading
+   in from three quarters size, "Welcome to" and "Trulinq." rising after it, and at 2.4s the whole panel fading out over
+   0.7s. partials/head.html decides before the first paint whether it plays (html.has-intro: once per browser tab) and
+   the timing lives entirely in CSS from that first frame. This only follows it: the page counts as revealed when the
+   fade begins, and the panel leaves the document when the fade ends. Everything that plays "the first time it is seen"
+   waits for `introDone`, so nothing happens behind the panel. */
 const introEl = document.querySelector('[data-intro]');
-let introResolve, revealResolve, pageReadyResolve;
+let introResolve, revealResolve;
 export const introDone = new Promise((resolve) => (introResolve = resolve));
-/* the moment the page itself starts to arrive: as the intro's cover lifts, or at once when there is no intro */
+/* the moment the page itself starts to show: as the loader begins to fade, or at once when there is none */
 export const pageRevealed = new Promise((resolve) => (revealResolve = resolve));
-const pageReady = new Promise((resolve) => (pageReadyResolve = resolve));
-const INTRO_WHOLE = 1000; // ms after the first paint at which the last letter has landed
+const INTRO_LEAVE_AT = 2400, INTRO_LEAVE_FOR = 700;
 
 function introFinish() {
   html.classList.remove('has-intro');
@@ -37,47 +38,11 @@ function introFinish() {
 }
 function runIntro() {
   if (!introEl || !html.classList.contains('has-intro')) { introFinish(); return; }
-  introEl.style.animation = 'none'; // the script has taken over from the CSS failsafe
-  const t0 = window.__introT0 ?? performance.now();
-  const wait = (ms) => new Promise((resolve) => setTimeout(resolve, Math.max(0, ms)));
-  const since = () => performance.now() - t0;
-  const listening = new AbortController();
-  let lifted = false;
-  const lift = () => {
-    if (lifted) return;
-    lifted = true;
-    listening.abort();
-    const cover = introEl.querySelector('[data-intro-cover]');
-    const logos = [...introEl.querySelectorAll('[data-intro-logo]')];
-    logos.forEach((l) => (l.style.animation = 'none'));
-    const target = document.querySelector('.nav .nav__logo .wordmark');
-    const main = document.querySelector('main');
-    const from = logos[0].getBoundingClientRect(), to = target && target.getBoundingClientRect();
-    introEl.style.pointerEvents = 'none'; // the page is usable the moment the cover starts to lift
-    const tl = gsap.timeline();
-    tl.fromTo(cover, { clipPath: 'inset(0% 0% 0% 0% round 0px 0px 0px 0px)' }, { clipPath: 'inset(0% 0% 100% 0% round 0px 0px 48px 48px)', duration: .85, ease: 'power3.inOut' }, 0);
-    if (to && to.width && to.bottom > 0 && to.top < innerHeight) {
-      tl.to(logos, { x: to.left + to.width / 2 - (from.left + from.width / 2), y: to.top + to.height / 2 - (from.top + from.height / 2), scale: to.width / from.width, duration: .95, ease: 'expo.inOut' }, .04)
-        .call(introFinish, null, .99);
-    } else {
-      /* the header is scrolled out of view (a restored scroll position, a link to a section): the logo simply leaves */
-      tl.to(logos, { y: -from.height, opacity: 0, duration: .55, ease: 'power2.in' }, 0).call(introFinish, null, .86);
-    }
-    /* the page arrives just behind the logo, so the flight never crosses the content */
-    if (main) tl.fromTo(main, { y: 72, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: 'expo.out', clearProps: 'transform,opacity' }, .46);
-    tl.call(revealResolve, null, .5);
-  };
-  /* a click, a key, a scroll or a swipe means "let me in": the cover lifts at once */
-  ['pointerdown', 'keydown', 'wheel', 'touchmove'].forEach((type) => addEventListener(type, lift, { passive: true, signal: listening.signal }));
-  /* The logo is whole when the last letter's animation finishes. That is measured from the animation itself, not from
-     a clock, because a slow first paint delays the CSS animations but not the script. The cover then waits (briefly)
-     for the fonts and the page's own content, so it never lifts onto a half-built page. */
-  const last = introEl.querySelector('.intro__ch:last-of-type');
-  const anim = last && last.getAnimations ? last.getAnimations()[0] : null;
-  const whole = anim ? anim.finished.catch(() => {}) : wait(INTRO_WHOLE - since());
-  const atMost = (p) => Promise.race([p, whole.then(() => wait(250))]);
-  const fonts = document.fonts ? document.fonts.ready : Promise.resolve();
-  Promise.all([whole.then(() => wait(100)), atMost(fonts), atMost(pageReady)]).then(lift);
+  const leave = introEl.getAnimations ? introEl.getAnimations().find((a) => a.animationName === 'intro-leave') : null;
+  const elapsed = leave && leave.currentTime != null ? leave.currentTime : 0;
+  setTimeout(() => { introEl.style.pointerEvents = 'none'; revealResolve(); }, Math.max(0, INTRO_LEAVE_AT - elapsed));
+  const gone = leave ? leave.finished : new Promise((resolve) => setTimeout(resolve, INTRO_LEAVE_AT + INTRO_LEAVE_FOR - elapsed));
+  gone.then(introFinish, introFinish);
 }
 runIntro();
 
@@ -296,7 +261,6 @@ export async function boot(pageInit, heroInit) {
   applySession().catch(() => {});
   try { if (typeof pageInit === 'function') await pageInit(); }
   catch (e) { console.error('[trulinq] page init failed', e); }
-  pageReadyResolve();
   hydrateSeals();
   initAccordions();
   initImages();

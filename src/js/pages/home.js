@@ -62,12 +62,8 @@ async function build() {
 
 /* ── Hero: the stamp presses the seal onto a real member's card ── */
 async function hero() {
-  /* the title writes itself as the page arrives, and the seal presses its full stop as the last letter lands */
-  pageRevealed.then(() => {
-    const split = document.querySelector('.hero__split');
-    if (split) split.classList.add('is-go');
-    stamp(document.querySelector('[data-hero-stop]'), { delay: .78, rotate: -12 });
-  });
+  /* the title writes itself as the page arrives */
+  pageRevealed.then(() => { const split = document.querySelector('.hero__split'); if (split) split.classList.add('is-go'); });
   const stage = document.querySelector('[data-hero-stage]');
   const desk = stage.querySelector('.hero__desk');
   const cardWrap = stage.querySelector('[data-hero-card]');
@@ -78,8 +74,6 @@ async function hero() {
   const note = cardWrap.querySelector('.hero__note');
   const stacked = matchMedia('(max-width: 1023px)');
   const write = () => note && note.classList.add('is-written');
-
-
 
   /* the card lies on the desk */
   gsap.set(card, { rotationX: 34, rotationZ: -6, rotationY: 4, transformPerspective: 1400, transformOrigin: '50% 50%' });
@@ -158,25 +152,79 @@ async function hero() {
   });
 }
 
+/* The rubber stamp that issues the sample's seal. Its stage is placed so the stamp's landing spot sits exactly on the
+   card's seal; it arrives from above, presses, and lifts away, leaving the seal printed in its place. Returns a
+   function that plays it once, or throws when WebGL isn't available. */
+async function howStamp(stage, host, sealEl) {
+  const S = await createStamp(stage.querySelector('canvas'), stage, {
+    mode: 'straight', fov: 30, camPos: [0, 3.4, 9.4], look: [0, .9, 0], scale: .36,
+    rest: { x: -.3, y: -.7, z: .08 }, restY: .62, dropY: .66, shadowY: -.02, softShadow: true, shadowOpacity: .12, pressShadow: .3
+  });
+  const LAND = [0, -.06, 0];
+  const place = () => {
+    const land = S.project(...LAND), hr = host.getBoundingClientRect(), sr = sealEl.getBoundingClientRect();
+    stage.style.left = `${(sr.left + sr.width / 2 - hr.left - land.x).toFixed(1)}px`;
+    stage.style.top = `${(sr.top + sr.height / 2 - hr.top - land.y).toFixed(1)}px`;
+  };
+  place();
+  new ResizeObserver(place).observe(host);
+  Object.assign(S.lift, { y: .8, o: 0 });
+  return (onImpact) => new Promise((resolve) => {
+    place();
+    stage.classList.add('is-on');
+    S.play(2.8);
+    gsap.timeline({ onComplete: () => { stage.classList.remove('is-on'); resolve(); } })
+      .to(stage, { opacity: 1, duration: .35, ease: 'power1.out' }, 0)
+      .to(S.lift, { y: 0, o: 1, duration: .8, ease: 'power3.out' }, 0)
+      .to(S.press, { t: 1, duration: .3, ease: 'power3.in' }, .85)
+      .add(onImpact)
+      .to(S.press, { t: 0, duration: .5, ease: 'power2.out' }, '+=.12')
+      .to(S.lift, { y: .9, o: 0, duration: .55, ease: 'power2.in' }, '-=.15')
+      .to(stage, { opacity: 0, duration: .3, ease: 'power1.in' }, '-=.3');
+  });
+}
+
 /* ── How it works: one application moving through the three checks, played once ── */
 function how() {
   const section = document.querySelector('[data-how]');
   const steps = [...section.querySelectorAll('[data-step]')];
   const status = section.querySelector('[data-how-status]');
   const sealEl = section.querySelector('[data-how-seal]');
+  const card = section.querySelector('[data-how-card]'), ink = section.querySelector('[data-how-ink]');
+  const stage = section.querySelector('[data-how-press]'), scene3 = steps[2].querySelector('.how__scene');
   const finish = () => {
     steps.forEach((s) => { s.classList.add('is-lit'); s.style.setProperty('--fill', '1'); });
     sealEl.classList.add('is-stamped');
     section.classList.add('is-played');
   };
-  if (reduced) { finish(); return; }
+  if (reduced) { finish(); stage.remove(); return; }
   status.textContent = 'In review'; status.classList.add('is-pending');
   steps.forEach((s) => gsap.set(s, { '--fill': 0 }));
+
+  /* the stamp is readied as the section approaches, and presses once the application reaches the third check and
+     that card is on screen (on phones it sits well below the first two) */
+  let press = null, reached;
+  const ready = new Promise((resolve) => whenVisible(section, () => howStamp(stage, scene3, sealEl).then((p) => (press = p), () => stage.remove()).finally(resolve), { rootMargin: '400px 0px' }));
+  const seen3 = new Promise((resolve) => whenVisible(scene3, resolve, { rootMargin: '0px 0px -22% 0px' }));
+  const atStep3 = new Promise((resolve) => (reached = resolve));
+  const verified = () => { status.textContent = 'Trulinq Verified'; status.classList.remove('is-pending'); section.classList.add('is-played'); };
+  /* the moment the rubber meets the card: the seal is printed, a ring of ink spreads, the card takes the weight */
+  const impact = () => {
+    gsap.fromTo(sealEl, { opacity: 0, scale: 1.12 }, { opacity: 1, scale: 1, duration: .3, ease: 'power2.out', onComplete: () => { sealEl.classList.add('is-stamped'); gsap.set(sealEl, { clearProps: 'opacity,transform' }); } });
+    gsap.fromTo(ink, { opacity: .75, scale: 1 }, { opacity: 0, scale: 2.1, duration: .9, ease: 'power2.out' });
+    gsap.timeline().to(card, { y: 5, duration: .09, ease: 'power2.out' }).to(card, { y: 0, duration: .8, ease: 'elastic.out(1, .5)' });
+    setTimeout(verified, 280);
+  };
+  Promise.all([ready, seen3, atStep3]).then(() => {
+    if (press) press(impact);
+    else { stamp(sealEl, { rotate: -8 }); setTimeout(verified, 350); }
+  });
+
   whenVisible(section.querySelector('[data-steps]'), () => {
     const sweep = section.querySelector('[data-sweep]'), match = section.querySelector('[data-match]');
     const rows = [...section.querySelectorAll('[data-row]')];
     const lit = (i) => () => steps[i].classList.add('is-lit');
-    const tl = gsap.timeline({ onComplete: () => section.classList.add('is-played') });
+    const tl = gsap.timeline();
     tl.add(lit(0), 0)
       .fromTo(sweep, { xPercent: -80, opacity: 0 }, { xPercent: 460, opacity: 1, duration: 1.2, ease: 'power2.inOut' }, .2)
       .to(sweep, { opacity: 0, duration: .25 }, 1.2)
@@ -190,8 +238,7 @@ function how() {
     const t3 = 2.3 + rows.length * .22;
     tl.to(steps[1], { '--fill': 1, duration: .6, ease: 'power2.inOut' }, t3)
       .add(lit(2), t3 + .55)
-      .add(() => stamp(sealEl, { rotate: -8 }), t3 + .7)
-      .add(() => { status.textContent = 'Trulinq Verified'; status.classList.remove('is-pending'); }, t3 + 1.05);
+      .add(reached, t3 + .6);
   }, { rootMargin: '0px 0px -25% 0px' });
 }
 

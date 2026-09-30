@@ -36,7 +36,7 @@ export async function createStamp(canvas, host, o = {}) {
     fov: 28, camPos: [0, .9, 9.4], look: [0, .45, 0],
     rest: { x: -.55, y: -.5, z: .12 }, restY: .55, dropY: 1.7,
     /* 'tip' leans the stamp forward as it presses (pricing); 'straight' squares it up so the face lands flat (hero) */
-    mode: 'tip', shadowY: -1.9, shadowOpacity: .14, position: [0, 0, 0], scale: 1,
+    mode: 'tip', shadowY: -1.9, shadowOpacity: .14, pressShadow: .3, position: [0, 0, 0], scale: 1,
     ...o
   };
   const renderer = new T.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
@@ -69,17 +69,28 @@ export async function createStamp(canvas, host, o = {}) {
   group.scale.setScalar(opt.scale);
   scene.add(group);
 
-  const shadow = new T.Mesh(new T.CylinderGeometry(1.35, 1.35, .01, 64), new T.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: opt.shadowOpacity }));
+  /* a hard disc under the stamp, or with softShadow a navy blur that fades out from the centre (on paper) */
+  let shadow;
+  if (opt.softShadow) {
+    const c = document.createElement('canvas'); c.width = c.height = 128;
+    const ctx = c.getContext('2d'), g = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+    g.addColorStop(0, 'rgba(4,22,70,1)'); g.addColorStop(.45, 'rgba(4,22,70,.55)'); g.addColorStop(1, 'rgba(4,22,70,0)');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, 128, 128);
+    shadow = new T.Mesh(new T.PlaneGeometry(3, 3), new T.MeshBasicMaterial({ map: new T.CanvasTexture(c), transparent: true, depthWrite: false, opacity: opt.shadowOpacity }));
+    shadow.rotation.x = -Math.PI / 2;
+  } else shadow = new T.Mesh(new T.CylinderGeometry(1.35, 1.35, .01, 64), new T.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: opt.shadowOpacity }));
   shadow.position.set(opt.position[0], opt.shadowY, opt.position[2]); scene.add(shadow);
 
   const press = { t: 0 };
+  /* lift raises the stamp above its resting height (it can arrive from above and leave again); o fades its shadow */
+  const lift = { y: 0, o: 1 };
   const lerp = (a, b, k) => a + (b - a) * k;
   function render() {
     const { x: rx, y: ry, z: rz } = opt.rest;
     if (opt.mode === 'tip') group.rotation.set(rx + press.t * 1.2, ry, rz);
     else group.rotation.set(lerp(rx, 0, press.t), lerp(ry, -.35, press.t), lerp(rz, 0, press.t));
-    group.position.y = opt.restY - press.t * opt.dropY;
-    shadow.scale.setScalar(opt.scale * (1 - press.t * .25)); shadow.material.opacity = opt.shadowOpacity + press.t * .3;
+    group.position.y = opt.restY + lift.y - press.t * opt.dropY;
+    shadow.scale.setScalar(opt.scale * (1 - press.t * .25)); shadow.material.opacity = (opt.shadowOpacity + press.t * opt.pressShadow) * lift.o;
     renderer.render(scene, camera);
   }
   function resize() { const w = host.clientWidth, h = host.clientHeight || w; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); render(); }
@@ -94,5 +105,5 @@ export async function createStamp(canvas, host, o = {}) {
   const v = new T.Vector3();
   const project = (x = opt.position[0], y = 0, z = opt.position[2]) => { v.set(x, y, z).project(camera); return { x: (v.x * .5 + .5) * host.clientWidth, y: (-v.y * .5 + .5) * host.clientHeight }; };
 
-  return { T, renderer, scene, camera, group, shadow, press, render, play, resize, project };
+  return { T, renderer, scene, camera, group, shadow, press, lift, render, play, resize, project };
 }
