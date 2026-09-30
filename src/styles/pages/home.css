@@ -1,5 +1,5 @@
 @layer pages {
-  .who__inner, .doubt__inner, .how__inner, .score__inner, .feats__inner, .quotes__inner, .faq__inner, .cta__inner { position: relative; z-index: 1; max-width: var(--max); margin: 0 auto; padding: var(--sect-y) var(--gutter); }
+  .who__inner, .film__inner, .doubt__inner, .how__inner, .score__inner, .feats__inner, .quotes__inner, .faq__inner, .cta__inner { position: relative; z-index: 1; max-width: var(--max); margin: 0 auto; padding: var(--sect-y) var(--gutter); }
 
   /* ── Hero ─────────────────────────────────────────────────────────
      A poster: the sentence set as large as it can be, the word "real" in ink, and a seal for its full stop. Beside it
@@ -72,6 +72,46 @@
   .who__line .who__any:hover { text-decoration: underline; text-decoration-thickness: .06em; }
   .who__inner { max-width: min(var(--max), 1240px); margin-inline: auto; }
   @media (min-width: 1024px) { .who__inner { text-wrap: balance; } }
+
+  /* ── The short version: the film ────────────────────────────
+     A frame the shape of the film (16:9, and a 4:5 cut on phones), its first frame as the poster, and the disc pressed
+     on its top edge, beside the title, so it is in view as soon as the film is. Nothing loads until it is asked for;
+     the poster then gives way to the film itself, which starts on that same frame. */
+  .film__inner { display: grid; gap: clamp(36px, 4.4vw, 64px); }
+  .film__title { font-size: var(--fs-2); max-width: 12ch; }
+  .film__stage, .film__play { --disc: clamp(116px, 9vw + 40px, 150px); }
+  .film__stage { position: relative; margin: 0; }
+  .film__frame { position: relative; aspect-ratio: 16 / 9; overflow: hidden; border-radius: clamp(16px, .6vw + 12px, 26px); background: #2E3848; isolation: isolate; }
+  .film__video, .film__poster, .film__poster img { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .film__video { object-fit: cover; background: #2E3848; }
+  .film__video:fullscreen { object-fit: contain; background: #000; }
+  /* the frame clips its corners, so a keyboard ring on the film is drawn by the frame */
+  .film__video:focus-visible { outline: none; }
+  .film__frame:has(> .film__video:focus-visible) { outline: 2px solid var(--blue-ink); outline-offset: 4px; }
+  .film__poster { z-index: 1; cursor: pointer; transition: opacity 640ms var(--e-out), visibility 0s linear 0s; }
+  .film__poster img { object-fit: cover; transform-origin: 36% 42%; transition: opacity var(--t-reveal) var(--e-out), transform 1.6s var(--e-out); }
+  .film__play { position: absolute; z-index: 3; right: clamp(20px, 4vw, 64px); top: calc(var(--disc) * -.4); transition: transform var(--t-state) var(--e-out), box-shadow var(--t-state) var(--e-out), opacity var(--t-state) var(--e-out), visibility 0s linear 0s; }
+  .film__glyph { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: #FFFFFF; color: #1464DC; transition: transform var(--t-state) var(--e-out); }
+  .film__glyph svg { position: static; width: 15px; height: 15px; fill: currentColor; transform: translateX(1px); transition: none; }
+  @media (hover: hover) {
+    .film__stage:hover .film__poster img { transform: scale(1.025); }
+    .film__stage:hover .film__play { transform: translateY(-2px); box-shadow: 0 1px 0 rgba(255, 255, 255, .25) inset, 0 24px 44px -18px rgba(20, 100, 220, .85); }
+    .film__stage:hover .film__play > svg { transform: rotate(40deg); }
+    .film__stage:hover .film__glyph { transform: scale(1.08); }
+  }
+  /* asked for: the ring turns while the first frames arrive, then the poster and the disc give way */
+  .film__stage.is-loading .film__play > svg { animation: film-turn 2.8s linear infinite; }
+  .film__stage.is-playing .film__poster { opacity: 0; visibility: hidden; transition: opacity 640ms var(--e-out), visibility 0s linear 640ms; }
+  .film__stage.is-playing .film__play { opacity: 0; visibility: hidden; transform: scale(.92); transition: opacity var(--t-state) var(--e-out), transform var(--t-state) var(--e-out), visibility 0s linear var(--t-state); }
+  @keyframes film-turn { to { transform: rotate(360deg); } }
+  html.no-js .film__poster, html.no-js .film__play { display: none; }
+  html.reduced-motion .film__poster img { transform: none; transition: opacity var(--t-reveal) var(--e-out); }
+  html.reduced-motion .film__stage.is-loading .film__play > svg { animation: none; }
+  @media (max-width: 767px) {
+    .film__stage, .film__play { --disc: 104px; }
+    .film__frame { aspect-ratio: 4 / 5; }
+    .film__play { right: 16px; }
+  }
 
   /* ── One stamp. Zero doubt. ───────────────────────────────────── */
   .doubt__inner { display: grid; gap: clamp(36px, 5vw, 64px); }

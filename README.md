@@ -34,6 +34,11 @@ npm test           # backend test suite
   the reviewer's margin notes), components, motion rules and quality bar.
 * **Globe data.** `src/data/land.js` is a small bitmask of land points generated from Natural Earth by
   `scripts/gen-land.mjs`; it only needs regenerating if the grid changes (see the script's header).
+* **The homepage film.** `src/media/` holds the explainer in two cuts, 16:9 and a 4:5 crop for phones, with WebP
+  posters made from each cut's first frame; Vite fingerprints them. They were made from the 1080p source with
+  `ffmpeg -i source.mp4 [-vf crop=864:1080:528:0] -c:v libx264 -preset veryslow -tune film -crf 28 -profile:v high
+  -pix_fmt yuv420p -g 48 -x264-params aq-mode=3:aq-strength=0.9 -colorspace bt709 -color_primaries bt709
+  -color_trc bt709 -c:a copy -movflags +faststart`, the crop only for the 4:5 cut.
 
 ## Deploy
 

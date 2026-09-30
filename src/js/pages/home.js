@@ -266,6 +266,58 @@ async function howStamp(stage, host, sealEl) {
   });
 }
 
+/* ── The short version: the film, played only when asked ───────
+   Nothing is fetched until someone presses play. The cut is chosen for the screen at that moment (4:5 on phones,
+   16:9 elsewhere, both starting on the poster's own frame), the ring turns while the first frames arrive, and then the
+   poster gives way to the film with its controls. At the end the poster returns. A phone turned mid-film switches cut
+   where it was, unless the film is full screen. Without script, the video stands on its own with its controls. */
+function film() {
+  const stage = document.querySelector('[data-film]');
+  if (!stage) return;
+  const video = stage.querySelector('[data-film-video]'), disc = stage.querySelector('[data-film-play]'), poster = stage.querySelector('[data-film-poster]');
+  const cuts = [...video.querySelectorAll('source')].map((el) => ({ src: el.src, media: el.media }));
+  const pick = () => (cuts.find((c) => !c.media || matchMedia(c.media).matches) || cuts[cuts.length - 1]).src;
+  let src = '';
+  video.removeAttribute('controls');
+
+  const failed = () => { stage.classList.remove('is-loading'); stage.classList.add('is-playing'); video.setAttribute('controls', ''); };
+  const start = () => {
+    if (!src) { src = pick(); video.preload = 'auto'; video.src = src; }
+    stage.classList.add('is-loading');
+    const p = video.play();
+    if (p) p.catch((e) => { if (e.name !== 'AbortError') failed(); });
+  };
+  disc.addEventListener('click', start);
+  poster.addEventListener('click', start);
+
+  video.addEventListener('playing', () => {
+    const fromDisc = document.activeElement === disc;
+    stage.classList.remove('is-loading');
+    stage.classList.add('is-playing');
+    video.setAttribute('controls', '');
+    if (fromDisc) video.focus({ preventScroll: true });
+  });
+  video.addEventListener('ended', () => {
+    const fromVideo = document.activeElement === video;
+    if (document.fullscreenElement === video) document.exitFullscreen().catch(() => {});
+    else if (video.webkitDisplayingFullscreen && video.webkitExitFullscreen) video.webkitExitFullscreen();
+    stage.classList.remove('is-playing');
+    video.removeAttribute('controls');
+    if (fromVideo) disc.focus({ preventScroll: true });
+  });
+  video.addEventListener('error', () => { if (src) failed(); });
+
+  matchMedia('(max-width: 767px)').addEventListener('change', () => {
+    if (!src || document.fullscreenElement || video.webkitDisplayingFullscreen) return;
+    const next = pick();
+    if (next === src) return;
+    const at = video.currentTime, playing = !video.paused && !video.ended;
+    src = next;
+    video.src = src;
+    video.addEventListener('loadedmetadata', () => { video.currentTime = at; if (playing) video.play().catch(() => {}); }, { once: true });
+  });
+}
+
 /* ── How it works: one application moving through the three checks, played once ── */
 function how() {
   const section = document.querySelector('[data-how]');
@@ -488,8 +540,9 @@ function globe() {
   canvas.addEventListener('pointerup', up); canvas.addEventListener('pointercancel', up); canvas.addEventListener('lostpointercapture', up);
 }
 
-/* the wash needs no data, so it starts with the page */
+/* the wash and the film need no data, so they start with the page */
 heroWash();
+film();
 boot(build, () => {
   hero();
   how();

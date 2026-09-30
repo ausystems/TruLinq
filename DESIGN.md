@@ -86,7 +86,8 @@ premium product page: few elements per viewport, very large light type, generous
 3. **Tabs on the desk.** `.scatter` lays chips at small fixed angles; hovering straightens one. Used once, for the
    feature index under "trulinq features". Everywhere else chips sit straight (`.chip-row`).
 4. **The disc.** `.disc` is the round call to apply, with its legend on a ring and an arrow in the middle, pressed on
-   the edge of the members bezel. Its legend turns a little on hover.
+   the edge of the members bezel. Its legend turns a little on hover. The film's play control is the same disc with a
+   play mark, pressed on the film's top edge.
 5. **Portraits.** `portrait(member)` shows the member's approved photo, or a monogram in one of four fixed tones.
    Placeholders (`placeholder: true`) render a blank silhouette, never initials.
 6. **The member card.** `idCard(member)`: portrait with the seal on it, name, role and business, industry and place,
@@ -128,7 +129,16 @@ premium product page: few elements per viewport, very large light type, generous
     reviewer's note counts as small below 24px). Rendered at no more than 720px on its long side and scaled up,
     dithered by one step, at most 30 frames a second, paused off screen, still for reduced motion, and gone for forced
     colours or more contrast, where the panel's own gradient stays, as it does without WebGL.
-13. **No mascot, no animal, no cartoon character**, anywhere.
+13. **The film.** "The short version." sits between the audience line and "One stamp. Zero doubt.": the explainer the
+    user supplied, in a frame the shape of the film (16:9, and a 4:5 cut on phones, where the presenter stays in frame
+    throughout), its own first frame as the poster, and the disc pressed on its top edge beside the title so it is in
+    view whenever the film is. Nothing is fetched until play is pressed (`preload="none"`, no source set); the cut is
+    chosen for the screen then, the ring turns while the first frames arrive, and the poster crossfades into the film,
+    which starts on that same frame, with its native controls. At the end the poster returns. A phone turned mid-film
+    switches cut at the same second. Media lives in `src/media/` so Vite fingerprints it: H.264 High with the index
+    at the front, 5.2 MB for 16:9 and 3.1 MB for 4:5, WebP posters of 17 to 41 KB, lazy and faded in over the
+    poster's own average colour. The presenter is not named anywhere, since the film does not say who they are.
+14. **No mascot, no animal, no cartoon character**, anywhere.
 
 ## Components (`src/styles/components.css`)
 

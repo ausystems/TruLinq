@@ -51,6 +51,29 @@
       </div>
     </section>
 
+    <!-- ── The short version: Trulinq on film, played only when asked ─────── -->
+    <section class="panel panel--ice film" id="film" aria-labelledby="film-title">
+      <div class="film__inner">
+        <h2 id="film-title" class="film__title display">The short <span class="hl">version.</span></h2>
+        <figure class="film__stage" data-film>
+          <div class="film__frame">
+            <video class="film__video" controls playsinline preload="none" controlslist="nodownload noplaybackrate noremoteplayback" disablepictureinpicture disableremoteplayback aria-label="Trulinq in thirty seconds" data-film-video>
+              <source src="/src/media/film-4x5.mp4" type="video/mp4" media="(max-width: 767px)">
+              <source src="/src/media/film-16x9.mp4" type="video/mp4">
+            </video>
+            <picture class="film__poster" data-film-poster>
+              <source media="(max-width: 767px)" srcset="/src/media/film-4x5-640.webp 640w, /src/media/film-4x5-864.webp 864w" sizes="calc(100vw - 40px)" width="864" height="1080">
+              <img src="/src/media/film-16x9-1440.webp" srcset="/src/media/film-16x9-960.webp 960w, /src/media/film-16x9-1440.webp 1440w, /src/media/film-16x9-1920.webp 1920w" sizes="(min-width: 1440px) 1300px, calc(100vw - 64px)" width="1920" height="1080" alt="" loading="lazy" decoding="async" data-fade>
+            </picture>
+          </div>
+          <button class="disc film__play" type="button" aria-label="Play the film, thirty seconds, with sound" data-film-play>
+            <svg viewBox="0 0 120 120" aria-hidden="true"><defs><path id="film-ring" d="M60,60 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0"/></defs><text><textPath href="#film-ring" textLength="276" lengthAdjust="spacing">PLAY THE FILM · THIRTY SECONDS · SOUND ON ·</textPath></text></svg>
+            <span class="film__glyph" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M5.6 3.4v9.2l7.2-4.6z"/></svg></span>
+          </button>
+        </figure>
+      </div>
+    </section>
+
     <!-- ── One stamp. Zero doubt. ─────────────────────────────── -->
     <section class="panel panel--navy doubt" id="stamp" aria-labelledby="doubt-title">
       <div class="doubt__inner">
