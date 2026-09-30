@@ -1,11 +1,12 @@
 import '../../styles/main.css';
 import '../../styles/pages/home.css';
-import { boot, gsap, stamp, reduced, isTouch, whenVisible, pageRevealed } from '../main.js';
+import { boot, gsap, stamp, reduced, isTouch, whenVisible, whileVisible, pageRevealed } from '../main.js';
 import { idCard, portrait, seal, esc, href, fmtDate, relTime } from '../ui.js';
 import { loadMembers, loadStats, loadRooms } from '../data.js';
 import { FEATURED, QUOTES } from '../../data/editorial.js';
 import { gaugeHTML, factorsHTML, runGauge } from '../gauge.js';
 import { createStamp } from '../stamp3d.js';
+import { createWash, rgb } from '../wash.js';
 import { LAND } from '../../data/land.js';
 
 let members = [], byId = {};
@@ -58,6 +59,87 @@ async function build() {
 
   /* each room gets the seal its speakers carry; hovering the card stamps them in, one by one */
   document.querySelector('[data-room-list]').innerHTML = rooms.slice(0, 4).map((r, i) => `<li style="--i:${i}"><b>${esc(r.name)}</b>${r.lastMessageAt ? `<span>active ${relTime(r.lastMessageAt)}</span>` : ''}<span class="seal seal--xs"></span></li>`).join('');
+}
+
+/* ── Hero: the ink wash under it ───────────────────────────────
+   The brand's blue tints, read from the tokens, laid out around the page's own layout: the palest paper under the
+   headline and the copy, the 40 percent tint pooled behind the stamp and the member's card and turning slowly around
+   them, the 22 percent tint along the far edge, the sky (let 30 percent into paper) along the top, and ice along the
+   foot. Stacked, the card sits under the copy, so the tints move with it. Everything drifts on loops of fifteen seconds
+   to over a minute; it holds still for reduced motion and off screen, and steps aside for forced colours and more
+   contrast. */
+function heroWash() {
+  const hero = document.querySelector('.hero'), canvas = hero && hero.querySelector('[data-hero-wash]');
+  if (!canvas) return;
+  if (matchMedia('(forced-colors: active), (prefers-contrast: more)').matches) { canvas.remove(); return; }
+  const css = getComputedStyle(document.documentElement);
+  const tok = (name, fallback) => rgb(css.getPropertyValue(name)) || rgb(fallback);
+  const paper = tok('--surface-2', '#FFFFFF'), ice2 = tok('--ice-2', '#F1F6FE'), ice = tok('--ice', '#E6EFFD');
+  const ice3 = tok('--ice-3', '#D3E4FD'), ice4 = tok('--ice-4', '#A9CDFD');
+  const sky = tok('--sky', '#7FCBFF').map((v, i) => paper[i] + (v - paper[i]) * .3);
+  const pt = (color, x, y, size, ax, ay, fx, fy, bias = 0) => ({ color, x, y, size, ax, ay, fx, fy, bias });
+  /* x, y: where the point sits (0..1 of the panel); size, and how far and fast it drifts, in units of the panel's short
+     side; bias lets the pool behind the card hold its ground */
+  const WIDE = {
+    swirl: { x: .77, y: .36, angle: 1, reach: 5 },
+    points: [
+      pt(paper, .25, .3, .32, .07, .05, .21, .16),
+      pt(ice2, .18, .66, .32, .08, .05, .17, .22),
+      pt(ice, .02, .04, .3, .05, .05, .13, .18),
+      pt(sky, .5, .03, .3, .12, .04, .19, .12),
+      pt(ice3, .94, .08, .3, .05, .06, .15, .2),
+      pt(ice4, .77, .34, .22, .04, .04, .12, .17, .15),
+      pt(ice3, .99, .46, .24, .03, .05, .23, .14),
+      pt(paper, .7, .79, .3, .06, .03, .14, .21),
+      pt(ice, .4, .98, .32, .12, .03, .11, .19),
+      pt(ice2, .96, .95, .28, .04, .03, .16, .13)
+    ]
+  };
+  const STACKED = {
+    swirl: { x: .5, y: .52, angle: .9, reach: 5 },
+    points: [
+      pt(paper, .3, .06, .35, .1, .04, .21, .16),
+      pt(ice2, .75, .2, .3, .08, .04, .17, .22),
+      pt(paper, .35, .32, .35, .08, .04, .13, .18),
+      pt(sky, .97, .02, .28, .05, .04, .19, .12),
+      pt(ice, .02, .12, .26, .04, .04, .15, .2),
+      pt(ice4, .5, .52, .2, .05, .03, .12, .17, .15),
+      pt(ice3, .98, .47, .26, .04, .04, .23, .14),
+      pt(sky, .02, .6, .26, .04, .04, .11, .19),
+      pt(paper, .45, .71, .32, .08, .03, .16, .13),
+      pt(ice, .5, .97, .35, .12, .03, .14, .21)
+    ]
+  };
+  const wide = matchMedia('(min-width: 1024px)');
+  let wash;
+  try { wash = createWash(canvas, { layout: wide.matches ? WIDE : STACKED, warp: .06, waves: 2.4, speed: 1.6 }); }
+  catch (e) { console.info('[trulinq] ink wash unavailable', e); canvas.remove(); return; }
+  window.__wash = wash; // lets automated checks draw any moment
+  /* Small blue text keeps AA contrast (4.5:1) whatever drifts under it: the link beside the button, the caption, the
+     motto, and the reviewer's note while it is set under 24px. The ink is held above a floor there, measured to the
+     text itself. The layout already keeps the deep tints away from them, so the floor only ever lifts a little. */
+  const SMALL = ['.hero__cta .arrow-link', '.hero__caption', '.hero__motto', '.hero__note .scribble__text'];
+  const range = document.createRange();
+  const isSmall = (el) => { const cs = getComputedStyle(el), px = parseFloat(cs.fontSize); return px < 24 && !(px >= 18.66 && +cs.fontWeight >= 700); };
+  const measure = () => {
+    const cr = canvas.getBoundingClientRect();
+    wash.keep(SMALL.map((sel) => hero.querySelector(sel)).filter((el) => el && isSmall(el)).map((el) => { range.selectNodeContents(el); return range.getBoundingClientRect(); })
+      .filter((r) => r.width && r.height)
+      .map((r) => [r.left - cr.left, r.top - cr.top, r.right - cr.left, r.bottom - cr.top]));
+  };
+  measure();
+  wash.draw(0);
+  requestAnimationFrame(() => canvas.classList.add('is-on'));
+  wide.addEventListener('change', () => wash.setLayout(wide.matches ? WIDE : STACKED));
+  new ResizeObserver(() => { wash.resize(); measure(); }).observe(canvas);
+  /* the caption, the numbers and the card are written once the members load, the card is then laid on the desk, and
+     the fonts can reflow the rest */
+  new MutationObserver(measure).observe(hero, { childList: true, subtree: true, characterData: true });
+  new MutationObserver(measure).observe(hero.querySelector('[data-hero-card]'), { attributes: true, attributeFilter: ['style', 'class'] });
+  document.fonts.ready.then(measure);
+  canvas.addEventListener('washlost', () => canvas.classList.remove('is-on'));
+  canvas.addEventListener('washrestored', () => canvas.classList.add('is-on'));
+  if (!reduced) whileVisible(hero, (seen) => wash.play(seen));
 }
 
 /* ── Hero: the stamp presses the seal onto a real member's card ── */
@@ -406,6 +488,8 @@ function globe() {
   canvas.addEventListener('pointerup', up); canvas.addEventListener('pointercancel', up); canvas.addEventListener('lostpointercapture', up);
 }
 
+/* the wash needs no data, so it starts with the page */
+heroWash();
 boot(build, () => {
   hero();
   how();

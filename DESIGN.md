@@ -112,13 +112,23 @@ premium product page: few elements per viewport, very large light type, generous
     document); the lettering is outlined paths (Inter and Inter Tight, as on the original), so it never waits for a
     font. `runIntro()` in `src/js/main.js` reads the CSS animation's own clock to resolve `pageRevealed` as the fade
     starts and `introDone` when it is gone. Everything that plays "the first time it is seen" waits for `introDone`.
-    The breathing glow is the one loop allowed, and only for these three seconds.
+    The glow breathes only for these three seconds.
 11. **The feature scenes.** Each card under "trulinq features" acts out its feature when hovered or focused (on touch
     screens, once, as it scrolls into view): a new post drops onto the feed, an offer and a need are tied with a
     "Mutual fit" knot, every room's voices are stamped, a vouch is rewritten and signed, a stamp is struck out and
     greys, the year of a stamp comes round again. At rest every card is complete; the scene is a bonus, never the
     content. Entrance delays live in the hover rules so a card lets go at once.
-12. **No mascot, no animal, no cartoon character**, anywhere.
+12. **The ink wash.** Under the homepage hero, the brand's blue tints move like ink through wet paper: a slow mesh
+    gradient in `src/js/wash.js` (one WebGL triangle, a softmax of gaussian points, bent by two long waves and turned
+    around one spot), after the kind of mesh gradient that swirls, but quieter and in the tokens' own colours, read
+    at runtime: paper, `--ice-2`, `--ice`, `--ice-3`, `--ice-4` and `--sky` let 30 percent into paper. The palest
+    paper sits under the headline and the copy, the 40 percent tint pools behind the stamp and the member's card and
+    turns around them; stacked, the tints follow the card below the copy. Small blue text keeps 4.5:1 whatever
+    drifts under it (the layout keeps the deep tints away, and a feathered floor in the shader catches the rest; the
+    reviewer's note counts as small below 24px). Rendered at no more than 720px on its long side and scaled up,
+    dithered by one step, at most 30 frames a second, paused off screen, still for reduced motion, and gone for forced
+    colours or more contrast, where the panel's own gradient stays, as it does without WebGL.
+13. **No mascot, no animal, no cartoon character**, anywhere.
 
 ## Components (`src/styles/components.css`)
 
@@ -142,7 +152,8 @@ session storage until it is submitted (never the ID document itself).
 
 ## Motion
 
-Motion is feedback, not decoration. Allowed: the loader on arrival, the hero title writing itself, the stamp being issued (the 3D press in the
+Motion is feedback, not decoration. Allowed: the loader on arrival, the ink wash under the homepage hero (the one continuous motion, and only there),
+the hero title writing itself, the stamp being issued (the 3D press in the
 hero and under "Earn the stamp"), the reviewer's notes writing themselves once, the score being read once when first seen, the how-it-works
 application moving through its three checks once, the feature scenes on hover, state changes (menu, dialogs, toggles,
 chips, filters, busy buttons, the disc turning on hover), the globe turning while dragged, and the completeness ring. Not allowed: fade-ups on every
