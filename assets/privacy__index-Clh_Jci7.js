@@ -1,0 +1,1 @@
+import"./main-DhJBLX54.js";import{r as e,t}from"./legal-B_PCvZJU.js";e(t);

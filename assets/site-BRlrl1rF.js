@@ -1,0 +1,1 @@
+var e={name:`Trulinq`,url:`https://tru-linq.vercel.app`,place:`Hilo, Hawaiʻi`,email:{support:`support@trulinq.com`,trust:`trust@trulinq.com`,privacy:`privacy@trulinq.com`,sales:`sales@trulinq.com`},review:{businessDays:2},reverifyMonths:12};new URL(e.url).host;export{e as t};

@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard/
+Disallow: /auth/
+Sitemap: https://tru-linq.vercel.app/sitemap.xml
