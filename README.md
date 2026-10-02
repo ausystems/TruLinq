@@ -27,9 +27,11 @@ npm test           # backend test suite
   form helpers, accordions, toasts and the page boot. Scrolling is native: nothing is sticky, pinned, smoothed or
   tied to the scroll position. Each page has its own script in `src/js/pages/`.
 * **CSS layers.** `src/styles/tokens.css` → `base.css` → `components.css` → page files in `src/styles/pages/`.
-* **People.** The roster is the verified members on the live Trulinq product plus Ahmad Khalid, nobody else. Their
-  portraits show initials until member photos are approved for use (`scripts/build-portraits.mjs` prepares approved
-  photos). The dashboard's demo mode, shown only when accounts can't be reached, uses a nameless placeholder account.
+* **People.** The roster is the verified members on the live Trulinq product plus Ahmad Khalid, nobody else. A member
+  with a photo shows it; everyone else a monogram. To add one: save the original, then
+  `node scripts/build-portraits.mjs --master <slug> <file> <left> <top> <size>` (a square crop, metadata stripped),
+  `npm run portraits`, set `photo: '/portraits/<slug>'` in `src/data/members.js`, and add a forward migration that sets
+  the same `photo` where it is still null (as `004_noah_and_portraits.sql` does). The dashboard's demo mode, shown only when accounts can't be reached, uses a nameless placeholder account.
 * **Design guide.** `DESIGN.md` documents the visual system (blue ink on a verification desk: Lexend, the navy bezel,
   the reviewer's margin notes), components, motion rules and quality bar.
 * **Globe data.** `src/data/land.js` is a small bitmask of land points generated from Natural Earth by

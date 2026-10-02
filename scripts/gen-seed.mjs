@@ -1,9 +1,11 @@
 /* Turns the roster (src/data/members.js, rooms.js, feed.js) into the idempotent seed migration
    server/db/migrations/002_seed.sql. Members keep their live-product ids; referral codes are the member's existing
    code where known (Tyler Shirakawa: E9EAF5) and otherwise derived from the slug, so every environment agrees.
-   Run `npm run db:seed:gen` when the roster changes; the generated SQL is committed. */
+   The seed is applied in production, and an applied migration may never change (server/db/migrate.ts checks), so
+   this only writes it where it does not exist yet. Roster changes since go in a new forward migration
+   (003_ahmad_toronto.sql, 004_noah_and_portraits.sql); pass --force only in a fresh checkout with no database. */
 import { createHash } from 'node:crypto';
-import { writeFileSync } from 'node:fs';
+import { writeFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 
@@ -45,6 +47,9 @@ ROOMS.forEach((r, i) => {
 for (const [to, list] of Object.entries(VOUCHES)) {
   for (const v of list) sql += `insert into endorsements (id, to_member_id, from_member_id, body, created_at) values (md5('trulinq:vouch:${to}:${v.from}')::uuid, ${memberId(byId[to])}, ${memberId(byId[v.from])}, ${q(v.text)}, ${q(v.date + 'T12:00:00Z')}) on conflict do nothing;\n`;
 }
-writeFileSync(join(root, 'server/db/migrations/002_seed.sql'), sql);
+const target = join(root, 'server/db/migrations/002_seed.sql');
+if (existsSync(target) && !process.argv.includes('--force')) {
+  console.log('002_seed.sql is already applied in production and is left as it is; write roster changes as a new migration.');
+} else writeFileSync(target, sql);
 console.log(`seed written: ${MEMBERS.length} members, ${POSTS.length} posts, ${ROOMS.length} rooms`);
 console.log('referral codes:', MEMBERS.map((m) => `${m.id}=${m.referralCode || codeFor(m.id)}`).join(' '));

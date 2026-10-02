@@ -3,11 +3,12 @@ import '../../styles/pages/directory.css';
 import { boot } from '../main.js';
 import { idCard, portrait, seal, esc, href, scoreOf, gradeOf, fmtDate, isVerified, statusOf, arrowIcon } from '../ui.js';
 import { loadMembers, loadStats, INDUSTRIES } from '../data.js';
+import { FEATURED } from '../../data/editorial.js';
 
 /* The list the page shows: verified, public members, or everyone public when "Verified only" is switched off.
    Revoked profiles are never listed. */
 let MEMBERS = [];
-const state = { q: '', industry: 'All', all: false, sort: 'newest', view: 'cards' };
+const state = { q: '', industry: 'All', all: false, sort: 'featured', view: 'cards' };
 const $ = (s) => document.querySelector(s);
 const grid = $('[data-grid]'), regWrap = $('[data-register]'), regRows = $('[data-register-rows]');
 const countEl = $('[data-count]'), emptyEl = $('[data-empty]');
@@ -17,14 +18,14 @@ function readURL() {
   state.q = u.searchParams.get('q') || '';
   const ind = u.searchParams.get('industry') || 'All';
   state.industry = ind === 'All' || INDUSTRIES.includes(ind) ? ind : 'All';
-  state.sort = ['newest', 'score', 'az'].includes(u.searchParams.get('sort')) ? u.searchParams.get('sort') : 'newest';
+  state.sort = ['featured', 'newest', 'score', 'az'].includes(u.searchParams.get('sort')) ? u.searchParams.get('sort') : 'featured';
   state.view = u.searchParams.get('view') === 'register' ? 'register' : 'cards';
   state.all = u.searchParams.get('all') === '1';
 }
 function writeURL() {
   const u = new URL(location.href);
   const set = (k, v, def) => (v && v !== def ? u.searchParams.set(k, v) : u.searchParams.delete(k));
-  set('q', state.q, ''); set('industry', state.industry, 'All'); set('sort', state.sort, 'newest'); set('view', state.view, 'cards'); set('all', state.all ? '1' : '', '');
+  set('q', state.q, ''); set('industry', state.industry, 'All'); set('sort', state.sort, 'featured'); set('view', state.view, 'cards'); set('all', state.all ? '1' : '', '');
   history.replaceState(null, '', u.pathname + u.search + u.hash);
 }
 
@@ -37,6 +38,9 @@ function matches(m) {
 const scoreOfM = (m) => m.score ?? scoreOf(m.factors);
 function sorted(list) {
   const l = [...list];
+  /* featured: the members the site leads with (Tyler Shirakawa, Noah Duran, Ahmad Khalid), then the newest stamps */
+  const lead = (m) => { const i = FEATURED.world.indexOf(m.id); return i < 0 ? 99 : i; };
+  if (state.sort === 'featured') l.sort((a, b) => lead(a) - lead(b) || (b.verifiedOn || '').localeCompare(a.verifiedOn || '') || a.name.localeCompare(b.name));
   if (state.sort === 'newest') l.sort((a, b) => (b.verifiedOn || '').localeCompare(a.verifiedOn || '') || (b.joined || '').localeCompare(a.joined || '') || a.name.localeCompare(b.name));
   if (state.sort === 'score') l.sort((a, b) => scoreOfM(b) - scoreOfM(a) || a.name.localeCompare(b.name));
   if (state.sort === 'az') l.sort((a, b) => a.name.localeCompare(b.name));

@@ -10,14 +10,17 @@ afterAll(async () => { await h.db.close(); });
 describe('migrations and seed', () => {
   it('applies the schema and seeds the roster with codes', async () => {
     const { rows } = await h.db.query<{ n: string }>('select count(*)::text as n from members');
-    expect(Number(rows[0]!.n)).toBe(10);
+    expect(Number(rows[0]!.n)).toBe(11);
     const tyler = (await h.db.query<{ id: string; referral_code: string; verification_status: string }>(`select id, referral_code, verification_status from members where slug = 'tyler-shirakawa'`)).rows[0]!;
     expect(tyler.referral_code).toBe(TYLER_CODE);
     expect(tyler.verification_status).toBe('verified');
     expect(tyler.id).toBe('0542e68e-ae26-4a7e-ae34-252ae5e022ed');
     /* the roster is exactly the members on the live product plus Ahmad Khalid: nobody else is seeded */
     const everyone = (await h.db.query<{ slug: string }>('select slug from members order by slug')).rows.map((r) => r.slug);
-    expect(everyone).toEqual(['ahmad-khalid', 'chelsea-pferschy', 'david', 'makalea-medeiros', 'maverick-kang-jr', 'michael-onwumere', 'omai-kofi', 'palani-maharaj', 'preston-sinenci-jr', 'tyler-shirakawa']);
+    expect(everyone).toEqual(['ahmad-khalid', 'chelsea-pferschy', 'david', 'makalea-medeiros', 'maverick-kang-jr', 'michael-onwumere', 'noah-duran', 'omai-kofi', 'palani-maharaj', 'preston-sinenci-jr', 'tyler-shirakawa']);
+    /* the roster's later additions arrive through forward migrations, and agree with the roster file */
+    const later = (await h.db.query<{ slug: string; photo: string | null; total: number; profile: number }>(`select m.slug, m.photo, s.total, s.profile from members m join member_scores s on s.member_id = m.id where m.slug in ('noah-duran', 'ahmad-khalid') order by m.slug`)).rows;
+    expect(later).toEqual([{ slug: 'ahmad-khalid', photo: '/portraits/ahmad-khalid', total: 740, profile: 20 }, { slug: 'noah-duran', photo: null, total: 564, profile: 3 }]);
     const health = await h.call('GET', '/health');
     expect(health.body.ok).toBe(true);
     expect(health.body.migrations.pending).toEqual([]);

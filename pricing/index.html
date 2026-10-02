@@ -24,8 +24,23 @@
           </div>
         </div>
         <div class="phero-p__stage" data-stamp-stage aria-hidden="true">
-          <canvas class="phero-p__canvas" data-stamp-canvas></canvas>
-          <div class="phero-p__impression" data-impression><span class="seal seal--lg"></span></div>
+          <div class="phero-p__desk">
+            <div class="slip" data-slip>
+              <div class="slip__head">
+                <svg class="wordmark slip__logo" viewBox="0 0 176 40"><use href="#tq-mark-dark" x="1" y="1" width="38" height="38"/><use href="#tq-word" class="wordmark__word"/></svg>
+                <span class="slip__tag">Plan</span>
+              </div>
+              <b class="slip__title">Verified Business</b>
+              <span class="slip__price"><b data-slip-price>{{price.yearlyPerMonth}}</b><span data-slip-per>per month, billed yearly</span></span>
+              <ul class="slip__rows">
+                <li><i class="tick"></i>Identity checked</li>
+                <li><i class="tick"></i>Business checked</li>
+                <li><i class="tick"></i>Reviewed by a person</li>
+              </ul>
+              <span class="seal seal--md slip__seal" data-manual data-slip-seal></span>
+            </div>
+            <canvas class="phero-p__canvas" data-stamp-canvas></canvas>
+          </div>
         </div>
       </div>
     </section>

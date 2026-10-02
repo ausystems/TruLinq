@@ -1,12 +1,15 @@
 /* The Trulinq roster: the verified members listed on trulinqid.com/match (captured 27 September 2026, their public
-   profile fields exactly as published, score factors as the live product computed them), plus Ahmad Khalid.
+   profile fields exactly as published, score factors as the live product computed them), Noah Duran from the
+   trulinqid.com homepage, and Ahmad Khalid.
    This file is the single source for the seed migration (scripts/gen-seed.mjs), the static member pages
    (scripts/gen-members.mjs), the build-time statistics and the offline fallback. Once a database is connected the
    API is the source of truth and this file only seeds it.
 
    Fields are stored as the member wrote them. The only normalisation: country names spelled out ("US" → "United
    States"), tracking parameters removed from links, stray spaces removed. `uid` is the member's id on the live
-   product. `photo` is null for everyone: portraits render as monograms until member photos are approved for use. */
+   product. `photo` is a portrait made by scripts/build-portraits.mjs from the member's own photo (public/portraits);
+   everyone without one shows a monogram. Tyler Shirakawa, Noah Duran and Ahmad Khalid come first: theirs are the cards
+   the pages lead with. */
 export const MEMBERS = [
   {
     id: 'tyler-shirakawa', uid: '0542e68e-ae26-4a7e-ae34-252ae5e022ed', referralCode: 'E9EAF5',
@@ -16,6 +19,27 @@ export const MEMBERS = [
     website: 'trulinqid.com', founded: null, followers: 2, following: 4, photo: null,
     bio: '36 Yr old entrepreneur based in Hawaii. Background is marketing, trading, and pemf sales and peptides.',
     offers: '', looking: 'Investors, potential business partners.'
+  },
+  {
+    /* Shown on the trulinqid.com homepage among its verified members, with his photo, as "Lead Software Engineer ·
+       Honolulu"; nothing else about him is public. The dates are the day that card and photo were published, the
+       earliest he is known to have held the stamp. His score is the engine's (server/lib/score.ts) on what is known:
+       verified, one profile detail (his city). */
+    id: 'noah-duran', uid: null,
+    name: 'Noah Duran', first: 'Noah', headline: 'Lead Software Engineer', role: 'Lead Software Engineer', company: '',
+    city: 'Honolulu', region: '', country: 'United States', lat: 21.3069, lng: -157.8583,
+    industry: '', factors: [45, 3, 0, 0, 0], verifiedOn: '2026-09-23', joined: '2026-09-23',
+    website: '', founded: null, followers: 0, following: 0, photo: null,
+    bio: '', offers: '', looking: ''
+  },
+  {
+    id: 'ahmad-khalid', uid: null,
+    name: 'Ahmad Khalid', first: 'Ahmad', headline: '', role: 'Owner', company: 'Skybound Scaling',
+    city: 'Toronto', region: '', country: 'Canada', lat: 43.6532, lng: -79.3832,
+    industry: 'Marketing', factors: [45, 20, 15, 0, 0], verifiedOn: '2026-09-24', joined: '2026-09-20',
+    website: 'skyboundscaling.com', founded: 2025, followers: 0, following: 0, photo: '/portraits/ahmad-khalid',
+    bio: 'Owner of Skybound Scaling. Web development and digital marketing: websites built to bring in customers, and the SEO and paid campaigns that keep them coming.',
+    offers: 'Web development, digital marketing (SEO, Google and Meta ads)', looking: 'Founders and owners who want a site that brings in customers'
   },
   {
     id: 'maverick-kang-jr', uid: 'ff8d19ca-d314-448f-a596-7de8f2b07d44',
@@ -85,15 +109,6 @@ export const MEMBERS = [
     industry: '', factors: [45, 8, 0, 0, 0], verifiedOn: '2026-09-25', joined: '2026-09-25',
     website: '', founded: null, followers: 0, following: 0, photo: null,
     bio: '', offers: '', looking: ''
-  },
-  {
-    id: 'ahmad-khalid', uid: null,
-    name: 'Ahmad Khalid', first: 'Ahmad', headline: '', role: 'Owner', company: 'Skybound Scaling',
-    city: 'Toronto', region: '', country: 'Canada', lat: 43.6532, lng: -79.3832,
-    industry: 'Marketing', factors: [45, 15, 15, 0, 0], verifiedOn: '2026-09-24', joined: '2026-09-20',
-    website: 'skyboundscaling.com', founded: 2025, followers: 0, following: 0, photo: null,
-    bio: 'Owner of Skybound Scaling. Web development and digital marketing: websites built to bring in customers, and the SEO and paid campaigns that keep them coming.',
-    offers: 'Web development, digital marketing (SEO, Google and Meta ads)', looking: 'Founders and owners who want a site that brings in customers'
   }
 ];
 
