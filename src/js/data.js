@@ -32,7 +32,8 @@ export function loadMembers({ all = false } = {}) {
 export async function loadMember(slug) {
   try { return await api.get(`/members/${encodeURIComponent(slug)}`); }
   catch (e) {
-    if (e && e.status === 404) return null;
+    /* the API's own 404 means there is no such member; a static host with no backend answers 404 too, without a code */
+    if (e && e.status === 404 && !isBackendUnavailable(e)) return null;
     fallback(e);
     const { MEMBERS, byId, VOUCHES } = await import('../data/members.js');
     const { POSTS } = await import('../data/feed.js');
