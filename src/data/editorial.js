@@ -4,7 +4,9 @@ export const FEATURED = {
   hero: 'tyler-shirakawa',
   world: ['ahmad-khalid', 'maverick-kang-jr'],
   score: 'preston-sinenci-jr',
-  auth: ['david', 'chelsea-pferschy', 'palani-maharaj']
+  auth: ['david', 'chelsea-pferschy', 'palani-maharaj'],
+  /* the app concept: whose profile its home screen opens on, and who the discover screen lists */
+  app: { home: 'makalea-medeiros', discover: ['preston-sinenci-jr', 'david', 'tyler-shirakawa', 'ahmad-khalid', 'chelsea-pferschy'] }
 };
 
 export const QUOTES = [

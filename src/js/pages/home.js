@@ -1,7 +1,7 @@
 import '../../styles/main.css';
 import '../../styles/pages/home.css';
 import { boot, gsap, stamp, reduced, isTouch, whenVisible, whileVisible, pageRevealed } from '../main.js';
-import { idCard, portrait, seal, esc, href, fmtDate, relTime } from '../ui.js';
+import { idCard, portrait, seal, esc, href, fmtDate, relTime, scoreOf, gradeOf, roleLine, placeLine } from '../ui.js';
 import { loadMembers, loadStats, loadRooms } from '../data.js';
 import { FEATURED, QUOTES } from '../../data/editorial.js';
 import { gaugeHTML, factorsHTML, runGauge } from '../gauge.js';
@@ -57,8 +57,89 @@ async function build() {
     </figure>`).join('');
   if (!quotes.length) document.querySelector('.quotes').hidden = true;
 
+  const views = document.querySelector('[data-phone-views]');
+  if (views) views.innerHTML = appViews(rooms);
+
   /* each room gets the seal its speakers carry; hovering the card stamps them in, one by one */
   document.querySelector('[data-room-list]').innerHTML = rooms.slice(0, 4).map((r, i) => `<li style="--i:${i}"><b>${esc(r.name)}</b>${r.lastMessageAt ? `<span>active ${relTime(r.lastMessageAt)}</span>` : ''}<span class="seal seal--xs"></span></li>`).join('');
+}
+
+/* ── The app, coming soon: the four screens, from the real roster ──
+   A concept of the phone, built from the same records as the rest of the page: a member's verified profile and
+   trust score, members to discover with their real scores, the real rooms, and the visitor's own stamp. Nothing on
+   it is invented: no photos, no counts, no messages nobody sent. */
+const SCORE_RING = 2 * Math.PI * 52;
+const TICK_ICON = '<svg viewBox="0 0 24 24"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/></svg>';
+const CHEVRON = '<svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>';
+function appViews(rooms) {
+  const home = byId[FEATURED.app.home] || members[0];
+  const found = FEATURED.app.discover.map((id) => byId[id]).filter(Boolean);
+  if (!home) return '';
+  const score = scoreOf(home.factors), { grade } = gradeOf(score);
+  const off = SCORE_RING * (1 - (score - 300) / 550);
+  const row = (i, title, sub, d) => `<div class="pv__row" data-in style="--d:${d}"><span class="pv__tick">${TICK_ICON}</span><span><b>${esc(title)}</b>${esc(sub)}</span>${CHEVRON}</div>`;
+  const chips = ['All', 'Verified', ...new Set(found.map((m) => m.industry).filter(Boolean))].slice(0, 4);
+  return `<div class="phone__view pv--home is-active" data-view="home">
+      <div class="pv__who" data-in style="--d:0">
+        <span class="pv__face">${portrait(home, { size: 96 })}<span class="pv__stamp">${seal({ size: 'sm' })}</span><i class="pv__ripple"></i></span>
+        <b class="pv__name">${esc(home.name)}</b>
+        <span class="pv__meta">${esc([home.role, placeLine(home)].filter(Boolean).join(' · '))}</span>
+      </div>
+      <div class="pv__ring" data-in style="--d:1">
+        <svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52"/><circle class="pv__arc" cx="60" cy="60" r="52" style="--len:${SCORE_RING.toFixed(1)};--off:${off.toFixed(1)}"/></svg>
+        <span class="pv__score"><b data-count="${score}">${score}</b><small>Trust score</small><em>${grade}</em></span>
+      </div>
+      ${row(0, 'Identity verified', 'Checked by a reviewer', 2)}
+      ${row(1, 'Business verified', home.company || 'Public registry', 3)}
+      ${home.factors[2] ? row(2, 'Web presence', 'Confirmed', 4) : ''}
+      ${row(3, 'Verified since', fmtDate(home.verifiedOn), 5)}
+    </div>
+    <div class="phone__view pv--discover" data-view="discover">
+      <div class="pv__search" data-in style="--d:0"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Search verified members</div>
+      <div class="pv__chips" data-in style="--d:1">${chips.map((c) => `<span${c === 'Verified' ? ' class="is-on"' : ''}>${esc(c)}</span>`).join('')}</div>
+      ${found.map((m, i) => `<div class="pv__member" data-in style="--d:${i + 2}"><span class="pv__face pv__face--sm">${portrait(m, { size: 96 })}<span class="pv__stamp" style="--d:${i + 2}">${seal({ size: 'xs' })}</span></span><span><b>${esc(m.name)}</b>${esc(roleLine(m))}</span><em>${scoreOf(m.factors)}</em></div>`).join('')}
+    </div>
+    <div class="phone__view pv--rooms" data-view="rooms">
+      <div class="pv__head" data-in style="--d:0"><b>Rooms</b>Every voice here is verified.</div>
+      ${rooms.slice(0, 4).map((r, i) => `<div class="pv__room" data-in style="--d:${i + 1}"><span><b>${esc(r.name)}</b><span class="pv__topic">${esc(r.topic || '')}</span></span>${seal({ size: 'xs' })}</div>`).join('')}
+    </div>
+    <div class="phone__view pv--profile" data-view="profile">
+      <span class="pv__big" data-in style="--d:0"><span class="pv__stamp">${seal({ size: 'md' })}</span><i class="pv__ripple"></i></span>
+      <b class="pv__title" data-in style="--d:1">Trulinq Verified</b>
+      <p class="pv__text" data-in style="--d:2">Your stamp shows on every profile picture, so members know you are real.</p>
+      <span class="pv__cta" data-in style="--d:3">Share my invite link</span>
+    </div>`;
+}
+
+/* The phone walks through its screens every 4.2 seconds while it is on screen, the way the original does; a tap on a
+   tab takes over from it. The score counts up as the home screen opens. Held still for reduced motion. */
+function app() {
+  const stage = document.querySelector('[data-app]');
+  if (!stage) return;
+  const views = [...stage.querySelectorAll('[data-view]')], tabs = [...stage.querySelectorAll('[data-tab]')];
+  if (!views.length) return;
+  let at = 0, timer = 0, auto = !reduced, raf = 0;
+  const count = (el) => {
+    cancelAnimationFrame(raf);
+    const to = +el.dataset.count, t0 = performance.now();
+    if (reduced) { el.textContent = to; return; }
+    const step = (now) => { const k = Math.min(1, (now - t0 - 200) / 1400), e = 1 - (1 - Math.max(0, k)) ** 3; el.textContent = Math.round(300 + (to - 300) * e); if (k < 1) raf = requestAnimationFrame(step); };
+    el.textContent = 300; raf = requestAnimationFrame(step);
+  };
+  const show = (i) => {
+    at = i;
+    views.forEach((v, j) => v.classList.toggle('is-active', j === i));
+    tabs.forEach((t) => t.classList.toggle('is-active', t.dataset.tab === views[i].dataset.view));
+    const n = views[i].querySelector('[data-count]');
+    if (n) count(n);
+  };
+  const run = (on) => { clearInterval(timer); if (on && auto) timer = setInterval(() => show((at + 1) % views.length), 4200); };
+  tabs.forEach((t) => t.addEventListener('click', () => { auto = false; run(false); show(views.findIndex((v) => v.dataset.view === t.dataset.tab)); }));
+  let live = false;
+  whileVisible(stage, (seen) => {
+    if (seen && !live) { live = true; stage.classList.add('is-live'); show(0); }
+    run(seen);
+  });
 }
 
 /* ── Hero: the ink wash under it ───────────────────────────────
@@ -546,6 +627,7 @@ film();
 boot(build, () => {
   hero();
   how();
+  app();
   /* touch screens have no hover: each feature card plays its scene once, as it comes into view */
   if (isTouch) document.querySelectorAll('.bento__card').forEach((card) => whenVisible(card, () => card.classList.add('is-live'), { rootMargin: '0px 0px -30% 0px' }));
   whenVisible(document.querySelector('[data-globe]'), globe, { rootMargin: '400px 0px' });

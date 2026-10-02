@@ -1,5 +1,5 @@
 @layer pages {
-  .who__inner, .film__inner, .doubt__inner, .how__inner, .score__inner, .feats__inner, .quotes__inner, .faq__inner, .cta__inner { position: relative; z-index: 1; max-width: var(--max); margin: 0 auto; padding: var(--sect-y) var(--gutter); }
+  .who__inner, .film__inner, .app__inner, .doubt__inner, .how__inner, .score__inner, .feats__inner, .quotes__inner, .faq__inner, .cta__inner { position: relative; z-index: 1; max-width: var(--max); margin: 0 auto; padding: var(--sect-y) var(--gutter); }
 
   /* ── Hero ─────────────────────────────────────────────────────────
      A poster: the sentence set as large as it can be, the word "real" in ink, and a seal for its full stop. Beside it
@@ -437,6 +437,118 @@
   @keyframes ring-refill { 0% { stroke-dashoffset: 8; } 32% { stroke-dashoffset: 100; } 100% { stroke-dashoffset: 8; } }
   @keyframes ring-knob { 0% { transform: rotate(331.2deg); } 32% { transform: rotate(0deg); } 100% { transform: rotate(331.2deg); } }
   .ring12 small { margin-top: 4px; font-family: var(--f-mono); font-size: .6875rem; font-weight: 500; letter-spacing: 0; color: var(--fg-soft); }
+
+  /* ── The app, coming soon: the copy, and the phone walking through its screens ─────
+     The phone is drawn in CSS from one width (--pw): a titanium band, black glass, the keys, the island, and a paper
+     screen where the page's own seals, monograms and score live at phone size. Everything inside is set in em from
+     the screen's font size, so the phone keeps its proportions from a small phone to a wide monitor. */
+  .app__inner { display: grid; gap: clamp(56px, 7vw, 96px); align-items: center; }
+  @media (min-width: 1024px) { .app__inner { grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr); } }
+  .app__copy { display: grid; justify-items: start; gap: clamp(22px, 2.6vw, 30px); }
+  .app__title { font-size: var(--fs-2); max-width: 13ch; }
+  .app__lead { max-width: 40ch; }
+  .app__points { display: grid; gap: 20px clamp(20px, 2.4vw, 32px); margin-top: 6px; max-width: 34rem; }
+  @media (min-width: 560px) { .app__points { grid-template-columns: 1fr 1fr; } }
+  .app__points li { display: flex; align-items: flex-start; gap: 14px; }
+  .app__points b { display: block; margin-bottom: 4px; font-size: .9375rem; font-weight: 500; color: var(--fg); }
+  .app__points li > span:last-child { font-size: .875rem; line-height: 1.5; color: var(--fg-soft); }
+  .app__icon { display: grid; place-items: center; flex: none; width: 40px; height: 40px; border-radius: 50%; background: var(--blue-soft); color: var(--sky); box-shadow: inset 0 0 0 1px rgba(127, 203, 255, .22); }
+  .app__icon svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .app__fine { margin-top: 8px; font-size: var(--fs-meta); line-height: 1.5; color: var(--fg-mute); max-width: 44ch; }
+  .app__stage { --pw: min(clamp(244px, 15vw + 132px, 360px), (100svh - 120px) * .4615); position: relative; display: grid; place-items: center; margin: 0; padding: clamp(8px, 2vw, 24px) 0; }
+  /* light pooling under the phone, the way a screen lights the desk it rests on */
+  .app__stage::before { content: ""; position: absolute; left: 50%; top: 54%; width: min(560px, 120%); aspect-ratio: 1.15; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(closest-side, rgba(41, 129, 251, .42), rgba(41, 129, 251, .14) 55%, rgba(41, 129, 251, 0)); filter: blur(28px); pointer-events: none; }
+  .app__scribble { left: max(0px, calc(50% - var(--pw) / 2 - 168px)); top: 16%; --tilt: -6deg; flex-direction: column; align-items: flex-end; }
+  .app__scribble .scribble__pen { margin: 6px -18px 0 0; transform: rotate(8deg); }
+  @media (max-width: 1023px) { .app__scribble { left: auto; right: max(0px, calc(50% - var(--pw) / 2 - 150px)); top: 0; align-items: flex-start; --tilt: 4deg; } .app__scribble .scribble__pen { margin: 6px 0 0 -10px; transform: scaleX(-1) rotate(8deg); } }
+  @media (max-width: 560px) { .app__scribble { display: none; } }
+  @media (min-width: 600px) and (max-width: 1023px) { .app__stage { --pw: min(300px, (100svh - 120px) * .4615); } }
+
+  .phone { position: relative; z-index: 1; width: var(--pw); aspect-ratio: 9 / 19.5; padding: calc(var(--pw) * .016); border-radius: calc(var(--pw) * .168); background: linear-gradient(150deg, #6B7587 0%, #2A3140 18%, #121722 46%, #262D3A 74%, #707B8D 100%); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .2), inset 0 1px 1.5px rgba(255, 255, 255, .45), 0 2px 3px rgba(0, 0, 0, .35), 0 60px 110px -44px rgba(0, 0, 0, .8), 0 36px 70px -36px rgba(41, 129, 251, .5); }
+  .phone__key { position: absolute; width: calc(var(--pw) * .013); border-radius: 2px; background: linear-gradient(90deg, #1A202B, #5C6678 60%, #2A3140); }
+  .phone__key--action { left: calc(var(--pw) * -.011); top: 17%; height: 4.2%; }
+  .phone__key--up { left: calc(var(--pw) * -.011); top: 24.5%; height: 7.2%; }
+  .phone__key--down { left: calc(var(--pw) * -.011); top: 33.5%; height: 7.2%; }
+  .phone__key--side { right: calc(var(--pw) * -.011); top: 27%; height: 11.5%; transform: scaleX(-1); }
+  .phone__key--camera { right: calc(var(--pw) * -.009); top: 53%; height: 6.5%; width: calc(var(--pw) * .01); transform: scaleX(-1); opacity: .85; }
+  .phone__glass { height: 100%; padding: calc(var(--pw) * .026); border-radius: calc(var(--pw) * .152); background: #03050A; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .07); }
+  .phone__screen { position: relative; display: flex; flex-direction: column; height: 100%; overflow: hidden; border-radius: calc(var(--pw) * .126); background: linear-gradient(180deg, #FFFFFF 0%, #F4F7FC 100%); color: var(--fg); font-size: calc(var(--pw) * .0365); line-height: 1.3; letter-spacing: -.01em; user-select: none; -webkit-user-select: none; isolation: isolate; }
+  /* the glass catches the light across one corner */
+  .phone__screen::after { content: ""; position: absolute; inset: 0; z-index: 5; pointer-events: none; background: linear-gradient(125deg, rgba(255, 255, 255, .16) 0%, rgba(255, 255, 255, 0) 32%); }
+  .phone__island { position: absolute; z-index: 4; left: 50%; top: .72em; width: 31%; height: 2.35em; transform: translateX(-50%); border-radius: 999px; background: #000; }
+  .phone__status { display: flex; align-items: center; justify-content: space-between; padding: 1.05em 1.55em 0 1.9em; height: 3.1em; font-size: 1em; font-weight: 600; letter-spacing: -.01em; }
+  .phone__sys { display: flex; align-items: center; gap: .35em; }
+  .phone__sys svg { height: .78em; width: auto; fill: currentColor; }
+  .phone__bar { display: flex; align-items: center; justify-content: space-between; padding: .9em 1.25em .55em; }
+  .phone__logo { height: 1.85em; }
+  .phone__bell { position: relative; display: grid; place-items: center; width: 2.2em; height: 2.2em; border-radius: 50%; background: var(--surface-3); }
+  .phone__bell svg { width: 1.15em; height: 1.15em; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+  .phone__bell i { position: absolute; top: .42em; right: .5em; width: .42em; height: .42em; border-radius: 50%; background: var(--blue); box-shadow: 0 0 0 .14em #F2F5FA; }
+  .phone__views { position: relative; flex: 1; min-height: 0; }
+  .phone__tabs { display: grid; grid-template-columns: repeat(4, 1fr); padding: .55em .5em 2.1em; border-top: 1px solid var(--line); background: rgba(255, 255, 255, .92); }
+  .phone__tabs button { display: grid; justify-items: center; gap: .22em; font-size: .66em; font-weight: 500; color: var(--fg-mute); transition: color var(--t-state) var(--e-out); -webkit-tap-highlight-color: transparent; }
+  .phone__tabs svg { width: 2.1em; height: 2.1em; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .phone__tabs .is-active { color: var(--blue-ink); }
+  .phone__home { position: absolute; left: 50%; bottom: .6em; width: 34%; height: .36em; transform: translateX(-50%); border-radius: 999px; background: #0A1633; opacity: .88; }
+
+  /* the screens: one shows at a time, the next slides in from the right */
+  .phone__view { position: absolute; inset: 0; display: flex; flex-direction: column; gap: .78em; padding: .4em 1.25em 1em; opacity: 0; visibility: hidden; transform: translateX(7%); transition: opacity .38s var(--e-out), transform .5s var(--e-out), visibility 0s linear .5s; }
+  .phone__view.is-active { opacity: 1; visibility: visible; transform: none; transition: opacity .5s var(--e-out) .06s, transform .6s var(--e-out) .06s, visibility 0s; }
+  .app__stage.is-live .phone__view.is-active [data-in] { animation: pv-in .62s var(--e-out) both; animation-delay: calc(var(--d, 0) * 80ms + 120ms); }
+  .app__stage.is-live .phone__view.is-active .pv__stamp { animation: pv-stamp .52s cubic-bezier(.3, .9, .3, 1.15) both; animation-delay: calc(var(--d, 0) * 120ms + 420ms); }
+  .app__stage.is-live .phone__view.is-active .pv__ripple { animation: pv-ripple .9s var(--e-out) both; animation-delay: .78s; }
+  .app__stage.is-live .phone__view.is-active .pv__arc { animation: pv-arc 1.4s var(--e-out) .3s both; }
+  @keyframes pv-in { from { opacity: 0; transform: translateY(.7em); } }
+  @keyframes pv-stamp { from { opacity: 0; transform: scale(1.75) rotate(-26deg); } 62% { opacity: 1; transform: scale(.94) rotate(-9deg); } to { opacity: 1; transform: scale(1) rotate(-9deg); } }
+  @keyframes pv-ripple { from { opacity: .7; transform: scale(.7); } to { opacity: 0; transform: scale(1.9); } }
+  @keyframes pv-arc { from { stroke-dashoffset: var(--len); } }
+  html.reduced-motion .app__stage .phone__view, html.reduced-motion .app__stage .phone__view * { animation: none !important; transition: none !important; }
+
+  .pv__face { position: relative; display: block; width: 5.9em; flex: none; }
+  .pv__face .portrait { border-radius: 30%; box-shadow: 0 .5em 1.2em -.6em rgba(7, 26, 69, .45); }
+  .pv__stamp { position: absolute; right: -.75em; bottom: -.6em; display: block; transform: rotate(-9deg); }
+  .pv__stamp .seal { --seal-size: 2.5em; }
+  .pv__ripple { position: absolute; right: -.75em; bottom: -.6em; width: 2.5em; height: 2.5em; border-radius: 50%; box-shadow: 0 0 0 .14em var(--blue); opacity: 0; pointer-events: none; }
+  .pv__who { display: grid; justify-items: center; gap: .1em; padding-top: .2em; text-align: center; }
+  .pv__name { margin-top: .55em; font-size: 1.22em; font-weight: 500; letter-spacing: -.03em; }
+  .pv__meta { font-size: .64em; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--fg-mute); }
+  .pv__ring { position: relative; width: 10.6em; margin: .3em auto .5em; }
+  .pv__ring svg { display: block; width: 100%; transform: rotate(-90deg); fill: none; stroke-width: 7; stroke-linecap: round; }
+  .pv__ring circle:first-child { stroke: var(--surface-3); }
+  .pv__arc { stroke: var(--blue); stroke-dasharray: var(--len); stroke-dashoffset: var(--off); }
+  .pv__score { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; text-align: center; }
+  .pv__score b { font-size: 2.55em; font-weight: 450; letter-spacing: -.05em; line-height: 1; font-variant-numeric: tabular-nums; }
+  .pv__score small { margin-top: .35em; font-size: .52em; font-weight: 500; letter-spacing: .18em; text-transform: uppercase; color: var(--fg-mute); }
+  .pv__score em { margin-top: .4em; padding: .08em .45em; border-radius: .35em; font-size: .62em; font-style: normal; font-weight: 600; color: var(--blue-ink); box-shadow: inset 0 0 0 1px rgba(20, 100, 220, .45); }
+  .pv__row, .pv__member, .pv__room { display: flex; align-items: center; gap: .7em; padding: .62em .75em; border-radius: 1em; background: #FFFFFF; box-shadow: 0 0 0 1px var(--line), 0 .4em .9em -.7em rgba(7, 26, 69, .25); }
+  .pv__row > span:nth-child(2), .pv__member > span:nth-child(2), .pv__room > span:first-child { display: grid; flex: 1; min-width: 0; font-size: .64em; line-height: 1.35; color: var(--fg-mute); }
+  .pv__row b, .pv__member b, .pv__room b { overflow: hidden; font-size: 1.22em; font-weight: 500; color: var(--fg); text-overflow: ellipsis; white-space: nowrap; }
+  .pv__room { align-items: flex-start; padding-block: .8em; }
+  .pv__room .seal { margin-top: .1em; }
+  .pv__topic { display: -webkit-box; margin-top: .15em; overflow: hidden; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .pv__tick { display: grid; place-items: center; width: 1.9em; height: 1.9em; flex: none; border-radius: 50%; background: var(--blue-soft); color: var(--blue-ink); }
+  .pv__tick svg, .pv__row > svg { width: 1.1em; height: 1.1em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .pv__row > svg { flex: none; color: var(--fg-mute); }
+  .pv__search { display: flex; align-items: center; gap: .55em; padding: .7em .95em; border-radius: 999px; background: #FFFFFF; box-shadow: 0 0 0 1px var(--line-2); font-size: .74em; color: var(--fg-mute); }
+  .pv__search svg { width: 1.25em; height: 1.25em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+  .pv__chips { display: flex; gap: .4em; font-size: .64em; font-weight: 500; }
+  .pv__chips span { padding: .38em .85em; border-radius: 999px; color: var(--fg-soft); box-shadow: inset 0 0 0 1px var(--line-2); }
+  .pv__chips .is-on { background: var(--blue-ink); color: #FFFFFF; box-shadow: none; }
+  .pv__face--sm { width: 2.9em; }
+  .pv__face--sm .pv__stamp { right: -.45em; bottom: -.4em; }
+  .pv__face--sm .pv__stamp .seal { --seal-size: 1.35em; }
+  .pv__member em { padding: .32em .55em; border-radius: .6em; background: var(--blue-soft); font-size: .7em; font-style: normal; font-weight: 600; color: var(--blue-ink); font-variant-numeric: tabular-nums; }
+  .pv__head { display: grid; gap: .2em; padding: .2em .1em .45em; font-size: .72em; color: var(--fg-mute); }
+  .pv__head b { font-size: 1.6em; font-weight: 500; letter-spacing: -.03em; color: var(--fg); }
+  .pv__room .seal { --seal-size: 1.5em; flex: none; }
+  .pv--profile { align-items: center; justify-content: center; gap: .9em; padding-bottom: 2.2em; text-align: center; }
+  .pv__big { position: relative; display: block; width: 7.6em; height: 7.6em; }
+  .pv__big .pv__stamp { position: static; transform: rotate(-9deg); }
+  .pv__big .pv__stamp .seal { --seal-size: 7.6em; }
+  .pv__big .pv__ripple { inset: 0; right: auto; bottom: auto; width: 100%; height: 100%; }
+  .pv__title { font-size: 1.22em; font-weight: 500; letter-spacing: -.03em; }
+  .pv__text { max-width: 17em; font-size: .74em; line-height: 1.45; color: var(--fg-soft); }
+  .pv__cta { margin-top: .4em; padding: .85em 1.6em; border-radius: .9em; background: var(--blue-ink); font-size: .78em; font-weight: 500; color: #FFFFFF; box-shadow: 0 .6em 1.2em -.7em rgba(20, 100, 220, .8); }
 
   /* ── In their own words: set like a magazine page, not a carousel ── */
   .quotes__inner { display: grid; gap: clamp(40px, 5vw, 72px); }
