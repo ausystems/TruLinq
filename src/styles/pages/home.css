@@ -5,6 +5,8 @@
      A poster: the sentence set as large as it can be, the word "real" in ink, and a seal for its full stop. Beside it
      the desk, where the stamp presses the seal onto a real member's card. */
   .hero { display: grid; grid-template-rows: 1fr auto; min-height: calc(100svh - var(--nav-h) - var(--page-pad)); }
+  /* a tall screen held upright (a large tablet in portrait): the hero takes the height it needs, not the whole glass */
+  @media (min-width: 1024px) and (max-aspect-ratio: 4 / 5) { .hero { min-height: 0; } }
   /* the ink wash under the hero (src/js/wash.js): it fades in over the panel's own gradient once its first frame is
      drawn, and without WebGL that gradient simply stays */
   .hero__wash { position: absolute; inset: 0; z-index: 0; display: block; width: 100%; height: 100%; pointer-events: none; opacity: 0; transition: opacity 1.4s var(--e-out); }
@@ -22,6 +24,8 @@
   html.anim .hero__split.is-go .c { animation-name: hero-rise; animation-delay: calc(var(--i) * 18ms); }
   @keyframes hero-rise { from { transform: translateY(112%) rotate(8deg); } }
   @keyframes hero-rise-late { from { transform: translateY(112%) rotate(8deg); } }
+  /* a phone on its side: the title is sized to the height it has, so the buttons stay in the first view */
+  @media (max-height: 520px) and (min-aspect-ratio: 3 / 2) { .hero__title { font-size: min(clamp(3rem, 1.1rem + 6.4vw, 7.75rem), 12.5vh); } .hero__inner { padding-top: 20px; gap: 16px 40px; } .hero__lead { font-size: 1rem; } }
   .hero__copy { grid-area: copy; display: grid; gap: clamp(22px, 2.6vw, 34px); justify-items: start; }
   .hero__lead { max-width: 39ch; }
   .hero__cta { gap: 14px 28px; }
@@ -448,21 +452,21 @@
   .app__title { font-size: var(--fs-2); max-width: 13ch; }
   .app__lead { max-width: 40ch; }
   .app__points { display: grid; gap: 20px clamp(20px, 2.4vw, 32px); margin-top: 6px; max-width: 34rem; }
-  @media (min-width: 560px) { .app__points { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 560px) and (max-width: 1023px), (min-width: 1280px) { .app__points { grid-template-columns: 1fr 1fr; } }
   .app__points li { display: flex; align-items: flex-start; gap: 14px; }
   .app__points b { display: block; margin-bottom: 4px; font-size: .9375rem; font-weight: 500; color: var(--fg); }
   .app__points li > span:last-child { font-size: .875rem; line-height: 1.5; color: var(--fg-soft); }
   .app__icon { display: grid; place-items: center; flex: none; width: 40px; height: 40px; border-radius: 50%; background: var(--blue-soft); color: var(--sky); box-shadow: inset 0 0 0 1px rgba(127, 203, 255, .22); }
   .app__icon svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
   .app__fine { margin-top: 8px; font-size: var(--fs-meta); line-height: 1.5; color: var(--fg-mute); max-width: 44ch; }
-  .app__stage { --pw: min(clamp(244px, 15vw + 132px, 360px), (100svh - 120px) * .4615); position: relative; display: grid; place-items: center; margin: 0; padding: clamp(8px, 2vw, 24px) 0; }
+  .app__stage { --pw: min(clamp(244px, 15vw + 132px, 360px), max(220px, (100svh - 120px) * .4615)); position: relative; display: grid; place-items: center; margin: 0; padding: clamp(8px, 2vw, 24px) 0; }
   /* light pooling under the phone, the way a screen lights the desk it rests on */
   .app__stage::before { content: ""; position: absolute; left: 50%; top: 54%; width: min(560px, 120%); aspect-ratio: 1.15; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(closest-side, rgba(41, 129, 251, .42), rgba(41, 129, 251, .14) 55%, rgba(41, 129, 251, 0)); filter: blur(28px); pointer-events: none; }
   .app__scribble { left: max(0px, calc(50% - var(--pw) / 2 - 168px)); top: 16%; --tilt: -6deg; flex-direction: column; align-items: flex-end; }
   .app__scribble .scribble__pen { margin: 6px -18px 0 0; transform: rotate(8deg); }
   @media (max-width: 1023px) { .app__scribble { left: auto; right: max(0px, calc(50% - var(--pw) / 2 - 150px)); top: 0; align-items: flex-start; --tilt: 4deg; } .app__scribble .scribble__pen { margin: 6px 0 0 -10px; transform: scaleX(-1) rotate(8deg); } }
-  @media (max-width: 560px) { .app__scribble { display: none; } }
-  @media (min-width: 600px) and (max-width: 1023px) { .app__stage { --pw: min(300px, (100svh - 120px) * .4615); } }
+  @media (max-width: 560px), (min-width: 1024px) and (max-width: 1279px) { .app__scribble { display: none; } }
+  @media (min-width: 600px) and (max-width: 1023px) { .app__stage { --pw: min(300px, max(220px, (100svh - 120px) * .4615)); } }
 
   .phone { position: relative; z-index: 1; width: var(--pw); aspect-ratio: 9 / 19.5; padding: calc(var(--pw) * .016); border-radius: calc(var(--pw) * .168); background: linear-gradient(150deg, #6B7587 0%, #2A3140 18%, #121722 46%, #262D3A 74%, #707B8D 100%); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .2), inset 0 1px 1.5px rgba(255, 255, 255, .45), 0 2px 3px rgba(0, 0, 0, .35), 0 60px 110px -44px rgba(0, 0, 0, .8), 0 36px 70px -36px rgba(41, 129, 251, .5); }
   .phone__key { position: absolute; width: calc(var(--pw) * .013); border-radius: 2px; background: linear-gradient(90deg, #1A202B, #5C6678 60%, #2A3140); }

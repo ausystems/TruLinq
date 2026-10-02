@@ -17,7 +17,8 @@
   .face .portrait { border-radius: 50%; box-shadow: 0 0 0 3px #F1F6FE, 0 10px 18px -12px rgba(10, 22, 51, .45); }
   .face .seal { --seal-size: 20px; position: absolute; right: -1px; bottom: -1px; }
   .dhero__note { align-items: center; gap: 6px; --tilt: -3deg; }
-  @media (max-width: 560px) { .face { width: 48px; margin-left: -12px; } .dhero__note { display: none; } }
+  /* on a phone the faces overlap a little more and size to the width, so the whole roster stays one row */
+  @media (max-width: 560px) { .face { --fw: min(48px, (100vw - 64px) / 7.4); width: var(--fw); margin-left: calc(var(--fw) * -.3); } .face .seal { --seal-size: calc(var(--fw) * .4); } .dhero__note { display: none; } }
 
   /* ── Controls ─────────────────────────────────────────────────── */
   .dir__inner { padding-top: clamp(32px, 3.4vw, 52px); }

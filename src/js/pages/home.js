@@ -11,7 +11,7 @@ import { LAND } from '../../data/land.js';
 
 let members = [], byId = {};
 /* the reviewer's note beside the hero card: written once the stamp has landed */
-const HERO_NOTE = `<p class="scribble hero__note" aria-hidden="true" data-manual><span class="scribble__text">checked by a person</span><svg class="scribble__pen" style="--pen-w:52px" viewBox="0 0 80 48"><path pathLength="1" d="M8 44c14-4 30-16 44-36"/><path pathLength="1" d="M40 12l13-5 3 13"/></svg></p>`;
+const HERO_NOTE = `<p class="scribble hero__note" aria-hidden="true" data-manual><span class="scribble__text">checked by a person</span><svg class="scribble__pen" style="--pen-w:3.25rem" viewBox="0 0 80 48"><path pathLength="1" d="M8 44c14-4 30-16 44-36"/><path pathLength="1" d="M40 12l13-5 3 13"/></svg></p>`;
 const job = (m) => [m.role, m.company].filter(Boolean).join(', ') || m.headline || '';
 
 const STAT_LABELS = {

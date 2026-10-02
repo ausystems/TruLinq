@@ -21,7 +21,7 @@
   /* ── Navigation: part of the page, scrolls away with it ──────── */
   .nav { position: relative; z-index: 20; padding: env(safe-area-inset-top, 0px) var(--page-pad) 0; }
   .nav__bar { max-width: var(--max); margin: 0 auto; height: var(--nav-h); padding: 0 var(--gutter); display: flex; align-items: center; gap: var(--s-7); }
-  .nav__logo { display: flex; align-items: center; height: 44px; margin-left: -2px; border-radius: 8px; }
+  .nav__logo { display: flex; flex: none; align-items: center; height: 44px; margin-left: -2px; border-radius: 8px; }
   .wordmark { height: 27px; width: auto; overflow: visible; }
   .wordmark__word { fill: var(--fg); }
   .nav__links { display: none; flex: 1; justify-content: center; gap: 4px; }
@@ -41,6 +41,9 @@
   @media (min-width: 1024px) { .nav__links { display: flex; } .nav__signin { display: inline-flex; } .nav__burger { display: none; } .nav__actions { margin-left: 0; } }
   @media (max-width: 1023px) { .nav__bar { gap: var(--s-4); } }
   @media (max-width: 420px) { .nav__actions .btn { padding: 0 8px 0 14px; } }
+  /* the logo never gives way: on the narrowest phones the button sheds its disc, then leaves for the menu */
+  @media (max-width: 370px) { .nav__actions .btn { padding: 0 14px; } .nav__actions .btn .btn__icon { display: none; } }
+  @media (max-width: 349px) { .nav__actions .btn { display: none; } }
 
   /* The menu is a passport opened over the page: a navy cover, a paper sheet, the destinations written large.
      It is a dialog: its own close button, trapped focus, the page behind it locked. */

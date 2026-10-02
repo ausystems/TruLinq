@@ -138,7 +138,15 @@ premium product page: few elements per viewport, very large light type, generous
     switches cut at the same second. Media lives in `src/media/` so Vite fingerprints it: H.264 High with the index
     at the front, 5.2 MB for 16:9 and 3.1 MB for 4:5, WebP posters of 17 to 41 KB, lazy and faded in over the
     poster's own average colour. The presenter is not named anywhere, since the film does not say who they are.
-14. **No mascot, no animal, no cartoon character**, anywhere.
+14. **The app, coming soon.** The mobile section from trulinqid.com, on a navy panel between the features and the
+    quotes: its copy, its two points, its concept note, and an iPhone drawn in CSS from one width (`--pw`; a titanium
+    band, black glass, keys, the island) whose paper screen is set in em, so it keeps its proportions at any size. Like
+    the original it walks through Home, Discover, Rooms and Profile every 4.2 seconds while on screen (the stamp
+    presses onto the profile, the score counts up, rows stagger in); a tap on a tab takes over, reduced motion holds it
+    still. Unlike the original, nothing on it is invented: the profile, the members and their scores, the dates and
+    the rooms come from the roster and the room list (`FEATURED.app` in `src/data/editorial.js`), with monograms, not
+    photos, and no counts or messages nobody wrote.
+15. **No mascot, no animal, no cartoon character**, anywhere.
 
 ## Components (`src/styles/components.css`)
 
@@ -173,8 +181,19 @@ the View Transitions API where supported.
 
 ## Responsive and accessibility
 
-Check every page at 1440, 1280, 1024, 768, 414, 375 and 320px wide: no horizontal overflow, no clipped text, no
-orphaned headings, touch targets at least 36px (primary actions 44px). Phones get their own compositions, not a
+**Every screen, one design.** Sizes are written in px and served in rem (`postcss.config.mjs`; hairlines under 2px,
+SVG text and media query breakpoints stay in px), and the root size grows on large monitors, by width and by height,
+whichever allows less (`html` in `base.css`): 16px up to a large laptop, about 1.08 at 1920 by 1080, 1.25 at 2560 by
+1440, 1.3 on a 34 inch ultrawide, 1.5 on a 4K screen at full scale. So a 27, 34 or 40 inch monitor shows the same
+composition as a laptop, larger, instead of a small column in the middle of the glass. Below that the conversion is
+exact and nothing moves. A large tablet held upright gives the hero the height it needs rather than the whole screen; a
+phone on its side sizes the hero title to the height it has; on the narrowest phones the header button sheds its disc
+and then moves into the menu, so the logo never shrinks; the directory's row of faces sizes to the width.
+
+Check every page at 280 (a folded phone's cover), 320, 360, 390, 430, 540 (one screen of a dual-screen phone), 768,
+820, 884 (an unfolded phone), 1024 upright, 1114 (both screens), 1280, 1440, 1920, 2560, 3440 and 3840px wide, and
+phones on their side (667 by 375, 844 by 390): no horizontal overflow, no clipped text, no orphaned headings, no
+readable text under 11px, touch targets at least 36px (primary actions 44px). Phones get their own compositions, not a
 squeezed desktop: the hero headline re-breaks for the width, the small feature tiles pair up, margin notes that would
 crowd a small screen are left out, and the header becomes a menu dialog below 1024px (a navy cover around a paper
 sheet) with a focus trap, Escape to close and its own close button. Headings follow the document outline; every
