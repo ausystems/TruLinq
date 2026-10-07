@@ -26,7 +26,7 @@
             <div class="field"><label class="field__label" for="si-email">Email</label><input class="input" id="si-email" name="email" type="email" autocomplete="username" placeholder="you@yourbusiness.com" required><p class="field__err">Enter the email on your account.</p></div>
             <div class="field">
               <label class="field__label" for="si-pass"><span data-pass-label>Password</span> <button type="button" class="auth__inline" data-forgot aria-expanded="false" aria-controls="reset-box">Forgot password?</button></label>
-              <input class="input" id="si-pass" name="password" type="password" autocomplete="current-password" required>
+              <div class="pass"><input class="input" id="si-pass" name="password" type="password" autocomplete="current-password" required><button type="button" class="pass__show" data-reveal><span data-reveal-word>Show</span><span class="sr-only"> password</span></button></div>
               <p class="field__err">Enter your password.</p>
             </div>
             <div class="form-note auth__reset" id="reset-box" data-reset hidden>
@@ -50,14 +50,10 @@
               <p class="field__err">Enter the full code a member gave you.</p>
             </div>
             <div class="field"><label class="field__label" for="su-name">Full name</label><input class="input" id="su-name" name="name" autocomplete="name" maxlength="80"><p class="field__err">Enter your name as it appears on your ID.</p></div>
-            <div class="auth__row">
-              <div class="field"><label class="field__label" for="su-business">Business name <small>optional</small></label><input class="input" id="su-business" name="business" autocomplete="organization" maxlength="120"><p class="field__err">Keep it under 120 characters.</p></div>
-              <div class="field"><label class="field__label" for="su-country">Country <small>optional</small></label><input class="input" id="su-country" name="country" autocomplete="country-name" maxlength="80"><p class="field__err">Keep it under 80 characters.</p></div>
-            </div>
             <div class="field"><label class="field__label" for="su-email">Work email</label><input class="input" id="su-email" name="email" type="email" autocomplete="email" placeholder="you@yourbusiness.com"><p class="field__err">Enter a working email.</p></div>
             <div class="field">
               <label class="field__label" for="su-pass">Password <small>10 or more characters</small></label>
-              <input class="input" id="su-pass" name="password" type="password" autocomplete="new-password" data-pass aria-describedby="su-pass-hint">
+              <div class="pass"><input class="input" id="su-pass" name="password" type="password" autocomplete="new-password" data-pass aria-describedby="su-pass-hint"><button type="button" class="pass__show" data-reveal><span data-reveal-word>Show</span><span class="sr-only"> password</span></button></div>
               <div class="strength" aria-hidden="true" data-strength><i></i><i></i><i></i><i></i></div>
               <p class="field__hint" id="su-pass-hint" data-strength-label>A long phrase you’ll remember works best.</p>
               <p class="field__err">Use at least 10 characters.</p>
@@ -65,6 +61,7 @@
             <div class="field"><label class="check"><input type="checkbox" name="agree" data-agree><i></i><span>I agree to the <a href="/terms/">Terms</a> and the <a href="/privacy/">Privacy Policy</a>.</span></label><p class="field__err">Agree to the terms to create your account.</p></div>
             <p class="form-error" data-error="signup" role="alert" hidden></p>
             <button type="submit" class="btn btn--primary btn--block btn--lg"><span>Create account</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></button>
+            <p class="auth__assure">Creating an account is free, and we never sell your data.</p>
             <p class="auth__alt">Already a member? <button type="button" class="auth__inline" data-switch="signin">Sign in</button></p>
           </form>
         </div>

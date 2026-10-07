@@ -37,12 +37,21 @@
             <li data-step-item="3"><b>Review and submit</b><span>One last look</span></li>
           </ol>
           <p class="dossier__eta">Review takes up to {{review.businessDays}} business days.</p>
+          <div class="dossier__need">
+            <h2>What you’ll need</h2>
+            <ul>
+              <li>Your invitation code</li>
+              <li>A passport, driver’s licence or national ID</li>
+              <li>Your business registration number</li>
+              <li>Your website, if you have one</li>
+            </ul>
+          </div>
         </aside>
 
         <div class="dossier__stage" data-stage>
 
           <form class="dossier__card card" data-step="0" novalidate aria-labelledby="step0-title">
-            <div class="dossier__card-head"><h2 id="step0-title" tabindex="-1">Your invitation code</h2><p>Ask any verified member for a code, or <a class="link" href="/contact/?topic=invite">request one</a>.</p></div>
+            <div class="dossier__card-head"><h2 id="step0-title" tabindex="-1">Your invitation code</h2><p>Enter the code a verified member gave you.</p></div>
             <div class="field">
               <label class="field__label" for="v-code">Invitation code</label>
               <input class="input mono dossier__code" id="v-code" name="code" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="14" aria-describedby="v-code-hint">
@@ -51,6 +60,10 @@
             </div>
             <div class="dossier__actions">
               <button type="submit" class="btn btn--primary"><span>Continue</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></button>
+            </div>
+            <div class="dossier__invite">
+              <p><b>No code yet?</b> Every verified member has one to share. No one to ask? A person answers invitation requests, most within one business day.</p>
+              <a class="btn btn--tint btn--sm" href="/contact/?topic=invite"><span>Request an invitation</span></a>
             </div>
             <p class="dossier__alt">Already a member? <a class="link" href="/auth/?next=/verify/">Sign in</a></p>
           </form>

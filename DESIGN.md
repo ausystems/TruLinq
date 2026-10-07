@@ -167,7 +167,28 @@ premium product page: few elements per viewport, very large light type, generous
     still. Unlike the original, nothing on it is invented: the profile, the members and their scores, the dates and
     the rooms come from the roster and the room list (`FEATURED.app` in `src/data/editorial.js`), with the members'
     own photos or monograms, and no counts or messages nobody wrote.
-15. **No mascot, no animal, no cartoon character**, anywhere.
+15. **The closing call.** Every page that asks for the sign-up ends the same way, just above the footer: a blue sheet
+    with the big seal pressed half off its edge (rotated, cropped by the sheet; in the bottom corner on narrow
+    screens), a large white line and one sentence written for that page, then the same actions and proof everywhere:
+    Get verified, Request an invitation (membership is invite only, so the two always travel together), the real
+    members who already carry the stamp (faces and first names of `FEATURED.world`, and how many more, read from the
+    members when the call comes near; the build's verified count until then), and three facts that answer the last
+    doubts: the price, that the ID is never public, and the review time. The markup is `partials/cta-seal.html` and
+    `partials/cta-actions.html` inside a `section.panel.panel--blue.cta`; the style is `.cta` in `components.css`. Pages
+    that are themselves the sign-up (auth, verify, the dashboard) and the 404 do not have one; on the contact page it
+    steps aside when someone has come to request an invitation.
+16. **No mascot, no animal, no cartoon character**, anywhere.
+
+## Conversion
+
+Every page earns the next step honestly. One primary action, everywhere: Get verified (to `/verify/`), in the header,
+the hero, at the point a page has made its case, and in the closing call. Membership is invite only, so wherever Get
+verified is the main ask, Request an invitation (`/contact/?topic=invite`, which opens the contact page as an invitation
+request) is beside it. The facts that remove doubt sit next to the action they are about: the price (from the billing
+configuration), that the ID is never public, that a person reviews it and how long that takes, what to have ready.
+Proof is only ever real: the members themselves, their real counts, exact excerpts of their own words. Forms ask for
+the least they need (sign-up is code, name, email, password); passwords can be shown before they are sent. Never:
+fake urgency or scarcity, invented numbers or testimonials, popups, sticky bars, countdowns, dark patterns.
 
 ## Components (`src/styles/components.css`)
 

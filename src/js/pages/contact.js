@@ -17,10 +17,25 @@ function setTopic(t, focus = false) {
   $('[data-to-line]').textContent = TO[t];
 }
 
+/* Arriving from Request an invitation: the page says so in its first line, the form follows the heading directly, and
+   the message is started for them, ending where they carry on in their own words. */
+function invite() {
+  $('#contact-title').textContent = 'Request an invitation.';
+  $('.chero .lead').textContent = 'Tell us who you are and what your business does. A person reads every request, and most replies land within one business day.';
+  $('.channels').hidden = true;
+  $('#write-title').textContent = 'Your request';
+  $('#c-msg').value = 'I’d like an invitation code. My business is ';
+  $('[data-letter] button[type=submit] span').textContent = 'Send request';
+  $('[data-member]').closest('.switch').hidden = true;
+  /* the closing call would only lead back here */
+  const close = $('.cta'); if (close) close.hidden = true;
+  document.title = 'Request an invitation · Trulinq';
+}
+
 function build() {
   const params = new URLSearchParams(location.search);
   let t = params.get('topic') || 'support';
-  if (t === 'invite') { t = 'support'; $('#c-msg').value = 'I’d like an invitation code.'; }
+  if (t === 'invite') { t = 'support'; invite(); }
   setTopic(t);
   $('[data-channels]').addEventListener('click', (e) => { const c = e.target.closest('[data-topic]'); if (c) setTopic(c.dataset.topic); });
   $('[data-channels]').addEventListener('keydown', (e) => {

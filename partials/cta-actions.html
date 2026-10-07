@@ -1,0 +1,15 @@
+<!-- The closing call's actions and proof, the same on every page: Get verified, and for anyone without a code,
+     Request an invitation; the real members who already carry the stamp (src/js/main.js puts their faces and names in);
+     and the three facts that answer the last doubts. -->
+<div class="btn-row cta__row">
+  <a class="btn btn--white btn--lg" href="/verify/"><span>Get verified</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
+  <a class="btn btn--ghost-light btn--lg" href="/contact/?topic=invite"><span>Request an invitation</span></a>
+</div>
+<div class="cta__proof">
+  <a class="cta__people" href="/directory/" data-cta-people><span class="cta__faces" aria-hidden="true" data-cta-faces></span><span data-cta-people-text>{{stats.verified}} verified members, each checked by a person</span></a>
+  <ul class="cta__assure">
+    <li>From {{price.yearlyPerMonth}} a month</li>
+    <li>Your ID is never public</li>
+    <li>Reviewed by a person in {{review.businessDays}} business days</li>
+  </ul>
+</div>

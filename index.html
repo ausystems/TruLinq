@@ -23,6 +23,7 @@
             <a class="btn btn--primary btn--lg" href="/verify/"><span>Get verified</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
             <a class="arrow-link arrow-link--lg" href="#how"><span>How it works</span><i aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M6 3.5l4.5 4.5L6 12.5"/></svg></i></a>
           </div>
+          <p class="hero__fine">Invite only · From {{price.yearlyPerMonth}} a month · <span class="hero__ask">No code? <a class="link" href="/contact/?topic=invite">Request one</a></span></p>
         </div>
         <figure class="hero__stage" data-hero-stage>
           <div class="hero__desk" aria-hidden="true">
@@ -185,6 +186,10 @@
             </div>
           </li>
         </ol>
+        <div class="how__cta">
+          <a class="btn btn--primary btn--lg" href="/verify/"><span>Start your application</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
+          <p class="how__cta-note">It takes a few minutes. No invitation code? <a class="link" href="/contact/?topic=invite">Request one</a>.</p>
+        </div>
       </div>
     </section>
 
@@ -360,6 +365,10 @@
             <div class="acc__panel"><div><p class="acc__body">We confirmed the person’s identity and the existence of their business at the time of review. It is not a guarantee of business performance, product quality, or the outcome of any deal. Use your own judgment and written contracts.</p></div></div>
           </div>
           <div class="acc__item">
+            <h3><button class="acc__btn" type="button"><span>How do I get an invitation code?</span><span class="acc__plus" aria-hidden="true"></span></button></h3>
+            <div class="acc__panel"><div><p class="acc__body">Every verified member has a code to share from their dashboard, so ask someone who knows your work. No one to ask? <a class="link" href="/contact/?topic=invite">Request an invitation</a> and a person replies, most within one business day.</p></div></div>
+          </div>
+          <div class="acc__item">
             <h3><button class="acc__btn" type="button"><span>How long does verification take?</span><span class="acc__plus" aria-hidden="true"></span></button></h3>
             <div class="acc__panel"><div><p class="acc__body">Most reviews finish within {{review.businessDays}} business days once your documents are readable and complete. You can follow the status from your dashboard, and a reviewer signs off before the stamp is issued.</p></div></div>
           </div>
@@ -379,16 +388,13 @@
       </div>
     </section>
 
-    <!-- ── Call to action ────────────────────────────────────── -->
+    <!-- ── The closing call (shared: partials/cta-seal.html, partials/cta-actions.html) ── -->
     <section class="panel panel--blue cta" id="join" aria-labelledby="cta-title">
-      <div class="cta__seal" aria-hidden="true"><span class="seal seal--xl"></span></div>
+      <!--@include(partials/cta-seal.html)-->
       <div class="cta__inner">
         <h2 id="cta-title" class="display">Claim your stamp.</h2>
-        <p class="cta__lead">The application takes a few minutes. A person reviews it within {{review.businessDays}} business days.</p>
-        <div class="btn-row cta__row">
-          <a class="btn btn--white btn--lg" href="/auth/?mode=signup"><span>Create your account</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
-          <a class="btn btn--ghost-light btn--lg" href="/directory/"><span>Browse verified members</span></a>
-        </div>
+        <p class="cta__lead">The application takes a few minutes. Have your ID and your business registration number ready.</p>
+        <!--@include(partials/cta-actions.html)-->
       </div>
     </section>
 

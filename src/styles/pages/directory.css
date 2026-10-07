@@ -1,14 +1,15 @@
 @layer pages {
-  .dhero__inner, .dir__inner, .dcta__inner { position: relative; z-index: 1; max-width: var(--max); margin: 0 auto; padding: var(--sect-y) var(--gutter); }
+  .dhero__inner, .dir__inner { position: relative; z-index: 1; max-width: var(--max); margin: 0 auto; padding: var(--sect-y) var(--gutter); }
 
   /* ── Head: the title, the numbers, and everyone in the directory as a row of faces ── */
   .dhero__inner { display: grid; gap: 22px; padding-top: clamp(48px, 6vw, 104px); padding-bottom: clamp(28px, 3vw, 44px); }
   @media (min-width: 1024px) {
-    .dhero__inner { grid-template-columns: minmax(0, 1fr) minmax(280px, 340px); grid-template-areas: "crumb crumb" "title ledger" "lead ledger"; align-items: end; column-gap: var(--gutter); }
-    .dhero__inner .breadcrumb { grid-area: crumb; } .dhero__inner h1 { grid-area: title; } .dhero__inner .lead { grid-area: lead; } .dhero__ledger { grid-area: ledger; }
+    .dhero__inner { grid-template-columns: minmax(0, 1fr) minmax(280px, 340px); grid-template-areas: "crumb crumb" "title ledger" "lead ledger" "cta ledger"; align-items: end; column-gap: var(--gutter); }
+    .dhero__inner .breadcrumb { grid-area: crumb; } .dhero__inner h1 { grid-area: title; } .dhero__inner .lead { grid-area: lead; } .dhero__cta { grid-area: cta; } .dhero__ledger { grid-area: ledger; }
   }
   .dhero h1 { font-size: var(--fs-1); max-width: 12ch; }
   .dhero .lead { max-width: 46ch; }
+  .dhero__cta { justify-self: start; }
   .dhero__ledger { padding: 8px 22px; border-radius: var(--r-card); background: var(--paper); box-shadow: var(--sh-object); }
   .dhero__ledger b { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
   .dhero__faces { position: relative; z-index: 1; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 22px; max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter) clamp(36px, 4vw, 60px); }
@@ -45,6 +46,8 @@
   /* ── Cards ────────────────────────────────────────────────────── */
   .dir__grid { display: grid; gap: 12px; grid-template-columns: 1fr; }
   .dir__grid[hidden], .reg[hidden], .dir__empty[hidden] { display: none; }
+  /* the report prompt sits under the list it is about */
+  .dir__report { margin-top: clamp(32px, 4vw, 48px); padding-top: 22px; border-top: 1px solid var(--line); max-width: 72ch; font-size: var(--fs-sm); color: var(--fg-soft); }
   @media (min-width: 700px) { .dir__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (min-width: 1180px) { .dir__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 
@@ -75,14 +78,4 @@
     .reg-row__cell, .reg-row__date { display: none; }
   }
   .dir__empty { margin-top: 12px; }
-
-  /* ── Bottom: the call on blue, the report on paper ────────────── */
-  .dcta__inner { display: grid; gap: clamp(28px, 4vw, 48px); padding-block: clamp(64px, 8vw, 128px); }
-  @media (min-width: 900px) { .dcta__inner { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); align-items: center; gap: var(--gutter); } }
-  .dcta__col { display: grid; gap: 20px; justify-items: start; }
-  .dcta__col h2 { font-size: clamp(2.5rem, 1.5rem + 3.4vw, 5rem); font-weight: 400; letter-spacing: -.05em; line-height: .96; color: #FFFFFF; }
-  .dcta__col:not(.dcta__col--report) > p { max-width: 34ch; font-size: var(--fs-lead); font-weight: 350; color: #EEF4FF; }
-  .dcta__col--report { gap: 12px; padding: clamp(24px, 3vw, 36px); box-shadow: 0 30px 60px -32px rgba(4, 22, 70, .6); }
-  .dcta__col--report h3 { font-size: var(--fs-3); font-weight: 450; }
-  .dcta__col--report p { color: var(--fg-soft); }
 }

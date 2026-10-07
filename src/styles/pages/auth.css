@@ -12,12 +12,11 @@
   .auth__head { display: grid; gap: 8px; }
   .auth__card h1 { font-size: var(--fs-2); }
   .auth__lead { color: var(--fg-soft); }
-  .auth__row { display: grid; gap: 18px; }
-  @media (min-width: 520px) { .auth__row { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   .auth__inline { font-size: var(--fs-meta); font-weight: 500; color: var(--blue-ink); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; border-radius: 3px; }
   .auth__reset { display: grid; gap: 10px; justify-items: start; }
   .auth__reset[hidden] { display: none; }
   .auth__alt { font-size: .9375rem; color: var(--fg-soft); text-align: center; }
+  .auth__assure { margin-top: -6px; font-size: var(--fs-meta); color: var(--fg-soft); text-align: center; }
   .auth__alt .auth__inline { font-size: inherit; }
   .strength { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
   .strength i { height: 3px; border-radius: 2px; background: var(--surface-3); transition: background var(--t-state); }

@@ -23,6 +23,16 @@
   .dossier__steps li.is-done { color: var(--fg-soft); }
   .dossier__steps li.is-done b::after { content: ""; display: inline-block; width: 9px; height: 5px; margin: 0 0 3px 10px; border-left: 1.75px solid var(--blue-ink); border-bottom: 1.75px solid var(--blue-ink); transform: rotate(-45deg); }
   .dossier__eta { font-size: var(--fs-meta); color: var(--fg-soft); }
+  /* what to have ready, so no one stops halfway to go and look for a document */
+  .dossier__need { display: grid; gap: 10px; width: 100%; padding: 18px 20px; border-radius: var(--r-well); background: var(--ice-2); }
+  .dossier__need h2 { font-size: .9375rem; font-weight: 550; letter-spacing: -.01em; }
+  .dossier__need ul { display: grid; gap: 8px; }
+  .dossier__need li { position: relative; padding-left: 22px; font-size: var(--fs-meta); line-height: 1.45; color: var(--fg-soft); }
+  .dossier__need li::before { content: ""; position: absolute; left: 2px; top: 5px; width: 9px; height: 5px; border-left: 1.6px solid var(--blue-ink); border-bottom: 1.6px solid var(--blue-ink); transform: rotate(-45deg); }
+  /* the door for anyone without a code */
+  .dossier__invite { display: grid; gap: 12px; justify-items: start; padding: 16px 18px; border-radius: var(--r-well); background: var(--ice-2); box-shadow: inset 0 0 0 1px var(--line); }
+  .dossier__invite p { font-size: var(--fs-sm); line-height: 1.5; color: var(--fg-soft); }
+  .dossier__invite b { font-weight: 550; color: var(--fg); }
   @media (max-width: 1023px) {
     .dossier__side { grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 12px 20px; }
     .dossier__progress { width: 96px; grid-row: 1 / 3; }
@@ -30,7 +40,9 @@
     .dossier__progress-num { font-size: .6875rem; }
     .dossier__steps { display: none; }
     .dossier__eta { grid-column: 2; }
+    .dossier__need { grid-column: 1 / -1; }
   }
+  @media (min-width: 560px) and (max-width: 1023px) { .dossier__need ul { grid-template-columns: 1fr 1fr; column-gap: 24px; } }
 
   .dossier__card { display: grid; gap: 20px; padding: clamp(24px, 3.2vw, 44px); box-shadow: 0 40px 80px -52px rgba(10, 22, 51, .45), inset 0 0 0 1px var(--line); }
   .dossier__card[hidden] { display: none; }

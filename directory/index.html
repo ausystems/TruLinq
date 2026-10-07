@@ -15,6 +15,7 @@
         <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Trulinq</a><i aria-hidden="true"></i><span aria-current="page">Directory</span></nav>
         <h1 id="dir-title" class="display">The verified <span class="hl">directory</span></h1>
         <p class="lead">Every profile below belongs to a real person and a real business. Check the stamp before you send money, sign, or partner.</p>
+        <a class="arrow-link arrow-link--lg dhero__cta" href="/verify/"><span>Get your own stamp</span><i aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></i></a>
         <ul class="dhero__ledger ledger" aria-label="The directory in numbers">
           <li class="ledger__row"><span>Verified members</span><i></i><b data-stat="verified">{{stats.verified}}</b></li>
           <li class="ledger__row"><span>Industries</span><i></i><b data-stat="industries">{{stats.industries}}</b></li>
@@ -79,21 +80,17 @@
           <p>Try another industry or a shorter search. Every new member is checked the same way, so the list grows one real person at a time.</p>
           <button type="button" class="btn btn--ink btn--sm" data-reset><span>Clear filters</span></button>
         </div>
+        <p class="dir__report">See a profile that isn’t what it claims? <a class="link" href="/trust/#report">Report it</a>. A person reviews every report, and nothing you report is shared with the profile.</p>
       </div>
     </section>
 
-    <section class="panel panel--blue dcta" aria-labelledby="dcta-title">
-      <div class="dcta__inner">
-        <div class="dcta__col">
-          <h2 id="dcta-title" class="display">Get your stamp.</h2>
-          <p>A person reviews every application within {{review.businessDays}} business days.</p>
-          <a class="btn btn--white btn--lg" href="/verify/"><span>Get verified</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
-        </div>
-        <div class="dcta__col dcta__col--report card paper">
-          <h3>See a profile that isn’t what it claims?</h3>
-          <p>Report it and a person reviews it. Fraudulent accounts and impersonation lose the stamp, and usually the account. Nothing you report is shared with the profile.</p>
-          <a class="arrow-link" href="/trust/#report"><span>Report a profile</span><i aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></i></a>
-        </div>
+    <!-- ── The closing call (shared: partials/cta-seal.html, partials/cta-actions.html) ── -->
+    <section class="panel panel--blue cta" id="join" aria-labelledby="cta-title">
+      <!--@include(partials/cta-seal.html)-->
+      <div class="cta__inner">
+        <h2 id="cta-title" class="display">Get your stamp.</h2>
+        <p class="cta__lead">Join the list the way everyone on it did: your ID and your business, checked by a person.</p>
+        <!--@include(partials/cta-actions.html)-->
       </div>
     </section>
 

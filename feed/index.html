@@ -38,7 +38,10 @@
             </div>
             <div class="composer__lock" data-composer-lock>
               <p>Only verified members can post</p>
-              <a class="btn btn--primary btn--sm" href="/auth/?next=/feed/"><span>Sign in to post</span></a>
+              <div class="composer__lock-row">
+                <a class="btn btn--primary btn--sm" href="/verify/" data-lock-primary><span>Get verified</span></a>
+                <a class="link composer__signin" href="/auth/?next=/feed/" data-lock-signin>Sign in</a>
+              </div>
             </div>
           </form>
           <div class="chip-row feed__filters" role="group" aria-label="Filter posts" data-filters>
@@ -77,6 +80,16 @@
             <a class="btn btn--white btn--sm" href="/verify/"><span>Get verified</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
           </div>
         </aside>
+      </div>
+    </section>
+
+    <!-- ── The closing call (shared: partials/cta-seal.html, partials/cta-actions.html) ── -->
+    <section class="panel panel--blue cta" id="join" aria-labelledby="cta-title">
+      <!--@include(partials/cta-seal.html)-->
+      <div class="cta__inner">
+        <h2 id="cta-title" class="display">Share your first win.</h2>
+        <p class="cta__lead">Verified members post wins, asks, offers and hires here, newest first. Yours carries the stamp.</p>
+        <!--@include(partials/cta-actions.html)-->
       </div>
     </section>
 

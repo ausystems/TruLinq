@@ -2,9 +2,10 @@
    Scrolling belongs to the browser: nothing is pinned, smoothed, hijacked or tied to the scroll position. Motion is
    reserved for moments that mean something (a stamp being issued, a score being read, a state changing). */
 import gsap from 'gsap';
-import { sealSVG, href } from './ui.js';
+import { sealSVG, href, portrait, esc, isVerified } from './ui.js';
 import { api } from './api.js';
-import { loadSession } from './data.js';
+import { loadSession, loadMembers } from './data.js';
+import { FEATURED } from '../data/editorial.js';
 
 const html = document.documentElement;
 html.classList.remove('no-js');
@@ -305,6 +306,44 @@ export async function applySession() {
   return s;
 }
 
+/* ── Password fields: show what's typed ───────────────────────── */
+export function initReveal(scope = document) {
+  scope.querySelectorAll('[data-reveal]').forEach((btn) => {
+    const input = btn.parentElement.querySelector('input');
+    btn.addEventListener('click', () => {
+      const show = input.type === 'password';
+      input.type = show ? 'text' : 'password';
+      btn.querySelector('[data-reveal-word]').textContent = show ? 'Hide' : 'Show';
+      input.focus({ preventScroll: true });
+    });
+  });
+}
+
+/* ── The closing call: who already carries the stamp ──────────── */
+/* The faces and first names of the members the site leads with (Tyler Shirakawa, Noah Duran, Ahmad Khalid), and how
+   many more there are, read from the members themselves when the call comes near. Until then, and without script, it
+   reads as the verified count from the build. */
+export function initCTA(scope = document) {
+  const row = scope.querySelector('[data-cta-people]');
+  if (!row) return;
+  whenVisible(row, async () => {
+    try {
+      const { members } = await loadMembers();
+      const verified = members.filter(isVerified);
+      const lead = FEATURED.world.map((id) => verified.find((m) => m.id === id)).filter(Boolean);
+      if (!lead.length) return;
+      const more = verified.length - lead.length;
+      const names = lead.map((m) => m.first || m.name);
+      const and = (list) => (list.length > 1 ? `${list.slice(0, -1).join(', ')} and ${list[list.length - 1]}` : list[0]);
+      const text = more > 0 ? `Join ${names.join(', ')} and ${more} more verified members`
+        : names.length > 1 ? `Join ${and(names)}, all verified` : `Join ${names[0]}, a verified member`;
+      row.querySelector('[data-cta-faces]').innerHTML = lead.map((m) => portrait(m, { size: 34 })).join('');
+      row.querySelector('[data-cta-people-text]').textContent = text;
+      initImages(row);
+    } catch { /* the build's count stays */ }
+  }, { rootMargin: '600px 0px' });
+}
+
 /* ── Boot ──────────────────────────────────────────────────────── */
 /* Build the page's data-driven DOM, then run its one choreographed moment, if it has one. */
 export async function boot(pageInit, heroInit) {
@@ -315,6 +354,8 @@ export async function boot(pageInit, heroInit) {
   initAccordions();
   initImages();
   initScribbles();
+  initCTA();
+  initReveal();
   html.classList.add('is-ready');
   if (typeof heroInit === 'function') {
     try { await Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 1200))]); heroInit(); }

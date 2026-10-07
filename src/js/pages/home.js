@@ -203,13 +203,13 @@ function heroWash() {
   try { wash = createWash(canvas, { layout: pick(), warp: .06, waves: 2.4, speed: 1.6 }); }
   catch (e) { console.info('[trulinq] ink wash unavailable', e); canvas.remove(); return; }
   window.__wash = wash; // lets automated checks draw any moment
-  /* Small blue text keeps AA contrast (4.5:1) whatever drifts under it: the link beside the button, the caption, the
-     motto, and the reviewer's note while it is set under 24px. The ink is held to a limit there, measured to the text
+  /* Small blue text keeps AA contrast (4.5:1) whatever drifts under it: the link beside the button, the line under the
+     buttons, the caption, the motto, and the reviewer's note while it is set under 24px. The ink is held to a limit there, measured to the text
      itself: above a floor on paper, below a ceiling at night, where the text is light. The layout already keeps the
      strongest tints away from them, so the limit only ever acts a little. */
   const limit = () => (theme() === 'dark' ? wash.limit(.05, -1) : wash.limit(.85, 1));
   limit();
-  const SMALL = ['.hero__cta .arrow-link', '.hero__caption', '.hero__motto', '.hero__note .scribble__text'];
+  const SMALL = ['.hero__cta .arrow-link', '.hero__fine', '.hero__caption', '.hero__motto', '.hero__note .scribble__text'];
   const range = document.createRange();
   const isSmall = (el) => { const cs = getComputedStyle(el), px = parseFloat(cs.fontSize); return px < 24 && !(px >= 18.66 && +cs.fontWeight >= 700); };
   const measure = () => {

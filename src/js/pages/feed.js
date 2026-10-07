@@ -29,7 +29,8 @@ function composer() {
   const lock = $('[data-composer-lock]');
   const m = session.member;
   if (!m || m.status !== 'verified') {
-    const a = lock.querySelector('a');
+    const a = lock.querySelector('[data-lock-primary]');
+    if (session.user) lock.querySelector('[data-lock-signin]').hidden = true;
     if (m) { a.href = href(m.status === 'pending' ? '/dashboard/' : '/verify/'); a.querySelector('span').textContent = m.status === 'pending' ? 'Verification in review' : 'Get verified to post'; }
     return;
   }

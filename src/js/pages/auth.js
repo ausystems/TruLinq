@@ -104,7 +104,7 @@ async function build() {
   });
 
   /* ── Create an account ── */
-  const code = $('#su-code'), name = $('#su-name'), biz = $('#su-business'), country = $('#su-country'), sem = $('#su-email'), pass = $('[data-pass]'), agree = $('[data-agree]');
+  const code = $('#su-code'), name = $('#su-name'), sem = $('#su-email'), pass = $('[data-pass]'), agree = $('[data-agree]');
   const hint = $('[data-code-hint]');
   code.addEventListener('input', () => { const pos = code.selectionStart, before = code.value; code.value = before.toUpperCase().replace(/[^A-Z0-9-]/g, ''); if (code.value.length === before.length) code.setSelectionRange(pos, pos); });
   const checkCode = async (v) => {
@@ -139,14 +139,14 @@ async function build() {
     const btn = forms.signup.querySelector('button[type=submit]');
     busy(btn, true);
     try {
-      const r = await api.post('/auth/signup', { name: name.value.trim(), email: sem.value.trim(), password: pass.value, code: code.value.trim(), business: biz.value.trim() || undefined, country: country.value.trim() || undefined, agree: true });
+      const r = await api.post('/auth/signup', { name: name.value.trim(), email: sem.value.trim(), password: pass.value, code: code.value.trim(), agree: true });
       toast(r.referral ? `Welcome to Trulinq. You were invited by ${r.referral.referrer.name}.` : 'Welcome to Trulinq.');
       go(destination());
     } catch (err) {
       busy(btn, false);
       if (err instanceof ApiError && err.code === 'email_taken') { setInvalid(sem, true, 'An account already uses this email. Sign in instead.'); sem.focus(); return; }
       if (err instanceof ApiError && (err.code === 'invalid_code' || err.code === 'code_required')) { setInvalid(code, true, err.message); code.focus(); return; }
-      explain(forms.signup, err, { code, name, email: sem, password: pass, business: biz, country });
+      explain(forms.signup, err, { code, name, email: sem, password: pass });
     }
   });
 }

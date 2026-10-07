@@ -1,7 +1,7 @@
 /* the feed mock's fade animates as a number, so older posts can step back smoothly */
 @property --fade { syntax: "<number>"; inherits: true; initial-value: 1; }
 @layer pages {
-  .who__inner, .film__inner, .app__inner, .doubt__inner, .how__inner, .score__inner, .feats__inner, .quotes__inner, .faq__inner, .cta__inner { position: relative; z-index: 1; max-width: var(--max); margin: 0 auto; padding: var(--sect-y) var(--gutter); }
+  .who__inner, .film__inner, .app__inner, .doubt__inner, .how__inner, .score__inner, .feats__inner, .quotes__inner, .faq__inner { position: relative; z-index: 1; max-width: var(--max); margin: 0 auto; padding: var(--sect-y) var(--gutter); }
 
   /* ── Hero ─────────────────────────────────────────────────────────
      A poster: the sentence set as large as it can be, the word "real" in ink, and a seal for its full stop. Beside it
@@ -31,6 +31,10 @@
   .hero__copy { grid-area: copy; display: grid; gap: clamp(22px, 2.6vw, 34px); justify-items: start; }
   .hero__lead { max-width: 39ch; }
   .hero__cta { gap: 14px 28px; }
+  /* what it costs and how to get in, under the buttons, the way a price sits under a Buy button */
+  .hero__fine { margin-top: calc(clamp(8px, 1.2vw, 16px) * -1); font-size: var(--fs-meta); color: var(--fg-soft); }
+  .hero__fine .link { font-weight: 500; }
+  .hero__ask { white-space: nowrap; }
   @media (max-width: 560px) { .hero__cta .btn { flex: 1 1 100%; justify-content: space-between; } }
 
   /* The desk: a member card lies in perspective; the stamp presses the seal onto it. The card is placed by script so
@@ -218,6 +222,11 @@
   .how__press.is-on { visibility: visible; }
   .how__press canvas { display: block; width: 100%; height: 100%; }
   .how__ink { position: absolute; right: -18px; bottom: -18px; width: 60px; height: 60px; border-radius: 50%; box-shadow: 0 0 0 1.5px var(--blue), 0 0 18px 2px rgba(41, 129, 251, .35); opacity: 0; pointer-events: none; }
+  /* after the three checks: the step that starts them */
+  .how__cta { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 28px; }
+  .how__cta-note { max-width: 40ch; font-size: var(--fs-sm); color: var(--fg-soft); }
+  @media (min-width: 1024px) { .how__cta { padding-left: 38px; } }
+  @media (max-width: 560px) { .how__cta .btn { flex: 1 1 100%; justify-content: space-between; } }
   .idcard__status { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: var(--fs-meta); font-weight: 500; color: var(--blue-ink); }
   .idcard__status.is-pending { color: var(--fg-mute); }
   /* before the sequence plays (it plays once, when the section is first on screen) */
@@ -588,14 +597,4 @@
   @media (min-width: 1024px) { .faq__inner { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); align-items: start; } }
   .faq__side h2 { font-size: var(--fs-2); max-width: 9ch; }
   .faq__sub { margin-top: 18px; max-width: 32ch; color: var(--fg-soft); }
-
-  /* ── Call to action ───────────────────────────────────────────── */
-  .cta__inner { display: grid; gap: 22px; justify-items: start; padding-block: clamp(96px, 12vw, 190px); }
-  .cta h2 { font-size: clamp(2.75rem, 1.4rem + 4.6vw, 6.5rem); font-weight: 400; letter-spacing: -.055em; line-height: .95; color: #FFFFFF; max-width: 9ch; }
-  .cta__lead { max-width: 38ch; font-size: var(--fs-lead); font-weight: 350; color: #EEF4FF; }
-  .cta__row { margin-top: 14px; }
-  .cta__seal { position: absolute; right: -4%; top: 50%; z-index: 0; transform: translateY(-50%) rotate(-8deg); pointer-events: none; }
-  .cta__seal .seal { --seal-size: clamp(280px, 36vw, 560px); }
-  .cta__seal .seal svg { filter: drop-shadow(0 30px 60px rgba(4, 22, 70, .45)); }
-  @media (max-width: 900px) { .cta__inner { padding-bottom: clamp(220px, 60vw, 300px); } .cta__seal { top: auto; bottom: -20%; right: -22%; transform: rotate(-8deg); } .cta__seal .seal { --seal-size: clamp(240px, 66vw, 340px); } }
 }

@@ -83,7 +83,7 @@ async function build() {
   ({ members: MEMBERS } = await loadMembers());
   $('[data-industry]').insertAdjacentHTML('beforeend', INDUSTRIES.map((i) => `<option value="${esc(i)}">${esc(i)}</option>`).join(''));
   const { mutual, oneway } = pairs();
-  $('[data-fits]').innerHTML = mutual.map(fitHTML).join('') || `<div class="empty"><h3>No mutual fits yet.</h3><p>A fit appears when one member offers what another is looking for, in both directions. Add both lines to your profile and you’ll show up here the moment someone matches.</p><a class="btn btn--ink btn--sm" href="${href('/dashboard/#profile')}"><span>Update your profile</span></a></div>`;
+  $('[data-fits]').innerHTML = mutual.map(fitHTML).join('') || `<div class="empty"><h3>No mutual fits yet.</h3><p>A fit appears when one member offers what another is looking for, in both directions. Get verified, add both lines to your profile, and you’ll show up here the moment someone matches.</p><div class="btn-row"><a class="btn btn--primary btn--sm" href="${href('/verify/')}"><span>Get verified</span></a><a class="link" href="${href('/dashboard/#profile')}">Already verified? Update your profile</a></div></div>`;
   $('[data-oneway]').innerHTML = oneway.slice(0, 6).map(fitHTML).join('');
   $('[data-oneway-wrap]').hidden = !oneway.length;
   $('[data-people]').innerHTML = MEMBERS.map(cardHTML).join('');

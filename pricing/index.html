@@ -15,6 +15,10 @@
         <div class="phero-p__copy">
           <h1 id="pricing-title" class="display">One stamp. Priced like <span class="hl">a stamp.</span></h1>
           <p class="lead">A free stamp is a worthless stamp. Paid review funds real human checks on documents and business registries. No tiers of trust, no add-ons.</p>
+          <div class="btn-row phero-p__cta">
+            <a class="btn btn--primary btn--lg" href="/verify/"><span>Start verification</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
+            <a class="arrow-link arrow-link--lg" href="#plans"><span>Compare plans</span><i aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M6 3.5l4.5 4.5L6 12.5"/></svg></i></a>
+          </div>
           <div class="phero-p__toggle">
             <div class="segmented" role="group" aria-label="Billing period" data-billing>
               <button type="button" class="is-active" data-period="yearly" aria-pressed="true">Yearly</button>
@@ -165,6 +169,10 @@
             <div class="acc__panel"><div><p class="acc__body">A free stamp is a worthless stamp. Paid review funds real human checks on documents and business registries.</p></div></div>
           </div>
           <div class="acc__item">
+            <h3><button class="acc__btn" type="button"><span>Do I need an invitation?</span><span class="acc__plus" aria-hidden="true"></span></button></h3>
+            <div class="acc__panel"><div><p class="acc__body">Yes. Membership is invite only. Ask any verified member for their code, or <a class="link" href="/contact/?topic=invite">request an invitation</a> and a person replies, most within one business day.</p></div></div>
+          </div>
+          <div class="acc__item">
             <h3><button class="acc__btn" type="button"><span>What if I’m rejected?</span><span class="acc__plus" aria-hidden="true"></span></button></h3>
             <div class="acc__panel"><div><p class="acc__body">You keep your free profile, get the reason in your dashboard, and can resubmit once the issue is fixed.</p></div></div>
           </div>
@@ -180,13 +188,13 @@
       </div>
     </section>
 
-    <section class="panel panel--blue pcta" aria-labelledby="pcta-title">
-      <div class="pcta__inner">
-        <h2 id="pcta-title" class="display">Apply today. A person reviews it within {{review.businessDays}} business days.</h2>
-        <div class="btn-row">
-          <a class="btn btn--white btn--lg" href="/verify/"><span>Start verification</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
-          <a class="btn btn--ghost-light btn--lg" href="/trust/"><span>Read the Trust Centre</span></a>
-        </div>
+    <!-- ── The closing call (shared: partials/cta-seal.html, partials/cta-actions.html) ── -->
+    <section class="panel panel--blue cta" id="join" aria-labelledby="cta-title">
+      <!--@include(partials/cta-seal.html)-->
+      <div class="cta__inner">
+        <h2 id="cta-title" class="display">Apply today.</h2>
+        <p class="cta__lead">One plan, one stamp, checked by a person. Have your ID and your business registration number ready.</p>
+        <!--@include(partials/cta-actions.html)-->
       </div>
     </section>
 

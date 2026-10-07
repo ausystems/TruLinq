@@ -22,6 +22,8 @@
   .composer__lock { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 14px; padding: 20px; text-align: center; background: color-mix(in srgb, var(--ice-2) 78%, transparent); -webkit-backdrop-filter: blur(6px) saturate(1.1); backdrop-filter: blur(6px) saturate(1.1); border-radius: var(--r-card); }
   .composer__lock[hidden] { display: none; }
   .composer__lock p { font-weight: 500; }
+  .composer__lock-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px 18px; }
+  .composer__signin { font-size: var(--fs-sm); font-weight: 500; }
 
   .feed__count { font-size: var(--fs-meta); color: var(--fg-soft); }
   .feed__list { display: grid; border-top: 1px solid var(--line-2); }

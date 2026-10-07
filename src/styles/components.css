@@ -327,6 +327,11 @@
   .field.is-invalid .input:focus { box-shadow: inset 0 0 0 1.5px var(--danger), 0 0 0 4px rgba(200, 50, 31, .12); }
   .input:disabled { background: var(--surface-3); color: var(--fg-mute); box-shadow: none; cursor: not-allowed; }
   .input:-webkit-autofill, .input:-webkit-autofill:hover, .input:-webkit-autofill:focus { -webkit-text-fill-color: var(--fg); -webkit-box-shadow: inset 0 0 0 1px var(--line-2), 0 0 0 100px var(--autofill) inset; transition: background-color 9999s; }
+  /* a password field with a Show button inside its right edge, so a typo can be seen before it is sent */
+  .pass { position: relative; }
+  .pass .input { padding-right: 78px; }
+  .pass__show { position: absolute; right: 7px; top: 50%; height: 36px; padding: 0 12px; border-radius: 9px; transform: translateY(-50%); font-size: var(--fs-meta); font-weight: 550; color: var(--blue-ink); transition: background var(--t-hover); }
+  .pass__show:hover { background: var(--blue-soft); }
   textarea.input { height: auto; min-height: 132px; padding: 14px 16px; line-height: 1.55; resize: vertical; }
   .input.mono { font-family: var(--f-mono); letter-spacing: .02em; }
   .select { position: relative; }
@@ -474,6 +479,38 @@
   .vouch-card figcaption b { display: block; color: var(--fg); font-weight: 500; }
   .vouch-card figcaption .avatar { width: 32px; height: 32px; }
   .vouch-card time { margin-left: auto; font-family: var(--f-mono); }
+
+  /* ── The closing call: a blue sheet with the stamp pressed half off its edge ─────────
+     The same on every page that asks for the sign-up (partials/cta-seal.html and partials/cta-actions.html): a big
+     line in white and one sentence, written for the page; then, the same everywhere, Get verified and Request an
+     invitation, the real members who already carry the stamp, and the three facts that answer the last doubts. */
+  .cta__inner { position: relative; z-index: 1; display: grid; gap: 22px; justify-items: start; max-width: var(--max); margin: 0 auto; padding: clamp(96px, 12vw, 190px) var(--gutter); }
+  .cta h2 { font-size: clamp(2.75rem, 1.4rem + 4.6vw, 6.5rem); font-weight: 400; letter-spacing: -.055em; line-height: .95; color: #FFFFFF; max-width: 9ch; }
+  .cta__lead { max-width: 38ch; font-size: var(--fs-lead); font-weight: 350; color: #EEF4FF; }
+  .cta__row { margin-top: 14px; }
+  .cta__seal { --s: clamp(280px, 36vw, 560px); position: absolute; right: -4%; top: 50%; z-index: 0; transform: translateY(-50%) rotate(-8deg); pointer-events: none; }
+  .cta__seal .seal { --seal-size: var(--s); }
+  .cta__seal .seal svg { filter: drop-shadow(0 30px 60px rgba(4, 22, 70, .45)); }
+  /* who already carries it, and what it costs, what stays private, how long it takes */
+  .cta__proof { display: grid; gap: 14px; margin-top: 18px; padding-top: 22px; border-top: 1px solid rgba(255, 255, 255, .22); width: min(100%, 620px); }
+  .cta__people { display: inline-flex; align-items: center; gap: 12px; justify-self: start; min-height: 32px; border-radius: 6px; font-size: .9375rem; font-weight: 450; color: #FFFFFF; }
+  .cta__people > span:last-child { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .22em; text-decoration-color: rgba(255, 255, 255, .45); transition: text-decoration-color var(--t-hover); }
+  .cta__people:hover > span:last-child { text-decoration-color: #FFFFFF; }
+  .cta__faces { display: flex; flex: none; }
+  html.js .cta__faces:empty { width: 86px; height: 34px; } /* held open while the faces load, so the line never jumps */
+  .cta__faces .portrait { width: 34px; height: 34px; border-radius: 50%; box-shadow: 0 0 0 2px #FFFFFF; }
+  .cta__faces .portrait + .portrait { margin-left: -8px; }
+  .cta__assure { display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: var(--fs-meta); color: #EDF4FF; }
+  .cta__assure li { display: inline-flex; align-items: center; gap: 8px; }
+  .cta__assure li::before { content: ""; flex: none; width: 9px; height: 5px; margin-top: -3px; border-left: 1.6px solid #FFFFFF; border-bottom: 1.6px solid #FFFFFF; transform: rotate(-45deg); }
+  @media (max-width: 900px) {
+    .cta__inner { padding-bottom: clamp(220px, 60vw, 300px); }
+    /* on narrow screens the stamp sits in the bottom corner, half on the sheet, whatever the copy above it runs to */
+    .cta__seal { --s: clamp(240px, 66vw, 340px); top: auto; bottom: calc(var(--s) * -.5); right: calc(var(--s) * -.32); transform: rotate(-8deg); }
+  }
+  /* where the stamp sits beside the copy but the screen is still narrow, the proof keeps to the copy's width */
+  @media (min-width: 901px) and (max-width: 1099px) { .cta__proof { width: min(100%, 30rem); } }
+  @media (max-width: 560px) { .cta__row .btn { flex: 1 1 100%; justify-content: space-between; } .cta__assure { flex-direction: column; } }
 
   /* ── Footer: a navy cover around the last sheet ──────────────── */
   .footer { margin: 0 var(--page-pad) var(--page-pad); }
