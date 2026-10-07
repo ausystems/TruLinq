@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <!--@include(partials/head.html)-->
+  <title>{{post.seoTitle}}</title>
+  <meta name="description" content="{{post.description}}">
+  <script type="module" src="/src/js/pages/blog.js"></script>
+</head>
+<body>
+  <!--@include(partials/nav.html)-->
+  <main id="main" class="page">
+    <article class="guide" aria-labelledby="guide-title">
+      <header class="panel panel--ice guide-hero">
+        <div class="guide-hero__inner">
+          <div class="guide-hero__text">
+            <!--@render(guide-crumbs)-->
+            <h1 id="guide-title" class="display">{{post.titleHTML}}</h1>
+            <p class="guide-hero__dek">{{post.dek}}</p>
+            <!--@render(guide-byline)-->
+          </div>
+          <div class="guide-hero__art" aria-hidden="true"><!--@include(partials/art/how-to-tell-if-a-website-is-legit.html)--></div>
+        </div>
+      </header>
+
+      <div class="panel panel--paper guide-main">
+        <div class="guide-main__inner">
+          <div class="guide__col">
+            <div class="guide__body prose">
+<!--guide-body-->
+              <div class="guide__answer">
+                <b>The short answer</b>
+                <p>Read the exact domain in the address bar for misspellings, extra words or odd characters, check when it was registered with ICANN Lookup, and run it through Google’s Safe Browsing check. Then confirm a real business behind it, search its name with “scam” or “complaint”, and pay by credit card. HTTPS and the padlock only mean the connection is encrypted, not that the site is honest.</p>
+              </div>
+
+              <!--@render(guide-toc)-->
+
+              <p class="guide__lede">A convincing fake shop or sign-in page takes an afternoon to build. In 2025, nearly 30 percent of people who told the FTC they had lost money to a scam said it started on social media, with $2.1 billion lost, and more than 40 percent of those were buying something they had seen in an ad. Phishing is near its highest level in years: the Anti-Phishing Working Group counted 425,808 phishing sites in June 2026 alone, the most in a month since April 2023. The checks below tell a real site from a copy, and most take seconds.</p>
+
+              <h2 id="one-minute-check">The one-minute check</h2>
+              <ul class="guide__checks">
+                <li><b>Read the real domain.</b><span>The part just before the first single slash, read from the right.</span></li>
+                <li><b>See how old the domain is.</b><span>A site registered last week shouldn’t be claiming twenty years in business.</span></li>
+                <li><b>Run it through Google Safe Browsing.</b><span>It flags sites Google currently knows to be dangerous.</span></li>
+                <li><b>Find a real business behind it.</b><span>An address, a phone number and a returns policy you can check.</span></li>
+                <li><b>Search its name with “scam” and “complaint”.</b><span>Other people’s experience, from outside the site.</span></li>
+                <li><b>Pay in a way you can dispute.</b><span>A credit card, never a gift card, wire, payment app or crypto to a stranger.</span></li>
+              </ul>
+
+              <h2 id="domain">Read the real address</h2>
+              <p>Everything else on a page can be copied: the logo, the photos, the layout, even the reviews. The domain can’t. To find it, look at the address, find the first single slash after the <code>https://</code>, and read the words just before it from the right. In <code>yourbank.com.secure-login.example/sign-in</code>, the site you are on is <code>secure-login.example</code>. The “yourbank.com” at the front is just a label its owner chose. Chrome’s own guidelines note that everything before the real domain, and everything after it, is <a href="https://chromium.googlesource.com/chromium/src/+/main/docs/security/url_display_guidelines/url_display_guidelines.md" target="_blank" rel="noopener">completely under the control of the website</a> and can be crafted to mislead.</p>
+              <p class="scribble guide__note" aria-hidden="true"><svg class="scribble__pen" style="--pen-w:2.75rem" viewBox="0 0 80 48"><path pathLength="1" d="M74 8C58 10 34 20 12 40"/><path pathLength="1" d="M10 26l2 14 14-2"/></svg><span class="scribble__text">read it from the right</span></p>
+              <p>Watch for three kinds of lookalike:</p>
+              <ul>
+                <li><b>Typos and swaps.</b> A zero for an o, an extra letter, a hyphen, a different ending such as .co instead of .com.</li>
+                <li><b>Real names in the wrong place.</b> A brand’s name used as a subdomain of someone else’s site, as in the example above.</li>
+                <li><b>Letters from other alphabets.</b> A Cyrillic “а” looks identical to a Latin “a”. Browsers show some of these addresses in a coded form starting with <code>xn--</code>, which is a reason to stop and look.</li>
+              </ul>
+              <p>Chrome warns about many lookalikes with a “Did you mean” message, but its documentation is clear that it <a href="https://chromium.googlesource.com/chromium/src/+/main/docs/security/lookalikes/lookalike-domains.md" target="_blank" rel="noopener">can not detect all lookalike domains</a>. Ads deserve the same caution: criminals buy search and social ads that lead to copies of real sites. For anything that involves a password or a payment, type the address yourself or use a bookmark.</p>
+
+              <h2 id="domain-age">Check how old the site is</h2>
+              <p><a href="https://lookup.icann.org/en" target="_blank" rel="noopener">ICANN Lookup</a> is the official, free place to see when a domain was registered. Since January 2025 it has used a system called RDAP, which <a href="https://www.icann.org/en/announcements/details/icann-update-launching-rdap-sunsetting-whois-27-01-2025-en" target="_blank" rel="noopener">replaced the old WHOIS service</a> for most domain endings. Type the domain and look for the registration or creation date.</p>
+              <p>You will usually find the owner’s name and address marked as redacted. That is normal: privacy rules require it, so it says nothing either way. The date is what matters. A store claiming decades of history on a domain registered last month is lying about something. But age cuts only one way: new businesses have new domains, and old domains can be bought, or hacked and reused.</p>
+
+              <h2 id="padlock">What the padlock means, and what it doesn’t</h2>
+              <p>HTTPS means the connection between your browser and the site is encrypted, so no one in between can read it. It says nothing about who is on the other end. Google’s Chrome team put it plainly in 2023: <a href="https://blog.chromium.org/2023/05/an-update-on-lock-icon.html" target="_blank" rel="noopener">“nearly all phishing sites use HTTPS”</a>, and in its research only 11 percent of people correctly understood what the padlock meant. That is why Chrome replaced the padlock with a neutral “tune” icon in version 117, released in September 2023. The FBI said the same years earlier: <a href="https://www.ic3.gov/PSA/2019/PSA190610" target="_blank" rel="noopener">“Do not trust a website just because it has a lock icon or ‘https’ in the browser address bar.”</a></p>
+              <p>The useful rule is the reverse one. If a page asks for a password or a card number and is <em>not</em> using HTTPS, leave.</p>
+
+              <h2 id="safe-browsing">Check Google Safe Browsing</h2>
+              <p>Google’s <a href="https://transparencyreport.google.com/safe-browsing/search" target="_blank" rel="noopener">Safe Browsing site status</a> tool shows whether a site is currently flagged as dangerous. Google says it finds thousands of new unsafe sites every day, “many of which are legitimate websites that have been compromised.” A warning is worth taking seriously. A clean result is not a clean bill of health: a scam site launched this week may not have been caught yet. If you find a phishing page, you can <a href="https://safebrowsing.google.com/safebrowsing/report_phish/" target="_blank" rel="noopener">report it to Google</a> so the warning reaches others.</p>
+
+              <h2 id="business">Find the business behind the site</h2>
+              <p>A real shop is run by a real business, and it leaves details you can check:</p>
+              <ul>
+                <li><b>Contact details.</b> A street address, a phone number and an email address on the site’s own domain. Look the address up on a map, and call the number.</li>
+                <li><b>Policies.</b> The FTC says a site <a href="https://consumer.ftc.gov/articles/online-shopping" target="_blank" rel="noopener">“must say whether you’re able to return the item for a full refund.”</a> Vague or missing shipping and returns terms are a warning.</li>
+                <li><b>The company itself.</b> The legal name in the terms or the footer should match a business you can find in an official registry. Our guide to <a href="/blog/how-to-check-if-a-business-is-legit/">checking if a business is legit</a> walks through it.</li>
+                <li><b>Prices.</b> Deep discounts on brands that never discount are the classic bait. The FTC found that many social media ads behind reported losses <a href="https://www.ftc.gov/news-events/data-visualizations/data-spotlight/2026/04/reported-losses-scams-social-media-eight-times-higher-2020" target="_blank" rel="noopener">led to unfamiliar websites or to sites impersonating well-known brands</a> offering big discounts.</li>
+              </ul>
+
+              <h2 id="reviews">Read reviews the right way</h2>
+              <p>Reviews on the site itself prove nothing; they are as easy to fake as the site. The FTC’s advice is to search the product or company name <a href="https://consumer.ftc.gov/articles/online-shopping" target="_blank" rel="noopener">“plus the words ‘complaint’ or ‘scam,’”</a> and not to rely on star ratings, because “some reviews and ratings are fake or misleading.” In the US, Chrome can also show an AI-written <a href="https://blog.google/products-and-platforms/products/chrome/store-reviews/" target="_blank" rel="noopener">summary of a store’s reviews</a> from other sites: click the icon to the left of the web address.</p>
+
+              <h2 id="checkers">Do website checkers work?</h2>
+              <p>Free “legit checkers” combine signals such as domain age, blocklists and reports into a score. They are a reasonable second opinion, not a verdict, and their makers say so. ScamAdviser calls its score <a href="https://www.scamadviser.com/articles/scamadviser-algorithm-explainer" target="_blank" rel="noopener">“a risk indicator, not a verdict”</a> and warns that a scam site registered yesterday with no negative history “will score higher than it deserves until reports accumulate.” URLVoid checks a site against more than 30 blocklists and says data submitted to it <a href="https://www.urlvoid.com/" target="_blank" rel="noopener">is shared with security companies</a>, so never paste in a link that contains personal details or a login token.</p>
+
+              <h2 id="paying">Pay in a way you can take back</h2>
+              <p>“Paying by credit card best protects you and your money in case of a scam,” says the FTC. Under the Fair Credit Billing Act you can dispute charges for things you <a href="https://consumer.ftc.gov/articles/using-credit-cards-and-disputing-charges" target="_blank" rel="noopener">“didn’t accept or weren’t delivered as agreed”</a>, your liability for unauthorized charges is capped at $50, and your dispute letter must reach the card issuer within 60 days of the first bill showing the error.</p>
+              <p>The FTC’s other rule is absolute: never buy from a seller that insists you pay with gift cards, a wire transfer, a payment app or cryptocurrency. Those payments are hard or impossible to reverse, which is exactly why scammers ask for them.</p>
+
+              <h2 id="browser-help">Let your password manager and browser help</h2>
+              <p>A password manager is one of the best fake-site detectors you have. The UK’s National Cyber Security Centre points out that it protects you from phishing because <a href="https://www.ncsc.gov.uk/collection/top-tips-for-staying-secure-online/password-managers" target="_blank" rel="noopener">“the password will only autofill on the correct website.”</a> If your password manager doesn’t offer your login on a page that looks exactly like your bank’s, don’t copy and paste the password in. Stop and check the address. The same goes for a browser warning: read it before you click past it.</p>
+
+              <h2 id="already">Already paid, or typed in a password?</h2>
+              <p>Act today, and in this order:</p>
+              <ol>
+                <li><b>Contact whoever moved the money.</b> The FTC’s advice is to report it <a href="https://consumer.ftc.gov/articles/what-do-if-you-were-scammed" target="_blank" rel="noopener">immediately</a> to your card issuer, bank, payment app, gift card issuer, wire company or crypto exchange, and ask them to reverse the payment.</li>
+                <li><b>Change the password</b> on the real site, and anywhere else you used it, then turn on two-factor authentication.</li>
+                <li><b>If you gave your Social Security number</b> or ID documents, use <a href="https://www.identitytheft.gov/" target="_blank" rel="noopener">IdentityTheft.gov</a> for a recovery plan.</li>
+                <li><b>Report it</b> to the FTC at <a href="https://reportfraud.ftc.gov/" target="_blank" rel="noopener">ReportFraud.ftc.gov</a> and to the FBI at <a href="https://www.ic3.gov/" target="_blank" rel="noopener">ic3.gov</a>. Forward phishing emails to <a href="mailto:reportphishing@apwg.org">reportphishing@apwg.org</a>, scam texts to 7726 (SPAM), and report the site to Google Safe Browsing. Type these addresses yourself: fake “recovery” sites copy them too.</li>
+              </ol>
+              <p>Non-payment and non-delivery scams alone drew 56,478 complaints and $503.4 million in reported losses to the FBI in 2025. Reporting is how the next shopper gets warned.</p>
+
+              <div class="guide__callout">
+                <span class="seal seal--sm"></span>
+                <div>
+                  <p><b>A website can be built in an afternoon. A verified business can’t.</b> On Trulinq, every member’s business registration is checked against public registries and its website, domain and contact details are confirmed as active, before a person on our review team issues the stamp.</p>
+                  <p>So when a member sends you to their site, you already know there is a real business behind it. <a href="/trust/">What the stamp means</a></p>
+                </div>
+              </div>
+
+              <h2 id="sources">Sources</h2>
+              <ol class="guide__sources">
+                <li><a href="https://www.ftc.gov/news-events/data-visualizations/data-spotlight/2026/04/reported-losses-scams-social-media-eight-times-higher-2020" target="_blank" rel="noopener">FTC Data Spotlight, Reported losses to scams on social media eight times higher than in 2020</a>, April 27, 2026.</li>
+                <li><a href="https://docs.apwg.org/reports/apwg_trends_report_q2_2026.pdf" target="_blank" rel="noopener">Anti-Phishing Working Group, Phishing Activity Trends Report, second quarter 2026</a>.</li>
+                <li><a href="https://chromium.googlesource.com/chromium/src/+/main/docs/security/url_display_guidelines/url_display_guidelines.md" target="_blank" rel="noopener">Chromium, Guidelines for URL display</a>, and <a href="https://chromium.googlesource.com/chromium/src/+/main/docs/security/lookalikes/lookalike-domains.md" target="_blank" rel="noopener">Lookalike warnings in Google Chrome</a>.</li>
+                <li><a href="https://www.icann.org/en/announcements/details/icann-update-launching-rdap-sunsetting-whois-27-01-2025-en" target="_blank" rel="noopener">ICANN, Launching RDAP; sunsetting WHOIS</a>, January 27, 2025.</li>
+                <li><a href="https://blog.chromium.org/2023/05/an-update-on-lock-icon.html" target="_blank" rel="noopener">Chromium Blog, An update on the lock icon</a>, May 2, 2023.</li>
+                <li><a href="https://www.ic3.gov/PSA/2019/PSA190610" target="_blank" rel="noopener">FBI, Cyber actors exploit “secure” websites in phishing campaigns</a>, June 10, 2019.</li>
+                <li><a href="https://transparencyreport.google.com/safe-browsing/search" target="_blank" rel="noopener">Google Transparency Report, Safe Browsing site status</a>.</li>
+                <li><a href="https://consumer.ftc.gov/articles/online-shopping" target="_blank" rel="noopener">FTC Consumer Advice, Online shopping</a>.</li>
+                <li><a href="https://blog.google/products-and-platforms/products/chrome/store-reviews/" target="_blank" rel="noopener">Google, Chrome is helping you shop smarter and safer with store reviews</a>, July 28, 2025.</li>
+                <li><a href="https://www.scamadviser.com/articles/scamadviser-algorithm-explainer" target="_blank" rel="noopener">ScamAdviser, Algorithm explainer</a>, and <a href="https://www.urlvoid.com/" target="_blank" rel="noopener">URLVoid</a>.</li>
+                <li><a href="https://consumer.ftc.gov/articles/using-credit-cards-and-disputing-charges" target="_blank" rel="noopener">FTC Consumer Advice, Using credit cards and disputing charges</a>.</li>
+                <li><a href="https://www.ncsc.gov.uk/collection/top-tips-for-staying-secure-online/password-managers" target="_blank" rel="noopener">UK National Cyber Security Centre, Password managers</a>.</li>
+                <li><a href="https://consumer.ftc.gov/articles/what-do-if-you-were-scammed" target="_blank" rel="noopener">FTC Consumer Advice, What to do if you were scammed</a>.</li>
+                <li><a href="https://www.ic3.gov/AnnualReport/Reports/2025_IC3Report.pdf" target="_blank" rel="noopener">FBI Internet Crime Complaint Center, 2025 IC3 Annual Report</a>, April 2026.</li>
+              </ol>
+<!--/guide-body-->
+            </div>
+            <!--@render(guide-about)-->
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <section class="panel panel--mist gmore" aria-labelledby="gmore-title">
+      <div class="gmore__inner">
+        <h2 id="gmore-title" class="display">Keep <span class="hl">reading.</span></h2>
+        <div class="gmore__grid"><!--@render(guide-related)--></div>
+      </div>
+    </section>
+
+    <!-- ── The closing call (shared: partials/cta-seal.html, partials/cta-actions.html) ── -->
+    <section class="panel panel--blue cta" id="join" aria-labelledby="cta-title">
+      <!--@include(partials/cta-seal.html)-->
+      <div class="cta__inner">
+        <h2 id="cta-title" class="display">Meet the business behind the website.</h2>
+        <p class="cta__lead">Every Trulinq member’s business, its registration and its site were checked before a person issued the stamp. Deal with businesses that are already real.</p>
+        <!--@include(partials/cta-actions.html)-->
+      </div>
+    </section>
+
+  </main>
+  <!--@include(partials/footer.html)-->
+</body>
+</html>

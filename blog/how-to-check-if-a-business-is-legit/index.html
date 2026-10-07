@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <!--@include(partials/head.html)-->
+  <title>{{post.seoTitle}}</title>
+  <meta name="description" content="{{post.description}}">
+  <script type="module" src="/src/js/pages/blog.js"></script>
+</head>
+<body>
+  <!--@include(partials/nav.html)-->
+  <main id="main" class="page">
+    <article class="guide" aria-labelledby="guide-title">
+      <header class="panel panel--ice guide-hero">
+        <div class="guide-hero__inner">
+          <div class="guide-hero__text">
+            <!--@render(guide-crumbs)-->
+            <h1 id="guide-title" class="display">{{post.titleHTML}}</h1>
+            <p class="guide-hero__dek">{{post.dek}}</p>
+            <!--@render(guide-byline)-->
+          </div>
+          <div class="guide-hero__art" aria-hidden="true"><!--@include(partials/art/how-to-check-if-a-business-is-legit.html)--></div>
+        </div>
+      </header>
+
+      <div class="panel panel--paper guide-main">
+        <div class="guide-main__inner">
+          <div class="guide__col">
+            <div class="guide__body prose">
+<!--guide-body-->
+              <div class="guide__answer">
+                <b>The short answer</b>
+                <p>Search the company’s exact name in the official business registry of the state where it was formed, and confirm it is active or in good standing. Registration proves a business exists, not that it’s honest, so also check its licenses, address, phone, reviews and court records, and pay in a way you can dispute. Anyone who will only take gift cards, crypto or a wire from a stranger is a red flag.</p>
+              </div>
+
+              <!--@render(guide-toc)-->
+
+              <p class="guide__lede">In 2025, people told the Federal Trade Commission they lost about $16 billion to fraud, the most on record, and nearly $1 billion of it to scammers pretending to be businesses. There is no single database that says a company is honest. But there are a dozen free records that, taken together, make a convincing front very hard to keep up. Here they are, with what each one proves and, just as important, what it doesn’t.</p>
+
+              <h2 id="checklist">The 12-point checklist</h2>
+              <p>Work down the list. A real business passes almost all of it without effort; a fake one starts failing early.</p>
+              <ul class="guide__checks">
+                <li><b>It’s in the official business registry.</b><span>Search the state where it was formed, and the state where it works with you.</span></li>
+                <li><b>Its status is active, or in good standing.</b><span>Not dissolved, revoked, suspended or delinquent.</span></li>
+                <li><b>The names match.</b><span>The legal name, any trade name, and the name on your contract, invoice or receipt.</span></li>
+                <li><b>It holds the licenses its work needs.</b><span>Contractors, realtors, lenders and many trades are licensed, and the licence can be looked up.</span></li>
+                <li><b>The address is a real place it uses.</b><span>A street address you can see, not only a mail drop or a registered agent’s office.</span></li>
+                <li><b>The phone number works, and you found it yourself.</b><span>Not the number in the email, the ad or the caller ID.</span></li>
+                <li><b>Its website is older than its offer.</b><span>Check when the domain was registered.</span></li>
+                <li><b>People who aren’t the business say it’s real.</b><span>Independent reviews, complaints and its record with the BBB.</span></li>
+                <li><b>Its name, plus “scam” or “complaint”, turns up nothing alarming.</b><span>The FTC’s own first step.</span></li>
+                <li><b>Its tax ID checks out.</b><span>A signed Form W-9 from a vendor; the IRS list for a charity; SEC filings for a public company.</span></li>
+                <li><b>Court records and liens show no pattern of trouble.</b><span>Worth doing before a large contract, a loan or a partnership.</span></li>
+                <li><b>It takes a payment you can dispute.</b><span>Pressure to pay by wire, gift card, crypto or a payment app is the clearest sign of all.</span></li>
+              </ul>
+
+              <h2 id="registry">Find it in the official registry</h2>
+              <p>Every corporation, LLC and limited partnership in the United States is registered with a state, and the record is public and free to search. That record is the single most useful thing you can check, because a fake business either won’t be there or will be there under a different name.</p>
+              <h3>Which registry to search</h3>
+              <p>Start with the state where the business says it was formed, then the state where it works with you, since companies that operate in several states usually register in each one (called foreign qualification). In most states the registry belongs to the Secretary of State, but not in all: Arizona’s is run by its Corporation Commission, Virginia’s by its State Corporation Commission and Hawaii’s by the Department of Commerce and Consumer Affairs. The National Association of Secretaries of State keeps <a href="https://www.nass.org/business-services/corporate-registration" target="_blank" rel="noopener">a page linking every state’s registry</a>, which is the quickest way to the right one.</p>
+              <p class="scribble guide__note" aria-hidden="true"><svg class="scribble__pen" style="--pen-w:2.75rem" viewBox="0 0 80 48"><path pathLength="1" d="M74 8C58 10 34 20 12 40"/><path pathLength="1" d="M10 26l2 14 14-2"/></svg><span class="scribble__text">free to search in every state</span></p>
+              <h3>What a record tells you</h3>
+              <p>A typical entry shows the exact legal name, the type of entity, the date it was formed, its status, its registered agent and, depending on the state, its officers or managers, its annual filings and any trade names. Hawaii’s, for example, shows a status such as “Active” and a separate line saying whether the business is in good standing. Hawaii moved its search to a new portal in July 2026, <a href="https://hbe.dcca.hawaii.gov/search-and-buy" target="_blank" rel="noopener">Hawaii Business Express</a>, and some older pages still link the retired one.</p>
+              <h3>“Active” and “good standing” are not the same as honest</h3>
+              <p>Good standing usually means the business has kept up with its state filings and fees. Colorado’s Secretary of State puts it plainly: good standing means <a href="https://www.coloradosos.gov/pubs/business/FAQs/certGoodStanding.html" target="_blank" rel="noopener">“statutory filing requirements have been met with our office. However, this office does not review or verify information submitted in those filings.”</a> The UK’s Companies House says the same of its register. Registration proves a company exists on paper; everything after this section is about whether it is what it claims to be.</p>
+              <h3>Registered agents and trade names</h3>
+              <p>The address on a registry record is often the registered agent’s, a person or firm that <a href="https://www.sba.gov/business-guide/launch-your-business/register-your-business" target="_blank" rel="noopener">receives legal papers for the company</a>, not the place the business operates. And a business may trade under a name that isn’t its legal one, called a DBA or trade name. Ask for the legal name behind any brand you are about to pay, and make sure that is the name on the contract.</p>
+
+              <h2 id="licenses">Check its licenses</h2>
+              <p>Many kinds of work need a license, and licenses are easier to check than most people think. Contractors, real estate agents, insurance agents, lenders, accountants, electricians and many health and beauty trades are licensed by a state board that publishes a lookup, and often a record of complaints and discipline. Hawaii, for instance, publishes a <a href="https://cca.hawaii.gov/business-check/" target="_blank" rel="noopener">Business Check</a> that shows both. Search “[your state] [trade] license lookup” and use the result on a .gov site. A license that doesn’t exist, has lapsed or belongs to a different name is one of the strongest signals you can get.</p>
+
+              <h2 id="contact-details">Check the address, the phone and the website</h2>
+              <p>Real businesses leave a consistent trail. Fake ones reuse details, borrow them or make them up.</p>
+              <ul>
+                <li><b>The address.</b> Look it up on a map. Is it an office, a shop, a warehouse, a house? A mailbox store or a building with hundreds of companies at one suite number isn’t proof of fraud, but it means you should rely more on the other checks.</li>
+                <li><b>The phone.</b> Call a number you found yourself, on the registry record, the license or the company’s long-standing website, not the one in the message. The FTC warns that scammers often fake their numbers, so <a href="https://www.ftc.gov/business-guidance/resources/scams-your-small-business-guide-business" target="_blank" rel="noopener">don’t trust caller ID</a>.</li>
+                <li><b>The website.</b> Check when the domain was registered with <a href="https://lookup.icann.org/en" target="_blank" rel="noopener">ICANN Lookup</a>, the official tool that replaced WHOIS for most domains in January 2025. A “20-year-old firm” on a domain registered last month deserves a hard look. Domain age is a clue, not proof: new businesses have new domains. Our guide to <a href="/blog/how-to-tell-if-a-website-is-legit/">telling if a website is legit</a> covers the rest.</li>
+              </ul>
+
+              <h2 id="reputation">Read what others say, carefully</h2>
+              <h3>Search the name with “scam” and “complaint”</h3>
+              <p>The FTC’s own advice is to search online for the company’s name with words like <a href="https://consumer.ftc.gov/consumer-alerts/2026/07/way-spot-scams-how-someone-asks-you-pay" target="_blank" rel="noopener">“review,” “scam,” or “complaint”</a> and see what other people say. A pattern of similar stories matters more than one angry review.</p>
+              <h3>The Better Business Bureau</h3>
+              <p>A BBB profile is worth reading for its complaint history and how the business answered. But know what it is: “BBB is not a government agency and holds no regulatory power,” and accreditation, which businesses pay for, is <a href="https://www.bbb.org/faq" target="_blank" rel="noopener">“voluntary and separate from the rating.”</a> The BBB also says a rating is not a guarantee of how a business will perform. No profile at all is not a mark against a business.</p>
+              <h3>Reviews can be bought</h3>
+              <p>Since October 21, 2024, an FTC rule has banned fake reviews and testimonials, including ones written by AI, bought reviews, undisclosed reviews by insiders and fake “independent” review sites. Breaking it can cost <a href="https://www.ftc.gov/news-events/news/press-releases/2025/12/ftc-warns-10-companies-about-possible-violations-agencys-new-consumer-review-rule" target="_blank" rel="noopener">up to $53,088 per violation</a>. That makes fake reviews illegal, not rare. Trust reviews that are specific, spread over time and found on more than one site, and be wary of a wall of five-star praise posted in the same few weeks.</p>
+              <h3>Complaints to the state</h3>
+              <p>State attorneys general and consumer protection offices handle complaints against businesses and sometimes publish actions they have taken. Find yours through the <a href="https://www.naag.org/find-my-ag/" target="_blank" rel="noopener">National Association of Attorneys General</a> or <a href="https://www.usa.gov/state-consumer" target="_blank" rel="noopener">USA.gov</a>.</p>
+
+              <h2 id="records">For bigger deals: tax IDs, liens and lawsuits</h2>
+              <p>Before a large contract, a loan or a partnership, go a level deeper.</p>
+              <h3>Tax IDs</h3>
+              <p>The IRS’s own number-matching service is <a href="https://www.irs.gov/government-entities/indian-tribal-governments/taxpayer-identification-number-tin-on-line-matching" target="_blank" rel="noopener">only for businesses that file certain Forms 1099</a>, and “EIN lookup” websites are not the IRS. The standard route is to ask a vendor for a signed <a href="https://www.irs.gov/forms-pubs/about-form-w-9" target="_blank" rel="noopener">Form W-9</a>, which gives its legal name and taxpayer number, and to check that both match the registry. For a charity, the IRS’s <a href="https://www.irs.gov/charities-non-profits/tax-exempt-organization-search" target="_blank" rel="noopener">Tax Exempt Organization Search</a> confirms whether it can receive tax-deductible donations and shows its filings. For a public company, <a href="https://www.sec.gov/search-filings" target="_blank" rel="noopener">SEC EDGAR</a> holds its filings for free.</p>
+              <h3>Liens</h3>
+              <p>UCC filings, kept by each state, let lenders <a href="https://www.nass.org/business-services/ucc-filings" target="_blank" rel="noopener">record the assets a business has pledged as collateral</a>. A search shows who it owes, and a sudden pile of new liens can be a sign of strain.</p>
+              <h3>Lawsuits</h3>
+              <p>Federal cases are searchable through <a href="https://pcl.uscourts.gov/" target="_blank" rel="noopener">PACER’s case locator</a>, which charges $0.10 a page, capped at $3 a document, and waives the fees for anyone who spends $30 or less in a quarter. PACER covers federal courts only; state and county courts have their own portals. One lawsuit means little. Dozens from customers or suppliers with the same complaint mean a lot.</p>
+
+              <h2 id="paying">Pay in a way you can take back</h2>
+              <p>How a business asks to be paid is one of the clearest signals you will get. The FTC is blunt: if the only way to pay is “by bank transfer, wire transfer, cryptocurrency, payment app, or gift card,” <a href="https://consumer.ftc.gov/consumer-alerts/2026/07/way-spot-scams-how-someone-asks-you-pay" target="_blank" rel="noopener">reports to the FTC show that’s a scam</a>. Its advice is to pay by credit card whenever possible, because cards let you dispute a charge.</p>
+              <p>Two caveats. A credit card is not a shield: in 2025 it was the payment method people mentioned most often in fraud reports to the FTC, even though bank payments and cryptocurrency lost the most money. Its value is the right to dispute. And between businesses, bank transfers are normal, which is exactly why invoice fraud works: before you pay new bank details, call the business on a number you looked up yourself. Our guide to <a href="/blog/business-email-compromise/">business email compromise</a> explains why.</p>
+
+              <h2 id="canada-uk">Checking a business in Canada or the UK</h2>
+              <h3>Canada</h3>
+              <p>Corporations can be formed federally or in a province. Corporations Canada’s <a href="https://ised-isde.canada.ca/cc/lgcy/fdrlCrpSrch.html" target="_blank" rel="noopener">federal corporation search</a> is the official source for federal corporations and shows their status, address and directors. For provincial companies, <a href="https://ised-isde.canada.ca/cbr-rec/en/" target="_blank" rel="noopener">Canada’s Business Registries</a> searches several registries at once: Alberta, British Columbia, Manitoba, Nova Scotia, Ontario, Québec, Saskatchewan and the federal one. For the other provinces and the territories, search their registries directly.</p>
+              <h3>The United Kingdom</h3>
+              <p>Every UK company is on <a href="https://find-and-update.company-information.service.gov.uk/" target="_blank" rel="noopener">Companies House</a>, free to search, with its status, filing history, officers and people with significant control. Companies House says it does not check the accuracy of what is filed, but it now checks people: since 18 November 2025, directors and people with significant control must <a href="https://www.gov.uk/guidance/verify-your-identity-for-companies-house" target="_blank" rel="noopener">verify their identity</a>, with existing directors given until their company’s next confirmation statement during a 12-month transition. Officer pages now show their identity verification status.</p>
+
+              <h2 id="already-paid">If you think you’ve already been scammed</h2>
+              <ol>
+                <li><b>Contact your card issuer or bank today.</b> Ask to dispute the charge or recall the transfer. Speed matters most with wires.</li>
+                <li><b>Report it.</b> In the US, to the FTC at <a href="https://reportfraud.ftc.gov/" target="_blank" rel="noopener">ReportFraud.ftc.gov</a>, and if it happened online, to the FBI at <a href="https://www.ic3.gov/" target="_blank" rel="noopener">ic3.gov</a>, which says to file “regardless of the amount lost.” In Canada, to the <a href="https://antifraudcentre-centreantifraude.ca/index-eng.htm" target="_blank" rel="noopener">Canadian Anti-Fraud Centre</a>. In the UK, to <a href="https://www.reportfraud.police.uk/" target="_blank" rel="noopener">Report Fraud</a>, which replaced Action Fraud in December 2025.</li>
+                <li><b>Tell your state’s attorney general</b> or consumer protection office, which can act on patterns of complaints.</li>
+                <li><b>Keep everything:</b> messages, the website address, receipts and payment confirmations.</li>
+                <li><b>Be wary of anyone offering to recover your money for a fee.</b> Recovery scams follow the first scam.</li>
+              </ol>
+
+              <div class="guide__callout">
+                <span class="seal seal--sm"></span>
+                <div>
+                  <p><b>How Trulinq checks a business.</b> Before the Trulinq Verified stamp appears on a profile, a person on our review team checks the member’s identity and their business, including its registration and its presence, and the stamp is checked again every year.</p>
+                  <p>It is a check at a point in time, not a guarantee of how a deal will go, so the checks above still apply to any contract or payment. <a href="/trust/">What the stamp means</a></p>
+                </div>
+              </div>
+
+              <h2 id="sources">Sources</h2>
+              <ol class="guide__sources">
+                <li><a href="https://www.ftc.gov/news-events/news/press-releases/2026/06/ftc-data-show-people-reported-losing-3-point-5-billion-imposter-scams-2025" target="_blank" rel="noopener">Federal Trade Commission, FTC data show people reported losing $3.5 billion to imposter scams in 2025</a>, June 15, 2026.</li>
+                <li><a href="https://www.ftc.gov/system/files/ftc_gov/pdf/ftc-testimony-jec-hearing-on-the-rising-scam-economy.pdf" target="_blank" rel="noopener">Federal Trade Commission, Prepared statement on The Rising Scam Economy</a>, March 25, 2026.</li>
+                <li><a href="https://consumer.ftc.gov/consumer-alerts/2026/07/way-spot-scams-how-someone-asks-you-pay" target="_blank" rel="noopener">FTC Consumer Advice, A way to spot scams: how someone asks you to pay</a>, July 22, 2026.</li>
+                <li><a href="https://www.ftc.gov/business-guidance/resources/scams-your-small-business-guide-business" target="_blank" rel="noopener">FTC, Scams and your small business: a guide for business</a>.</li>
+                <li><a href="https://www.govinfo.gov/content/pkg/FR-2024-08-22/html/2024-18519.htm" target="_blank" rel="noopener">Federal Register, Trade Regulation Rule on the Use of Consumer Reviews and Testimonials</a>, August 22, 2024.</li>
+                <li><a href="https://www.ftc.gov/news-events/news/press-releases/2025/12/ftc-warns-10-companies-about-possible-violations-agencys-new-consumer-review-rule" target="_blank" rel="noopener">FTC, FTC warns 10 companies about possible violations of the agency’s new consumer review rule</a>, December 22, 2025.</li>
+                <li><a href="https://www.nass.org/business-services/corporate-registration" target="_blank" rel="noopener">National Association of Secretaries of State, Corporate registration</a> and <a href="https://www.nass.org/business-services/ucc-filings" target="_blank" rel="noopener">UCC filings</a>.</li>
+                <li><a href="https://www.coloradosos.gov/pubs/business/FAQs/certGoodStanding.html" target="_blank" rel="noopener">Colorado Secretary of State, Business FAQs: certificate of good standing</a>.</li>
+                <li><a href="https://cca.hawaii.gov/breg/new-hawaii-business-registration-portal-faqs/" target="_blank" rel="noopener">Hawaii DCCA, New Hawaii business registration portal FAQs</a>, and <a href="https://cca.hawaii.gov/business-check/" target="_blank" rel="noopener">Business Check</a>.</li>
+                <li><a href="https://www.sba.gov/business-guide/launch-your-business/register-your-business" target="_blank" rel="noopener">U.S. Small Business Administration, Register your business</a>.</li>
+                <li><a href="https://www.bbb.org/faq" target="_blank" rel="noopener">Better Business Bureau, Frequently asked questions</a>, and <a href="https://www.bbb.org/about/overview-of-ratings" target="_blank" rel="noopener">Overview of BBB ratings</a>.</li>
+                <li><a href="https://www.icann.org/en/announcements/details/icann-update-launching-rdap-sunsetting-whois-27-01-2025-en" target="_blank" rel="noopener">ICANN, Launching RDAP; sunsetting WHOIS</a>, January 27, 2025.</li>
+                <li><a href="https://www.irs.gov/government-entities/indian-tribal-governments/taxpayer-identification-number-tin-on-line-matching" target="_blank" rel="noopener">IRS, Taxpayer identification number on-line matching</a>; <a href="https://www.irs.gov/forms-pubs/about-form-w-9" target="_blank" rel="noopener">About Form W-9</a>; <a href="https://www.irs.gov/charities-non-profits/tax-exempt-organization-search" target="_blank" rel="noopener">Tax Exempt Organization Search</a>.</li>
+                <li><a href="https://www.sec.gov/search-filings" target="_blank" rel="noopener">U.S. Securities and Exchange Commission, Search filings (EDGAR)</a>.</li>
+                <li><a href="https://pacer.uscourts.gov/pacer-pricing-how-fees-work" target="_blank" rel="noopener">PACER, Pricing: how fees work</a>.</li>
+                <li><a href="https://ised-isde.canada.ca/cc/lgcy/fdrlCrpSrch.html" target="_blank" rel="noopener">Corporations Canada, Search for a federal corporation</a>, and <a href="https://ised-isde.canada.ca/cbr-rec/en/" target="_blank" rel="noopener">Canada’s Business Registries</a>.</li>
+                <li><a href="https://find-and-update.company-information.service.gov.uk/" target="_blank" rel="noopener">Companies House, Find and update company information</a>, and <a href="https://www.gov.uk/guidance/verify-your-identity-for-companies-house" target="_blank" rel="noopener">GOV.UK, Verify your identity for Companies House</a>.</li>
+                <li><a href="https://www.ic3.gov/AnnualReport/Reports/2025_IC3Report.pdf" target="_blank" rel="noopener">FBI Internet Crime Complaint Center, 2025 IC3 Annual Report</a>, April 2026.</li>
+                <li><a href="https://www.gov.uk/government/news/report-fraud-new-service-from-city-of-london-police" target="_blank" rel="noopener">GOV.UK, Report Fraud: new service from City of London Police</a>, December 2025.</li>
+              </ol>
+<!--/guide-body-->
+            </div>
+            <!--@render(guide-about)-->
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <section class="panel panel--mist gmore" aria-labelledby="gmore-title">
+      <div class="gmore__inner">
+        <h2 id="gmore-title" class="display">Keep <span class="hl">reading.</span></h2>
+        <div class="gmore__grid"><!--@render(guide-related)--></div>
+      </div>
+    </section>
+
+    <!-- ── The closing call (shared: partials/cta-seal.html, partials/cta-actions.html) ── -->
+    <section class="panel panel--blue cta" id="join" aria-labelledby="cta-title">
+      <!--@include(partials/cta-seal.html)-->
+      <div class="cta__inner">
+        <h2 id="cta-title" class="display">Start with businesses that are checked.</h2>
+        <p class="cta__lead">Every Trulinq member’s identity and business were reviewed by a person before the stamp appeared. Find partners, clients and suppliers who have already done this work.</p>
+        <!--@include(partials/cta-actions.html)-->
+      </div>
+    </section>
+
+  </main>
+  <!--@include(partials/footer.html)-->
+</body>
+</html>

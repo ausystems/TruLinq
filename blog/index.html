@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <!--@include(partials/head.html)-->
+  <title>Guides to spotting scams, fakes and fraud · Trulinq</title>
+  <meta name="description" content="Plain, sourced guides to checking businesses, websites, profiles and invoices before you trust them with your money, your data or your name.">
+  <script type="module" src="/src/js/pages/blog.js"></script>
+</head>
+<body>
+  <!--@include(partials/nav.html)-->
+  <main id="main" class="page">
+
+    <section class="panel panel--ice phead bhero" aria-labelledby="blog-title">
+      <div class="phead__inner">
+        <h1 id="blog-title" class="display">Know who you’re <span class="hl">dealing with.</span></h1>
+        <p class="lead">Plain, sourced guides to checking businesses, websites, people and invoices before you trust them with your money, your data or your name.</p>
+      </div>
+      <p class="scribble bhero__note" aria-hidden="true"><svg class="scribble__pen" style="--pen-w:3rem" viewBox="0 0 80 48"><path pathLength="1" d="M74 40C58 40 34 32 12 10"/><path pathLength="1" d="M10 24L11 9l15 2"/></svg><span class="scribble__text">every fact links to its source</span></p>
+    </section>
+
+    <section class="panel panel--paper guides" aria-label="All guides">
+      <div class="guides__inner">
+        <!--@render(blog-cards)-->
+      </div>
+    </section>
+
+    <section class="panel panel--mist gstd" aria-labelledby="gstd-title">
+      <div class="gstd__inner">
+        <h2 id="gstd-title" class="display">How we write <span class="hl">these.</span></h2>
+        <ul class="gstd__list">
+          <li><b>Sourced</b><p>Every figure and every rule links to the agency, registry, court or study that published it, and each guide lists its sources at the end.</p></li>
+          <li><b>Checked</b><p>Researched and drafted with the help of AI, then checked claim by claim against those sources before it is published. Each guide shows when it was last reviewed.</p></li>
+          <li><b>Corrected</b><p>Something wrong or out of date? Email <a class="link" href="mailto:{{email.trust}}">{{email.trust}}</a> and we will correct it.</p></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── The closing call (shared: partials/cta-seal.html, partials/cta-actions.html) ── -->
+    <section class="panel panel--blue cta" id="join" aria-labelledby="cta-title">
+      <!--@include(partials/cta-seal.html)-->
+      <div class="cta__inner">
+        <h2 id="cta-title" class="display">Skip the guesswork.</h2>
+        <p class="cta__lead">On Trulinq, a person checks the identity and the business behind every member before the stamp appears. Meet people who are already checked.</p>
+        <!--@include(partials/cta-actions.html)-->
+      </div>
+    </section>
+
+  </main>
+  <!--@include(partials/footer.html)-->
+</body>
+</html>

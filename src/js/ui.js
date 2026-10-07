@@ -6,8 +6,9 @@ export const RING = 'TRULINQ · VERIFIED · ENTREPRENEUR ·';
 export const BASE = import.meta.env.BASE_URL || '/';
 export const href = (path) => BASE + String(path).replace(/^\//, '');
 
-const ESC = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
-export const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ESC[c]);
+/* escaping and dates are shared with the build (src/js/html.js), so static and live markup agree */
+import { esc, fmtDate } from './html.js';
+export { esc, fmtDate };
 
 /* ── The seal ──────────────────────────────────────────────────── */
 /* Full: the navy face, the sky-to-royal rim, the turning ring text and the TD mark. Compact (under 56px): no ring
@@ -115,11 +116,6 @@ export function idCard(m, { link = true, stamp = 'static', cls = '', sealSize = 
 }
 
 /* ── Dates ─────────────────────────────────────────────────────── */
-export function fmtDate(iso, opts = { day: 'numeric', month: 'short', year: 'numeric' }) {
-  if (!iso) return '';
-  const d = new Date(String(iso).length <= 10 ? iso + 'T12:00:00' : iso);
-  return Number.isNaN(d.getTime()) ? '' : d.toLocaleDateString('en-US', opts);
-}
 export function relTime(iso) {
   const d = new Date(iso); const mins = Math.max(1, Math.round((Date.now() - d.getTime()) / 6e4));
   if (mins < 60) return `${mins} min ago`;

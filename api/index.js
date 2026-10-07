@@ -19916,6 +19916,10 @@ var SITE = {
   name: "Trulinq",
   url: "https://tru-linq.vercel.app",
   place: "Hilo, Hawai\u02BBi",
+  /* where Trulinq is based, for its structured data */
+  address: { locality: "Hilo", region: "HI", country: "US" },
+  /* the live product */
+  sameAs: ["https://trulinqid.com"],
   email: {
     support: "support@trulinq.com",
     trust: "trust@trulinq.com",

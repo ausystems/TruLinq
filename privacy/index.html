@@ -2,8 +2,8 @@
 <html lang="en" class="no-js">
 <head>
   <!--@include(partials/head.html)-->
-  <title>Privacy policy · Trulinq</title>
-  <meta name="description" content="How Trulinq collects, uses, stores and deletes your data. Documents stay private, nothing is sold, and deletion is one email away.">
+  <title>Privacy policy: how Trulinq handles your data</title>
+  <meta name="description" content="How Trulinq collects, uses, stores and deletes your data. Identity documents stay private, nothing is sold, and deleting your account takes one email.">
   <script type="module" src="/src/js/pages/privacy.js"></script>
 </head>
 <body>
@@ -13,16 +13,18 @@
       <div class="lhero__inner">
         <h1 id="legal-title" class="display">Privacy policy</h1>
         <p class="lhero__meta">Last updated September 2026 · Applies to the Trulinq website and apps</p>
-        <p class="lhero__summary" data-summary></p>
+        <p class="lhero__summary"><!--@render(legal-summary:privacy)--></p>
       </div>
     </section>
     <section class="panel panel--paper legal" aria-label="Privacy policy">
       <div class="legal__inner">
         <nav class="legal__index" aria-labelledby="legal-index-title">
           <h2 id="legal-index-title" class="legal__index-title">On this page</h2>
-          <ul data-index></ul>
+          <ul><!--@render(legal-index:privacy)--></ul>
         </nav>
-        <div class="legal__clauses" data-clauses></div>
+        <div class="legal__clauses">
+          <!--@render(legal-clauses:privacy)-->
+        </div>
       </div>
     </section>
     <section class="panel panel--mist lfoot" aria-labelledby="lfoot-title">

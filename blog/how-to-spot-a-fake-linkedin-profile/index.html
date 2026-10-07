@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <!--@include(partials/head.html)-->
+  <title>{{post.seoTitle}}</title>
+  <meta name="description" content="{{post.description}}">
+  <script type="module" src="/src/js/pages/blog.js"></script>
+</head>
+<body>
+  <!--@include(partials/nav.html)-->
+  <main id="main" class="page">
+    <article class="guide" aria-labelledby="guide-title">
+      <header class="panel panel--ice guide-hero">
+        <div class="guide-hero__inner">
+          <div class="guide-hero__text">
+            <!--@render(guide-crumbs)-->
+            <h1 id="guide-title" class="display">{{post.titleHTML}}</h1>
+            <p class="guide-hero__dek">{{post.dek}}</p>
+            <!--@render(guide-byline)-->
+          </div>
+          <div class="guide-hero__art" aria-hidden="true"><!--@include(partials/art/how-to-spot-a-fake-linkedin-profile.html)--></div>
+        </div>
+      </header>
+
+      <div class="panel panel--paper guide-main">
+        <div class="guide-main__inner">
+          <div class="guide__col">
+            <div class="guide__body prose">
+<!--guide-body-->
+              <div class="guide__answer">
+                <b>The short answer</b>
+                <p>Click any verification badge to see exactly what LinkedIn confirmed, run the profile photo through a reverse image search, and check the work history against the employer’s own website and staff. Treat a quick move to WhatsApp or Telegram, a fee, an equipment purchase or an investment pitch as a scam signal. Report fakes from the profile’s More menu; the person won’t know it was you.</p>
+              </div>
+
+              <!--@render(guide-toc)-->
+
+              <p class="guide__lede">In the second half of 2025, LinkedIn says it stopped 88.9 million fake accounts at registration and restricted another 24.4 million before any member reported them. The ones that get through are built to survive a glance: a friendly face, a plausible title, a few hundred connections. The face may not belong to anyone. This guide covers what LinkedIn now verifies for you, which checks still work against AI-made profiles, which ones wrongly flag real people, and what to do when you find a fake.</p>
+
+              <h2 id="verification">Start with what LinkedIn has verified</h2>
+              <p>The fastest check is the one LinkedIn has already done. More than 115 million members had verified something on their profile by September 2026, and a badge next to a name opens a panel that says exactly what was confirmed. There are three kinds:</p>
+              <ul>
+                <li><b>Identity.</b> A government ID checked through a partner: <a href="https://www.linkedin.com/help/linkedin/answer/a1359065" target="_blank" rel="noopener">CLEAR in the US, Canada and Mexico</a>, DigiLocker in India, and Persona, with an NFC-enabled passport, in many other countries.</li>
+                <li><b>Workplace.</b> Confirmed through a work email address, a Microsoft Entra Verified ID, or a LinkedIn Learning or Recruiter license provided by the employer.</li>
+                <li><b>Education.</b> Confirmed through a LinkedIn Learning license provided by the school.</li>
+              </ul>
+              <p>Two newer rules help with the profiles that matter most. Since September 2025, members who add or change a recruiting title, such as “Recruiter” or “Talent Acquisition Specialist”, or a senior one, such as Managing Director or Vice President, <a href="https://www.linkedin.com/pulse/linkedin-expands-verification-millions-businesses-key-oscar-rodriguez-honce/" target="_blank" rel="noopener">must verify their workplace</a>. And since September 2026, admins of verified company pages can <a href="https://news.linkedin.com/2026/linkedin-launches-new-verification-features-to-build-professional-trust" target="_blank" rel="noopener">remove known imposter accounts</a> from search results under their company’s name, while LinkedIn tests peer verification, where enough confirmations from verified colleagues earn a badge.</p>
+              <h3>What a badge doesn’t prove</h3>
+              <p>A badge proves only what it says: that the name matches an ID, or that the person can use a work email at that company. It says nothing about their intentions. And no badge is not a red flag on its own: verification is optional, and LinkedIn says identity verification “is limited to select geographies.” Use badges to rule things in, not to rule people out.</p>
+
+              <h2 id="photo">Check the photo, and know what it can’t tell you</h2>
+              <h3>AI faces fool almost everyone</h3>
+              <p>In a 2022 study in PNAS, people sorting real faces from AI-generated ones scored 48.2 percent, about the same as guessing, and <a href="https://doi.org/10.1073/pnas.2120481119" target="_blank" rel="noopener">rated the AI faces as more trustworthy</a>. It has not got easier. A 2025 study found that ordinary participants were below chance at spotting AI faces without training, though people with exceptional face recognition did better, and both groups improved with brief training. A 2026 study found that faces from newer diffusion models were rated <a href="https://doi.org/10.1167/jov.26.7.3" target="_blank" rel="noopener">more trustworthy than both older AI faces and real ones</a>.</p>
+              <p>The old advice to hunt for glitches, a single earring, warped hair, a smudged background, works less and less. Researchers report that training people to look for those artifacts <a href="https://doi.org/10.1073/pnas.2602122123" target="_blank" rel="noopener">has proven largely ineffective</a>, and chasing them risks flagging real people whose photos are simply unusual. Treat the photo as one clue among several, never as the verdict.</p>
+              <h3>Reverse image search</h3>
+              <p>A reverse image search with <a href="https://support.google.com/websearch/answer/1325808" target="_blank" rel="noopener">Google Lens</a>, <a href="https://tineye.com/" target="_blank" rel="noopener">TinEye</a> or Bing Visual Search catches the most common trick: a photo stolen from someone else. If the same face appears under other names, on a stock photo site or on a model’s portfolio, you have your answer. But a newly generated AI face has never been posted anywhere, so “no matches” proves nothing.</p>
+              <p class="scribble guide__note" aria-hidden="true"><svg class="scribble__pen" style="--pen-w:2.75rem" viewBox="0 0 80 48"><path pathLength="1" d="M74 8C58 10 34 20 12 40"/><path pathLength="1" d="M10 26l2 14 14-2"/></svg><span class="scribble__text">no match proves nothing</span></p>
+
+              <h2 id="tells">The checks that still work</h2>
+              <p>Fakes are cheap to make and expensive to maintain. Look for the history a real career leaves behind, and for several signals together rather than one.</p>
+              <ul class="guide__checks">
+                <li><b>The work history matches the employer.</b><span>Does the company exist, and does its own website, team page or press mention this person? Call the company’s main number, from its website, if it matters.</span></li>
+                <li><b>They know the people they claim to work with.</b><span>LinkedIn’s own advice: be wary of profiles “not connected to many employees within the company they represent.”</span></li>
+                <li><b>The timeline makes sense.</b><span>Dates that overlap or don’t add up, a senior title straight out of school, a career that jumps continents every few months.</span></li>
+                <li><b>There is a real history of activity.</b><span>Posts, comments and recommendations from people you can check, spread over years, not weeks.</span></li>
+                <li><b>Mutual connections actually know them.</b><span>Ask one. A mutual connection who accepted a stranger’s request is not a reference.</span></li>
+                <li><b>The rest of the internet agrees.</b><span>The same name, face and job on a company site, a conference agenda, a published article or a business registry.</span></li>
+              </ul>
+              <h3>Signs that wrongly flag real people</h3>
+              <p>LinkedIn itself warns that “not all incomplete profiles are fake. Many members are new, private, or still building their profile.” Treat these as reasons to look further, not as proof:</p>
+              <ul>
+                <li>A sparse profile, few connections or no photo.</li>
+                <li>No verification badge.</li>
+                <li>A slightly odd photo, an unusual name or imperfect English.</li>
+              </ul>
+              <p>And the reverse: polished writing proves nothing either. Government agencies warned in July 2026 that North Korean operatives use translation services and large language models to produce convincing profiles in other languages.</p>
+
+              <h2 id="recruiters">Fake recruiters and job offers</h2>
+              <p>Job scams are where most fake profiles earn their money. People reported 24,688 employment scams to the FBI in 2025, with $362.9 million in losses, according to the <a href="https://www.ic3.gov/AnnualReport/Reports/2025_IC3Report.pdf" target="_blank" rel="noopener">2025 IC3 report</a>. The script is familiar:</p>
+              <ul class="guide__flags">
+                <li>An offer, or an interview, comes fast and without much of a process.</li>
+                <li>The “recruiter” wants to move to WhatsApp, Telegram or an outside form. LinkedIn lists <a href="https://www.linkedin.com/help/linkedin/answer/a1336387" target="_blank" rel="noopener">urgent requests to move off-platform</a> as a warning sign.</li>
+                <li>You are asked to pay for training, a background check or equipment, or to buy a laptop and send it to “IT”.</li>
+                <li>A check arrives to cover equipment, and you are asked to send part of the money back.</li>
+                <li>The interview is text-only, or the “interviewer” asks for your bank details or ID scans before a written offer.</li>
+              </ul>
+              <p>The FTC’s rule of thumb settles most cases: <a href="https://consumer.ftc.gov/articles/job-scams" target="_blank" rel="noopener">“Honest employers, including the federal government, will never ask you to pay to get a job.”</a> Nor will an honest employer send a check and ask for part of it back. Its <a href="https://consumer.ftc.gov/consumer-alerts/2026/04/job-offer-text-probably-scam" target="_blank" rel="noopener">April 2026 advice</a> is to ignore generic and unexpected texts, WhatsApp or Telegram messages about jobs. If an offer looks real, find the job on the company’s own careers page and contact the company through its website, not through the recruiter.</p>
+              <p>Developers face a sharper version. A September 2026 advisory from the FBI and Japan’s National Police Agency describes a North Korean group that poses as employers and asks candidates to <a href="https://www.ic3.gov/CSA/2026/260918.pdf" target="_blank" rel="noopener">download and run code</a> for a coding test or to fix a video-call error. It has infected at least 30,000 devices in more than 100 countries. Never run an interviewer’s code on a machine you care about.</p>
+
+              <h2 id="investors">Fake investors and crypto pitches</h2>
+              <p>Founders get a different pitch: an investor, a family office or a “partner” who is interested in your company, then in you, and eventually in an opportunity. Cryptocurrency investment fraud was the largest source of losses the FBI recorded in 2025, at $7.2 billion, and it typically starts with a text, a social media message, an ad or a dating app before the conversation moves to a messaging app. The FBI has called the long version of this, where trust is built for weeks before the ask, <a href="https://www.ic3.gov/PSA/2022/PSA221003" target="_blank" rel="noopener">“pig butchering”</a>.</p>
+              <p>A second pattern targets fundraising directly: an “investor” who is ready to commit once you pay for due diligence, legal paperwork or a listing. That is an advance-fee scam, a category that cost victims $155.9 million in reports to the FBI in 2025. Real investors pay their own costs; they don’t charge you to receive their money.</p>
+
+              <h2 id="hiring">Hiring? Check the candidate too</h2>
+              <p>Fake profiles also apply for jobs. In July 2026, an international alert published by the FBI warned that North Korean IT workers use false identities and AI to get hired remotely and send their pay home. Their <a href="https://www.ic3.gov/CSA/2026/260731.pdf" target="_blank" rel="noopener">red flags</a> include photo ID mismatches or video that appears manipulated or artificially generated, refusal to join video calls, rates well below market, and signs that one account is run by several people. In April 2026, two Americans who ran “laptop farms” for such workers were sentenced to nine and almost eight years in prison; the scheme <a href="https://www.justice.gov/opa/pr/two-us-nationals-sentenced-facilitating-fraudulent-remote-information-technology-worker" target="_blank" rel="noopener">used the stolen identities of more than 80 Americans</a> and placed workers at more than 100 US companies.</p>
+              <p>For remote hires, verify identity documents through a proper service, hold at least one live video interview with the camera on, check references by calling the companies directly, and ship equipment only to the address on their verified ID.</p>
+
+              <h2 id="report">How to report a fake, and what to do if you engaged</h2>
+              <ol>
+                <li><b>Report the profile.</b> On desktop, open the profile, select More, then Report or block, and choose the fake account or impersonation option. LinkedIn says <a href="https://www.linkedin.com/help/linkedin/answer/a1338436" target="_blank" rel="noopener">reported members won’t know who made the report</a>.</li>
+                <li><b>If someone is impersonating your company,</b> a verified company page admin can now remove the imposter from search results under your company’s name.</li>
+                <li><b>If you paid or sent money,</b> contact your bank or card issuer right away, then report it to the FTC at <a href="https://reportfraud.ftc.gov/" target="_blank" rel="noopener">ReportFraud.ftc.gov</a> and the FBI at <a href="https://www.ic3.gov/" target="_blank" rel="noopener">ic3.gov</a>.</li>
+                <li><b>If you shared ID documents or your Social Security number,</b> follow the recovery plan at <a href="https://www.identitytheft.gov/" target="_blank" rel="noopener">IdentityTheft.gov</a>.</li>
+                <li><b>If you ran code or installed software</b> a “recruiter” sent you, disconnect that computer, change your passwords from a different device, and get it checked before using it for anything sensitive.</li>
+              </ol>
+
+              <div class="guide__callout">
+                <span class="seal seal--sm"></span>
+                <div>
+                  <p><b>Why Trulinq starts from verification.</b> On Trulinq, a person on our review team matches every member’s government ID to the person behind the account, and checks their business against public registries, before the Trulinq Verified stamp appears.</p>
+                  <p>So the first question this guide asks, is this a real person, is answered before you meet anyone. The others, what they want and whether it adds up, are still yours to ask. <a href="/trust/">What the stamp means</a></p>
+                </div>
+              </div>
+
+              <h2 id="sources">Sources</h2>
+              <ol class="guide__sources">
+                <li><a href="https://about.linkedin.com/transparency/community-report" target="_blank" rel="noopener">LinkedIn, Community Report</a>, July to December 2025.</li>
+                <li><a href="https://www.linkedin.com/help/linkedin/answer/a1359065" target="_blank" rel="noopener">LinkedIn Help, Verifications on your LinkedIn profile</a>.</li>
+                <li><a href="https://www.linkedin.com/pulse/linkedin-expands-verification-millions-businesses-key-oscar-rodriguez-honce/" target="_blank" rel="noopener">Oscar Rodriguez, LinkedIn, LinkedIn expands verification to millions of businesses and key job titles</a>, September 4, 2025.</li>
+                <li><a href="https://news.linkedin.com/2026/linkedin-launches-new-verification-features-to-build-professional-trust" target="_blank" rel="noopener">LinkedIn Newsroom, LinkedIn expands verification to help members and businesses build trust</a>, September 23, 2026.</li>
+                <li><a href="https://www.linkedin.com/help/linkedin/answer/a1338436" target="_blank" rel="noopener">LinkedIn Help, Report fake profiles</a>, and <a href="https://www.linkedin.com/help/linkedin/answer/a1336387" target="_blank" rel="noopener">Recognize and report scams</a>.</li>
+                <li><a href="https://doi.org/10.1073/pnas.2120481119" target="_blank" rel="noopener">Nightingale and Farid, AI-synthesized faces are indistinguishable from real faces and more trustworthy</a>, PNAS, February 2022.</li>
+                <li><a href="https://doi.org/10.1098/rsos.250921" target="_blank" rel="noopener">Gray and others, Training human super-recognizers’ detection and discrimination of AI-generated faces</a>, Royal Society Open Science, November 2025.</li>
+                <li><a href="https://doi.org/10.1073/pnas.2602122123" target="_blank" rel="noopener">Dawel and others, Training humans to detect AI-generated faces</a>, PNAS, June 2026.</li>
+                <li><a href="https://doi.org/10.1167/jov.26.7.3" target="_blank" rel="noopener">McGuire and others, AI-generated faces are becoming more trustworthy</a>, Journal of Vision, July 2026.</li>
+                <li><a href="https://www.ic3.gov/AnnualReport/Reports/2025_IC3Report.pdf" target="_blank" rel="noopener">FBI Internet Crime Complaint Center, 2025 IC3 Annual Report</a>, April 2026.</li>
+                <li><a href="https://www.ic3.gov/PSA/2022/PSA221003" target="_blank" rel="noopener">FBI, Cryptocurrency investment schemes</a>, public service announcement, October 3, 2022.</li>
+                <li><a href="https://consumer.ftc.gov/articles/job-scams" target="_blank" rel="noopener">FTC Consumer Advice, Job scams</a>, and <a href="https://consumer.ftc.gov/consumer-alerts/2026/04/job-offer-text-probably-scam" target="_blank" rel="noopener">That job offer text is probably a scam</a>, April 30, 2026.</li>
+                <li><a href="https://www.ic3.gov/CSA/2026/260731.pdf" target="_blank" rel="noopener">Alert to countries, companies, and other entities regarding North Korean IT workers</a>, published by the FBI, July 31, 2026.</li>
+                <li><a href="https://www.ic3.gov/CSA/2026/260918.pdf" target="_blank" rel="noopener">Japan National Police Agency, FBI and partners, North Korean “WaterPlum” (Contagious Interview) targeting IT professionals</a>, September 18, 2026.</li>
+                <li><a href="https://www.justice.gov/opa/pr/two-us-nationals-sentenced-facilitating-fraudulent-remote-information-technology-worker" target="_blank" rel="noopener">US Department of Justice, Two US nationals sentenced for facilitating fraudulent remote IT worker scheme</a>, April 15, 2026.</li>
+              </ol>
+<!--/guide-body-->
+            </div>
+            <!--@render(guide-about)-->
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <section class="panel panel--mist gmore" aria-labelledby="gmore-title">
+      <div class="gmore__inner">
+        <h2 id="gmore-title" class="display">Keep <span class="hl">reading.</span></h2>
+        <div class="gmore__grid"><!--@render(guide-related)--></div>
+      </div>
+    </section>
+
+    <!-- ── The closing call (shared: partials/cta-seal.html, partials/cta-actions.html) ── -->
+    <section class="panel panel--blue cta" id="join" aria-labelledby="cta-title">
+      <!--@include(partials/cta-seal.html)-->
+      <div class="cta__inner">
+        <h2 id="cta-title" class="display">Every profile here is a real person.</h2>
+        <p class="cta__lead">A person on our review team matched each member’s ID before the stamp appeared. Network where the first question is already answered.</p>
+        <!--@include(partials/cta-actions.html)-->
+      </div>
+    </section>
+
+  </main>
+  <!--@include(partials/footer.html)-->
+</body>
+</html>

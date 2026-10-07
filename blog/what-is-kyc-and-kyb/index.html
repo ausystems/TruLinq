@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <!--@include(partials/head.html)-->
+  <title>{{post.seoTitle}}</title>
+  <meta name="description" content="{{post.description}}">
+  <script type="module" src="/src/js/pages/blog.js"></script>
+</head>
+<body>
+  <!--@include(partials/nav.html)-->
+  <main id="main" class="page">
+    <article class="guide" aria-labelledby="guide-title">
+      <header class="panel panel--ice guide-hero">
+        <div class="guide-hero__inner">
+          <div class="guide-hero__text">
+            <!--@render(guide-crumbs)-->
+            <h1 id="guide-title" class="display">{{post.titleHTML}}</h1>
+            <p class="guide-hero__dek">{{post.dek}}</p>
+            <!--@render(guide-byline)-->
+          </div>
+          <div class="guide-hero__art" aria-hidden="true"><!--@include(partials/art/what-is-kyc-and-kyb.html)--></div>
+        </div>
+      </header>
+
+      <div class="panel panel--paper guide-main">
+        <div class="guide-main__inner">
+          <div class="guide__col">
+            <div class="guide__body prose">
+<!--guide-body-->
+              <div class="guide__answer">
+                <b>The short answer</b>
+                <p>KYC, short for know your customer, is how banks and other regulated businesses confirm who a customer is and judge the risk they pose, before and during the relationship. A US bank must collect at least your name, date of birth, address and an ID number, verify them, and keep watching the account. KYB, know your business, applies the same checks to a company and the people who own and control it.</p>
+              </div>
+
+              <!--@render(guide-toc)-->
+
+              <p class="guide__lede">If you have opened a bank account, signed up for a payment app or applied to sell on a marketplace, you have been through KYC, probably without hearing the name. It is why you were asked to photograph your driver’s license, hold your phone up to your face, or list everyone who owns a quarter or more of your company. This guide explains what the rules actually require, what happens to the photos you upload, what a business is asked to prove, and how to tell a real verification request from a scam that imitates one.</p>
+
+              <h2 id="meaning">What KYC means</h2>
+              <p>KYC is not one check but four layers that build on each other:</p>
+              <ul>
+                <li><b>Customer identification.</b> Collecting who you are (name, date of birth, address, an ID number) and verifying it against documents or reliable records.</li>
+                <li><b>Customer due diligence.</b> Understanding what the relationship is for and how risky it is, and, for a company, who owns and controls it.</li>
+                <li><b>Enhanced due diligence.</b> Deeper checks for higher-risk customers: where their money comes from, senior approval, closer monitoring.</li>
+                <li><b>Ongoing monitoring.</b> Watching activity over time and updating what is known when something changes.</li>
+              </ul>
+              <div class="guide__table-wrap">
+                <table class="guide__table">
+                  <caption>KYC and KYB side by side</caption>
+                  <thead><tr><th scope="col"></th><th scope="col">KYC</th><th scope="col">KYB</th></tr></thead>
+                  <tbody>
+                    <tr><td>Who is checked</td><td data-label="KYC">A person</td><td data-label="KYB">A company, and the people who own or control it</td></tr>
+                    <tr><td>Typical evidence</td><td data-label="KYC">Government ID, sometimes a selfie, name, date of birth, address, ID number</td><td data-label="KYB">Registry record, legal name and number, address, owners of 25 percent or more, one person in control</td></tr>
+                    <tr><td>Who must do it</td><td data-label="KYC">Banks and other regulated financial firms</td><td data-label="KYB">The same firms when the customer is a business; marketplaces, for their high-volume sellers</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 id="us-rules">What US law requires</h2>
+              <h3>Customer identification</h3>
+              <p>The Bank Secrecy Act, as amended by the USA PATRIOT Act, is the foundation. Section 326 of the PATRIOT Act led to the Customer Identification Program rule, which since 2003 has required banks to collect, before opening an account, at least four things: <a href="https://www.ecfr.gov/current/title-31/subtitle-B/chapter-X/part-1020/subpart-B/section-1020.220" target="_blank" rel="noopener">your name, date of birth, address and an identification number</a>. For a US person that number is a taxpayer ID, usually a Social Security number; for others it can be a passport or other government ID number.</p>
+              <p>The bank must then “form a reasonable belief that it knows the true identity of each customer”, either with documents, such as a driver’s license or passport, or by checking the details against other reliable sources. It must keep the records for five years and tell you it is doing this, which is why so many account forms carry the same line: “Federal law requires all financial institutions to obtain, verify, and record information that identifies each person who opens an account.”</p>
+              <h3>Beneficial owners</h3>
+              <p>FinCEN’s Customer Due Diligence rule, which banks have had to follow since May 2018, adds the business side. When a company opens an account, the bank must identify each person who owns, directly or indirectly, <a href="https://www.ecfr.gov/current/title-31/subtitle-B/chapter-X/part-1010/subpart-B/section-1010.230" target="_blank" rel="noopener">25 percent or more of it, plus one person with significant control</a>, such as the chief executive or managing member. That is between one and five people, each with a name, address, date of birth and ID number. The bank may rely on the company’s own certification of who they are.</p>
+              <h3>What changed in 2025 and 2026</h3>
+              <ul>
+                <li><b>June 2025.</b> FinCEN let banks take a customer’s taxpayer ID number from a <a href="https://www.fincen.gov/news/news-releases/fincen-permits-banks-use-alternative-collection-method-obtaining-tin-information" target="_blank" rel="noopener">reliable third-party source</a> instead of always asking the customer for it.</li>
+                <li><b>February 2026.</b> Banks no longer have to identify a business’s owners again <a href="https://www.fincen.gov/news/news-releases/fincen-issues-exceptive-relief-streamline-customer-due-diligence-requirements" target="_blank" rel="noopener">every time it opens a new account</a>: only at the first account, when something calls the earlier information into question, or when their risk-based procedures require it.</li>
+                <li><b>August 2026.</b> FinCEN <a href="https://www.fincen.gov/news/news-releases/fincen-permanently-ends-beneficial-ownership-reporting-requirements-millions" target="_blank" rel="noopener">permanently ended beneficial ownership reporting</a> under the Corporate Transparency Act for US companies and US persons. Only foreign companies registered to do business in the US still report.</li>
+              </ul>
+              <p>One common confusion: the end of those reports to FinCEN does not change what your bank asks for. Banks still collect beneficial ownership information under the Customer Due Diligence rule. And there is no fixed US schedule for refreshing it; FinCEN says updates are driven by risk and events, not the calendar.</p>
+
+              <h2 id="global-rules">KYC outside the United States</h2>
+              <p>Most countries’ rules trace back to the <a href="https://www.fatf-gafi.org/en/publications/Fatfrecommendations/Fatf-recommendations.html" target="_blank" rel="noopener">FATF Recommendations</a>, the international standard against money laundering. Recommendation 10 asks financial institutions to carry out due diligence when a relationship starts, for one-off transactions above USD or EUR 15,000, when they suspect money laundering, and when they doubt what they were told before, verifying identity “using reliable, independent source documents, data or information.” If they can’t, they should not go ahead.</p>
+              <p>The European Union is replacing its patchwork of national rules with a single regulation that <a href="https://eur-lex.europa.eu/eli/reg/2024/1624/oj/eng" target="_blank" rel="noopener">applies from 10 July 2027</a>. It keeps the 25 percent ownership threshold, requires customer information to be updated at least every year for higher-risk customers and every five years for the rest, and sets five years as the standard time to keep records before deleting them. A new EU Anti-Money Laundering Authority, based in Frankfurt, will directly supervise up to 40 of the largest financial firms from 2028.</p>
+
+              <h2 id="how-it-works">What happens when you verify your identity online</h2>
+              <p>Most online identity checks combine several of these steps, and the system or a person decides on the combination:</p>
+              <ul>
+                <li><b>The document.</b> You photograph your ID. Software reads it, checks that the format, fonts, security features and machine-readable lines are consistent, and that it hasn’t expired.</li>
+                <li><b>The face.</b> You take a selfie or a short video. It is compared with the photo on the ID, and a liveness check looks for signs of a real person in front of the camera rather than a printed photo, a screen or a mask.</li>
+                <li><b>The records.</b> Your name, date of birth, address and ID number are compared with other data sources. The US government’s own sign-in service, <a href="https://www.login.gov/help/verify-your-identity/overview/" target="_blank" rel="noopener">Login.gov</a>, for example, asks for photos of your ID, your Social Security number and a phone number, sometimes a selfie, and offers in-person verification at participating Post Offices.</li>
+                <li><b>The lists.</b> Your name is screened against sanctions lists and, for some services, lists of politically exposed people.</li>
+                <li><b>A person, when it matters.</b> Unclear or high-risk cases go to a human reviewer.</li>
+              </ul>
+              <p>Automated checks are fast: Stripe’s identity service, for one, says results <a href="https://docs.stripe.com/identity/verification-sessions" target="_blank" rel="noopener">normally arrive within a few minutes</a>. No regulator publishes a standard turnaround, and checks that go to a person take longer.</p>
+              <h3>How strong is “verified”?</h3>
+              <p>NIST, the US standards body, grades identity proofing in three levels in its <a href="https://pages.nist.gov/800-63-4/sp800-63a.html" target="_blank" rel="noopener">Digital Identity Guidelines</a>, revised in July 2025. IAL1 and IAL2 can both be done remotely; IAL2 requires stronger evidence and verification. IAL3 requires an in-person session with a trained agent and at least one biometric, such as a fingerprint or face image.</p>
+              <h3>Deepfakes and injection attacks</h3>
+              <p>Fraudsters now try to fool selfie checks with AI-generated faces and video, or by injecting fake footage straight into the camera feed. FinCEN warned banks in November 2024 that reports of <a href="https://www.fincen.gov/system/files/shared/FinCEN-Alert-DeepFakes-Alert508FINAL.pdf" target="_blank" rel="noopener">deepfake media in fraud</a> were rising, with red flags such as a photo inconsistent with the customer’s stated age or a third-party webcam plugin used during a live check. NIST is candid that liveness detection helps but that “even these mechanisms are not sufficient to address all possible cases of these kinds of attacks.” That is why serious verification layers several signals, and why a human review still matters.</p>
+
+              <h2 id="kyb">How KYB works for a business</h2>
+              <p>When a bank, payment provider or marketplace verifies your business, expect to provide:</p>
+              <ul class="guide__checks">
+                <li><b>The legal name and registration number.</b><span>Exactly as they appear on the registry record, with the state or country of formation.</span></li>
+                <li><b>Formation documents.</b><span>Articles of incorporation or organization, or a certificate of good standing.</span></li>
+                <li><b>The registered and operating addresses.</b><span>Where the business is registered, and where it actually works.</span></li>
+                <li><b>The owners and the person in control.</b><span>Everyone with 25 percent or more, plus one person with significant control, each with ID details.</span></li>
+                <li><b>What the business does.</b><span>Often a website, a description, the expected volume of payments.</span></li>
+              </ul>
+              <p>The checker then confirms the company in the official registry, verifies the people behind it as individuals, screens the company and its owners against sanctions lists, and looks for a real operating presence. Marketplaces have their own duty: since June 2023 the US <a href="https://www.ftc.gov/business-guidance/resources/informing-businesses-about-inform-consumers-act" target="_blank" rel="noopener">INFORM Consumers Act</a> has required them to collect and verify bank, contact and tax details from high-volume sellers, those with 200 or more sales and $5,000 or more in revenue in a 12-month period.</p>
+
+              <h2 id="sanctions">Sanctions, politically exposed people and extra checks</h2>
+              <p>US sanctions bind every US person and company, not only banks, and the liability is strict: a business can be penalized even if it didn’t know. Ownership counts too. Under OFAC’s <a href="https://ofac.treasury.gov/faqs/401" target="_blank" rel="noopener">50 percent rule</a>, a company owned 50 percent or more, together, by sanctioned people is treated as sanctioned itself, even if it isn’t on any list. Anyone can search the lists with OFAC’s free <a href="https://sanctionssearch.ofac.treas.gov/" target="_blank" rel="noopener">Sanctions List Search</a>.</p>
+              <p>A politically exposed person is someone with a prominent public role, or their family and close associates. FATF asks for enhanced checks on foreign ones, including senior approval and an understanding of where their wealth comes from. US regulators have said they do not treat <a href="https://www.fincen.gov/system/files/shared/PEP%20Interagency%20Statement_FINAL%20508.pdf" target="_blank" rel="noopener">US public officials as politically exposed persons</a> and require no extra steps just for the label, while the EU’s rules cover domestic ones too.</p>
+
+              <h2 id="real-or-fake">How to tell a real KYC request from a scam</h2>
+              <p>Because everyone is used to “verify your account” messages, criminals send fake ones. In 2025, people reported losing nearly $1 billion to scammers impersonating businesses, and <a href="https://www.ftc.gov/news-events/news/press-releases/2026/06/ftc-data-show-people-reported-losing-3-point-5-billion-imposter-scams-2025" target="_blank" rel="noopener">bank impersonators caused the highest losses</a>, according to the FTC.</p>
+              <ul class="guide__flags">
+                <li>A message, text or call tells you your account will be frozen unless you “complete KYC” now.</li>
+                <li>The link goes to a site other than the one you normally use, or arrives by text, WhatsApp or Telegram.</li>
+                <li>Someone asks you to email or message photos of your ID or a selfie to a person.</li>
+                <li>You are asked for a password, a one-time code or a card PIN. Identity checks don’t need them.</li>
+                <li>The check costs money, or you are told to move funds to a “safe” account.</li>
+              </ul>
+              <p>The safe habit is simple: never start verification from a link in a message. Open the app or type the company’s address yourself, and do it there if the request is real.</p>
+
+              <h2 id="your-data">Your data: what is kept, and for how long</h2>
+              <p>Verification collects some of the most sensitive data you have, so it is fair to ask how it is handled. US banks must keep identification records for five years, and OFAC now requires some sanctions-related records to be kept for ten. Under the EU’s new regulation, five years is the standard before deletion.</p>
+              <p>Biometric data has extra protection in some places. Illinois’ <a href="https://www.ilga.gov/legislation/ilcs/ilcs3.asp?ActID=3004&amp;ChapterID=57" target="_blank" rel="noopener">Biometric Information Privacy Act</a> requires written notice and a written release before a business collects a scan of your face, and destruction once the purpose is met or within three years of your last interaction. In the EU, the <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679" target="_blank" rel="noopener">GDPR</a> treats biometric data used to identify you as a special category that needs an exception, such as your explicit consent. Before you upload, it is reasonable to ask who will see your documents, how long they will be kept and how to have them deleted.</p>
+
+              <h2 id="why-platforms">Why networks and marketplaces verify people too</h2>
+              <p>Outside regulated finance and marketplaces, KYB is generally not a legal duty. Many platforms verify anyway, because fraud is expensive and trust is the product: people told the FTC they lost about $16 billion to fraud in 2025, the most on record. A verified identity doesn’t make someone honest, but it removes the cheapest tricks, the fake name, the borrowed face, the company that doesn’t exist, and gives everyone a real person to hold to account.</p>
+
+              <div class="guide__callout">
+                <span class="seal seal--sm"></span>
+                <div>
+                  <p><b>How Trulinq verifies members.</b> Trulinq is not a bank and isn’t required to run KYC. We verify because a network is only as trustworthy as its members: a government ID is matched to the person behind the account, the business’s registration number is checked against public registries, its website and contact details are confirmed as active, and a person on our review team signs off, usually within {{review.businessDays}} business days.</p>
+                  <p>Your documents are stored privately, never shown on your profile, and you can ask us to delete them. <a href="/trust/">See exactly what the stamp means</a></p>
+                </div>
+              </div>
+
+              <h2 id="sources">Sources</h2>
+              <ol class="guide__sources">
+                <li><a href="https://www.ecfr.gov/current/title-31/subtitle-B/chapter-X/part-1020/subpart-B/section-1020.220" target="_blank" rel="noopener">Electronic Code of Federal Regulations, 31 CFR 1020.220, Customer identification program requirements for banks</a>.</li>
+                <li><a href="https://www.ecfr.gov/current/title-31/subtitle-B/chapter-X/part-1010/subpart-B/section-1010.230" target="_blank" rel="noopener">Electronic Code of Federal Regulations, 31 CFR 1010.230, Beneficial ownership requirements for legal entity customers</a>.</li>
+                <li><a href="https://www.fincen.gov/system/files/2026-05/CDD-Rule-Consolidated-FAQs.pdf" target="_blank" rel="noopener">FinCEN, Customer Due Diligence rule: consolidated FAQs</a>, May 2026.</li>
+                <li><a href="https://www.fincen.gov/news/news-releases/fincen-permits-banks-use-alternative-collection-method-obtaining-tin-information" target="_blank" rel="noopener">FinCEN, FinCEN permits banks to use alternative collection method for obtaining TIN information</a>, June 27, 2025.</li>
+                <li><a href="https://www.fincen.gov/news/news-releases/fincen-issues-exceptive-relief-streamline-customer-due-diligence-requirements" target="_blank" rel="noopener">FinCEN, FinCEN issues exceptive relief to streamline customer due diligence requirements</a>, February 13, 2026.</li>
+                <li><a href="https://www.fincen.gov/news/news-releases/fincen-permanently-ends-beneficial-ownership-reporting-requirements-millions" target="_blank" rel="noopener">FinCEN, FinCEN permanently ends beneficial ownership reporting requirements for millions of small business owners</a>, August 11, 2026.</li>
+                <li><a href="https://www.fatf-gafi.org/en/publications/Fatfrecommendations/Fatf-recommendations.html" target="_blank" rel="noopener">Financial Action Task Force, The FATF Recommendations</a>.</li>
+                <li><a href="https://eur-lex.europa.eu/eli/reg/2024/1624/oj/eng" target="_blank" rel="noopener">EUR-Lex, Regulation (EU) 2024/1624 on the prevention of money laundering</a>, and <a href="https://www.amla.europa.eu/about-amla_en" target="_blank" rel="noopener">Anti-Money Laundering Authority, About AMLA</a>.</li>
+                <li><a href="https://pages.nist.gov/800-63-4/sp800-63a.html" target="_blank" rel="noopener">NIST, SP 800-63A-4, Digital Identity Guidelines: identity proofing and enrollment</a>, July 2025.</li>
+                <li><a href="https://www.fincen.gov/system/files/shared/FinCEN-Alert-DeepFakes-Alert508FINAL.pdf" target="_blank" rel="noopener">FinCEN, Alert on fraud schemes involving deepfake media targeting financial institutions</a>, November 13, 2024.</li>
+                <li><a href="https://www.login.gov/help/verify-your-identity/overview/" target="_blank" rel="noopener">Login.gov, Verify your identity</a>.</li>
+                <li><a href="https://docs.stripe.com/identity/verification-sessions" target="_blank" rel="noopener">Stripe, The Verification Sessions API</a>.</li>
+                <li><a href="https://www.ftc.gov/business-guidance/resources/informing-businesses-about-inform-consumers-act" target="_blank" rel="noopener">FTC, Informing businesses about the INFORM Consumers Act</a>.</li>
+                <li><a href="https://ofac.treasury.gov/faqs/401" target="_blank" rel="noopener">OFAC, FAQ 401 (the 50 percent rule)</a>, and <a href="https://sanctionssearch.ofac.treas.gov/" target="_blank" rel="noopener">Sanctions List Search</a>.</li>
+                <li><a href="https://www.federalregister.gov/documents/2025/03/21/2025-04864/reporting-procedures-and-penalties-regulations" target="_blank" rel="noopener">Federal Register, OFAC Reporting, Procedures and Penalties Regulations</a>, March 21, 2025.</li>
+                <li><a href="https://www.fincen.gov/system/files/shared/PEP%20Interagency%20Statement_FINAL%20508.pdf" target="_blank" rel="noopener">Federal banking agencies and FinCEN, Joint statement on due diligence for customers who may be considered politically exposed persons</a>, August 21, 2020.</li>
+                <li><a href="https://www.ftc.gov/news-events/news/press-releases/2026/06/ftc-data-show-people-reported-losing-3-point-5-billion-imposter-scams-2025" target="_blank" rel="noopener">FTC, FTC data show people reported losing $3.5 billion to imposter scams in 2025</a>, June 15, 2026.</li>
+                <li><a href="https://www.ilga.gov/legislation/ilcs/ilcs3.asp?ActID=3004&amp;ChapterID=57" target="_blank" rel="noopener">Illinois General Assembly, Biometric Information Privacy Act (740 ILCS 14)</a>.</li>
+                <li><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679" target="_blank" rel="noopener">EUR-Lex, General Data Protection Regulation (EU) 2016/679</a>.</li>
+              </ol>
+<!--/guide-body-->
+            </div>
+            <!--@render(guide-about)-->
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <section class="panel panel--mist gmore" aria-labelledby="gmore-title">
+      <div class="gmore__inner">
+        <h2 id="gmore-title" class="display">Keep <span class="hl">reading.</span></h2>
+        <div class="gmore__grid"><!--@render(guide-related)--></div>
+      </div>
+    </section>
+
+    <!-- ── The closing call (shared: partials/cta-seal.html, partials/cta-actions.html) ── -->
+    <section class="panel panel--blue cta" id="join" aria-labelledby="cta-title">
+      <!--@include(partials/cta-seal.html)-->
+      <div class="cta__inner">
+        <h2 id="cta-title" class="display">One check, done by a person.</h2>
+        <p class="cta__lead">Prove who you are and that your business is real once, and carry the Trulinq Verified stamp on your profile for the year.</p>
+        <!--@include(partials/cta-actions.html)-->
+      </div>
+    </section>
+
+  </main>
+  <!--@include(partials/footer.html)-->
+</body>
+</html>

@@ -3,7 +3,7 @@
 Trulinq is a verified entrepreneur network from Hilo, Hawaiʻi. "Everyone here is real." Members prove their identity
 and their business, a person on the review team signs off, and the profile carries the Trulinq Verified stamp and a
 300–850 Trulinq Score. Pages: home, directory, member profiles, match, rooms, feed, verify, pricing, trust centre,
-contact, privacy, terms, auth, dashboard, 404.
+contact, privacy, terms, auth, dashboard, 404, and the blog (`/blog/`) with its guides.
 
 The site is a Vite multi-page app with vanilla JS modules. GSAP core runs the few animations that mean something;
 Three.js draws only the rubber stamp. The members globe is a 2D canvas. Run `npm run dev` (port 5180, API on 5190).
@@ -178,6 +178,12 @@ premium product page: few elements per viewport, very large light type, generous
     that are themselves the sign-up (auth, verify, the dashboard) and the 404 do not have one; on the contact page it
     steps aside when someone has come to request an invitation.
 16. **No mascot, no animal, no cartoon character**, anywhere.
+17. **The guides' objects.** Each guide has the thing it is about lying on the desk, drawn in HTML from the same
+    vocabulary as the scenes (paper, redaction bars, ticks, silhouettes, the seal): a registry extract, a browser with
+    its address read from the right, a profile under a lens, an invoice whose bank details changed, a company and the
+    people with control under it, an ID beside the face that should match it. They are sized in em, so the container
+    sets the scale (container units on the cards and the guide head), papers are `--paper` so they dim at night, and
+    they live in `partials/art/<slug>.html`, used by the guide's head, its card and its share image.
 
 ## Conversion
 
@@ -189,6 +195,38 @@ configuration), that the ID is never public, that a person reviews it and how lo
 Proof is only ever real: the members themselves, their real counts, exact excerpts of their own words. Forms ask for
 the least they need (sign-up is code, name, email, password); passwords can be shown before they are sent. Never:
 fake urgency or scarcity, invented numbers or testimonials, popups, sticky bars, countdowns, dark patterns.
+
+## Search
+
+Every page writes only its `<title>` (30 to 60 characters, the searched phrase first, ` · Trulinq` at the end when it
+fits) and its meta description (120 to 160). Everything else a search engine or a link preview reads is built from
+those, the page's address and `src/data`: `src/build/seo.js` adds the Open Graph and X cards, the robots defaults
+(`max-image-preview:large`) and one JSON-LD graph per page (Trulinq as an Organization with its logo, contacts and
+the live product as `sameAs`; the WebSite; the page with its breadcrumb trail; and what the page is about: a guide as
+a BlogPosting with its sources as citations, a member's profile as a ProfilePage and Person with exactly the fields the
+page shows, the plans as a Service with Offers, the film as a VideoObject, the directory's members as an ItemList).
+Pages marked noindex (auth, dashboard, the generic profile, 404) lose their canonical link and get no graph. Nothing in
+structured data says more than the page shows; there is no FAQPage markup, since Google no longer shows it.
+
+`npm run gen` (before every build and dev start) writes the member pages, then `scripts/gen-seo.mjs` writes the
+sitemap (each page's lastmod is the date of the last commit that changed it, a guide's its own `modified`), robots.txt
+(everything crawlable but the API; the account pages stay crawlable so their noindex can be read), the guides' RSS feed
+(`/blog/feed.xml`) and `llms.txt`. Words are in the HTML before any script runs: the legal pages are written from
+`src/data/legal.js` and each member page carries its bio and record (`src/js/html.js` makes the same markup for the
+build and the browser). `npm run check:seo`, after a build, runs the whole checklist on `dist/`: lengths, canonical,
+cards, structured data, one h1, heading order, alt text, links and anchors, duplicates and em dashes.
+
+**The guides.** One entry in `src/data/blog.js` (title, `seoTitle`, description, dek, dates, keywords, related guides)
+feeds the index, the guide's head, byline, breadcrumb and related cards, its structured data, the sitemap, the feed and
+`llms.txt`. The words live in `blog/<slug>/index.html` between `<!--guide-body-->` and `<!--/guide-body-->`; the build
+reads them for the contents list (every `h2` with an `id`), the reading time and the citations (the links in
+`ol.guide__sources`). A guide opens with the short answer, cites a primary source for every figure and rule (the agency,
+registry, court or study that published it), names no invented people and shows no invented numbers, uses no em
+dashes, and ends with its sources and the "About this guide" note, which says how it was made: researched and drafted
+with AI, checked claim by claim against the sources, with the date they were last reviewed and where to send a
+correction (Google asks for this, and the EU AI Act's Article 50 asks AI-assisted text on public-interest topics to
+say so). When a fact is re-checked or changed, move `modified`. Its share image is the site's share card with the
+guide's title and object (1200 by 630, `public/blog/<slug>/og.png`).
 
 ## Components (`src/styles/components.css`)
 

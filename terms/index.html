@@ -2,8 +2,8 @@
 <html lang="en" class="no-js">
 <head>
   <!--@include(partials/head.html)-->
-  <title>Terms of service · Trulinq</title>
-  <meta name="description" content="The Trulinq terms of service: accounts, verification, honest use, revocation, fees, content, liability and changes, in plain language.">
+  <title>Terms of service, in plain language · Trulinq</title>
+  <meta name="description" content="The Trulinq terms of service in plain language: accounts, verification, honest use, revocation, fees, content, liability and how changes are made.">
   <script type="module" src="/src/js/pages/terms.js"></script>
 </head>
 <body>
@@ -13,16 +13,18 @@
       <div class="lhero__inner">
         <h1 id="legal-title" class="display">Terms of service</h1>
         <p class="lhero__meta">Last updated September 2026 · Applies to the Trulinq website and apps</p>
-        <p class="lhero__summary" data-summary></p>
+        <p class="lhero__summary"><!--@render(legal-summary:terms)--></p>
       </div>
     </section>
     <section class="panel panel--paper legal" aria-label="Terms of service">
       <div class="legal__inner">
         <nav class="legal__index" aria-labelledby="legal-index-title">
           <h2 id="legal-index-title" class="legal__index-title">On this page</h2>
-          <ul data-index></ul>
+          <ul><!--@render(legal-index:terms)--></ul>
         </nav>
-        <div class="legal__clauses" data-clauses></div>
+        <div class="legal__clauses">
+          <!--@render(legal-clauses:terms)-->
+        </div>
       </div>
     </section>
     <section class="panel panel--mist lfoot" aria-labelledby="lfoot-title">

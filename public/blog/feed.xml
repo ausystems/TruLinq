@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Trulinq guides</title>
+    <link>https://tru-linq.vercel.app/blog/</link>
+    <atom:link href="https://tru-linq.vercel.app/blog/feed.xml" rel="self" type="application/rss+xml"/>
+    <description>Plain, sourced guides to checking businesses, websites, profiles and invoices before you trust them with your money, your data or your name.</description>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 07 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>What is KYC? Identity and business checks, explained</title>
+      <link>https://tru-linq.vercel.app/blog/what-is-kyc-and-kyb/</link>
+      <guid isPermaLink="true">https://tru-linq.vercel.app/blog/what-is-kyc-and-kyb/</guid>
+      <pubDate>Wed, 07 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Verification</category>
+      <description>What KYC and KYB mean, the rules behind them, how ID and selfie checks really work, what businesses are asked for, and how your data should be protected.</description>
+    </item>
+    <item>
+      <title>How to tell if a website is legit</title>
+      <link>https://tru-linq.vercel.app/blog/how-to-tell-if-a-website-is-legit/</link>
+      <guid isPermaLink="true">https://tru-linq.vercel.app/blog/how-to-tell-if-a-website-is-legit/</guid>
+      <pubDate>Wed, 07 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Websites</category>
+      <description>How to check a website before you buy, sign in or type a card number: read the real domain, check its age, test the padlock myth and pay the safe way.</description>
+    </item>
+    <item>
+      <title>How to spot a fake LinkedIn profile</title>
+      <link>https://tru-linq.vercel.app/blog/how-to-spot-a-fake-linkedin-profile/</link>
+      <guid isPermaLink="true">https://tru-linq.vercel.app/blog/how-to-spot-a-fake-linkedin-profile/</guid>
+      <pubDate>Wed, 07 Oct 2026 12:00:00 GMT</pubDate>
+      <category>People</category>
+      <description>The checks that still catch fake LinkedIn profiles, recruiters and investors, now that AI faces look real: verification badges, history, photos and asks.</description>
+    </item>
+    <item>
+      <title>How to find out who owns a business</title>
+      <link>https://tru-linq.vercel.app/blog/how-to-find-out-who-owns-a-business/</link>
+      <guid isPermaLink="true">https://tru-linq.vercel.app/blog/how-to-find-out-who-owns-a-business/</guid>
+      <pubDate>Wed, 07 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Businesses</category>
+      <description>Where ownership is actually on record: state filings, DBA records, SEC filings, Form 990s, and the Canadian and UK registers of people with control.</description>
+    </item>
+    <item>
+      <title>How to check if a business is legit</title>
+      <link>https://tru-linq.vercel.app/blog/how-to-check-if-a-business-is-legit/</link>
+      <guid isPermaLink="true">https://tru-linq.vercel.app/blog/how-to-check-if-a-business-is-legit/</guid>
+      <pubDate>Wed, 07 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Businesses</category>
+      <description>Twelve checks that tell a real company from a convincing front: official registries, licenses, addresses, reviews, court records and how to pay safely.</description>
+    </item>
+    <item>
+      <title>Business email compromise: how to stop fake invoices</title>
+      <link>https://tru-linq.vercel.app/blog/business-email-compromise/</link>
+      <guid isPermaLink="true">https://tru-linq.vercel.app/blog/business-email-compromise/</guid>
+      <pubDate>Wed, 07 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Payments</category>
+      <description>How business email compromise and fake invoice scams work, the controls that stop them, and what to do in the first hours if money has already gone.</description>
+    </item>
+  </channel>
+</rss>

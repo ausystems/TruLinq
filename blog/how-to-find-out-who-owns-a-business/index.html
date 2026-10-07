@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <!--@include(partials/head.html)-->
+  <title>{{post.seoTitle}}</title>
+  <meta name="description" content="{{post.description}}">
+  <script type="module" src="/src/js/pages/blog.js"></script>
+</head>
+<body>
+  <!--@include(partials/nav.html)-->
+  <main id="main" class="page">
+    <article class="guide" aria-labelledby="guide-title">
+      <header class="panel panel--ice guide-hero">
+        <div class="guide-hero__inner">
+          <div class="guide-hero__text">
+            <!--@render(guide-crumbs)-->
+            <h1 id="guide-title" class="display">{{post.titleHTML}}</h1>
+            <p class="guide-hero__dek">{{post.dek}}</p>
+            <!--@render(guide-byline)-->
+          </div>
+          <div class="guide-hero__art" aria-hidden="true"><!--@include(partials/art/how-to-find-out-who-owns-a-business.html)--></div>
+        </div>
+      </header>
+
+      <div class="panel panel--paper guide-main">
+        <div class="guide-main__inner">
+          <div class="guide__col">
+            <div class="guide__body prose">
+<!--guide-body-->
+              <div class="guide__answer">
+                <b>The short answer</b>
+                <p>Search the official registry of the state where the business was formed for its officers, directors, managers and registered agent, then check its annual reports, trade name filings, licenses, property and court records. Public companies name their large shareholders in SEC filings, and charities list their leaders on Form 990. Many LLC owners appear on no public record, and FinCEN’s ownership data was never public.</p>
+              </div>
+
+              <!--@render(guide-toc)-->
+
+              <p class="guide__lede">“Who owns this company?” sounds like a question with one answer in one database. In the United States it isn’t. Ownership is recorded in pieces, across state, county and federal records, and some states let LLC owners stay off the public record entirely. Canada and the UK publish more. Here is where each piece lives, what it can tell you, and where the trail usually goes cold.</p>
+
+              <h2 id="on-paper">What “owner” means on paper</h2>
+              <p>Records rarely use the word owner. These are the roles you will actually see, and what each one does and doesn’t tell you:</p>
+              <p class="scribble guide__note" aria-hidden="true"><svg class="scribble__pen" style="--pen-w:2.75rem" viewBox="0 0 80 48"><path pathLength="1" d="M74 8C58 10 34 20 12 40"/><path pathLength="1" d="M10 26l2 14 14-2"/></svg><span class="scribble__text">the agent is rarely the owner</span></p>
+              <div class="guide__table-wrap">
+                <table class="guide__table">
+                  <caption>The names on a company record</caption>
+                  <thead><tr><th scope="col">Role</th><th scope="col">What it means</th><th scope="col">Is it the owner?</th></tr></thead>
+                  <tbody>
+                    <tr><td>Member</td><td data-label="What it means">An owner of an LLC</td><td data-label="Is it the owner?">Yes, though often not listed publicly</td></tr>
+                    <tr><td>Manager</td><td data-label="What it means">Runs a manager-managed LLC</td><td data-label="Is it the owner?">Not necessarily</td></tr>
+                    <tr><td>Shareholder</td><td data-label="What it means">Owns shares in a corporation</td><td data-label="Is it the owner?">Yes, but rarely listed for private companies</td></tr>
+                    <tr><td>Officer or director</td><td data-label="What it means">Runs or oversees a corporation</td><td data-label="Is it the owner?">Not necessarily</td></tr>
+                    <tr><td>Registered agent</td><td data-label="What it means">Receives legal papers for the company</td><td data-label="Is it the owner?">Usually not; often a service firm</td></tr>
+                    <tr><td>Organizer or incorporator</td><td data-label="What it means">Filed the formation papers</td><td data-label="Is it the owner?">Often a lawyer or filing service</td></tr>
+                    <tr><td>Beneficial owner</td><td data-label="What it means">Ultimately owns or controls it</td><td data-label="Is it the owner?">Yes, the term banks and regulators use</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 id="name-and-state">Start with the exact legal name and state</h2>
+              <p>Brands and legal names often differ. Look for the legal name in the contract, the invoice, a receipt, the website’s terms or its footer, and note any “LLC”, “Inc.” or “Ltd.” at the end. Then find the state where the company was formed, which may not be the state where it works. The National Association of Secretaries of State links to <a href="https://www.nass.org/business-services/corporate-registration" target="_blank" rel="noopener">every state’s business registry</a>.</p>
+
+              <h2 id="state-registry">Search the state registry</h2>
+              <p>A state record is free to search and usually shows the entity’s legal name, type, formation date, status, registered agent and filing history. What it shows about people depends on the state and the kind of company. California’s business search, for example, includes information on <a href="https://www.sos.ca.gov/business-programs/business-entities/faqs" target="_blank" rel="noopener">“officers, directors, managers, members, general partners, and/or agent for service of process.”</a></p>
+              <h3>Annual reports</h3>
+              <p>Many states require a yearly report that updates who runs the company, and these are often the best source of names. In Delaware, a corporation’s annual report must list <a href="https://delcode.delaware.gov/title8/c005/index.html" target="_blank" rel="noopener">“the names and addresses of all the directors.”</a> Open the filing history and read the reports themselves, not only the summary page.</p>
+              <h3>Why LLC owners are often missing</h3>
+              <p>Corporations name directors and officers far more often than LLCs name members. In several states an LLC’s formation papers need little more than a name and a registered agent, and the yearly filing asks for no owners. That is why these states are known for anonymous LLCs, though the details differ:</p>
+              <div class="guide__table-wrap">
+                <table class="guide__table">
+                  <caption>What some states publish about the people behind an LLC</caption>
+                  <thead><tr><th scope="col">State</th><th scope="col">Formation filing</th><th scope="col">Yearly filing</th></tr></thead>
+                  <tbody>
+                    <tr><td>Delaware</td><td data-label="Formation filing">Name and registered agent; anything more is optional</td><td data-label="Yearly filing">No annual report for LLCs</td></tr>
+                    <tr><td>Wyoming</td><td data-label="Formation filing">Name and registered agent</td><td data-label="Yearly filing">Annual report names no members or managers</td></tr>
+                    <tr><td>New Mexico</td><td data-label="Formation filing">No member names required</td><td data-label="Yearly filing">None that names members</td></tr>
+                    <tr><td>Nevada</td><td data-label="Formation filing">Initial managers, or members if member-managed</td><td data-label="Yearly filing">Managers, or managing members, listed each year</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p>New York passed an LLC transparency law, but it now applies only to <a href="https://dos.ny.gov/beneficial-ownership-disclosure-frequently-asked-questions" target="_blank" rel="noopener">LLCs formed under the law of a foreign country</a> that do business in New York, and what they file is exempt from public records requests.</p>
+
+              <h2 id="local-records">Local records that name people</h2>
+              <ul>
+                <li><b>Trade names.</b> A business using a name other than its legal one usually registers it as a DBA with the <a href="https://www.sba.gov/business-guide/launch-your-business/choose-your-business-name" target="_blank" rel="noopener">state, county or city</a>. In California, for instance, fictitious business names are filed with the county. Sole proprietors often appear by name here.</li>
+                <li><b>Licenses and permits.</b> Professional and local business licenses often name the licensee or a responsible person.</li>
+                <li><b>Property.</b> The FTC suggests searching <a href="https://consumer.ftc.gov/articles/rental-listing-scams" target="_blank" rel="noopener">city or county tax assessment websites</a> to learn who owns a property. When the owner is an LLC, take that LLC’s name back to the state registry.</li>
+                <li><b>Liens.</b> A UCC financing statement names the debtor and the lender and describes the collateral, and loans are sometimes personally guaranteed.</li>
+                <li><b>Lawsuits.</b> Court filings often name owners, officers and guarantors. Federal cases are on <a href="https://pacer.uscourts.gov/pacer-pricing-how-fees-work" target="_blank" rel="noopener">PACER</a> ($0.10 a page, capped at $3 a document, free if you spend $30 or less in a quarter); state courts run their own portals.</li>
+              </ul>
+
+              <h2 id="public-companies">Public companies: SEC filings</h2>
+              <p>Ownership of public companies is the most transparent of all, on <a href="https://www.sec.gov/edgar/search/" target="_blank" rel="noopener">SEC EDGAR</a>, free:</p>
+              <ul>
+                <li><b>Schedules 13D and 13G</b> are filed by anyone who beneficially owns <a href="https://www.sec.gov/files/33-11253-fact-sheet.pdf" target="_blank" rel="noopener">more than 5 percent</a> of a class of a company’s voting shares.</li>
+                <li><b>Proxy statements</b> include a table of holders of more than 5 percent, and of the shares held by directors and executive officers.</li>
+                <li><b>Form D</b>, filed within 15 days of the first sale in many private fundraisings, names the executive officers, directors and promoters, and the managing members of an LLC. It gives investors only as a count, not by name.</li>
+              </ul>
+
+              <h2 id="nonprofits">Nonprofits: Form 990</h2>
+              <p>Nonprofits have no owners, but their annual Form 990 lists officers, directors, trustees and key employees, and often what they are paid. Find the returns through the IRS’s <a href="https://www.irs.gov/charities-non-profits/tax-exempt-organization-search" target="_blank" rel="noopener">Tax Exempt Organization Search</a> or <a href="https://projects.propublica.org/nonprofits/" target="_blank" rel="noopener">ProPublica’s Nonprofit Explorer</a>. Donors are another matter: except for private foundations, an exempt organization <a href="https://www.irs.gov/charities-non-profits/public-disclosure-and-availability-of-exempt-organizations-returns-and-applications-documents-subject-to-public-disclosure" target="_blank" rel="noopener">“is not required to disclose the name and address of any contributor.”</a></p>
+
+              <h2 id="websites">Who owns a website?</h2>
+              <p><a href="https://lookup.icann.org/en" target="_blank" rel="noopener">ICANN Lookup</a> shows a domain’s registrar and dates, but for most domains the registrant’s name, street address and phone are now redacted for privacy, so it rarely names an owner. Registrars must still publish an email address or web form for contacting the registrant, and people with a legitimate reason, such as lawyers and investigators, can request the hidden data through ICANN’s <a href="https://rdrs.icann.org/" target="_blank" rel="noopener">Registration Data Request Service</a>. The site’s own terms, privacy policy or legal notice often names the company that runs it, which you can then look up.</p>
+
+              <h2 id="aggregators">OpenCorporates and other aggregators</h2>
+              <p><a href="https://opencorporates.com/" target="_blank" rel="noopener">OpenCorporates</a> collects company records from official registers around the world into one free search, which is useful for finding every company a person is attached to. Coverage depends on what each register publishes: some include officers, many don’t. Treat it as a map, and confirm anything important at the official source. Be more careful still with paid “people search” sites, whose reports are often out of date.</p>
+
+              <h2 id="federal-registry">What happened to the federal ownership registry?</h2>
+              <p>A lot of advice online still says to “check FinCEN”. That is out of date. Ownership reports filed under the Corporate Transparency Act were never public: they are exempt from the Freedom of Information Act and available only to government agencies and, in some cases, banks. In August 2026, FinCEN <a href="https://www.fincen.gov/news/news-releases/fincen-permanently-ends-beneficial-ownership-reporting-requirements-millions" target="_blank" rel="noopener">permanently ended reporting</a> for US companies and US persons; only foreign companies registered to do business in the US still report, for their foreign owners, and FinCEN plans to delete what US persons had filed.</p>
+
+              <h2 id="canada">Canada</h2>
+              <p>Corporations can be formed federally or provincially, and the records differ:</p>
+              <ul>
+                <li><b>Federal corporations.</b> Corporations Canada’s <a href="https://ised-isde.canada.ca/cc/lgcy/fdrlCrpSrch.html" target="_blank" rel="noopener">search</a> shows directors’ names and addresses. Since January 22, 2024, it also publishes <a href="https://ised-isde.canada.ca/site/corporations-canada/en/how-find-information-about-individuals-significant-control" target="_blank" rel="noopener">individuals with significant control</a>: their names, when they gained and lost control, how they control it, and an address. You search by company, not by person.</li>
+                <li><b>Ontario.</b> Anyone can search the <a href="https://www.ontario.ca/page/ontario-business-registry" target="_blank" rel="noopener">Ontario Business Registry</a> for free, and an $8 profile report lists a corporation’s active directors and officers. Private companies’ registers of people with significant control are not public.</li>
+                <li><b>British Columbia and Québec.</b> Québec launched a public registry of beneficial owners in 2023. British Columbia has <a href="https://www2.gov.bc.ca/gov/content/justice/anti-money-laundering/quick-glance-government-actions/corporate-ownership-transparency" target="_blank" rel="noopener">announced one</a> but had not launched it as of April 2026.</li>
+              </ul>
+
+              <h2 id="uk">The United Kingdom</h2>
+              <p>The UK is the most open of the three. <a href="https://find-and-update.company-information.service.gov.uk/" target="_blank" rel="noopener">Companies House</a> shows every company’s current and resigned officers and its <a href="https://www.gov.uk/guidance/people-with-significant-control-pscs" target="_blank" rel="noopener">people with significant control</a>, such as anyone holding more than 25 percent of the shares or votes, for free. Only the month and year of birth are shown. Since 18 November 2025, directors and people with significant control have had to <a href="https://www.gov.uk/guidance/verify-your-identity-for-companies-house" target="_blank" rel="noopener">verify their identity</a> with Companies House, under a 12-month transition, and officer pages now show their verification status.</p>
+
+              <h2 id="fair-use">Using what you find, fairly</h2>
+              <p>Public records are public for good reasons, such as checking who you are about to pay, sue or partner with. They are not a license to harass anyone. And if you use a background report to decide on someone’s job, credit, insurance or housing, the Fair Credit Reporting Act applies: the report must come from a consumer reporting agency that follows its rules. The FTC has acted against “people search” sites over exactly this; in 2023, TruthFinder and Instant Checkmate paid <a href="https://www.ftc.gov/news-events/news/press-releases/2023/09/ftc-says-truthfinder-instant-checkmate-deceived-users-about-background-report-accuracy-violated-fcra" target="_blank" rel="noopener">$5.8 million</a> to settle charges that included violating it.</p>
+
+              <h2 id="trail-runs-cold">When the trail runs cold</h2>
+              <p>Sometimes the records end at a registered agent and an anonymous LLC. Then ask. A legitimate business will tell you who you are dealing with and who is authorized to sign. You can ask for a certificate of good standing, or for a contract signed in the company’s legal name by a named person with authority to bind it. For a large deal, a lawyer can obtain more. And if a counterparty won’t say who stands behind it, that is an answer too.</p>
+
+              <div class="guide__callout">
+                <span class="seal seal--sm"></span>
+                <div>
+                  <p><b>On Trulinq, you meet the person, not just the company.</b> Every member’s government ID is matched to the person behind the account, and their business registration is checked against public registries, before a person on our review team issues the stamp.</p>
+                  <p>Each profile shows who the member is and the business they speak for. <a href="/trust/">What the stamp means</a></p>
+                </div>
+              </div>
+
+              <h2 id="sources">Sources</h2>
+              <ol class="guide__sources">
+                <li><a href="https://www.nass.org/business-services/corporate-registration" target="_blank" rel="noopener">National Association of Secretaries of State, Corporate registration</a>.</li>
+                <li><a href="https://www.sos.ca.gov/business-programs/business-entities/faqs" target="_blank" rel="noopener">California Secretary of State, Business entities frequently asked questions</a>.</li>
+                <li><a href="https://delcode.delaware.gov/title8/c005/index.html" target="_blank" rel="noopener">Delaware Code, Title 8, chapter 5 (corporation annual reports)</a>, and <a href="https://delcode.delaware.gov/title6/c018/sc02/index.html" target="_blank" rel="noopener">Title 6, chapter 18 (limited liability company formation)</a>.</li>
+                <li><a href="https://corp.delaware.gov/alt-entitytaxinstructions/" target="_blank" rel="noopener">Delaware Division of Corporations, LLC, LP and GP franchise tax instructions</a>.</li>
+                <li><a href="https://sos.wyo.gov/Forms/WyoBiz/Wyoming_Limited_Liability_Company_Act_and_Close_LLC_Supplement.pdf" target="_blank" rel="noopener">Wyoming Secretary of State, Wyoming Limited Liability Company Act</a>.</li>
+                <li><a href="https://www.nmlegis.gov/Legislation/Legislation?chamber=S&amp;legType=B&amp;legNo=209&amp;year=23" target="_blank" rel="noopener">New Mexico Legislature, Senate Bill 209 (2023)</a>, quoting the state’s LLC filing requirements.</li>
+                <li><a href="https://codes.findlaw.com/nv/title-7-business-associations-securities-commodities/nv-rev-st-86-263/" target="_blank" rel="noopener">Nevada Revised Statutes 86.263 (annual list of managers or managing members)</a>.</li>
+                <li><a href="https://dos.ny.gov/beneficial-ownership-disclosure-frequently-asked-questions" target="_blank" rel="noopener">New York Department of State, Beneficial ownership disclosure FAQs</a>.</li>
+                <li><a href="https://www.sba.gov/business-guide/launch-your-business/choose-your-business-name" target="_blank" rel="noopener">U.S. Small Business Administration, Choose your business name</a>.</li>
+                <li><a href="https://consumer.ftc.gov/articles/rental-listing-scams" target="_blank" rel="noopener">FTC Consumer Advice, Rental listing scams</a>.</li>
+                <li><a href="https://pacer.uscourts.gov/pacer-pricing-how-fees-work" target="_blank" rel="noopener">PACER, Pricing: how fees work</a>.</li>
+                <li><a href="https://www.sec.gov/files/33-11253-fact-sheet.pdf" target="_blank" rel="noopener">SEC, Modernization of beneficial ownership reporting fact sheet</a>, October 2023, and <a href="https://www.sec.gov/resources-small-businesses/exempt-offerings/filing-form-d-notice" target="_blank" rel="noopener">Filing a Form D notice</a>.</li>
+                <li><a href="https://www.irs.gov/charities-non-profits/public-disclosure-and-availability-of-exempt-organizations-returns-and-applications-documents-subject-to-public-disclosure" target="_blank" rel="noopener">IRS, Public disclosure of exempt organizations’ returns</a>, and <a href="https://www.irs.gov/charities-non-profits/tax-exempt-organization-search" target="_blank" rel="noopener">Tax Exempt Organization Search</a>.</li>
+                <li><a href="https://www.icann.org/rdap" target="_blank" rel="noopener">ICANN, Registration Data Access Protocol</a>, and <a href="https://www.icann.org/en/contracted-parties/consensus-policies/registration-data-policy" target="_blank" rel="noopener">Registration Data Policy</a>.</li>
+                <li><a href="https://www.fincen.gov/news/news-releases/fincen-permanently-ends-beneficial-ownership-reporting-requirements-millions" target="_blank" rel="noopener">FinCEN, FinCEN permanently ends beneficial ownership reporting requirements for millions of small business owners</a>, August 11, 2026, and <a href="https://www.fincen.gov/boi-faqs" target="_blank" rel="noopener">BOI frequently asked questions</a>.</li>
+                <li><a href="https://ised-isde.canada.ca/site/corporations-canada/en/how-find-information-about-individuals-significant-control" target="_blank" rel="noopener">Corporations Canada, How to find information about individuals with significant control</a>.</li>
+                <li><a href="https://www.ontario.ca/page/ontario-business-registry" target="_blank" rel="noopener">Government of Ontario, Ontario Business Registry</a>.</li>
+                <li><a href="https://www2.gov.bc.ca/gov/content/justice/anti-money-laundering/quick-glance-government-actions/corporate-ownership-transparency" target="_blank" rel="noopener">Government of British Columbia, Money laundering and corporate ownership transparency</a>, April 2026.</li>
+                <li><a href="https://www.gov.uk/guidance/people-with-significant-control-pscs" target="_blank" rel="noopener">GOV.UK, People with significant control</a>, and <a href="https://www.gov.uk/guidance/verify-your-identity-for-companies-house" target="_blank" rel="noopener">Verify your identity for Companies House</a>.</li>
+                <li><a href="https://www.ftc.gov/news-events/news/press-releases/2023/09/ftc-says-truthfinder-instant-checkmate-deceived-users-about-background-report-accuracy-violated-fcra" target="_blank" rel="noopener">FTC, FTC says TruthFinder, Instant Checkmate deceived users about background report accuracy</a>, September 2023.</li>
+              </ol>
+<!--/guide-body-->
+            </div>
+            <!--@render(guide-about)-->
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <section class="panel panel--mist gmore" aria-labelledby="gmore-title">
+      <div class="gmore__inner">
+        <h2 id="gmore-title" class="display">Keep <span class="hl">reading.</span></h2>
+        <div class="gmore__grid"><!--@render(guide-related)--></div>
+      </div>
+    </section>
+
+    <!-- ── The closing call (shared: partials/cta-seal.html, partials/cta-actions.html) ── -->
+    <section class="panel panel--blue cta" id="join" aria-labelledby="cta-title">
+      <!--@include(partials/cta-seal.html)-->
+      <div class="cta__inner">
+        <h2 id="cta-title" class="display">See who’s behind the business.</h2>
+        <p class="cta__lead">Every Trulinq profile is a person whose ID and business were checked by someone on our review team. No registered agents, no anonymous fronts.</p>
+        <!--@include(partials/cta-actions.html)-->
+      </div>
+    </section>
+
+  </main>
+  <!--@include(partials/footer.html)-->
+</body>
+</html>

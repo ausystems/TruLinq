@@ -6,6 +6,7 @@ import { gaugeHTML, factorsHTML, runGauge } from '../gauge.js';
 import { api, ApiError } from '../api.js';
 import { loadMember, loadMembers, loadSession } from '../data.js';
 import { SITE } from '../../data/site.js';
+import { memberAboutHTML, memberDetails, ledgerHTML } from '../html.js';
 
 const $ = (s) => document.querySelector(s);
 const attr = $('[data-member]').dataset.member;
@@ -13,7 +14,6 @@ const attr = $('[data-member]').dataset.member;
 const id = attr === '__dynamic__' ? (location.pathname.match(/\/members\/([a-z0-9-]+)\/?$/) || [])[1] : attr;
 let data = null, m = null;
 
-const addMonths = (iso, n) => { const d = new Date(iso + 'T12:00:00'); d.setMonth(d.getMonth() + n); return d.toISOString().slice(0, 10); };
 const vouchHTML = (v) => `<figure class="vouch-card"><blockquote>${esc(v.text)}</blockquote><figcaption><a href="${href(`/members/${v.from.id}/`)}">${portrait(v.from, { size: 32, cls: 'avatar' })}<span><b>${esc(v.from.name)}</b>${esc([v.from.role, v.from.company].filter(Boolean).join(', '))}</span></a>${seal({ size: 'xs' })}<time datetime="${esc(v.date)}">${fmtDate(v.date)}</time></figcaption></figure>`;
 
 function notFound() {
@@ -52,17 +52,9 @@ async function build() {
   if (site) actions.push(`<a class="btn btn--ghost" href="https://${esc(site)}" target="_blank" rel="noopener nofollow"><span>Visit ${esc(site.length > 34 ? site.replace(/\/.*$/, '') : site)}</span></a>`);
   $('[data-actions]').innerHTML = actions.join('');
 
-  const needs = [['Offers', m.offers], ['Looking for', m.looking]].filter(([, v]) => v);
-  $('[data-bio]').innerHTML = (m.bio ? `<p>${esc(m.bio)}</p>` : `<p class="is-empty">${esc(m.first || m.name)} hasn’t written a bio yet.</p>`)
-    + (needs.length ? `<dl class="mhero__needs">${needs.map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>` : '');
-  const details = [
-    ['Industry', m.industry], ['Location', [m.city, m.region, m.country].filter(Boolean).join(', ')], ['Founded', m.founded],
-    ['Member since', fmtDate(m.joined)],
-    ['Re-verification due', verified ? fmtDate(addMonths(m.verifiedOn, SITE.reverifyMonths)) : '']
-  ].filter(([, v]) => v);
-  const list = $('[data-details]');
-  list.innerHTML = details.map(() => '<li class="ledger__row"><span></span><i></i><b></b></li>').join('');
-  list.querySelectorAll('.ledger__row').forEach((li, i) => { li.querySelector('span').textContent = details[i][0]; li.querySelector('b').textContent = String(details[i][1]); });
+  /* the same markup scripts/gen-members.mjs writes into the static page, now from the live record */
+  $('[data-bio]').innerHTML = memberAboutHTML(m);
+  $('[data-details]').innerHTML = ledgerHTML(memberDetails(m, { verified, reverifyMonths: SITE.reverifyMonths }));
 
   $('[data-gauge-mount]').innerHTML = gaugeHTML({ caption: [m.name, m.company].filter(Boolean).join(' · ') });
   $('[data-factors-mount]').innerHTML = factorsHTML(m);

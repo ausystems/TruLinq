@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <!--@include(partials/head.html)-->
+  <title>{{post.seoTitle}}</title>
+  <meta name="description" content="{{post.description}}">
+  <script type="module" src="/src/js/pages/blog.js"></script>
+</head>
+<body>
+  <!--@include(partials/nav.html)-->
+  <main id="main" class="page">
+    <article class="guide" aria-labelledby="guide-title">
+      <header class="panel panel--ice guide-hero">
+        <div class="guide-hero__inner">
+          <div class="guide-hero__text">
+            <!--@render(guide-crumbs)-->
+            <h1 id="guide-title" class="display">{{post.titleHTML}}</h1>
+            <p class="guide-hero__dek">{{post.dek}}</p>
+            <!--@render(guide-byline)-->
+          </div>
+          <div class="guide-hero__art" aria-hidden="true"><!--@include(partials/art/business-email-compromise.html)--></div>
+        </div>
+      </header>
+
+      <div class="panel panel--paper guide-main">
+        <div class="guide-main__inner">
+          <div class="guide__col">
+            <div class="guide__body prose">
+<!--guide-body-->
+              <div class="guide__answer">
+                <b>The short answer</b>
+                <p>Business email compromise (BEC) is fraud in which criminals take over or imitate a trusted email account, usually a supplier’s or an executive’s, to get someone to send money or sensitive data. The common versions are invoices with “new bank details”, urgent wire or gift card requests, and payroll changes. Victims reported $3.05 billion in BEC losses to the FBI in 2025.</p>
+              </div>
+
+              <p class="guide__urgent"><b>Sent a payment you now doubt?</b> Call your bank now and ask it to recall the money, then report it at <a href="https://complaint.ic3.gov/" target="_blank" rel="noopener">ic3.gov</a>. The first hours matter most. <a href="#if-you-paid">What to do first</a></p>
+
+              <!--@render(guide-toc)-->
+
+              <p class="guide__lede">Most fraud aimed at a business doesn’t break anything. Business email compromise simply asks. An email that seems to come from a supplier, a boss or a title company asks for a payment, and someone who is trying to do their job sends it. To the bank, nothing looks wrong, because the business itself approved the transfer. That is why it is one of the costliest crimes the FBI tracks, and why the defenses that work are habits more than software.</p>
+
+              <h2 id="what-it-is">What business email compromise is</h2>
+              <p>In a BEC scam the goal is a payment or a piece of sensitive information, and the tool is trust in a familiar conversation. The FBI’s Internet Crime Complaint Center (IC3) now counts compromised phone numbers and video meeting apps in its definition too, not only email, because the same fraud has moved to those channels.</p>
+              <p>It differs from ordinary phishing in one important way: there is often nothing to click. No attachment, no strange link, just a plausible request from a name you know. It comes in three forms:</p>
+              <ul>
+                <li><b>A lookalike or spoofed address.</b> A domain one letter off, a different ending, or a display name that hides the real address behind it.</li>
+                <li><b>A taken-over account.</b> The criminal has the real password, or a stolen sign-in token, and writes from inside the genuine mailbox.</li>
+                <li><b>A hacked supplier.</b> Often called vendor email compromise: the invoice comes from your supplier’s real address, in the real thread, with the real history, because the supplier’s mailbox is the one that was taken over.</li>
+              </ul>
+
+              <h2 id="numbers">How big the problem is</h2>
+              <p>In 2025, IC3 received 24,768 complaints about business email compromise with $3,046,598,558 in reported losses. Only investment fraud, at $8.65 billion, cost victims more. Losses rose about 10 percent on 2024, according to the FBI’s <a href="https://www.ic3.gov/AnnualReport/Reports/2025_IC3Report.pdf" target="_blank" rel="noopener">2025 Internet Crime Report</a>.</p>
+              <div class="guide__table-wrap">
+                <table class="guide__table">
+                  <caption>Business email compromise reported to the FBI’s IC3</caption>
+                  <thead><tr><th scope="col">Measure</th><th scope="col">2025</th><th scope="col">2024</th></tr></thead>
+                  <tbody>
+                    <tr><td>BEC complaints</td><td data-label="2025">24,768</td><td data-label="2024">21,442</td></tr>
+                    <tr><td>Reported BEC losses</td><td data-label="2025">$3.05 billion</td><td data-label="2024">$2.77 billion</td></tr>
+                    <tr><td>Losses to all internet crime</td><td data-label="2025">$20.88 billion</td><td data-label="2024">$16.6 billion</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p>Those are only the losses people reported to IC3 in one year. Taking the longer view, the FBI counted <a href="https://www.ic3.gov/PSA/2024/PSA240911" target="_blank" rel="noopener">$55.5 billion in exposed losses</a> across 305,033 BEC incidents worldwide between October 2013 and December 2023. “Exposed” means money taken plus money attempted, so that figure can’t be added to the yearly ones.</p>
+              <p>Almost all of it moves by bank transfer. Of the BEC complaints that named a payment method in 2025, 86 percent reported a wire or ACH transfer and 7 percent prepaid or gift cards. In the UK, banks reported £41.3 million lost to invoice and mandate scams in 2025, across 2,305 cases, and £5.6 million to CEO fraud, where the average loss per case was just over £28,000, the highest of any scam type in <a href="https://www.ukfinance.org.uk/system/files/2026-06/UK%20Finance%20Fraud%20Report%202026.pdf" target="_blank" rel="noopener">UK Finance’s Annual Fraud Report 2026</a>.</p>
+
+              <h2 id="how-it-works">How an attack unfolds</h2>
+              <ol>
+                <li><b>Research.</b> Company websites, press releases and professional profiles show who approves payments, who the suppliers are and when the boss is travelling.</li>
+                <li><b>Access or imitation.</b> A fake sign-in page captures a password, a phishing kit steals the sign-in token (the FBI warned in May 2026 of a kit that <a href="https://www.ic3.gov/PSA/2026/PSA260521" target="_blank" rel="noopener">bypasses multi-factor authentication</a> this way), or the criminal simply registers a lookalike domain.</li>
+                <li><b>Watching.</b> Inside a mailbox, criminals add rules that quietly forward or hide any message containing words like “bank”, “payment”, “invoice”, “wire” or “check”. The FBI has warned that rules set in webmail may not show up in the desktop email app at all.</li>
+                <li><b>The ask.</b> It arrives on time for a real event: an invoice that is really due, a closing date, a payroll run. It often carries a reason for the change (“our bank was audited”) and a reason for speed.</li>
+                <li><b>The money moves.</b> Funds land in an account controlled by the criminals and are moved on quickly, often split across several accounts. Every hour makes them harder to stop.</li>
+              </ol>
+
+              <h2 id="patterns">Six patterns to know</h2>
+              <h3>A supplier’s “new bank details”</h3>
+              <p>The classic. A real supplier, a real invoice, and a polite note that payments should now go to a different account. If the supplier’s own mailbox was hacked, the message is in the right thread and matches every earlier email.</p>
+              <h3>The executive who needs a wire, or gift cards, now</h3>
+              <p>A message from the chief executive, or a lawyer acting for them, about a confidential deal: send a transfer today and don’t discuss it. A smaller version asks an assistant to buy gift cards for “client gifts” and send the codes.</p>
+              <h3>Payroll diversion</h3>
+              <p>An “employee” asks HR to change where their pay is deposited. The FBI has also warned of criminals buying <a href="https://www.ic3.gov/PSA/2025/PSA250424" target="_blank" rel="noopener">search ads that imitate employee self-service sites</a>: staff log in to the fake page, and the criminal uses the stolen login to change the direct deposit.</p>
+              <h3>Real estate closings</h3>
+              <p>Home buyers receive wiring instructions that appear to come from their title company or agent. The FBI’s 2025 report describes a Missouri senior who was sent fake instructions for more than $1.3 million from a compromised title company account, and a city government office in Oregon whose bank recalled a $6 million wire because the account receiving it had already been flagged by an earlier report to the FBI.</p>
+              <h3>The hijacked mailbox that writes from inside</h3>
+              <p>When a supplier or customer is breached, the fraud can run for weeks: the criminal reads real threads and steps in only when money is about to move. Nothing about the sender looks wrong, which is why checking the sender is not enough.</p>
+              <h3>Deepfake voices and video calls</h3>
+              <p>In early 2024, an employee of the engineering firm Arup in Hong Kong made 15 transfers totalling HK$200 million, about US$26 million, after a video call in which the company’s UK-based chief financial officer and other colleagues were all deepfakes, <a href="https://hongkongfp.com/2024/02/05/multinational-loses-hk200-million-to-deepfake-video-conference-scam-hong-kong-police-say/" target="_blank" rel="noopener">built from public video and pre-recorded</a>. No system was hacked: the call was enough. AI is not yet common in reports: 135 BEC complaints to IC3 in 2025 mentioned it, with $30.3 million in losses. But it is the reason a familiar voice or face can no longer confirm a payment on its own.</p>
+
+              <h2 id="red-flags">Red flags in a payment request</h2>
+              <ul class="guide__flags">
+                <li>Bank details change by email, especially close to a payment date.</li>
+                <li>Urgency or secrecy: “today”, “confidential”, “I’m in a meeting, can’t talk”.</li>
+                <li>The reply-to address differs from the sender, or the domain is one character off.</li>
+                <li>The new account is in a different name, at a different bank, or in a different country from before.</li>
+                <li>Anyone asks for payment in gift cards. No real supplier or executive does.</li>
+                <li>The request asks you to skip the usual approval “just this once”.</li>
+                <li>A familiar voice or face on a call insists on speed and won’t let you call back.</li>
+              </ul>
+              <p>One more, which is easy to miss: <b>the thread looks real because it is real.</b> When a mailbox is compromised, the history, the signature and the tone will all be right. Treat the request itself, not the sender, as the thing to verify.</p>
+
+              <h2 id="controls">The controls that stop it</h2>
+              <p>None of these needs special software. They work because they move the decision out of the email thread and onto a channel the criminal doesn’t control.</p>
+              <p class="scribble guide__note" aria-hidden="true"><svg class="scribble__pen" style="--pen-w:2.75rem" viewBox="0 0 80 48"><path pathLength="1" d="M74 8C58 10 34 20 12 40"/><path pathLength="1" d="M10 26l2 14 14-2"/></svg><span class="scribble__text">a number you already had</span></p>
+              <ul class="guide__checks">
+                <li><b>Call back on a number you already had.</b><span>Use the phone number from your contract, your records or the supplier’s official website, never one in the email or the invoice. The FBI’s own warning fits on a sticker: check, call a known number, wait.</span></li>
+                <li><b>Require two people for any change to payee details.</b><span>Dual control means one person requests the change and another approves it after verifying it, a practice payment bodies such as <a href="https://www.nacha.org/sites/default/files/2019-04/NACHABECVIF.pdf" target="_blank" rel="noopener">Nacha</a> recommend.</span></li>
+                <li><b>Hold the first payment to new details.</b><span>Make it policy that money never goes to a new account until the call-back is done, however urgent the request sounds.</span></li>
+                <li><b>Never act on email, voice or video alone.</b><span>After Arup, a call is not proof either. Confirm through a second channel you started yourself.</span></li>
+                <li><b>Use phishing-resistant sign-in.</b><span>CISA calls phishing-resistant multi-factor authentication, such as security keys and passkeys, <a href="https://www.cisa.gov/sites/default/files/publications/fact-sheet-implementing-phishing-resistant-mfa-508c.pdf" target="_blank" rel="noopener">“the gold standard”</a>. Codes sent by text or app can be relayed by a fake sign-in page.</span></li>
+                <li><b>Block automatic forwarding to outside addresses.</b><span>The <a href="https://www.ic3.gov/PSA/2020/PSA200406" target="_blank" rel="noopener">FBI recommends it</a>, along with keeping sign-in and mailbox-change logs for at least 90 days so you can see what happened if something does.</span></li>
+                <li><b>Publish DMARC, and enforce it.</b><span>SPF, DKIM and DMARC let receiving mail servers reject messages that fake your exact domain. Since February 2024, Google has required them of anyone sending 5,000 or more messages a day to personal Gmail accounts, and Yahoo of its bulk senders, but a policy of <code>p=none</code> only monitors. Move to <code>quarantine</code> or <code>reject</code>.</span></li>
+                <li><b>Watch for lookalike domains.</b><span>Register the obvious misspellings of your own domain, and treat any new domain that resembles a supplier’s as a warning.</span></li>
+                <li><b>Train the people who pay.</b><span>Accounts payable, payroll and executive assistants are the targets. Make it explicit that slowing down to verify is always the right call, including when the request appears to come from the top.</span></li>
+              </ul>
+              <p>DMARC has limits worth knowing. It stops criminals from sending as your exact domain. It does nothing against a lookalike domain, and nothing when a supplier’s real mailbox has been taken over. That is why the call-back matters more than any setting.</p>
+
+              <h2 id="if-you-paid">If you have already paid</h2>
+              <p>Speed is everything. Work through these in order, today:</p>
+              <ol>
+                <li><b>Call your bank immediately.</b> Ask it to recall the funds, and ask for the hold harmless letter or letter of indemnity that the <a href="https://www.ic3.gov/CrimeInfo/BEC" target="_blank" rel="noopener">FBI’s guidance</a> mentions, so the receiving bank can return money. Ask your bank to contact the receiving bank directly.</li>
+                <li><b>Report it to IC3 at <a href="https://complaint.ic3.gov/" target="_blank" rel="noopener">complaint.ic3.gov</a></b>, whatever the amount, with the full transaction details: amounts, dates, both banks, account numbers and the reference. IC3 doesn’t take attachments, so keep the original emails and paste in their full headers.</li>
+                <li><b>Call your local <a href="https://www.fbi.gov/contact-us/field-offices" target="_blank" rel="noopener">FBI field office</a></b> for a large or international transfer. Treasury’s FinCEN says it is <a href="https://www.fincen.gov/system/files/2026-04/RRPFactSheet.pdf" target="_blank" rel="noopener">most likely to interdict or recover funds</a> when a fraudulent wire is reported to law enforcement within 72 hours.</li>
+                <li><b>Keep the evidence.</b> Don’t delete the emails or the forwarding rules you find. Save the messages with headers, the invoice and the payment confirmation.</li>
+                <li><b>Lock the mailbox down properly.</b> Changing the password is not enough: the FBI warned in September 2026 that access granted to a malicious app <a href="https://www.ic3.gov/PSA/2026/PSA260901" target="_blank" rel="noopener">survives a password change</a>. Sign out all sessions, remove unknown apps and forwarding rules, and check which devices are registered for sign-in. Microsoft publishes <a href="https://learn.microsoft.com/en-us/defender-office-365/responding-to-a-compromised-email-account" target="_blank" rel="noopener">step-by-step guidance</a> for Microsoft 365.</li>
+                <li><b>Warn the real supplier or customer</b> by phone, on a known number. If their mailbox was the one compromised, others are being targeted too.</li>
+                <li><b>Ignore anyone offering to recover the money for a fee.</b> IC3 says it will never contact you directly for information or money.</li>
+              </ol>
+              <h3>Can you get the money back?</h3>
+              <p>Sometimes, and fast reporting is the biggest factor. In 2025 the FBI’s Recovery Asset Team ran its Financial Fraud Kill Chain on 3,900 incidents and froze $679 million of $1.16 billion in attempted theft, a 58 percent success rate, down from 66 percent in 2024. Frozen money isn’t yet returned money, but it is money that hasn’t disappeared.</p>
+              <p>Refund rights depend on who you are and where. In the United States, the consumer protections of <a href="https://www.ecfr.gov/current/title-12/chapter-X/part-1005/subpart-A/section-1005.3" target="_blank" rel="noopener">Regulation E</a> don’t cover business accounts, and they exclude wire transfers made through Fedwire and similar systems, so a business generally has no automatic right to a refund on a wire. In the UK, banks must reimburse authorised push payment fraud for individuals, microenterprises and charities on UK Faster Payments and CHAPS transfers made since 7 October 2024, up to <a href="https://www.psr.org.uk/information-for-consumers/app-fraud-reimbursement-protections/" target="_blank" rel="noopener">£85,000 per claim</a>, and report it within 13 months; in the first year, 88 percent of losses in scope were reimbursed. UK victims report to <a href="https://www.reportfraud.police.uk/" target="_blank" rel="noopener">Report Fraud</a>, which replaced Action Fraud in December 2025.</p>
+
+              <div class="guide__callout">
+                <span class="seal seal--sm"></span>
+                <div>
+                  <p><b>What a verified profile can and can’t tell you.</b> On Trulinq, a person checks the identity and the business behind every member before the stamp appears, so you know the company you are dealing with is real and the person speaks for it.</p>
+                  <p>It can’t tell you that the email asking you to pay a new account came from them. Nothing can, except calling them on a number you already had. <a href="/trust/">What the stamp means</a></p>
+                </div>
+              </div>
+
+              <h2 id="sources">Sources</h2>
+              <ol class="guide__sources">
+                <li><a href="https://www.ic3.gov/AnnualReport/Reports/2025_IC3Report.pdf" target="_blank" rel="noopener">FBI Internet Crime Complaint Center, 2025 IC3 Annual Report</a>, April 2026. BEC and investment fraud losses, payment methods, the Financial Fraud Kill Chain, real estate and AI cases.</li>
+                <li><a href="https://www.ic3.gov/AnnualReport/Reports/2024_IC3Report.pdf" target="_blank" rel="noopener">FBI Internet Crime Complaint Center, 2024 IC3 Annual Report</a>, April 2025, including the FBI’s “Check, Call, Wait” warning.</li>
+                <li><a href="https://www.ic3.gov/PSA/2024/PSA240911" target="_blank" rel="noopener">FBI, Business Email Compromise: The $55 Billion Scam</a>, public service announcement, September 11, 2024.</li>
+                <li><a href="https://www.ic3.gov/CrimeInfo/BEC" target="_blank" rel="noopener">FBI Internet Crime Complaint Center, Business Email Compromise</a>, and <a href="https://www.ic3.gov/Home/FAQ" target="_blank" rel="noopener">IC3 frequently asked questions</a>.</li>
+                <li><a href="https://www.ic3.gov/CSA/2020/201204.pdf" target="_blank" rel="noopener">FBI, Private Industry Notification on email forwarding rules</a>, November 2020.</li>
+                <li><a href="https://www.ic3.gov/PSA/2020/PSA200406" target="_blank" rel="noopener">FBI, Cyber criminals conduct business email compromise through exploitation of cloud-based email services</a>, April 6, 2020.</li>
+                <li><a href="https://www.ic3.gov/PSA/2025/PSA250424" target="_blank" rel="noopener">FBI, Cyber criminals impersonate employee self-service websites using search engine ads</a>, April 24, 2025.</li>
+                <li><a href="https://www.ic3.gov/PSA/2026/PSA260521" target="_blank" rel="noopener">FBI, Kali365 phishing-as-a-service targets Microsoft 365 users</a>, May 21, 2026.</li>
+                <li><a href="https://www.ic3.gov/PSA/2026/PSA260901" target="_blank" rel="noopener">FBI, OAuth consent phishing</a>, September 1, 2026.</li>
+                <li><a href="https://www.fincen.gov/system/files/2026-04/RRPFactSheet.pdf" target="_blank" rel="noopener">FinCEN, Rapid Response Program fact sheet</a>, April 15, 2026.</li>
+                <li><a href="https://hongkongfp.com/2024/02/05/multinational-loses-hk200-million-to-deepfake-video-conference-scam-hong-kong-police-say/" target="_blank" rel="noopener">Hong Kong Free Press (AFP), Multinational loses HK$200 million to deepfake video conference scam</a>, February 5, 2024.</li>
+                <li><a href="https://www.theguardian.com/technology/article/2024/may/17/uk-engineering-arup-deepfake-scam-hong-kong-ai-video" target="_blank" rel="noopener">The Guardian, UK engineering firm Arup falls victim to £20m deepfake scam</a>, May 17, 2024.</li>
+                <li><a href="https://www.cisa.gov/sites/default/files/publications/fact-sheet-implementing-phishing-resistant-mfa-508c.pdf" target="_blank" rel="noopener">CISA, Implementing phishing-resistant MFA</a>, October 2022.</li>
+                <li><a href="https://support.google.com/a/answer/81126" target="_blank" rel="noopener">Google, Email sender guidelines</a>, and <a href="https://senders.yahooinc.com/best-practices/" target="_blank" rel="noopener">Yahoo, Sender best practices</a>.</li>
+                <li><a href="https://www.nacha.org/sites/default/files/2019-04/NACHABECVIF.pdf" target="_blank" rel="noopener">Nacha, Business Email Compromise, Vendor Impersonation Fraud, and Payments</a>, April 2019.</li>
+                <li><a href="https://learn.microsoft.com/en-us/defender-office-365/responding-to-a-compromised-email-account" target="_blank" rel="noopener">Microsoft Learn, Respond to a compromised email account</a>.</li>
+                <li><a href="https://www.ecfr.gov/current/title-12/chapter-X/part-1005/subpart-A/section-1005.3" target="_blank" rel="noopener">Electronic Code of Federal Regulations, 12 CFR 1005.3 (Regulation E, coverage)</a>.</li>
+                <li><a href="https://www.ukfinance.org.uk/system/files/2026-06/UK%20Finance%20Fraud%20Report%202026.pdf" target="_blank" rel="noopener">UK Finance, Annual Fraud Report 2026</a>, June 2026.</li>
+                <li><a href="https://www.psr.org.uk/information-for-consumers/app-fraud-reimbursement-protections/" target="_blank" rel="noopener">Payment Systems Regulator, APP fraud reimbursement protections</a>.</li>
+                <li><a href="https://www.gov.uk/government/news/report-fraud-new-service-from-city-of-london-police" target="_blank" rel="noopener">GOV.UK, Report Fraud: new service from City of London Police</a>, December 2025.</li>
+              </ol>
+<!--/guide-body-->
+            </div>
+            <!--@render(guide-about)-->
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <section class="panel panel--mist gmore" aria-labelledby="gmore-title">
+      <div class="gmore__inner">
+        <h2 id="gmore-title" class="display">Keep <span class="hl">reading.</span></h2>
+        <div class="gmore__grid"><!--@render(guide-related)--></div>
+      </div>
+    </section>
+
+    <!-- ── The closing call (shared: partials/cta-seal.html, partials/cta-actions.html) ── -->
+    <section class="panel panel--blue cta" id="join" aria-labelledby="cta-title">
+      <!--@include(partials/cta-seal.html)-->
+      <div class="cta__inner">
+        <h2 id="cta-title" class="display">Know who’s on the other end.</h2>
+        <p class="cta__lead">Every Trulinq member’s identity and business were checked by a person before the stamp appeared. Start every deal from there.</p>
+        <!--@include(partials/cta-actions.html)-->
+      </div>
+    </section>
+
+  </main>
+  <!--@include(partials/footer.html)-->
+</body>
+</html>
