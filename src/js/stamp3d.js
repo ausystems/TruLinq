@@ -47,7 +47,7 @@ export async function createStamp(canvas, host, o = {}) {
   camera.position.set(...opt.camPos);
   camera.lookAt(...opt.look);
 
-  scene.add(new T.HemisphereLight(0xFFFFFF, 0xDCEBFF, 1.4));
+  const hemi = new T.HemisphereLight(0xFFFFFF, 0xDCEBFF, 1.4); scene.add(hemi);
   const key = new T.DirectionalLight(0xFFFFFF, 2.2); key.position.set(3, 6, 4); scene.add(key);
   const rim = new T.DirectionalLight(0x4AB3FF, .9); rim.position.set(-4, 3, -3); scene.add(rim);
 
@@ -81,6 +81,19 @@ export async function createStamp(canvas, host, o = {}) {
   } else shadow = new T.Mesh(new T.CylinderGeometry(1.35, 1.35, .01, 64), new T.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: opt.shadowOpacity }));
   shadow.position.set(opt.position[0], opt.shadowY, opt.position[2]); scene.add(shadow);
 
+  /* At night the desk is dark: less light bounces up from it, a stronger blue rim keeps the navy handle's edge against
+     it, and the shadow is black rather than navy. It follows the page's theme as it changes. */
+  let shadeK = 1;
+  const night = () => {
+    const dark = document.documentElement.dataset.theme === 'dark';
+    hemi.groundColor.setHex(dark ? 0x0B1A36 : 0xDCEBFF); hemi.intensity = dark ? 1.25 : 1.4;
+    key.intensity = dark ? 2.6 : 2.2; rim.intensity = dark ? 2.4 : .9;
+    if (opt.softShadow) shadow.material.color.setHex(dark ? 0x000000 : 0xFFFFFF); /* tints the navy blur; the hard disc is black already */
+    shadeK = dark ? 1.6 : 1;
+  };
+  night();
+  window.addEventListener('themechange', () => { night(); render(); });
+
   const press = { t: 0 };
   /* lift raises the stamp above its resting height (it can arrive from above and leave again); o fades its shadow */
   const lift = { y: 0, o: 1 };
@@ -90,7 +103,7 @@ export async function createStamp(canvas, host, o = {}) {
     if (opt.mode === 'tip') group.rotation.set(rx + press.t * 1.2, ry, rz);
     else group.rotation.set(lerp(rx, 0, press.t), lerp(ry, -.35, press.t), lerp(rz, 0, press.t));
     group.position.y = opt.restY + lift.y - press.t * opt.dropY;
-    shadow.scale.setScalar(opt.scale * (1 - press.t * .25)); shadow.material.opacity = (opt.shadowOpacity + press.t * opt.pressShadow) * lift.o;
+    shadow.scale.setScalar(opt.scale * (1 - press.t * .25)); shadow.material.opacity = Math.min(1, (opt.shadowOpacity + press.t * opt.pressShadow) * lift.o * shadeK);
     renderer.render(scene, camera);
   }
   function resize() { const w = host.clientWidth, h = host.clientHeight || w; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); render(); }

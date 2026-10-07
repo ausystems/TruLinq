@@ -13,6 +13,28 @@
     --deep: #071A45;          /* passport navy: covers, frames, the drama panels */
     --deep-2: #0B2459;
     --deep-3: #12306E;
+    --blue-desk: #1766E6;     /* the blue desk and the blue panels, which carry white type */
+    /* Objects lying on a panel or a card (slips, ledgers, fields, bubbles) and the wells that hold what you type */
+    --paper: #FFFFFF;
+    --paper-2: #FBFCFE;
+    --well: #F2F5FA;
+    --well-focus: #FFFFFF;
+    --autofill: #F3F8FF;
+    --ice-grad: linear-gradient(180deg, #F6F9FF 0%, #E3EDFD 100%);
+    --hover-tint: rgba(10, 22, 51, .05);
+    --scrim: rgba(7, 17, 38, .5);             /* behind a dialog */
+    /* Small marks drawn in ink: redaction bars, the sample silhouette, skeleton lines, the gauge's track and ticks */
+    --redact: #1B2740;
+    --redact-2: #2A3650;
+    --sil-bg: #DCE5F1;
+    --sil-fg: #AFC0D6;
+    --skel: #C9D5E6;
+    --gauge-track: #E3EBF6;
+    --gauge-tick: rgba(12, 21, 38, .18);
+    --pending-bg: #FDF3E1;
+    --pending-fg: #7F5300;
+    --mark-t-1: #1B2740;      /* the T of the logo on paper: navy here, silver at night */
+    --mark-t-2: #0C1526;
 
     /* ── Ink ─────────────────────────────────────────────────── */
     --fg: #0A1633;            /* type: navy-black, never pure black */
@@ -92,6 +114,64 @@
     --t-hover: 200ms;
     --t-state: 260ms;
     --t-reveal: 460ms;
+    color-scheme: light;
+  }
+
+  /* ── Night: the same desk with the lights down ─────────────────────
+     Chosen by the reader (the switch in the header) or by their system, and set on <html> before the first paint
+     (partials/head.html). Every text colour here holds WCAG AA on every surface it can sit on: --fg-mute, the faintest,
+     is 4.5:1 on the lightest tint. The navy and blue panels are already night-coloured and keep their own tokens below;
+     sheets and paper inside them follow the page. */
+  :root[data-theme="dark"], :root[data-theme="dark"] :is(.sheet, .paper) {
+    --bg: #05080F;
+    --surface: #0B1322;
+    --surface-2: #111C31;
+    --surface-3: #1A263D;
+    --ice-2: #0E1A31;
+    --ice: #132447;
+    --ice-3: #1A3060;
+    --ice-4: #24427E;
+    --fg: #E8EEF7;
+    --fg-2: #FFFFFF;
+    --fg-soft: #A7B4C8;
+    --fg-mute: #919EB4;
+    --on-fg: #0A1633;
+    --line: rgba(232, 238, 247, .08);
+    --line-2: rgba(232, 238, 247, .14);
+    --line-3: rgba(232, 238, 247, .28);
+    --blue: #3D8EFF;
+    --blue-ink: #7AB8FF;
+    --blue-ink-2: #9CCBFF;
+    --blue-soft: rgba(96, 160, 255, .16);
+    --sky: #8FD3FF;
+    --danger: #FF8A78;
+    --danger-soft: rgba(255, 122, 102, .13);
+    --blue-desk: #1559CF;
+    --paper: #18253E;
+    --paper-2: #152138;
+    --well: #0A1426;
+    --well-focus: #0D1830;
+    --autofill: #12213D;
+    --ice-grad: linear-gradient(180deg, #0B1629 0%, #08101F 100%);
+    --hover-tint: rgba(232, 238, 247, .06);
+    --scrim: rgba(1, 4, 10, .7);
+    --redact: #8D9AB0;
+    --redact-2: #6C7A93;
+    --sil-bg: #1C2940;
+    --sil-fg: #34466A;
+    --skel: #2A3956;
+    --gauge-track: #1C2A44;
+    --gauge-tick: rgba(232, 238, 247, .24);
+    --pending-bg: rgba(255, 190, 90, .14);
+    --pending-fg: #F5C46E;
+    --mark-t-1: #FCFCFC;
+    --mark-t-2: #C6C6C6;
+    --sh-chip: 0 0 0 1px rgba(232, 238, 247, .05), 0 6px 16px -8px rgba(0, 0, 0, .65);
+    --sh-object: 0 0 0 1px rgba(232, 238, 247, .05), 0 14px 32px -14px rgba(0, 0, 0, .7);
+    --sh-lifted: 0 0 0 1px rgba(232, 238, 247, .06), 0 28px 56px -24px rgba(0, 0, 0, .75);
+    --sh-pop: 0 0 0 1px rgba(232, 238, 247, .08), 0 18px 44px -18px rgba(0, 0, 0, .75);
+    --focus: 0 0 0 2px var(--surface-2), 0 0 0 4px var(--blue-ink);
+    color-scheme: dark;
   }
 
   /* Deep contexts: navy and blue panels flip text, lines and fills to their light counterparts, so components need no
@@ -108,6 +188,16 @@
     --fg: #0A1633; --fg-2: #1C2944; --fg-soft: #48566F; --fg-mute: #5C6980; --on-fg: #FFFFFF;
     --line: rgba(10, 22, 51, .08); --line-2: rgba(10, 22, 51, .14); --line-3: rgba(10, 22, 51, .28);
     --surface-2: #FFFFFF; --surface-3: #E9EEF5; --ice: #E6EFFD; --blue-ink: #1464DC; --blue-soft: rgba(41, 129, 251, .12);
+    --focus: 0 0 0 2px #FFFFFF, 0 0 0 4px #1464DC;
+    color: var(--fg);
+  }
+  /* Documents drawn on the blue and navy desks (an ID, a registry extract, the sample card) are paper in both themes:
+     the desks they lie on do not change, so neither do they. */
+  .passport, .extract, .iddoc, .registry, .idcard--sample, .auth__stack .idcard {
+    --fg: #0A1633; --fg-2: #1C2944; --fg-soft: #48566F; --fg-mute: #5C6980; --on-fg: #FFFFFF;
+    --line: rgba(10, 22, 51, .08); --line-2: rgba(10, 22, 51, .14); --line-3: rgba(10, 22, 51, .28);
+    --surface-2: #FFFFFF; --surface-3: #E9EEF5; --ice: #E6EFFD; --blue: #2981FB; --blue-ink: #1464DC; --blue-soft: rgba(41, 129, 251, .12);
+    --paper: #FFFFFF; --redact: #1B2740; --redact-2: #2A3650; --sil-bg: #DCE5F1; --sil-fg: #AFC0D6; --skel: #C9D5E6;
     --focus: 0 0 0 2px #FFFFFF, 0 0 0 4px #1464DC;
     color: var(--fg);
   }

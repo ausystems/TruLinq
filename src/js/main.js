@@ -130,6 +130,56 @@ menu && menu.querySelectorAll('[data-menu-close]').forEach((b) => b.addEventList
 menu && menu.addEventListener('click', (e) => { if (e.target.closest('a[href]')) closeMenu(); });
 matchMedia('(min-width: 1024px)').addEventListener('change', (e) => { if (e.matches) closeMenu(); });
 
+/* ── Light and dark ────────────────────────────────────────────── */
+/* partials/head.html picks the theme before the first paint: the reader's own choice, remembered on this device, else
+   their system's. The switch in the header changes it. Where the browser has view transitions the new theme opens as a
+   circle from the switch over the old one; elsewhere, and with reduced motion, it changes in one frame. Either way every
+   colour moves together (html.theme-switching holds transitions back). Canvases listen for `themechange` and repaint. */
+const THEME_KEY = 'tq-theme';
+const THEME_COLOR = { light: '#ECF0F6', dark: '#05080F' };
+const systemDark = matchMedia('(prefers-color-scheme: dark)');
+const savedTheme = () => { try { const t = localStorage.getItem(THEME_KEY); return t === 'light' || t === 'dark' ? t : null; } catch { return null; } };
+export const theme = () => (html.dataset.theme === 'dark' ? 'dark' : 'light');
+function syncThemeUI(t) {
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute('content', THEME_COLOR[t]);
+  document.querySelectorAll('[data-theme-toggle]').forEach((b) => {
+    b.setAttribute('aria-checked', String(t === 'dark'));
+    b.title = t === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
+  });
+}
+function paintTheme(t) {
+  html.dataset.theme = t;
+  syncThemeUI(t);
+  window.dispatchEvent(new CustomEvent('themechange', { detail: { theme: t } }));
+}
+const settle = () => requestAnimationFrame(() => requestAnimationFrame(() => html.classList.remove('theme-switching', 'theme-vt')));
+function applyTheme(t) { html.classList.add('theme-switching'); paintTheme(t); settle(); }
+export function setTheme(t, from) {
+  if (t !== 'light' && t !== 'dark') return;
+  try { localStorage.setItem(THEME_KEY, t); } catch { /* private mode: the choice lasts for this page */ }
+  if (t === theme()) return;
+  if (reduced || !from || typeof document.startViewTransition !== 'function' || document.visibilityState !== 'visible') { applyTheme(t); return; }
+  html.classList.add('theme-switching', 'theme-vt');
+  const { x, y } = from, r = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+  const vt = document.startViewTransition(() => paintTheme(t));
+  vt.ready.then(() => html.animate(
+    { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${r}px at ${x}px ${y}px)`] },
+    { duration: 720, easing: 'cubic-bezier(.65, 0, .25, 1)', pseudoElement: '::view-transition-new(root)' }
+  )).catch(() => {});
+  vt.finished.then(settle, settle);
+}
+syncThemeUI(theme());
+document.querySelectorAll('[data-theme-toggle]').forEach((b) => b.addEventListener('click', () => {
+  const k = (b.querySelector('.theme__knob') || b).getBoundingClientRect();
+  setTheme(theme() === 'dark' ? 'light' : 'dark', { x: k.left + k.width / 2, y: k.top + k.height / 2 });
+}));
+/* until the reader chooses, the page follows the system as it changes; a choice made in another tab applies here too */
+const wanted = () => savedTheme() || (systemDark.matches ? 'dark' : 'light');
+systemDark.addEventListener('change', () => { if (!savedTheme() && wanted() !== theme()) applyTheme(wanted()); });
+window.addEventListener('storage', (e) => { if (e.key === THEME_KEY && wanted() !== theme()) applyTheme(wanted()); });
+window.addEventListener('pageshow', (e) => { if (e.persisted && wanted() !== theme()) applyTheme(wanted()); });
+
 /* ── The stamp ─────────────────────────────────────────────────── */
 /* Issuing a stamp: the one motion signature. Used where a stamp is actually issued or shown being issued. */
 export function stamp(el, { delay = 0, rotate = -6 } = {}) {

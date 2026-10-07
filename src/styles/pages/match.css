@@ -8,7 +8,7 @@
   /* the two searches read as one sentence, joined by a disc: they offer, they're looking for */
   .xsearch { position: relative; display: grid; gap: 10px; margin-top: clamp(12px, 2vw, 24px); }
   @media (min-width: 800px) { .xsearch { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; } }
-  .xsearch__field { display: grid; gap: 4px; padding: 16px 22px; border-radius: 18px; background: #FFFFFF; box-shadow: var(--sh-object); cursor: text; transition: box-shadow var(--t-hover) var(--e-out); }
+  .xsearch__field { display: grid; gap: 4px; padding: 16px 22px; border-radius: 18px; background: var(--paper); box-shadow: var(--sh-object); cursor: text; transition: box-shadow var(--t-hover) var(--e-out); }
   .xsearch__field:hover { box-shadow: var(--sh-object), inset 0 0 0 1px var(--line-2); }
   .xsearch__field:focus-within { box-shadow: inset 0 0 0 1.5px #1464DC, 0 0 0 4px rgba(20, 100, 220, .14); }
   .xsearch__label { font-size: var(--fs-meta); font-weight: 500; color: var(--fg-soft); }
@@ -16,12 +16,12 @@
   .xsearch__input::placeholder { color: var(--fg-mute); font-weight: 350; }
   .xsearch__input:focus-visible { outline: none; }
   .xsearch__input::-webkit-search-cancel-button { -webkit-appearance: none; }
-  .xsearch__link { display: none; position: absolute; left: 50%; top: 50%; z-index: 1; width: 40px; height: 40px; margin: -20px 0 0 -20px; place-items: center; border-radius: 50%; background: #1464DC; color: #FFFFFF; box-shadow: 0 0 0 5px #EBF2FE; }
+  .xsearch__link { display: none; position: absolute; left: 50%; top: 50%; z-index: 1; width: 40px; height: 40px; margin: -20px 0 0 -20px; place-items: center; border-radius: 50%; background: #1464DC; color: #FFFFFF; box-shadow: 0 0 0 5px var(--ice-2); }
   .xsearch__link svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
   @media (min-width: 800px) { .xsearch__link { display: grid; } .xsearch__field:last-child { padding-left: 34px; } }
   .xtools { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; }
   .xtools__select { min-width: 220px; }
-  .xtools__select .input { height: 44px; background: #FFFFFF; font-size: .875rem; font-weight: 450; }
+  .xtools__select .input { height: 44px; background: var(--paper); font-size: .875rem; font-weight: 450; }
   .xtools__count { margin-left: auto; font-size: var(--fs-meta); color: var(--fg-soft); }
   @media (max-width: 560px) { .xtools__count { margin-left: 0; } }
 
@@ -35,7 +35,7 @@
   .fits__sub { margin-bottom: 14px; font-size: var(--fs-4); }
   .fit { display: grid; gap: 16px; padding: clamp(22px, 2.4vw, 28px); border-radius: var(--r-card); background: var(--ice-2); }
   .fit__pair { display: flex; flex-wrap: wrap; gap: 8px; }
-  .fit__person { display: inline-flex; align-items: center; gap: 10px; min-height: 42px; padding: 4px 16px 4px 4px; border-radius: var(--r-pill); background: #FFFFFF; box-shadow: var(--sh-chip); font-size: .9375rem; font-weight: 500; transition: box-shadow var(--t-hover), transform var(--t-state) var(--e-out); }
+  .fit__person { display: inline-flex; align-items: center; gap: 10px; min-height: 42px; padding: 4px 16px 4px 4px; border-radius: var(--r-pill); background: var(--paper); box-shadow: var(--sh-chip); font-size: .9375rem; font-weight: 500; transition: box-shadow var(--t-hover), transform var(--t-state) var(--e-out); }
   .fit__person:hover { transform: translateY(-1px); box-shadow: 0 1px 1px rgba(10, 22, 51, .05), 0 10px 20px -10px rgba(10, 22, 51, .28); }
   .fit__person .portrait { width: 34px; border-radius: 50%; }
   .fit__lines { display: grid; gap: 10px; margin: 0; font-size: .9375rem; }

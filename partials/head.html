@@ -1,5 +1,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#ECF0F6">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -7,6 +8,16 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300..700&family=Caveat:wght@500..700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script>
+  /* Light or dark: the reader's own choice from the switch in the header, else their system's. Set here, before
+     anything paints, so the page never flashes the other theme; src/js/main.js runs the switch. */
+  (function () {
+    var d = document.documentElement, t = null;
+    try { t = localStorage.getItem('tq-theme'); } catch (e) {}
+    if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    d.setAttribute('data-theme', t);
+    var m = document.querySelector('meta[name="theme-color"]');
+    if (m) m.setAttribute('content', t === 'dark' ? '#05080F' : '#ECF0F6');
+  })();
   /* Decided here, before the first paint, so nothing flashes. html.anim: motion is welcome (not with reduced motion,
      not in ?nomotion reviews), so entrances such as the hero title may start hidden. html.has-intro: the loader plays,
      which it does once per browser tab, on whichever page is opened first, as it does on trulinqid.com. */
@@ -24,6 +35,7 @@
 <style>
   /* The loader, timed entirely here from its first frame: the mark fades and grows in over 1s, "Welcome to" rises at
      0.6s, "Trulinq." at 0.9s, the glow breathes, and at 2.4s the panel fades out over 0.7s. */
+  html[data-theme="dark"] { background: #05080F; color-scheme: dark; }
   .intro { display: none; }
   html.has-intro .intro { position: fixed; inset: 0; z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #060D19; background: oklch(16% .028 260); animation: intro-leave .7s cubic-bezier(.4, 0, .2, 1) 2.4s forwards; }
   .intro__glow { position: absolute; width: 24rem; height: 24rem; border-radius: 50%; background: rgba(41, 129, 251, .25); filter: blur(64px); pointer-events: none; animation: intro-pulse 2s cubic-bezier(.4, 0, .6, 1) infinite; }

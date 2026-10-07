@@ -1,6 +1,6 @@
 import '../../styles/main.css';
 import '../../styles/pages/home.css';
-import { boot, gsap, stamp, reduced, isTouch, whenVisible, whileVisible, pageRevealed } from '../main.js';
+import { boot, gsap, stamp, reduced, isTouch, whenVisible, whileVisible, pageRevealed, theme } from '../main.js';
 import { idCard, portrait, seal, esc, href, fmtDate, relTime, scoreOf, gradeOf, roleLine, placeLine } from '../ui.js';
 import { loadMembers, loadStats, loadRooms } from '../data.js';
 import { FEATURED, QUOTES } from '../../data/editorial.js';
@@ -153,52 +153,62 @@ function heroWash() {
   const hero = document.querySelector('.hero'), canvas = hero && hero.querySelector('[data-hero-wash]');
   if (!canvas) return;
   if (matchMedia('(forced-colors: active), (prefers-contrast: more)').matches) { canvas.remove(); return; }
-  const css = getComputedStyle(document.documentElement);
-  const tok = (name, fallback) => rgb(css.getPropertyValue(name)) || rgb(fallback);
-  const paper = tok('--surface-2', '#FFFFFF'), ice2 = tok('--ice-2', '#F1F6FE'), ice = tok('--ice', '#E6EFFD');
-  const ice3 = tok('--ice-3', '#D3E4FD'), ice4 = tok('--ice-4', '#A9CDFD');
-  const sky = tok('--sky', '#7FCBFF').map((v, i) => paper[i] + (v - paper[i]) * .3);
-  const pt = (color, x, y, size, ax, ay, fx, fy, bias = 0) => ({ color, x, y, size, ax, ay, fx, fy, bias });
-  /* x, y: where the point sits (0..1 of the panel); size, and how far and fast it drifts, in units of the panel's short
-     side; bias lets the pool behind the card hold its ground */
-  const WIDE = {
-    swirl: { x: .77, y: .36, angle: 1, reach: 5 },
-    points: [
-      pt(paper, .25, .3, .32, .07, .05, .21, .16),
-      pt(ice2, .18, .66, .32, .08, .05, .17, .22),
-      pt(ice, .02, .04, .3, .05, .05, .13, .18),
-      pt(sky, .5, .03, .3, .12, .04, .19, .12),
-      pt(ice3, .94, .08, .3, .05, .06, .15, .2),
-      pt(ice4, .77, .34, .22, .04, .04, .12, .17, .15),
-      pt(ice3, .99, .46, .24, .03, .05, .23, .14),
-      pt(paper, .7, .79, .3, .06, .03, .14, .21),
-      pt(ice, .4, .98, .32, .12, .03, .11, .19),
-      pt(ice2, .96, .95, .28, .04, .03, .16, .13)
-    ]
-  };
-  const STACKED = {
-    swirl: { x: .5, y: .52, angle: .9, reach: 5 },
-    points: [
-      pt(paper, .3, .06, .35, .1, .04, .21, .16),
-      pt(ice2, .75, .2, .3, .08, .04, .17, .22),
-      pt(paper, .35, .32, .35, .08, .04, .13, .18),
-      pt(sky, .97, .02, .28, .05, .04, .19, .12),
-      pt(ice, .02, .12, .26, .04, .04, .15, .2),
-      pt(ice4, .5, .52, .2, .05, .03, .12, .17, .15),
-      pt(ice3, .98, .47, .26, .04, .04, .23, .14),
-      pt(sky, .02, .6, .26, .04, .04, .11, .19),
-      pt(paper, .45, .71, .32, .08, .03, .16, .13),
-      pt(ice, .5, .97, .35, .12, .03, .14, .21)
-    ]
+  /* The palette is read from the tokens each time it is needed, so the same layout is pale blue ink on paper by day
+     and deep blue on the night desk; at night the sky glow is mixed in more lightly. */
+  const layouts = () => {
+    const css = getComputedStyle(document.documentElement);
+    const tok = (name, fallback) => rgb(css.getPropertyValue(name)) || rgb(fallback);
+    const paper = tok('--surface-2', '#FFFFFF'), ice2 = tok('--ice-2', '#F1F6FE'), ice = tok('--ice', '#E6EFFD');
+    const ice3 = tok('--ice-3', '#D3E4FD'), ice4 = tok('--ice-4', '#A9CDFD');
+    const glow = theme() === 'dark' ? .22 : .3;
+    const sky = tok('--sky', '#7FCBFF').map((v, i) => paper[i] + (v - paper[i]) * glow);
+    const pt = (color, x, y, size, ax, ay, fx, fy, bias = 0) => ({ color, x, y, size, ax, ay, fx, fy, bias });
+    /* x, y: where the point sits (0..1 of the panel); size, and how far and fast it drifts, in units of the panel's short
+       side; bias lets the pool behind the card hold its ground */
+    const WIDE = {
+      swirl: { x: .77, y: .36, angle: 1, reach: 5 },
+      points: [
+        pt(paper, .25, .3, .32, .07, .05, .21, .16),
+        pt(ice2, .18, .66, .32, .08, .05, .17, .22),
+        pt(ice, .02, .04, .3, .05, .05, .13, .18),
+        pt(sky, .5, .03, .3, .12, .04, .19, .12),
+        pt(ice3, .94, .08, .3, .05, .06, .15, .2),
+        pt(ice4, .77, .34, .22, .04, .04, .12, .17, .15),
+        pt(ice3, .99, .46, .24, .03, .05, .23, .14),
+        pt(paper, .7, .79, .3, .06, .03, .14, .21),
+        pt(ice, .4, .98, .32, .12, .03, .11, .19),
+        pt(ice2, .96, .95, .28, .04, .03, .16, .13)
+      ]
+    };
+    const STACKED = {
+      swirl: { x: .5, y: .52, angle: .9, reach: 5 },
+      points: [
+        pt(paper, .3, .06, .35, .1, .04, .21, .16),
+        pt(ice2, .75, .2, .3, .08, .04, .17, .22),
+        pt(paper, .35, .32, .35, .08, .04, .13, .18),
+        pt(sky, .97, .02, .28, .05, .04, .19, .12),
+        pt(ice, .02, .12, .26, .04, .04, .15, .2),
+        pt(ice4, .5, .52, .2, .05, .03, .12, .17, .15),
+        pt(ice3, .98, .47, .26, .04, .04, .23, .14),
+        pt(sky, .02, .6, .26, .04, .04, .11, .19),
+        pt(paper, .45, .71, .32, .08, .03, .16, .13),
+        pt(ice, .5, .97, .35, .12, .03, .14, .21)
+      ]
+    };
+    return { WIDE, STACKED };
   };
   const wide = matchMedia('(min-width: 1024px)');
+  const pick = () => layouts()[wide.matches ? 'WIDE' : 'STACKED'];
   let wash;
-  try { wash = createWash(canvas, { layout: wide.matches ? WIDE : STACKED, warp: .06, waves: 2.4, speed: 1.6 }); }
+  try { wash = createWash(canvas, { layout: pick(), warp: .06, waves: 2.4, speed: 1.6 }); }
   catch (e) { console.info('[trulinq] ink wash unavailable', e); canvas.remove(); return; }
   window.__wash = wash; // lets automated checks draw any moment
   /* Small blue text keeps AA contrast (4.5:1) whatever drifts under it: the link beside the button, the caption, the
-     motto, and the reviewer's note while it is set under 24px. The ink is held above a floor there, measured to the
-     text itself. The layout already keeps the deep tints away from them, so the floor only ever lifts a little. */
+     motto, and the reviewer's note while it is set under 24px. The ink is held to a limit there, measured to the text
+     itself: above a floor on paper, below a ceiling at night, where the text is light. The layout already keeps the
+     strongest tints away from them, so the limit only ever acts a little. */
+  const limit = () => (theme() === 'dark' ? wash.limit(.05, -1) : wash.limit(.85, 1));
+  limit();
   const SMALL = ['.hero__cta .arrow-link', '.hero__caption', '.hero__motto', '.hero__note .scribble__text'];
   const range = document.createRange();
   const isSmall = (el) => { const cs = getComputedStyle(el), px = parseFloat(cs.fontSize); return px < 24 && !(px >= 18.66 && +cs.fontWeight >= 700); };
@@ -211,7 +221,8 @@ function heroWash() {
   measure();
   wash.draw(0);
   requestAnimationFrame(() => canvas.classList.add('is-on'));
-  wide.addEventListener('change', () => wash.setLayout(wide.matches ? WIDE : STACKED));
+  wide.addEventListener('change', () => wash.setLayout(pick()));
+  window.addEventListener('themechange', () => { wash.setLayout(pick()); limit(); });
   new ResizeObserver(() => { wash.resize(); measure(); }).observe(canvas);
   /* the caption, the numbers and the card are written once the members load, the card is then laid on the desk, and
      the fonts can reflow the rest */
@@ -551,16 +562,22 @@ function globe() {
   for (let lng = -180; lng < 180; lng += 30) { const line = []; for (let lat = -90; lat <= 90; lat += 3) line.push([lat, lng]); graticule.push(line); }
   for (let lat = -60; lat <= 60; lat += 30) { const line = []; for (let lng = -180; lng <= 180; lng += 3) line.push([lat, lng]); graticule.push(line); }
 
+  /* by day a paper sphere with the land in blue ink; at night a deep blue sphere, lit from the upper left, the land in
+     brighter blue so it still reads */
+  const PALETTE = {
+    light: { shade: ['#FFFFFF', '#F7FAFF', '#E7EFFC'], grid: 'rgba(41, 129, 251, .16)', land: '23, 102, 230', alpha: [.36, .56, .78, .95], rim: 'rgba(10, 22, 51, .08)' },
+    dark: { shade: ['#1A2C50', '#101E39', '#0A1529'], grid: 'rgba(122, 184, 255, .12)', land: '92, 160, 255', alpha: [.3, .5, .72, .92], rim: 'rgba(232, 238, 247, .1)' }
+  };
   function draw() {
-    const cx = W / 2, cy = W / 2;
+    const cx = W / 2, cy = W / 2, P = PALETTE[theme()];
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, W, W);
-    /* the paper sphere */
+    /* the sphere */
     const shade = ctx.createRadialGradient(cx - R * .3, cy - R * .35, R * .1, cx, cy, R);
-    shade.addColorStop(0, '#FFFFFF'); shade.addColorStop(.7, '#F7FAFF'); shade.addColorStop(1, '#E7EFFC');
+    shade.addColorStop(0, P.shade[0]); shade.addColorStop(.7, P.shade[1]); shade.addColorStop(1, P.shade[2]);
     ctx.fillStyle = shade; ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.fill();
     /* the graticule, front side only */
-    ctx.strokeStyle = 'rgba(41, 129, 251, .16)'; ctx.lineWidth = 1;
+    ctx.strokeStyle = P.grid; ctx.lineWidth = 1;
     ctx.beginPath();
     for (const line of graticule) {
       let pen = false;
@@ -580,13 +597,13 @@ function globe() {
       buckets[Math.min(3, Math.floor(z * 4))].push(cx + x * R, cy - y * R, base * (.55 + .45 * z));
     }
     buckets.forEach((b, i) => {
-      ctx.fillStyle = `rgba(23, 102, 230, ${[.36, .56, .78, .95][i]})`;
+      ctx.fillStyle = `rgba(${P.land}, ${P.alpha[i]})`;
       ctx.beginPath();
       for (let k = 0; k < b.length; k += 3) { ctx.moveTo(b[k] + b[k + 2], b[k + 1]); ctx.arc(b[k], b[k + 1], b[k + 2], 0, Math.PI * 2); }
       ctx.fill();
     });
     /* the rim */
-    ctx.strokeStyle = 'rgba(10, 22, 51, .08)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(cx, cy, R - .5, 0, Math.PI * 2); ctx.stroke();
+    ctx.strokeStyle = P.rim; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(cx, cy, R - .5, 0, Math.PI * 2); ctx.stroke();
     /* the members */
     const spots = groups.map((g, i) => {
       const [x, y, z] = project(Math.sin(g.lat * RAD), Math.cos(g.lat * RAD), g.lng * RAD);
@@ -605,6 +622,7 @@ function globe() {
     draw();
   };
   resize(); new ResizeObserver(resize).observe(sphere);
+  window.addEventListener('themechange', draw);
 
   /* drag to turn; it redraws only while it moves */
   let raf = null, velocity = 0, dragging = false, lastX = 0;

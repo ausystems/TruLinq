@@ -55,6 +55,22 @@ premium product page: few elements per viewport, very large light type, generous
   white) for blue text and fills. The ice ramp (`--ice-2`, `--ice`, `--ice-3`, `--ice-4`) is the brand blue at 8, 14,
   22 and 40 percent: wells, selected rows, fields at rest. `--danger` is for errors and revocations only. Never add a
   hue; reach for a token.
+* **Light and dark.** The same desk with the lights down. The switch in the header (`.theme` in `partials/nav.html`,
+  run by `setTheme` in `src/js/main.js`) sets `data-theme` on `<html>`; with no choice made the site follows the
+  system, and `partials/head.html` decides before the first paint so nothing flashes. The night values live on
+  `:root[data-theme="dark"]` in `src/styles/tokens.css`, and every colour on the site comes from a token, so the rule
+  for new work is simple: never write a literal colour where a token exists. Paper objects use `--paper` (and
+  `--paper-2`), fields `--well` and `--well-focus`, the blue panels and desks `--blue-desk`, and redactions,
+  silhouettes and skeleton lines their own tokens. Night is layered the way day is: the table darkest, tinted panels
+  next, cards and sheets a step up, paper objects above them. The navy and blue panels keep their own tokens, and
+  the documents drawn on the blue and navy desks (an ID, a registry extract, the sample card) are paper in both
+  themes, since the desks do not change. White type on the fixed button blue `#1464DC` holds in both themes; never
+  put white type on `--blue-ink`, which turns light at night. Canvases follow along on the `themechange` event: the
+  hero's ink wash re-reads its tints (and holds a luminance ceiling under small text at night, as it holds a floor by
+  day), the globe draws a night sphere, the gauge's ticks and track are tokens, and the 3D stamp is lit for a dark
+  desk. Switching changes every colour in one frame (`html.theme-switching`), under a circle that opens from the
+  switch where view transitions exist, instantly elsewhere and with reduced motion. Check it with the pixel audit
+  described under Responsive and accessibility, in both themes.
 * **Radius by object type.** Panels `--r-panel`, sheets `--r-sheet`, cards `--r-card` (20), wells `--r-well` (14),
   fields and buttons `--r-field` (12), rows `--r-record` (8), tags `--r-tag` (6), portraits `--r-portrait` (14).
   `--r-pill` is for chips and the grade badge, never for buttons. Circles are for the seal, avatars, the arrow disc
@@ -194,6 +210,11 @@ composition as a laptop, larger, instead of a small column in the middle of the 
 exact and nothing moves. A large tablet held upright gives the hero the height it needs rather than the whole screen; a
 phone on its side sizes the hero title to the height it has; on the narrowest phones the header button sheds its disc
 and then moves into the menu, so the logo never shrinks; the directory's row of faces sizes to the width.
+
+**Readable in both themes.** Every visible piece of text, on every page, in both themes, must hold WCAG AA against
+the pixels actually behind it (4.5:1, or 3:1 for large text): measured by photographing the page with and without
+its text and comparing each glyph with what lies under it, so gradients, canvases and photos count. The hero's text
+is also checked over ten minutes of the wash's motion. Logotype text (the seal's ring) is exempt, as WCAG allows.
 
 Check every page at 280 (a folded phone's cover), 320, 360, 390, 430, 540 (one screen of a dual-screen phone), 768,
 820, 884 (an unfolded phone), 1024 upright, 1114 (both screens), 1280, 1440, 1920, 2560, 3440 and 3840px wide, and

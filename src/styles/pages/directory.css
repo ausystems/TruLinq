@@ -9,29 +9,30 @@
   }
   .dhero h1 { font-size: var(--fs-1); max-width: 12ch; }
   .dhero .lead { max-width: 46ch; }
-  .dhero__ledger { padding: 8px 22px; border-radius: var(--r-card); background: #FFFFFF; box-shadow: var(--sh-object); }
+  .dhero__ledger { padding: 8px 22px; border-radius: var(--r-card); background: var(--paper); box-shadow: var(--sh-object); }
   .dhero__ledger b { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
   .dhero__faces { position: relative; z-index: 1; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 22px; max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter) clamp(36px, 4vw, 60px); }
   .dhero__faceset { display: flex; flex-wrap: wrap; padding-left: 10px; }
   .face { position: relative; width: 60px; flex: none; margin-left: -10px; }
-  .face .portrait { border-radius: 50%; box-shadow: 0 0 0 3px #F1F6FE, 0 10px 18px -12px rgba(10, 22, 51, .45); }
+  .face .portrait { border-radius: 50%; box-shadow: 0 0 0 3px var(--ice-2), 0 10px 18px -12px rgba(10, 22, 51, .45); }
   .face .seal { --seal-size: 20px; position: absolute; right: -1px; bottom: -1px; }
   .dhero__note { align-items: center; gap: 6px; --tilt: -3deg; }
-  /* on a phone the faces overlap a little more and size to the width, so the whole roster stays one row */
-  @media (max-width: 560px) { .face { --fw: min(48px, (100vw - 64px) / 7.4); width: var(--fw); margin-left: calc(var(--fw) * -.3); } .face .seal { --seal-size: calc(var(--fw) * .4); } .dhero__note { display: none; } }
+  /* on a phone the faces size to the width, so the whole roster stays one row, and overlap just enough that no
+     initials are cut by the face in front */
+  @media (max-width: 560px) { .face { --fw: min(48px, (100vw - 64px) / 8.2); width: var(--fw); margin-left: calc(var(--fw) * -.2); } .face .seal { --seal-size: calc(var(--fw) * .4); } .face .portrait--mono span { font-size: 32cqi; } .dhero__note { display: none; } }
 
   /* ── Controls ─────────────────────────────────────────────────── */
   .dir__inner { padding-top: clamp(32px, 3.4vw, 52px); }
   .dir__controls { display: grid; gap: 18px; }
-  .dir__search { position: relative; display: flex; align-items: center; gap: 12px; min-height: 60px; padding: 0 16px 0 20px; border-radius: 16px; background: #F2F5FA; box-shadow: inset 0 0 0 1px rgba(10, 22, 51, .06); transition: box-shadow var(--t-hover) var(--e-out), background var(--t-hover); }
+  .dir__search { position: relative; display: flex; align-items: center; gap: 12px; min-height: 60px; padding: 0 16px 0 20px; border-radius: 16px; background: var(--well); box-shadow: inset 0 0 0 1px var(--line); transition: box-shadow var(--t-hover) var(--e-out), background var(--t-hover); }
   .dir__search:hover { box-shadow: inset 0 0 0 1px var(--line-2); }
-  .dir__search:focus-within { background: #FFFFFF; box-shadow: inset 0 0 0 1.5px #1464DC, 0 0 0 4px rgba(20, 100, 220, .14); }
+  .dir__search:focus-within { background: var(--well-focus); box-shadow: inset 0 0 0 1.5px #1464DC, 0 0 0 4px rgba(20, 100, 220, .14); }
   .dir__search svg { flex: none; width: 20px; height: 20px; fill: none; stroke: var(--fg-soft); stroke-width: 1.8; stroke-linecap: round; }
   .dir__search input { flex: 1; min-width: 0; height: 58px; border: 0; background: transparent; font-size: 1.0625rem; }
   .dir__search input::placeholder { color: var(--fg-mute); }
   .dir__search input:focus-visible { outline: none; }
   .dir__search input::-webkit-search-cancel-button { -webkit-appearance: none; }
-  .dir__search kbd { padding: 3px 8px; border-radius: 6px; background: #FFFFFF; box-shadow: inset 0 0 0 1px var(--line); font: 500 .75rem var(--f-mono); color: var(--fg-soft); }
+  .dir__search kbd { padding: 3px 8px; border-radius: 6px; background: var(--paper); box-shadow: inset 0 0 0 1px var(--line); font: 500 .75rem var(--f-mono); color: var(--fg-soft); }
   @media (hover: none), (max-width: 480px) { .dir__search kbd { display: none; } }
   .dir__tools { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; }
   .dir__tools-end { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
@@ -57,7 +58,8 @@
   .reg-row__who .avatar { width: 40px; height: 40px; }
   .reg-row__who > span { display: grid; min-width: 0; }
   .reg-row__who b { font-weight: 500; letter-spacing: -.015em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .reg-row__who span span { font-size: var(--fs-meta); color: var(--fg-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  /* the role under the name; the portrait's initials keep their own ink */
+  .reg-row__who > span:not(.portrait) > span { font-size: var(--fs-meta); color: var(--fg-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .reg-row__cell { font-size: .9375rem; color: var(--fg-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .reg-row__score { display: inline-flex; align-items: baseline; gap: 8px; font-family: var(--f-mono); }
   .reg-row__score b { font-size: .9375rem; font-weight: 600; }

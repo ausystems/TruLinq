@@ -32,6 +32,9 @@ npm test           # backend test suite
   `node scripts/build-portraits.mjs --master <slug> <file> <left> <top> <size>` (a square crop, metadata stripped),
   `npm run portraits`, set `photo: '/portraits/<slug>'` in `src/data/members.js`, and add a forward migration that sets
   the same `photo` where it is still null (as `004_noah_and_portraits.sql` does). The dashboard's demo mode, shown only when accounts can't be reached, uses a nameless placeholder account.
+* **Light and dark.** A switch in the header on every page; the choice is remembered on the device, and until one is
+  made the site follows the system. All colour comes from the tokens in `src/styles/tokens.css`, with the night
+  values under `:root[data-theme="dark"]`; new styles should use tokens, never literal colours.
 * **Design guide.** `DESIGN.md` documents the visual system (blue ink on a verification desk: Lexend, the navy bezel,
   the reviewer's margin notes), components, motion rules and quality bar.
 * **Globe data.** `src/data/land.js` is a small bitmask of land points generated from Natural Earth by

@@ -44,7 +44,7 @@
   hr { border: 0; height: 1px; background: var(--line); margin: 0; }
   b, strong { font-weight: 550; }
   time, .num { font-variant-numeric: tabular-nums; }
-  ::selection { background: var(--blue-ink); color: #fff; }
+  ::selection { background: #1464DC; color: #FFFFFF; }
 
   /* Focus is always visible for keyboards and never for pointers */
   :focus { outline: none; }
@@ -72,6 +72,13 @@
   .prose a, .link { color: var(--blue-ink); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .22em; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); transition: text-decoration-color var(--t-hover) var(--e-out), color var(--t-hover); }
   .prose a:hover, .link:hover { text-decoration-color: currentColor; }
 
+  /* Switching between light and dark: every colour changes in the same frame, so nothing lags behind in the old theme,
+     and where the browser can, the new theme opens as a circle from the switch over the old one (src/js/main.js). */
+  html.theme-switching, html.theme-switching *, html.theme-switching *::before, html.theme-switching *::after { transition: none !important; }
+  html.theme-switching .theme__knob, html.theme-switching .theme__core, html.theme-switching .theme__cut, html.theme-switching .theme__rays, html.theme-switching .theme__hint { transition: transform 560ms var(--e-spring), opacity 320ms var(--e-out) !important; }
+  html.theme-vt::view-transition-old(root), html.theme-vt::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+  html.theme-vt::view-transition-old(root) { z-index: 1; }
+  html.theme-vt::view-transition-new(root) { z-index: 2; }
   @view-transition { navigation: auto; }
   ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 200ms; animation-timing-function: var(--e-out); }
   @media (prefers-reduced-motion: reduce) {

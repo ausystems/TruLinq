@@ -20,7 +20,7 @@
   @media (max-width: 1023px) {
     .rooms__index { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; border-top: 0; scrollbar-width: none; }
     .rooms__index::-webkit-scrollbar { display: none; }
-    .room-link { flex: none; padding: 0 16px; min-height: 42px; align-content: center; border: 0; border-radius: var(--r-pill); background: #FFFFFF; box-shadow: var(--sh-chip), inset 0 0 0 1px var(--line); }
+    .room-link { flex: none; padding: 0 16px; min-height: 42px; align-content: center; border: 0; border-radius: var(--r-pill); background: var(--paper); box-shadow: var(--sh-chip), inset 0 0 0 1px var(--line); }
     .room-link span, .room-link::before { display: none; }
     .room-link b { font-size: .875rem; font-weight: 450; white-space: nowrap; }
     .room-link[aria-current="true"] { background: #1464DC; color: #FFFFFF; box-shadow: 0 10px 22px -12px rgba(20, 100, 220, .8); }
@@ -48,7 +48,7 @@
   .msg__who:hover { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; }
   .msg__who .seal { --seal-size: 16px; }
   .msg__time { font-family: var(--f-mono); font-size: var(--fs-micro); color: var(--fg-mute); }
-  .msg__bubble { display: inline-block; max-width: 100%; padding: 12px 16px; border-radius: 18px; border-top-left-radius: 6px; background: #FFFFFF; box-shadow: 0 1px 1px rgba(10, 22, 51, .04), 0 8px 18px -12px rgba(10, 22, 51, .25); font-size: .9375rem; line-height: 1.5; overflow-wrap: anywhere; }
+  .msg__bubble { display: inline-block; max-width: 100%; padding: 12px 16px; border-radius: 18px; border-top-left-radius: 6px; background: var(--paper); box-shadow: 0 1px 1px rgba(10, 22, 51, .04), 0 8px 18px -12px rgba(10, 22, 51, .25); font-size: .9375rem; line-height: 1.5; overflow-wrap: anywhere; }
   .msg--mine .msg__bubble { background: #1464DC; color: #FFFFFF; }
   .room__composer { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 12px 14px; border-top: 1px solid var(--line); background: var(--surface-2); }
   .room__lock { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--surface-3); }

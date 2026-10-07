@@ -5,12 +5,12 @@
     <linearGradient id="tq-mark-d" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0080FF"/><stop offset="1" stop-color="#003CAC"/></linearGradient>
     <radialGradient id="tq-seal-face" cx="38%" cy="30%" r="85%"><stop offset="0" stop-color="#1A2E4C"/><stop offset=".55" stop-color="#06132A"/><stop offset="1" stop-color="#020511"/></radialGradient>
     <linearGradient id="tq-seal-rim" x1="20%" y1="0%" x2="80%" y2="100%"><stop offset="0" stop-color="#77D9FF"/><stop offset=".5" stop-color="#007DF3"/><stop offset="1" stop-color="#4FC1FF"/></linearGradient>
-    <linearGradient id="tq-mark-t-dark" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1B2740"/><stop offset="1" stop-color="#0C1526"/></linearGradient>
+    <linearGradient id="tq-mark-t-dark" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color: var(--mark-t-1, #1B2740)"/><stop offset="1" style="stop-color: var(--mark-t-2, #0C1526)"/></linearGradient>
     <symbol id="tq-mark" viewBox="0 0 1080 1080">
       <path fill="url(#tq-mark-t)" d="M28 139H775L654 289H406V938H271V289H28Z"/>
       <path fill="url(#tq-mark-d)" fill-rule="evenodd" d="M473 362H600V487H668V362H763A288 288 0 0 1 763 938H473ZM600 487H763A163 163 0 0 1 763 813H600Z"/>
     </symbol>
-    <!-- The same mark for light surfaces: the T turns navy, the D stays the brand blue -->
+    <!-- The same mark for the page's own surfaces: the T is navy on paper and silver at night, the D stays the brand blue -->
     <symbol id="tq-mark-dark" viewBox="0 0 1080 1080">
       <path fill="url(#tq-mark-t-dark)" d="M28 139H775L654 289H406V938H271V289H28Z"/>
       <path fill="url(#tq-mark-d)" fill-rule="evenodd" d="M473 362H600V487H668V362H763A288 288 0 0 1 763 938H473ZM600 487H763A163 163 0 0 1 763 813H600Z"/>
@@ -48,6 +48,21 @@
       <a href="/trust/" data-nav-link>Trust</a>
     </nav>
     <div class="nav__actions">
+      <!-- Light or dark: a switch, remembered on this device. A pill with a sliding knob on wide screens, a round button
+           beside the menu on small ones; the icon turns from sun to moon. src/js/main.js runs it. -->
+      <button class="theme" type="button" role="switch" aria-checked="false" aria-label="Dark mode" title="Switch to dark mode" data-theme-toggle>
+        <span class="theme__track" aria-hidden="true">
+          <svg class="theme__hint theme__hint--sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.8v1.8M12 19.4v1.8M5.5 5.5l1.3 1.3M17.2 17.2l1.3 1.3M2.8 12h1.8M19.4 12h1.8M5.5 18.5l1.3-1.3M17.2 6.8l1.3-1.3"/></svg>
+          <svg class="theme__hint theme__hint--moon" viewBox="0 0 24 24"><path d="M19.6 14.9A8 8 0 0 1 9.1 4.4a8 8 0 1 0 10.5 10.5Z"/></svg>
+          <span class="theme__knob">
+            <svg class="theme__icon" viewBox="0 0 24 24">
+              <mask id="theme-cut"><rect width="24" height="24" fill="#fff"/><circle class="theme__cut" cx="17.6" cy="6.4" r="6.3" fill="#000"/></mask>
+              <circle class="theme__core" cx="12" cy="12" r="8.4" mask="url(#theme-cut)"/>
+              <path class="theme__rays" d="M12 1.6v2.1M12 20.3v2.1M4.65 4.65l1.5 1.5M17.85 17.85l1.5 1.5M1.6 12h2.1M20.3 12h2.1M4.65 19.35l1.5-1.5M17.85 6.15l1.5-1.5"/>
+            </svg>
+          </span>
+        </span>
+      </button>
       <a class="nav__signin" href="/auth/" data-account-link>Sign in</a>
       <a class="btn btn--primary btn--sm" href="/verify/"><span>Get verified</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
       <button class="nav__burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu" data-burger>

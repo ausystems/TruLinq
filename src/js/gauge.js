@@ -16,8 +16,8 @@ export function gaugeHTML({ caption = '', href: link = '' } = {}) {
       <path class="gauge__fill" d="M 40 236 A 130 130 0 1 1 280 236" fill="none" stroke="url(#grad-${id})" stroke-width="22" stroke-linecap="round" data-gauge-fill/>
       <circle class="gauge__pulse" r="9" fill="none" stroke="#2981FB" stroke-width="3" opacity="0" data-pulse cx="40" cy="236"/>
       <circle class="gauge__knob" r="9" fill="#FFFFFF" stroke="#2981FB" stroke-width="5" data-knob cx="40" cy="236"/>
-      <text x="34" y="272" class="gauge__lbl">300</text>
-      <text x="286" y="272" class="gauge__lbl" text-anchor="end">850</text>
+      <text x="34" y="272" class="gauge__lbl" font-size="11">300</text>
+      <text x="286" y="272" class="gauge__lbl" font-size="11" text-anchor="end">850</text>
     </svg>
     <div class="score__readout">
       <span class="score__num" data-score-num><span class="sr-only" data-score-text>300</span>${odometerHTML()}</span>

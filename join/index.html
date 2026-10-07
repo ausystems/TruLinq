@@ -4,8 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
+  <meta name="color-scheme" content="light dark">
+  <style>html { background: #ECF0F6; } html.dark { background: #05080F; }</style>
   <title>Join Trulinq</title>
   <script>
+    /* the page is gone in a moment; until then it wears the reader's theme, so a dark screen never flashes white */
+    (function () { var t = null; try { t = localStorage.getItem('tq-theme'); } catch (e) {} if (t === 'dark' || (t !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.className = 'dark'; })();
     /* /join?ref=CODE is the shareable referral link. It carries the code into the sign-up form; the referral itself is
        recorded once, on the server, when the account is created. */
     (function () {

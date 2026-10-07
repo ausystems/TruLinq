@@ -18,7 +18,8 @@
   .composer__foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; min-width: 0; }
   .composer__foot .segmented { min-width: 0; }
   .composer .segmented button[disabled] { cursor: default; }
-  .composer__lock { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 14px; padding: 20px; text-align: center; background: rgba(241, 246, 254, .92); border-radius: var(--r-card); }
+  /* locked: the form behind is frosted into soft shapes, a hint of what members get rather than faint text */
+  .composer__lock { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 14px; padding: 20px; text-align: center; background: color-mix(in srgb, var(--ice-2) 78%, transparent); -webkit-backdrop-filter: blur(6px) saturate(1.1); backdrop-filter: blur(6px) saturate(1.1); border-radius: var(--r-card); }
   .composer__lock[hidden] { display: none; }
   .composer__lock p { font-weight: 500; }
 
@@ -41,7 +42,8 @@
   .person-row .avatar { width: 36px; height: 36px; }
   .person-row b { display: block; font-size: .9375rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .person-row:hover b { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; }
-  .person-row span span { display: block; font-size: var(--fs-meta); color: var(--fg-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  /* the line under the name; the selector stays out of the portrait, whose initials keep their own ink */
+  .person-row > span:not(.portrait) > span { display: block; font-size: var(--fs-meta); color: var(--fg-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .person-row time { font-family: var(--f-mono); font-size: var(--fs-micro); color: var(--fg-mute); }
   .room-row { display: grid; gap: 2px; padding: 10px 0; border-bottom: 1px solid var(--line); }
   .room-row:last-child { border-bottom: 0; }

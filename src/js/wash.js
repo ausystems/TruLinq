@@ -4,8 +4,9 @@
    near it, weighted by a gaussian (a softmax over distance), so there are no seams. It is all soft gradient, so it is
    rendered small and scaled up, dithered by one step so the pale tints never band, drawn at most 30 times a second and
    only while it can be seen. The caller decides whether it moves (`play`) or holds one moment (`draw`).
-   Wherever small text sits (`keep`), the ink may never get darker than a floor, measured as relative luminance and
-   lifted in linear light, so the text keeps its contrast whatever drifts past; the edge of each zone is feathered. */
+   Wherever small text sits (`keep`), the ink is held to a limit measured as relative luminance, in linear light, so the
+   text keeps its contrast whatever drifts past: on light paper a floor it may not darken below, at night (`limit`) a
+   ceiling it may not brighten above, for the light text there. The edge of each zone is feathered. */
 
 const VERT = 'attribute vec2 a; void main() { gl_Position = vec4(a, 0., 1.); }';
 const N = 10, K = 4;
@@ -24,7 +25,7 @@ uniform vec4 u_ph;
 uniform vec4 u_sw;
 uniform vec2 u_warp;
 uniform vec4 u_keep[${K}];
-uniform vec2 u_floor;
+uniform vec3 u_floor;
 
 void main() {
   vec2 uv = gl_FragCoord.xy / u_res;
@@ -52,7 +53,8 @@ void main() {
   if (keep > 0.) {
     vec3 lin = pow((col + .055) / 1.055, vec3(2.4));
     float lum = dot(lin, vec3(.2126, .7152, .0722));
-    lin = mix(lin, vec3(1.), keep * clamp((u_floor.x - lum) / max(1. - lum, 1e-4), 0., 1.));
+    if (u_floor.z > 0.) lin = mix(lin, vec3(1.), keep * clamp((u_floor.x - lum) / max(1. - lum, 1e-4), 0., 1.));
+    else lin *= mix(1., min(1., u_floor.x / max(lum, 1e-4)), keep);
     col = 1.055 * pow(lin, vec3(1. / 2.4)) - .055;
   }
   float n = fract(52.9829189 * fract(dot(gl_FragCoord.xy, vec2(.06711056, .00583715))));
@@ -71,6 +73,8 @@ export function rgb(hex) {
    the panel's short side), fx, fy (how fast, radians a second), size (short-side units), bias }], swirl: { x, y
    (0..1), angle (radians at its heart), reach (how fast the turn fades with distance) } }. Up to ten points. */
 export function createWash(canvas, { layout, warp = .035, waves = 1, speed = 1, floor = .85, feather = 56, maxSide = 720 } = {}) {
+  /* a floor (dir 1) on light paper; `limit` turns it into a ceiling (dir -1) at night */
+  let limit = { to: floor, dir: 1 };
   const attrs = { alpha: true, antialias: false, depth: false, stencil: false, premultipliedAlpha: true, preserveDrawingBuffer: false, powerPreference: 'low-power' };
   /* a context that would be drawn by the CPU still gets one still frame, but never a running loop */
   let gl = canvas.getContext('webgl', { ...attrs, failIfMajorPerformanceCaveat: true }), software = false;
@@ -111,7 +115,7 @@ export function createWash(canvas, { layout, warp = .035, waves = 1, speed = 1, 
     const out = [];
     for (let i = 0; i < K; i++) { const b = boxes[i]; out.push(...(b ? b.map((v) => v / u) : [-9, -9, -8, -8])); }
     gl.uniform4fv(loc.u_keep, out);
-    gl.uniform2f(loc.u_floor, floor, feather / u);
+    gl.uniform3f(loc.u_floor, limit.to, feather / u, limit.dir);
   }
 
   /* unused slots get a copy of the last point that weighs nothing */
@@ -183,6 +187,7 @@ export function createWash(canvas, { layout, warp = .035, waves = 1, speed = 1, 
     play,
     setLayout: (next) => { setLayout(next); draw(t); },
     keep: (list) => { setKeep(list); draw(t); },
+    limit: (to, dir) => { limit = { to, dir }; setKeep(boxes); draw(t); },
     resize: () => { resize(); draw(t); },
     get software() { return software; },
     get time() { return t; }

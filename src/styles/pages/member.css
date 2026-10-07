@@ -17,7 +17,7 @@
   .mhero__headline { max-width: 52ch; font-size: 1rem; color: var(--fg-2); }
   .mhero__headline[hidden] { display: none; }
   .mhero__tags { display: flex; flex-wrap: wrap; gap: 8px; }
-  .mhero__tags .tag { height: 30px; padding: 0 12px; border-radius: var(--r-pill); background: #FFFFFF; box-shadow: var(--sh-chip); color: var(--fg); font-size: var(--fs-meta); font-weight: 450; }
+  .mhero__tags .tag { height: 30px; padding: 0 12px; border-radius: var(--r-pill); background: var(--paper); box-shadow: var(--sh-chip); color: var(--fg); font-size: var(--fs-meta); font-weight: 450; }
   .mhero__verified { font-size: var(--fs-sm); }
   .mhero__verified:empty { display: none; }
   .mhero__actions { margin-top: 4px; }
@@ -30,7 +30,7 @@
   .mhero__needs div { display: grid; gap: 2px; }
   .mhero__needs dt { font-size: var(--fs-meta); font-weight: 500; color: var(--fg-soft); }
   .mhero__needs dd { margin: 0; overflow-wrap: anywhere; }
-  .mhero__details { align-self: start; padding: 6px 22px; border-radius: var(--r-card); background: #FFFFFF; box-shadow: var(--sh-object); }
+  .mhero__details { align-self: start; padding: 6px 22px; border-radius: var(--r-card); background: var(--paper); box-shadow: var(--sh-object); }
   .mhero__missing { display: grid; gap: 14px; justify-items: start; max-width: 52ch; }
   .mhero__missing p { color: var(--fg-soft); }
 

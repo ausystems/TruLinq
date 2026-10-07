@@ -50,7 +50,7 @@
   .tdata__copy { display: grid; gap: 20px; justify-items: start; }
   .tdata__copy h2 { font-size: var(--fs-2); }
   .tdata__promises { width: 100%; padding: 6px 22px; border-radius: var(--r-card); background: var(--ice-2); font-size: .9375rem; }
-  .matrix-wrap { border-radius: var(--r-card); background: #FFFFFF; box-shadow: var(--sh-object); overflow: hidden; }
+  .matrix-wrap { border-radius: var(--r-card); background: var(--paper); box-shadow: var(--sh-object); overflow: hidden; }
   .matrix { width: 100%; border-collapse: collapse; font-size: .9375rem; }
   .matrix th, .matrix td { padding: 14px 18px; border-bottom: 1px solid var(--line); text-align: center; }
   .matrix th:first-child { text-align: left; }
@@ -68,7 +68,7 @@
   .report__lead { margin-top: 20px; max-width: 40ch; font-size: var(--fs-lead); color: var(--fg-soft); }
   .report__mail { margin-top: 16px; color: var(--fg-soft); }
   /* the form is paper on the navy desk */
-  .report__box { position: relative; background: #FFFFFF; box-shadow: 0 40px 80px -40px rgba(0, 0, 0, .6); }
+  .report__box { position: relative; background: var(--surface-2); box-shadow: 0 40px 80px -40px rgba(0, 0, 0, .6); }
   .report__form { display: grid; gap: 18px; }
   .report__form .btn { justify-self: start; }
   .report__done { display: grid; gap: 12px; justify-items: center; text-align: center; padding: 12px 0; }
