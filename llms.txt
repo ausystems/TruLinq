@@ -1,0 +1,34 @@
+# Trulinq
+
+> Trulinq is a network for entrepreneurs in which a person checks the identity and the business behind every member before the Trulinq Verified stamp appears on their profile. Made in Hilo, Hawaiʻi.
+
+Membership is by invitation. Verified profiles show a 300 to 850 Trulinq Score built from verification, business details, web presence and standing over time; it is not a credit score. Identity documents are never public.
+
+## Pages
+
+- [Home](https://tru-linq.vercel.app/): Trulinq checks the identity and the business behind every profile, so entrepreneurs can connect, deal and grow without scams. One stamp, reviewed by a person.
+- [Directory](https://tru-linq.vercel.app/directory/): Every profile belongs to a real person and a real business. Search verified founders, owners and operators by industry and city, each checked by a person.
+- [Match](https://tru-linq.vercel.app/match/): Find verified members by what they offer and what they need. Mutual fits rise to the top, and everyone you meet has passed identity and business checks.
+- [Rooms](https://tru-linq.vercel.app/rooms/): Topic rooms where every person posting has passed Trulinq verification. Anyone can read the conversation; only verified entrepreneurs can speak in it.
+- [Feed](https://tru-linq.vercel.app/feed/): A chronological, ad-free feed of updates, opportunities and wins from verified entrepreneurs. No algorithm and no engagement farming, newest first.
+- [Get verified](https://tru-linq.vercel.app/verify/): Apply for the Trulinq Verified stamp: enter your invitation code, prove it’s you, verify your business, and a person reviews it within 2 business days.
+- [Pricing](https://tru-linq.vercel.app/pricing/): A free Member profile, the Verified Business stamp at $19 a month billed yearly, and Enterprise verification for teams and marketplaces.
+- [Trust Centre](https://tru-linq.vercel.app/trust/): What the Trulinq Verified stamp means and what it doesn’t: identity, business, presence and human review, how your data is handled, how to report a fake.
+- [Contact](https://tru-linq.vercel.app/contact/): Contact Trulinq. A person reads every message, and most replies land within one business day. Verification help, fraud reports, privacy requests, enterprise.
+- [Privacy policy](https://tru-linq.vercel.app/privacy/): How Trulinq collects, uses, stores and deletes your data. Identity documents stay private, nothing is sold, and deleting your account takes one email.
+- [Terms of service](https://tru-linq.vercel.app/terms/): The Trulinq terms of service in plain language: accounts, verification, honest use, revocation, fees, content, liability and how changes are made.
+
+## Guides
+
+- [How to check if a business is legit](https://tru-linq.vercel.app/blog/how-to-check-if-a-business-is-legit/): Twelve checks that tell a real company from a convincing front: official registries, licenses, addresses, reviews, court records and how to pay safely.
+- [How to tell if a website is legit](https://tru-linq.vercel.app/blog/how-to-tell-if-a-website-is-legit/): How to check a website before you buy, sign in or type a card number: read the real domain, check its age, test the padlock myth and pay the safe way.
+- [How to spot a fake LinkedIn profile](https://tru-linq.vercel.app/blog/how-to-spot-a-fake-linkedin-profile/): The checks that still catch fake LinkedIn profiles, recruiters and investors, now that AI faces look real: verification badges, history, photos and asks.
+- [Business email compromise: how to stop fake invoices](https://tru-linq.vercel.app/blog/business-email-compromise/): How business email compromise and fake invoice scams work, the controls that stop them, and what to do in the first hours if money has already gone.
+- [How to find out who owns a business](https://tru-linq.vercel.app/blog/how-to-find-out-who-owns-a-business/): Where ownership is actually on record: state filings, DBA records, SEC filings, Form 990s, and the Canadian and UK registers of people with control.
+- [What is KYC? Identity and business checks, explained](https://tru-linq.vercel.app/blog/what-is-kyc-and-kyb/): What KYC and KYB mean, the rules behind them, how ID and selfie checks really work, what businesses are asked for, and how your data should be protected.
+
+## Contact
+
+- Support: support@trulinq.com
+- Trust and safety, and reports of fakes: trust@trulinq.com
+- Privacy: privacy@trulinq.com

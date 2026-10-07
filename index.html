@@ -1,0 +1,652 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#ECF0F6">
+<link rel="icon" href="/TruLinq/favicon.ico" sizes="32x32">
+<link rel="icon" href="/TruLinq/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300..700&family=Caveat:wght@500..700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>
+  /* Light or dark: the reader's own choice from the switch in the header, else their system's. Set here, before
+     anything paints, so the page never flashes the other theme; src/js/main.js runs the switch. */
+  (function () {
+    var d = document.documentElement, t = null;
+    try { t = localStorage.getItem('tq-theme'); } catch (e) {}
+    if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    d.setAttribute('data-theme', t);
+    var m = document.querySelector('meta[name="theme-color"]');
+    if (m) m.setAttribute('content', t === 'dark' ? '#05080F' : '#ECF0F6');
+  })();
+  /* Decided here, before the first paint, so nothing flashes. html.anim: motion is welcome (not with reduced motion,
+     not in ?nomotion reviews), so entrances such as the hero title may start hidden. html.has-intro: the loader plays,
+     which it does once per browser tab, on whichever page is opened first, as it does on trulinqid.com. */
+  (function () {
+    try {
+      var d = document.documentElement, q = location.search;
+      if (/[?&]nomotion(=|&|$)/.test(q) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      d.classList.add('anim');
+      if (/[?&]nointro(=|&|$)/.test(q)) return;
+      try { if (sessionStorage.getItem('tq-intro')) return; sessionStorage.setItem('tq-intro', '1'); } catch (e) {}
+      d.classList.add('has-intro');
+    } catch (e) {}
+  })();
+</script>
+<style>html[data-theme=dark]{--lightningcss-light: ;--lightningcss-dark:initial;color-scheme:dark;background:#05080f}.intro{display:none}html.has-intro .intro{z-index:1000;background:#060d19;background:oklch(16% .028 260);flex-direction:column;justify-content:center;align-items:center;animation:.7s cubic-bezier(.4,0,.2,1) 2.4s forwards intro-leave;display:flex;position:fixed;inset:0}.intro__glow{filter:blur(4rem);pointer-events:none;background:#2981fb40;border-radius:50%;width:24rem;height:24rem;animation:2s cubic-bezier(.4,0,.6,1) infinite intro-pulse;position:absolute}.intro__mark,.intro__welcome,.intro__name{flex:none;display:block;position:relative;overflow:visible}.intro__mark{--in-scale:.75;width:7rem;height:7rem;animation:1s backwards intro-in}.intro__welcome{fill:#abb9c9;fill:oklch(78% .028 252);--in-y:.5rem;width:8.13206rem;height:1rem;margin-top:2rem;animation:.7s .6s both intro-in}.intro__name{aspect-ratio:153.621/48;fill:#f4f7fb;fill:oklch(97.5% .006 250);--in-y:.75rem;height:2.25rem;margin:.625rem 0 .125rem;animation:.7s .9s both intro-in}.intro__name .intro__dot{fill:#2981fb}@media (min-width:40rem){.intro__mark{width:9rem;height:9rem}.intro__name{height:3rem;margin:.5rem 0 0}}@keyframes intro-in{0%{opacity:0;transform:translate3d(0, var(--in-y,0), 0) scale3d(var(--in-scale,1), var(--in-scale,1), 1)}}@keyframes intro-pulse{50%{opacity:.5}}@keyframes intro-leave{to{opacity:0;visibility:hidden}}</style>
+<link rel="apple-touch-icon" href="/TruLinq/apple-touch-icon.png">
+<link rel="alternate" type="application/rss+xml" title="Trulinq guides" href="https://tru-linq.vercel.app/blog/feed.xml">
+<!-- The canonical address; the Open Graph and X cards, the robots defaults and the structured data are added from
+     each page's title and description by src/build/seo.js. -->
+<link rel="canonical" href="https://tru-linq.vercel.app/">
+
+  <title>Trulinq · The verified network where everyone is real</title>
+  <meta name="description" content="Trulinq checks the identity and the business behind every profile, so entrepreneurs can connect, deal and grow without scams. One stamp, reviewed by a person.">
+  <meta property="og:title" content="Trulinq · Everyone here is real">
+  <meta property="og:description" content="A trusted network for entrepreneurs, built around verified identities and verified businesses.">
+  <script type="module" crossorigin src="/TruLinq/assets/index-LPA1ZYxN.js"></script>
+  <link rel="modulepreload" crossorigin href="/TruLinq/assets/main-DKgH8B-n.js">
+  <link rel="modulepreload" crossorigin href="/TruLinq/assets/gauge-BibT_c4u.js">
+  <link rel="modulepreload" crossorigin href="/TruLinq/assets/stamp3d-K_eaNAFJ.js">
+  <link rel="stylesheet" crossorigin href="/TruLinq/assets/main-BEO-WR3Q.css">
+  <link rel="stylesheet" crossorigin href="/TruLinq/assets/index-DxqlSQmr.css">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Trulinq">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:url" content="https://tru-linq.vercel.app/">
+  <meta property="og:image" content="https://tru-linq.vercel.app/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Trulinq, the verified network for entrepreneurs: everyone here is real">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Trulinq · The verified network where everyone is real">
+  <meta name="twitter:description" content="Trulinq checks the identity and the business behind every profile, so entrepreneurs can connect, deal and grow without scams. One stamp, reviewed by a person.">
+  <meta name="twitter:image" content="https://tru-linq.vercel.app/og.png">
+  <meta name="twitter:image:alt" content="Trulinq, the verified network for entrepreneurs: everyone here is real">
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://tru-linq.vercel.app/#organization","name":"Trulinq","url":"https://tru-linq.vercel.app/","description":"A trusted network for entrepreneurs, built around verified identities and verified businesses. A person reviews every application before the Trulinq Verified stamp is issued.","slogan":"Everyone here is real.","logo":{"@type":"ImageObject","@id":"https://tru-linq.vercel.app/#logo","url":"https://tru-linq.vercel.app/logo.png","contentUrl":"https://tru-linq.vercel.app/logo.png","width":512,"height":512,"caption":"Trulinq"},"image":{"@id":"https://tru-linq.vercel.app/#logo"},"email":"support@trulinq.com","address":{"@type":"PostalAddress","addressLocality":"Hilo","addressRegion":"HI","addressCountry":"US"},"contactPoint":[{"@type":"ContactPoint","contactType":"customer support","email":"support@trulinq.com","availableLanguage":"English"},{"@type":"ContactPoint","contactType":"trust and safety","email":"trust@trulinq.com","availableLanguage":"English"},{"@type":"ContactPoint","contactType":"privacy","email":"privacy@trulinq.com","availableLanguage":"English"},{"@type":"ContactPoint","contactType":"sales","email":"sales@trulinq.com","availableLanguage":"English"}],"sameAs":["https://trulinqid.com"],"employee":[{"@type":"Person","name":"Tyler Shirakawa","jobTitle":"CEO","url":"https://tru-linq.vercel.app/members/tyler-shirakawa/"}]},{"@type":"WebSite","@id":"https://tru-linq.vercel.app/#website","url":"https://tru-linq.vercel.app/","name":"Trulinq","description":"The verified network for entrepreneurs.","publisher":{"@id":"https://tru-linq.vercel.app/#organization"},"inLanguage":"en-US"},{"@type":"WebPage","@id":"https://tru-linq.vercel.app/#webpage","url":"https://tru-linq.vercel.app/","name":"Trulinq · The verified network where everyone is real","description":"Trulinq checks the identity and the business behind every profile, so entrepreneurs can connect, deal and grow without scams. One stamp, reviewed by a person.","isPartOf":{"@id":"https://tru-linq.vercel.app/#website"},"inLanguage":"en-US","about":{"@id":"https://tru-linq.vercel.app/#organization"},"primaryImageOfPage":{"@type":"ImageObject","url":"https://tru-linq.vercel.app/og.png","contentUrl":"https://tru-linq.vercel.app/og.png","width":1200,"height":630,"caption":"Trulinq, the verified network for entrepreneurs: everyone here is real"}},{"@type":"VideoObject","@id":"https://tru-linq.vercel.app/#film","name":"Trulinq in thirty seconds","description":"A thirty-second film about Trulinq, the network where a person verifies the identity and the business behind every member.","thumbnailUrl":"https://tru-linq.vercel.app/assets/film-16x9-1440-BNkQhWPa.webp","contentUrl":"https://tru-linq.vercel.app/assets/film-16x9-DG0PGz5i.mp4","uploadDate":"2026-09-30","duration":"PT30S","inLanguage":"en-US","publisher":{"@id":"https://tru-linq.vercel.app/#organization"}}]}</script>
+</head>
+<body>
+  <!-- Brand definitions shared by every page: the Trulinq mark (traced from the product logo) and the seal's gradients. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="tq-mark-t" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FCFCFC"/><stop offset="1" stop-color="#C6C6C6"/></linearGradient>
+    <linearGradient id="tq-mark-d" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0080FF"/><stop offset="1" stop-color="#003CAC"/></linearGradient>
+    <radialGradient id="tq-seal-face" cx="38%" cy="30%" r="85%"><stop offset="0" stop-color="#1A2E4C"/><stop offset=".55" stop-color="#06132A"/><stop offset="1" stop-color="#020511"/></radialGradient>
+    <linearGradient id="tq-seal-rim" x1="20%" y1="0%" x2="80%" y2="100%"><stop offset="0" stop-color="#77D9FF"/><stop offset=".5" stop-color="#007DF3"/><stop offset="1" stop-color="#4FC1FF"/></linearGradient>
+    <linearGradient id="tq-mark-t-dark" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color: var(--mark-t-1, #1B2740)"/><stop offset="1" style="stop-color: var(--mark-t-2, #0C1526)"/></linearGradient>
+    <symbol id="tq-mark" viewBox="0 0 1080 1080">
+      <path fill="url(#tq-mark-t)" d="M28 139H775L654 289H406V938H271V289H28Z"/>
+      <path fill="url(#tq-mark-d)" fill-rule="evenodd" d="M473 362H600V487H668V362H763A288 288 0 0 1 763 938H473ZM600 487H763A163 163 0 0 1 763 813H600Z"/>
+    </symbol>
+    <!-- The same mark for the page's own surfaces: the T is navy on paper and silver at night, the D stays the brand blue -->
+    <symbol id="tq-mark-dark" viewBox="0 0 1080 1080">
+      <path fill="url(#tq-mark-t-dark)" d="M28 139H775L654 289H406V938H271V289H28Z"/>
+      <path fill="url(#tq-mark-d)" fill-rule="evenodd" d="M473 362H600V487H668V362H763A288 288 0 0 1 763 938H473ZM600 487H763A163 163 0 0 1 763 813H600Z"/>
+    </symbol>
+    <!-- The wordmark, outlined from Lexend 500 at 29px (tracking -0.045em), so it never waits for a font. -->
+    <g id="tq-word"><path id="tq-ch-0" d="M58.56 29L54.79 29L54.79 12.18L48.99 12.18L48.99 8.7L64.53 8.7L64.53 12.18L58.56 12.18L58.56 29Z"/><path id="tq-ch-1" d="M68.16 29L64.56 29L64.56 13.72L68.07 13.72L68.13 18.59L67.63 17.49Q67.95 16.33 68.73 15.4Q69.52 14.47 70.55 13.93Q71.58 13.4 72.71 13.4L72.71 13.4Q73.2 13.4 73.65 13.48Q74.1 13.57 74.39 13.69L74.39 13.69L73.43 17.6Q73.11 17.43 72.65 17.31Q72.19 17.2 71.72 17.2L71.72 17.2Q71 17.2 70.34 17.47Q69.69 17.75 69.2 18.24Q68.71 18.73 68.43 19.39Q68.16 20.04 68.16 20.85L68.16 20.85L68.16 29Z"/><path id="tq-ch-2" d="M80.77 29.29L80.77 29.29Q79.12 29.29 77.9 28.55Q76.68 27.81 76.04 26.43Q75.41 25.06 75.41 23.14L75.41 23.14L75.41 13.72L78.97 13.72L78.97 22.39Q78.97 23.61 79.35 24.46Q79.73 25.32 80.45 25.78Q81.18 26.25 82.19 26.25L82.19 26.25Q82.94 26.25 83.57 26Q84.19 25.75 84.66 25.3Q85.12 24.85 85.38 24.23Q85.64 23.61 85.64 22.88L85.64 22.88L85.64 13.72L89.21 13.72L89.21 29L85.73 29L85.67 25.81L86.31 25.46Q85.96 26.56 85.13 27.42Q84.31 28.27 83.18 28.78Q82.05 29.29 80.77 29.29Z"/><path id="tq-ch-3" d="M95.7 29L92.11 29L92.11 7.54L95.7 7.54L95.7 29Z"/><path id="tq-ch-4" d="M102.58 29L99.01 29L99.01 13.72L102.58 13.72L102.58 29ZM100.75 10.47L100.75 10.47Q99.68 10.47 99.08 9.93Q98.49 9.4 98.49 8.41L98.49 8.41Q98.49 7.48 99.1 6.9Q99.71 6.32 100.75 6.32L100.75 6.32Q101.85 6.32 102.45 6.86Q103.04 7.39 103.04 8.41L103.04 8.41Q103.04 9.31 102.43 9.89Q101.82 10.47 100.75 10.47Z"/><path id="tq-ch-5" d="M105.8 29L105.8 29L105.8 13.72L109.28 13.72L109.33 16.85L108.67 17.2Q108.96 16.15 109.8 15.3Q110.64 14.44 111.8 13.92Q112.96 13.4 114.18 13.4L114.18 13.4Q115.92 13.4 117.09 14.09Q118.27 14.79 118.86 16.18Q119.46 17.57 119.46 19.66L119.46 19.66L119.46 29L115.89 29L115.89 19.92Q115.89 18.76 115.57 17.99Q115.25 17.23 114.58 16.86Q113.92 16.5 112.96 16.53L112.96 16.53Q112.18 16.53 111.52 16.78Q110.87 17.02 110.39 17.47Q109.91 17.92 109.64 18.5Q109.36 19.08 109.36 19.78L109.36 19.78L109.36 29L107.59 29Q107.07 29 106.62 29Q106.17 29 105.8 29Z"/><path id="tq-ch-6" d="M136.54 35.38L132.97 35.38L132.97 25.35L133.69 25.43Q133.67 26.13 133.19 26.81Q132.71 27.49 131.94 28.06Q131.17 28.62 130.23 28.96Q129.29 29.29 128.27 29.29L128.27 29.29Q126.24 29.29 124.63 28.26Q123.02 27.23 122.09 25.43Q121.17 23.63 121.17 21.34L121.17 21.34Q121.17 19.02 122.08 17.24Q122.99 15.46 124.57 14.43Q126.15 13.4 128.18 13.4L128.18 13.4Q129.29 13.4 130.3 13.75Q131.32 14.09 132.13 14.67Q132.94 15.25 133.42 15.98Q133.9 16.7 133.93 17.46L133.93 17.46L133 17.55L133.06 13.69L136.54 13.69L136.54 35.38ZM128.85 26.13L128.85 26.13Q130.1 26.13 131.06 25.52Q132.01 24.91 132.55 23.84Q133.09 22.77 133.09 21.34L133.09 21.34Q133.09 19.92 132.55 18.84Q132.01 17.75 131.06 17.14Q130.1 16.53 128.85 16.53L128.85 16.53Q127.6 16.53 126.65 17.15Q125.69 17.78 125.15 18.86Q124.62 19.95 124.62 21.34L124.62 21.34Q124.62 22.74 125.15 23.82Q125.69 24.91 126.65 25.52Q127.6 26.13 128.85 26.13Z"/></g>
+  </defs>
+</svg>
+<!-- The loader, as on trulinqid.com: a navy panel, a breathing glow, the mark, "Welcome to" and "Trulinq." It plays once per
+     browser tab (partials/head.html decides before the first paint) and times itself in CSS; src/js/main.js removes it
+     when it has faded. The words are outlined from Inter and Inter Tight, the faces the original uses, so nothing waits
+     for a font. -->
+<div class="intro" aria-hidden="true" data-intro>
+  <div class="intro__glow"></div>
+  <svg class="intro__mark" viewBox="0 0 1080 1080"><use href="#tq-mark" width="1080" height="1080"/></svg>
+  <svg class="intro__welcome" viewBox="0 0 130.113 16"><path d="M3.984 12.365L2.684 12.365L0.305 3.635L1.441 3.635L2.824 8.99Q2.936 9.418 3.035 9.86Q3.135 10.303 3.229 10.757Q3.322 11.211 3.404 11.691L3.404 11.691L3.27 11.691Q3.357 11.211 3.451 10.757Q3.545 10.303 3.65 9.86Q3.756 9.418 3.867 8.99L3.867 8.99L5.279 3.635L6.545 3.635L7.945 8.99Q8.063 9.418 8.165 9.86Q8.268 10.303 8.367 10.757Q8.467 11.211 8.555 11.691L8.555 11.691L8.402 11.691Q8.49 11.211 8.584 10.757Q8.678 10.303 8.783 9.86Q8.889 9.418 8.994 8.99L8.994 8.99L10.371 3.635L11.52 3.635L9.129 12.365L7.834 12.365L6.334 6.834Q6.188 6.295 6.053 5.659Q5.918 5.023 5.789 4.191L5.789 4.191L6.023 4.191Q5.895 4.977 5.771 5.595Q5.648 6.213 5.479 6.834L5.479 6.834L3.984 12.365ZM23.052 12.365L17.679 12.365L17.679 3.635L22.999 3.635L22.999 4.619L18.792 4.619L18.792 7.467L22.712 7.467L22.712 8.451L18.792 8.451L18.792 11.381L23.052 11.381L23.052 12.365ZM34.848 12.365L29.692 12.365L29.692 3.635L30.805 3.635L30.805 11.381L34.848 11.381L34.848 12.365ZM44.81 12.482L44.81 12.482Q43.691 12.482 42.815 11.94Q41.939 11.398 41.438 10.394Q40.937 9.389 40.937 8.006L40.937 8.006Q40.937 6.617 41.438 5.612Q41.939 4.607 42.815 4.063Q43.691 3.518 44.81 3.518L44.81 3.518Q45.472 3.518 46.061 3.711Q46.65 3.904 47.119 4.276Q47.588 4.648 47.901 5.179Q48.214 5.709 48.332 6.383L48.332 6.383L47.218 6.383Q47.125 5.932 46.899 5.592Q46.673 5.252 46.348 5.018Q46.023 4.783 45.63 4.666Q45.238 4.549 44.81 4.549L44.81 4.549Q44.025 4.549 43.392 4.947Q42.759 5.346 42.39 6.116Q42.021 6.887 42.021 8.006L42.021 8.006Q42.021 9.119 42.393 9.89Q42.765 10.66 43.398 11.056Q44.031 11.451 44.81 11.451L44.81 11.451Q45.238 11.451 45.63 11.331Q46.023 11.211 46.348 10.979Q46.673 10.748 46.899 10.405Q47.125 10.063 47.218 9.617L47.218 9.617L48.332 9.617Q48.22 10.285 47.907 10.813Q47.593 11.34 47.125 11.715Q46.656 12.09 46.067 12.286Q45.478 12.482 44.81 12.482ZM58.382 12.482L58.382 12.482Q57.263 12.482 56.387 11.94Q55.511 11.398 55.007 10.394Q54.503 9.389 54.503 8.006L54.503 8.006Q54.503 6.617 55.007 5.612Q55.511 4.607 56.387 4.063Q57.263 3.518 58.382 3.518L58.382 3.518Q59.501 3.518 60.374 4.063Q61.247 4.607 61.748 5.612Q62.249 6.617 62.249 8.006L62.249 8.006Q62.249 9.389 61.748 10.394Q61.247 11.398 60.374 11.94Q59.501 12.482 58.382 12.482ZM58.382 11.451L58.382 11.451Q59.161 11.451 59.791 11.056Q60.421 10.66 60.793 9.89Q61.165 9.119 61.165 8.006L61.165 8.006Q61.165 6.881 60.793 6.11Q60.421 5.34 59.791 4.944Q59.161 4.549 58.382 4.549L58.382 4.549Q57.596 4.549 56.964 4.947Q56.331 5.346 55.959 6.116Q55.587 6.887 55.587 8.006L55.587 8.006Q55.587 9.119 55.959 9.887Q56.331 10.654 56.964 11.053Q57.596 11.451 58.382 11.451ZM69.879 12.365L68.818 12.365L68.818 3.635L70.4 3.635L72.551 9.143Q72.627 9.336 72.724 9.626Q72.82 9.916 72.929 10.256Q73.037 10.596 73.137 10.933Q73.236 11.27 73.313 11.557L73.313 11.557L73.066 11.557Q73.148 11.287 73.248 10.956Q73.348 10.625 73.456 10.282Q73.564 9.939 73.664 9.641Q73.764 9.342 73.84 9.143L73.84 9.143L75.961 3.635L77.549 3.635L77.549 12.365L76.453 12.365L76.453 7.379Q76.453 7.109 76.456 6.764Q76.459 6.418 76.468 6.037Q76.477 5.656 76.485 5.264Q76.494 4.871 76.5 4.502L76.5 4.502L76.594 4.502Q76.471 4.906 76.333 5.325Q76.195 5.744 76.063 6.134Q75.932 6.523 75.814 6.846Q75.697 7.168 75.615 7.379L75.615 7.379L73.664 12.365L72.697 12.365L70.717 7.379Q70.635 7.174 70.523 6.86Q70.412 6.547 70.28 6.163Q70.148 5.779 70.008 5.354Q69.867 4.93 69.721 4.502L69.721 4.502L69.826 4.502Q69.838 4.83 69.847 5.211Q69.855 5.592 69.861 5.981Q69.867 6.371 69.873 6.731Q69.879 7.092 69.879 7.379L69.879 7.379L69.879 12.365ZM89.831 12.365L84.458 12.365L84.458 3.635L89.779 3.635L89.779 4.619L85.571 4.619L85.571 7.467L89.491 7.467L89.491 8.451L85.571 8.451L85.571 11.381L89.831 11.381L89.831 12.365ZM106.914 4.619L104.166 4.619L104.166 3.635L110.763 3.635L110.763 4.619L108.027 4.619L108.027 12.365L106.914 12.365L106.914 4.619ZM120.731 12.482L120.731 12.482Q119.612 12.482 118.736 11.94Q117.86 11.398 117.356 10.394Q116.852 9.389 116.852 8.006L116.852 8.006Q116.852 6.617 117.356 5.612Q117.86 4.607 118.736 4.063Q119.612 3.518 120.731 3.518L120.731 3.518Q121.85 3.518 122.723 4.063Q123.596 4.607 124.097 5.612Q124.598 6.617 124.598 8.006L124.598 8.006Q124.598 9.389 124.097 10.394Q123.596 11.398 122.723 11.94Q121.85 12.482 120.731 12.482ZM120.731 11.451L120.731 11.451Q121.511 11.451 122.14 11.056Q122.77 10.66 123.142 9.89Q123.514 9.119 123.514 8.006L123.514 8.006Q123.514 6.881 123.142 6.11Q122.77 5.34 122.14 4.944Q121.511 4.549 120.731 4.549L120.731 4.549Q119.946 4.549 119.313 4.947Q118.68 5.346 118.308 6.116Q117.936 6.887 117.936 8.006L117.936 8.006Q117.936 9.119 118.308 9.887Q118.68 10.654 119.313 11.053Q119.946 11.451 120.731 11.451Z"/></svg>
+  <svg class="intro__name" viewBox="0 0 153.621 48"><path d="M11.813 11.836L1.008 11.836L1.008 6.539L28.852 6.539L28.852 11.836L18.07 11.836L18.07 41.461L11.813 41.461L11.813 11.836ZM36.857 41.461L30.693 41.461L30.693 15.258L36.669 15.258L36.669 19.664L36.951 19.664Q37.654 17.367 39.412 16.137Q41.169 14.906 43.419 14.906L43.419 14.906Q43.912 14.906 44.556 14.953Q45.201 15 45.623 15.07L45.623 15.07L45.623 20.742Q45.224 20.602 44.38 20.508Q43.537 20.414 42.763 20.414L42.763 20.414Q41.052 20.414 39.716 21.141Q38.38 21.867 37.619 23.133Q36.857 24.398 36.857 26.086L36.857 26.086L36.857 41.461ZM63.19 30.469L63.19 30.469L63.19 15.258L69.354 15.258L69.354 41.461L63.378 41.461L63.378 36.797L63.097 36.797Q62.206 39 60.19 40.406Q58.175 41.813 55.222 41.789L55.222 41.789Q52.643 41.789 50.686 40.652Q48.729 39.516 47.616 37.301Q46.503 35.086 46.503 31.945L46.503 31.945L46.503 15.258L52.667 15.258L52.667 31.008Q52.667 33.469 54.038 34.945Q55.409 36.422 57.636 36.398L57.636 36.398Q58.995 36.398 60.272 35.742Q61.55 35.086 62.37 33.773Q63.19 32.461 63.19 30.469ZM72.461 6.539L78.625 6.539L78.625 41.461L72.461 41.461L72.461 6.539ZM87.896 41.461L81.732 41.461L81.732 15.258L87.896 15.258L87.896 41.461ZM84.826 11.578L84.826 11.578Q83.349 11.578 82.295 10.594Q81.24 9.609 81.24 8.227L81.24 8.227Q81.24 6.82 82.295 5.836Q83.349 4.852 84.826 4.852L84.826 4.852Q86.279 4.852 87.334 5.836Q88.388 6.82 88.388 8.203L88.388 8.203Q88.388 9.609 87.334 10.594Q86.279 11.578 84.826 11.578ZM97.167 26.133L97.167 26.133L97.167 41.461L91.003 41.461L91.003 15.258L97.05 15.258L97.05 19.734L97.355 19.734Q98.245 17.531 100.155 16.23Q102.066 14.93 105.019 14.93L105.019 14.93Q107.737 14.93 109.753 16.078Q111.769 17.227 112.882 19.441Q113.995 21.656 113.995 24.797L113.995 24.797L113.995 41.461L107.831 41.461L107.831 25.758Q107.831 23.133 106.472 21.645Q105.112 20.156 102.722 20.156L102.722 20.156Q101.105 20.156 99.851 20.859Q98.597 21.563 97.882 22.887Q97.167 24.211 97.167 26.133ZM140.657 51.258L134.516 51.258L134.516 37.313L134.258 37.313Q133.766 38.273 132.876 39.34Q131.985 40.406 130.508 41.168Q129.032 41.93 126.758 41.93L126.758 41.93Q123.688 41.93 121.239 40.348Q118.79 38.766 117.383 35.742Q115.977 32.719 115.977 28.406L115.977 28.406Q115.977 24.023 117.419 21.023Q118.86 18.023 121.297 16.477Q123.735 14.93 126.758 14.93L126.758 14.93Q129.079 14.93 130.555 15.703Q132.032 16.477 132.911 17.566Q133.79 18.656 134.258 19.594L134.258 19.594L134.633 19.594L134.633 15.258L140.657 15.258L140.657 51.258ZM128.469 36.867L128.469 36.867Q130.438 36.867 131.809 35.801Q133.18 34.734 133.907 32.824Q134.633 30.914 134.633 28.383L134.633 28.383Q134.633 25.828 133.919 23.941Q133.204 22.055 131.833 21.023Q130.462 19.992 128.469 19.992L128.469 19.992Q126.43 19.992 125.047 21.07Q123.665 22.148 122.973 24.047Q122.282 25.945 122.282 28.383L122.282 28.383Q122.282 30.82 122.985 32.742Q123.688 34.664 125.059 35.766Q126.43 36.867 128.469 36.867Z"/><path class="intro__dot" d="M148.287 41.859L148.287 41.859Q146.693 41.859 145.604 40.77Q144.514 39.68 144.514 38.109L144.514 38.109Q144.514 36.539 145.604 35.449Q146.693 34.359 148.287 34.359L148.287 34.359Q149.881 34.359 150.971 35.449Q152.061 36.539 152.061 38.109L152.061 38.109Q152.061 39.68 150.971 40.77Q149.881 41.859 148.287 41.859Z"/></svg>
+</div>
+<a class="skip" href="#main">Skip to content</a>
+<!-- The header is part of the page: it scrolls away with everything else. -->
+<header class="nav">
+  <div class="nav__bar">
+    <a class="nav__logo" href="/TruLinq/" aria-label="Trulinq, home">
+      <svg class="wordmark" viewBox="0 0 176 40" aria-hidden="true">
+        <use href="#tq-mark-dark" x="1" y="1" width="38" height="38"/>
+        <use href="#tq-word" class="wordmark__word"/>
+      </svg>
+    </a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="/TruLinq/directory/" data-nav-link>Directory</a>
+      <a href="/TruLinq/match/" data-nav-link>Match</a>
+      <a href="/TruLinq/rooms/" data-nav-link>Rooms</a>
+      <a href="/TruLinq/feed/" data-nav-link>Feed</a>
+      <a href="/TruLinq/pricing/" data-nav-link>Pricing</a>
+      <a href="/TruLinq/trust/" data-nav-link>Trust</a>
+      <a href="/TruLinq/blog/" data-nav-link>Blog</a>
+    </nav>
+    <div class="nav__actions">
+      <!-- Light or dark: a switch, remembered on this device. A pill with a sliding knob on wide screens, a round button
+           beside the menu on small ones; the icon turns from sun to moon. src/js/main.js runs it. -->
+      <button class="theme" type="button" role="switch" aria-checked="false" aria-label="Dark mode" title="Switch to dark mode" data-theme-toggle>
+        <span class="theme__track" aria-hidden="true">
+          <svg class="theme__hint theme__hint--sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.8v1.8M12 19.4v1.8M5.5 5.5l1.3 1.3M17.2 17.2l1.3 1.3M2.8 12h1.8M19.4 12h1.8M5.5 18.5l1.3-1.3M17.2 6.8l1.3-1.3"/></svg>
+          <svg class="theme__hint theme__hint--moon" viewBox="0 0 24 24"><path d="M19.6 14.9A8 8 0 0 1 9.1 4.4a8 8 0 1 0 10.5 10.5Z"/></svg>
+          <span class="theme__knob">
+            <svg class="theme__icon" viewBox="0 0 24 24">
+              <mask id="theme-cut"><rect width="24" height="24" fill="#fff"/><circle class="theme__cut" cx="17.6" cy="6.4" r="6.3" fill="#000"/></mask>
+              <circle class="theme__core" cx="12" cy="12" r="8.4" mask="url(#theme-cut)"/>
+              <path class="theme__rays" d="M12 1.6v2.1M12 20.3v2.1M4.65 4.65l1.5 1.5M17.85 17.85l1.5 1.5M1.6 12h2.1M20.3 12h2.1M4.65 19.35l1.5-1.5M17.85 6.15l1.5-1.5"/>
+            </svg>
+          </span>
+        </span>
+      </button>
+      <a class="nav__signin" href="/TruLinq/auth/" data-account-link>Sign in</a>
+      <a class="btn btn--primary btn--sm" href="/TruLinq/verify/"><span>Get verified</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
+      <button class="nav__burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu" data-burger>
+        <span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+<div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Menu" data-menu hidden>
+  <div class="menu__sheet">
+    <div class="menu__head">
+      <a class="nav__logo" href="/TruLinq/" aria-label="Trulinq, home">
+        <svg class="wordmark" viewBox="0 0 176 40" aria-hidden="true">
+          <use href="#tq-mark-dark" x="1" y="1" width="38" height="38"/>
+          <use href="#tq-word" class="wordmark__word"/>
+        </svg>
+      </a>
+      <button class="menu__close" type="button" aria-label="Close menu" data-menu-close></button>
+    </div>
+    <nav class="menu__links" aria-label="Menu">
+      <a href="/TruLinq/directory/" data-nav-link><span>Directory</span><em>Every member, checked</em></a>
+      <a href="/TruLinq/match/" data-nav-link><span>Match</span><em>Offers meet needs</em></a>
+      <a href="/TruLinq/rooms/" data-nav-link><span>Rooms</span><em>Verified voices only</em></a>
+      <a href="/TruLinq/feed/" data-nav-link><span>Feed</span><em>Newest first, no ads</em></a>
+      <a href="/TruLinq/pricing/" data-nav-link><span>Pricing</span><em>$19 a month, billed yearly</em></a>
+      <a href="/TruLinq/trust/" data-nav-link><span>Trust Centre</span><em>What the stamp means</em></a>
+      <a href="/TruLinq/blog/" data-nav-link><span>Blog</span><em>Guides to spotting fakes</em></a>
+      <a href="/TruLinq/contact/" data-nav-link><span>Contact</span><em>A person replies</em></a>
+    </nav>
+    <div class="menu__foot">
+      <a class="btn btn--primary btn--lg" href="/TruLinq/verify/"><span>Get verified</span></a>
+      <a class="btn btn--tint btn--lg" href="/TruLinq/auth/" data-account-link>Sign in</a>
+    </div>
+  </div>
+</div>
+
+  <main id="main" class="page">
+
+    <!-- ── Hero: the word "real", and the stamp that makes it true ─────────── -->
+    <section class="panel panel--ice hero" aria-labelledby="hero-title">
+      <canvas class="hero__wash" data-hero-wash aria-hidden="true"></canvas>
+      <div class="hero__inner">
+        <h1 id="hero-title" class="hero__title display"><span class="sr-only">Everyone here is real.</span><span class="hero__split" aria-hidden="true"><span class="w"><span class="c" style="--i:0;--k:-.015em">E</span><span class="c" style="--i:1;--k:-.015em">v</span><span class="c" style="--i:2">e</span><span class="c" style="--i:3">r</span><span class="c" style="--i:4;--k:-.01em">y</span><span class="c" style="--i:5">o</span><span class="c" style="--i:6">n</span><span class="c" style="--i:7">e</span></span> <span class="w"><span class="c" style="--i:8">h</span><span class="c" style="--i:9">e</span><span class="c" style="--i:10;--k:-.022em">r</span><span class="c" style="--i:11">e</span></span> <span class="w"><span class="c" style="--i:12">i</span><span class="c" style="--i:13">s</span></span> <span class="w hl"><span class="c" style="--i:14;--k:-.022em">r</span><span class="c" style="--i:15">e</span><span class="c" style="--i:16">a</span><span class="c" style="--i:17">l</span></span><span class="w"><span class="c" style="--i:18">.</span></span></span></h1>
+        <div class="hero__copy">
+          <p class="lead hero__lead">A trusted network for entrepreneurs, built around verified identities and verified businesses. One stamp, checked by a person, before anyone gets to pitch you.</p>
+          <div class="btn-row hero__cta">
+            <a class="btn btn--primary btn--lg" href="/TruLinq/verify/"><span>Get verified</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
+            <a class="arrow-link arrow-link--lg" href="#how"><span>How it works</span><i aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M6 3.5l4.5 4.5L6 12.5"/></svg></i></a>
+          </div>
+          <p class="hero__fine">Invite only · From $19 a month · <span class="hero__ask">No code? <a class="link" href="/TruLinq/contact/?topic=invite">Request one</a></span></p>
+        </div>
+        <figure class="hero__stage" data-hero-stage>
+          <div class="hero__desk" aria-hidden="true">
+            <div class="hero__card" data-hero-card></div>
+            <canvas class="hero__stamp" data-hero-stamp></canvas>
+          </div>
+          <figcaption class="hero__caption" data-hero-caption></figcaption>
+        </figure>
+      </div>
+      <div class="hero__ledger">
+        <ul class="hero__stats" aria-label="The network in numbers">
+          <li><b data-stat="people">11</b><span data-stat-label="people">people on Trulinq</span></li>
+          <li><b data-stat="verified">11</b><span data-stat-label="verified">verified profiles</span></li>
+          <li><b data-stat="posts">0</b><span data-stat-label="posts">posts shared</span></li>
+          <li><b data-stat="revoked">0</b><span data-stat-label="revoked">stamps revoked</span></li>
+        </ul>
+        <p class="hero__motto">We never faked momentum. <em>We built it.</em></p>
+      </div>
+    </section>
+
+    <!-- ── For founders in: one sentence, every industry a way in ─────────── -->
+    <section class="panel panel--paper who" aria-labelledby="who-title">
+      <div class="who__inner">
+        <h2 id="who-title" class="who__title">For founders in</h2>
+        <p class="who__line" data-who><a href="/TruLinq/directory/?industry=Consulting" data-industry-tag="Consulting">consulting</a>, <a href="/TruLinq/directory/?industry=Direct%20sales%2Fservice" data-industry-tag="Direct sales/service">direct sales &amp; service</a>, <a href="/TruLinq/directory/?industry=Energy" data-industry-tag="Energy">energy</a>, <a href="/TruLinq/directory/?industry=Marketing" data-industry-tag="Marketing">marketing</a>, <a href="/TruLinq/directory/?industry=Real%20Estate" data-industry-tag="Real Estate">real estate</a>, <a href="/TruLinq/directory/?industry=Restaurant" data-industry-tag="Restaurant">restaurants</a> and <a href="/TruLinq/directory/?industry=Technology" data-industry-tag="Technology">technology</a>. <a class="who__any" href="/TruLinq/verify/">And any other real business.</a></p>
+      </div>
+    </section>
+
+    <!-- ── The short version: Trulinq on film, played only when asked ─────── -->
+    <section class="panel panel--ice film" id="film" aria-labelledby="film-title">
+      <div class="film__inner">
+        <h2 id="film-title" class="film__title display">The short <span class="hl">version.</span></h2>
+        <figure class="film__stage" data-film>
+          <div class="film__frame">
+            <video class="film__video" controls playsinline preload="none" controlslist="nodownload noplaybackrate noremoteplayback" disablepictureinpicture disableremoteplayback aria-label="Trulinq in thirty seconds" data-film-video>
+              <source src="/TruLinq/assets/film-4x5-DuTNyBV-.mp4" type="video/mp4" media="(max-width: 767px)">
+              <source src="/TruLinq/assets/film-16x9-DG0PGz5i.mp4" type="video/mp4">
+            </video>
+            <picture class="film__poster" data-film-poster>
+              <source media="(max-width: 767px)" srcset="/TruLinq/assets/film-4x5-640-BejE0fMB.webp 640w, /TruLinq/assets/film-4x5-864-BO-8Ndgs.webp 864w" sizes="calc(100vw - 40px)" width="864" height="1080">
+              <img src="/TruLinq/assets/film-16x9-1440-BNkQhWPa.webp" srcset="/TruLinq/assets/film-16x9-960-uFDgv36O.webp 960w, /TruLinq/assets/film-16x9-1440-BNkQhWPa.webp 1440w, /TruLinq/assets/film-16x9-1920-CJWdwOBk.webp 1920w" sizes="(min-width: 1440px) 88vw, calc(100vw - 64px)" width="1920" height="1080" alt="" loading="lazy" decoding="async" data-fade>
+            </picture>
+          </div>
+          <button class="disc film__play" type="button" aria-label="Play the film, thirty seconds, with sound" data-film-play>
+            <svg viewBox="0 0 120 120" aria-hidden="true"><defs><path id="film-ring" d="M60,60 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0"/></defs><text><textPath href="#film-ring" textLength="276" lengthAdjust="spacing">PLAY THE FILM · THIRTY SECONDS · SOUND ON ·</textPath></text></svg>
+            <span class="film__glyph" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M5.6 3.4v9.2l7.2-4.6z"/></svg></span>
+          </button>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ── One stamp. Zero doubt. ─────────────────────────────── -->
+    <section class="panel panel--navy doubt" id="stamp" aria-labelledby="doubt-title">
+      <div class="doubt__inner">
+        <div class="doubt__type">
+          <h2 id="doubt-title" class="doubt__title display"><span class="doubt__one">One stamp.</span> <span class="doubt__zero">Zero doubt.</span></h2>
+          <p class="doubt__lead">Fake buyers, fake suppliers, fake “investors”. Every one of them needs a profile nobody checked. Trulinq removes the profile nobody checked.</p>
+        </div>
+        <aside class="doubt__card card card--blue" aria-labelledby="doubt-card-title">
+          <span class="seal seal--lg" role="img" aria-label="The Trulinq Verified seal"></span>
+          <h3 id="doubt-card-title">What the stamp says</h3>
+          <p>The Trulinq Verified stamp signals that an identity or business has completed our verification process. One clear standard, so you know who you’re dealing with.</p>
+          <a class="arrow-link" href="/TruLinq/trust/"><span>Read the Trust Centre</span><i aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M6 3.5l4.5 4.5L6 12.5"/></svg></i></a>
+        </aside>
+        <div class="doubt__pillars">
+          <article class="doubt__pillar">
+            <div class="doubt__pillar-text">
+              <h3>Identity</h3>
+              <p>A government ID is matched to the person behind the account.</p>
+            </div>
+            <figure class="artifact" aria-hidden="true">
+              <div class="passport">
+                <div class="passport__top"><span>Passport</span><span>Data page</span></div>
+                <div class="passport__body">
+                  <span class="silhouette"></span>
+                  <span class="passport__lines"><span class="redact" style="--w:78%"></span><span class="redact" style="--w:52%"></span><span class="redact" style="--w:64%"></span><span class="redact" style="--w:40%"></span></span>
+                </div>
+                <div class="passport__mrz"><span>P&lt;USA<span class="redact redact--mrz" style="--w:9ch"></span>&lt;&lt;<span class="redact redact--mrz" style="--w:6ch"></span>&lt;&lt;&lt;&lt;&lt;</span><span><span class="redact redact--mrz" style="--w:9ch"></span>&lt;4USA<span class="redact redact--mrz" style="--w:7ch"></span>&lt;&lt;&lt;&lt;</span></div>
+              </div>
+              <figcaption class="artifact__cap"><i class="tick"></i>Matched to the account holder</figcaption>
+            </figure>
+          </article>
+          <article class="doubt__pillar">
+            <div class="doubt__pillar-text">
+              <h3>Business</h3>
+              <p>Registration numbers are checked against public business registries.</p>
+            </div>
+            <figure class="artifact" aria-hidden="true">
+              <div class="extract">
+                <div class="extract__head"><span>Business registry</span><span>Public record</span></div>
+                <dl class="extract__rows">
+                  <div><dt>Entity</dt><dd><span class="redact" style="--w:8ch"></span> LLC</dd></div>
+                  <div><dt>Registration no.</dt><dd><span class="redact" style="--w:9ch"></span></dd></div>
+                  <div><dt>Standing</dt><dd>Active</dd></div>
+                  <div><dt>Registered agent</dt><dd><span class="redact" style="--w:7ch"></span></dd></div>
+                </dl>
+              </div>
+              <figcaption class="artifact__cap"><i class="tick"></i>Checked against the public registry</figcaption>
+            </figure>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── How it works: one application, moving across the desk ─────────── -->
+    <section class="panel panel--paper how" id="how" aria-labelledby="how-title" data-how>
+      <div class="how__inner">
+        <div class="how__head">
+          <h2 id="how-title" class="display">Know who’s behind <span class="hl">the profile.</span></h2>
+          <p class="lead how__lead">Three checks, in the order a reviewer runs them. The stamp is issued only when all three pass.</p>
+        </div>
+        <ol class="how__steps" data-steps>
+          <li class="how__step" data-step="0">
+            <div class="how__text"><h3>Prove it’s you</h3><p>Government-issued ID and identity verification help confirm that the person behind the profile is real.</p></div>
+            <div class="how__scene" aria-hidden="true">
+              <p class="scribble scribble--label how__label"><span class="scribble__text">A sample application, redacted</span><svg class="scribble__pen" style="--pen-w:3.625rem" viewBox="0 0 80 48" aria-hidden="true"><path pathLength="1" d="M6 6c16 2 36 12 52 32"/><path pathLength="1" d="M45 36l13 3 0-13"/></svg></p>
+              <div class="iddoc">
+                <div class="iddoc__head"><span class="tag">Government ID</span><span class="redact" style="--w:9ch"></span></div>
+                <div class="iddoc__body">
+                  <span class="silhouette"></span>
+                  <dl class="iddoc__fields">
+                    <div><dt>Name</dt><dd><span class="redact" style="--w:12ch"></span></dd></div>
+                    <div><dt>Date of birth</dt><dd><span class="redact" style="--w:8ch"></span></dd></div>
+                    <div><dt>Document no.</dt><dd><span class="redact" style="--w:10ch"></span></dd></div>
+                  </dl>
+                </div>
+                <span class="iddoc__sweep" data-sweep></span>
+                <span class="iddoc__match" data-match><i class="tick"></i>Identity matched</span>
+              </div>
+            </div>
+          </li>
+          <li class="how__step" data-step="1">
+            <div class="how__text"><h3>Verify the business</h3><p>Business information is checked against trusted data sources to confirm the company and its connection to the person claiming it.</p></div>
+            <div class="how__scene" aria-hidden="true">
+              <div class="registry">
+                <div class="registry__head"><span class="tag">Business registry</span><span>Public record</span></div>
+                <ul class="registry__rows">
+                  <li data-row><span>Entity name</span><b><span class="redact" style="--w:9ch"></span> LLC</b><i class="tick"></i></li>
+                  <li data-row><span>Registration no.</span><b><span class="redact" style="--w:9ch"></span></b><i class="tick"></i></li>
+                  <li data-row><span>Standing</span><b>Active</b><i class="tick"></i></li>
+                  <li data-row><span>Domain</span><b><span class="redact" style="--w:7ch"></span>.com</b><i class="tick"></i></li>
+                  <li data-row><span>Human review</span><b>Signed off</b><i class="tick"></i></li>
+                </ul>
+              </div>
+            </div>
+          </li>
+          <li class="how__step" data-step="2">
+            <div class="how__text"><h3>Earn the stamp</h3><p>Profiles that complete Trulinq’s requirements receive the Trulinq Verified™ stamp, a clear signal that verification has been completed.</p></div>
+            <div class="how__scene" aria-hidden="true">
+              <div class="idcard idcard--object idcard--sample" data-how-card>
+                <span class="idcard__photo"><span class="portrait portrait--sample"><span class="silhouette"></span></span><span class="how__ink" data-how-ink></span><span class="seal seal--sm" data-manual data-how-seal></span></span>
+                <span class="idcard__body">
+                  <span class="idcard__name">Your name</span>
+                  <span class="idcard__role">Founder&nbsp;· Your&nbsp;business</span>
+                  <span class="idcard__meta">Your&nbsp;industry · Your&nbsp;city</span>
+                  <span class="idcard__status" data-how-status>Trulinq Verified</span>
+                </span>
+              </div>
+              <div class="how__press" data-how-press><canvas></canvas></div>
+            </div>
+          </li>
+        </ol>
+        <div class="how__cta">
+          <a class="btn btn--primary btn--lg" href="/TruLinq/verify/"><span>Start your application</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
+          <p class="how__cta-note">It takes a few minutes. No invitation code? <a class="link" href="/TruLinq/contact/?topic=invite">Request one</a>.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Real people, real places: the members, pinned where they work ─── -->
+    <section class="world bezel" id="members" aria-labelledby="world-title">
+      <div class="sheet world__sheet">
+        <div class="world__inner">
+          <div class="world__copy">
+            <h2 id="world-title" class="world__title display">Real people.<br><span class="hl">Real places.</span></h2>
+            <p class="lead">Founders, owners and operators, each one checked against a real business. The stamp means the same thing in Hilo as it does in Honolulu or Toronto.</p>
+            <div class="world__list" data-world-cards></div>
+            <a class="btn btn--ink" href="/TruLinq/directory/"><span>Browse the directory</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
+          </div>
+          <figure class="world__globe" data-globe>
+            <div class="world__sphere">
+              <canvas class="world__canvas" data-globe-canvas role="img" aria-label="A globe showing where verified members are based"></canvas>
+              <div class="world__pins" data-globe-pins aria-hidden="true"></div>
+              <svg class="scribble world__arc" viewBox="0 0 100 100" aria-hidden="true"><defs><path id="world-arc" d="M 8.2,34.8 A 44.5,44.5 0 0 1 51.6,5.5"/></defs><text><textPath href="#world-arc">it all started in Hilo</textPath></text></svg>
+            </div>
+            <figcaption class="world__caption" data-globe-caption>Members who list a city, pinned where they work.</figcaption>
+          </figure>
+          <a class="disc world__disc" href="/TruLinq/verify/" aria-label="Get verified. A person reviews your application within 2 business days.">
+        <svg viewBox="0 0 120 120" aria-hidden="true"><defs><path id="disc-ring" d="M60,60 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0"/></defs><text><textPath href="#disc-ring" textLength="276" lengthAdjust="spacing">GET VERIFIED · REVIEWED IN 2 BUSINESS DAYS ·</textPath></text></svg>
+        <span class="disc__arrow" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span>
+      </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── The score ─────────────────────────────────────────── -->
+    <section class="panel panel--mist score" id="score" aria-labelledby="score-title">
+      <div class="score__inner">
+        <div class="score__gauge" data-gauge-mount></div>
+        <div class="score__copy">
+          <h2 id="score-title" class="display">A number you <span class="hl">can’t fake.</span></h2>
+          <p class="lead">Every verified profile carries a 300 to 850 rating built from verification, business details, web presence and standing over time. It moves when the facts move.</p>
+        </div>
+        <div class="score__factors" data-factors-mount></div>
+      </div>
+    </section>
+
+    <!-- ── Features: the tabs on the desk, then what each one does ───────── -->
+    <section class="panel panel--ice feats" id="features" aria-labelledby="feats-title">
+      <div class="feats__inner">
+        <div class="feats__board">
+          <h2 id="feats-title" class="feats__title display"><span class="hl">trulinq</span> features</h2>
+          <ul class="scatter feats__index">
+            <li><a class="chip" href="#feat-feed">Chronological feed</a></li>
+            <li><a class="chip" href="#feat-match">Match</a></li>
+            <li><a class="chip" href="#feat-endorse">Endorsements</a></li>
+            <li><a class="chip" href="#feat-rooms">Rooms</a></li>
+            <li><a class="chip" href="#feat-report">Report &amp; revoke</a></li>
+            <li><a class="chip" href="#feat-renew">Re-verification</a></li>
+            <li><a class="chip" href="#score">Trulinq Score</a></li>
+            <li class="feats__human"><a class="chip chip--blue" href="#how">Human review</a><p class="scribble feats__note" aria-hidden="true"><svg class="scribble__pen" style="--pen-w:2.875rem" viewBox="0 0 80 48"><path pathLength="1" d="M74 42c-16-2-36-12-52-32"/><path pathLength="1" d="M34 10l-13-1 1 13"/></svg><span class="scribble__text">the part we never automate</span></p></li>
+          </ul>
+          <p class="lead feats__lead">A feed without an algorithm, a room without anonymous voices, a match without a catfish. Boring on purpose, because boring is what trust looks like.</p>
+        </div>
+        <div class="bento">
+          <a id="feat-feed" class="bento__card bento__card--feed card" href="/TruLinq/feed/">
+            <div class="bento__ui bento__ui--feed" aria-hidden="true">
+              <span class="feedmock">
+                <span class="feedmock__col">
+                  <span class="mini-post mini-post--new" style="--n:0"><span class="mini-post__avatar" data-tone="1"></span><span class="mini-post__lines"><i style="--w:30%"></i><i style="--w:90%"></i><i style="--w:62%"></i></span><span class="mini-post__side"><span class="mini-post__when"><b>just now</b></span><span class="seal seal--xs"></span></span></span>
+                  <span class="mini-post" style="--n:1"><span class="mini-post__avatar"></span><span class="mini-post__lines"><i style="--w:34%"></i><i style="--w:94%"></i><i style="--w:72%"></i></span><span class="mini-post__side"><span class="mini-post__when mini-post__when--swap"><b>newest</b><b>earlier</b></span><span class="seal seal--xs"></span></span></span>
+                  <span class="mini-post" style="--n:2"><span class="mini-post__avatar" data-tone="3"></span><span class="mini-post__lines"><i style="--w:28%"></i><i style="--w:86%"></i><i style="--w:54%"></i></span><span class="mini-post__side"><span class="mini-post__when"><b>earlier</b></span><span class="seal seal--xs"></span></span></span>
+                  <span class="mini-post" style="--n:3"><span class="mini-post__avatar" data-tone="2"></span><span class="mini-post__lines"><i style="--w:40%"></i><i style="--w:78%"></i><i style="--w:46%"></i></span><span class="mini-post__side"><span class="mini-post__when"><b>earlier</b></span><span class="seal seal--xs"></span></span></span>
+                  <span class="mini-post" style="--n:4"><span class="mini-post__avatar"></span><span class="mini-post__lines"><i style="--w:32%"></i><i style="--w:82%"></i></span><span class="mini-post__side"><span class="mini-post__when"><b>earlier</b></span><span class="seal seal--xs"></span></span></span>
+                </span>
+              </span>
+            </div>
+            <div class="bento__text"><h3>The feed</h3><p>Chronological. Ad-free. No algorithm deciding what you see, just verified founders, newest first.</p></div>
+          </a>
+          <a id="feat-match" class="bento__card bento__card--match card" href="/TruLinq/match/">
+            <div class="bento__ui bento__ui--match" aria-hidden="true">
+              <span class="linq">
+                <span class="linq__field linq__field--offer"><small>They offer</small><span>capital, <mark>distribution</mark>…</span></span>
+                <span class="linq__join"><span class="linq__thread"></span><span class="linq__knot"><i class="tick"></i>Mutual fit</span></span>
+                <span class="linq__field linq__field--need"><small>They’re looking for</small><span><mark>distribution</mark>, a co-founder…</span></span>
+              </span>
+            </div>
+            <div class="bento__text"><h3>Match</h3><p>Say what you offer and what you’re looking for. Mutual fits rise to the top.</p></div>
+          </a>
+          <a id="feat-rooms" class="bento__card bento__card--rooms card" href="/TruLinq/rooms/">
+            <div class="bento__ui bento__ui--rooms" aria-hidden="true"><ul class="room-list" data-room-list></ul></div>
+            <div class="bento__text"><h3>Rooms</h3><p>Topic rooms where every person posting has passed verification. Anyone can read.</p></div>
+          </a>
+          <a id="feat-endorse" class="bento__card bento__card--endorse card card--navy" href="/TruLinq/directory/">
+            <div class="bento__ui bento__ui--endorse" aria-hidden="true">
+              <span class="vouch-mock">
+                <span class="vouch-mock__q">“</span>
+                <span class="vouch-mock__lines"><i style="--w:92%"></i><i style="--w:78%"></i><i style="--w:56%"></i></span>
+                <span class="vouch-mock__by"><span class="vouch-mock__avatar"></span><i style="--w:36%"></i><span class="vouch-mock__seal"><span class="seal seal--sm"></span></span></span>
+              </span>
+            </div>
+            <div class="bento__text"><h3>Endorsements</h3><p>Vouches written by other verified members. One per person, signed with their name, and always public.</p></div>
+          </a>
+          <a id="feat-report" class="bento__card bento__card--report card" href="/TruLinq/trust/#report">
+            <div class="bento__ui bento__ui--report" aria-hidden="true">
+              <span class="revoke"><span class="revoke__seal"><span class="seal seal--md"></span></span><span class="revoke__x"><i></i><i></i></span></span>
+              <span class="revoke__tags"><span class="tag tag--pending">Reported</span><span class="tag tag--danger">Revoked</span></span>
+            </div>
+            <div class="bento__text"><h3>Report &amp; revoke</h3><p>Spot a fake? Report it. A stamp can be revoked at any time.</p></div>
+          </a>
+          <a id="feat-renew" class="bento__card bento__card--renew card card--blue" href="/TruLinq/pricing/">
+            <div class="bento__ui bento__ui--renew" aria-hidden="true"><span class="ring12"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="8"/><circle class="ring12__arc" cx="50" cy="50" r="42" fill="none" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="8"/><g class="ring12__knob"><circle cx="92" cy="50" r="7.5" style="fill: var(--blue-desk, #1766E6)" stroke="#FFFFFF" stroke-width="3"/></g></svg><b>12<small>months</small></b><span class="ring12__check"><i class="tick"></i></span></span></div>
+            <div class="bento__text"><h3>Re-verification</h3><p>Every 12 months we check again. Businesses close; stamps shouldn’t outlive them.</p></div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── The app: your trusted network, always with you (coming soon) ───── -->
+    <section class="panel panel--navy app" id="app" aria-labelledby="app-title">
+      <div class="app__inner">
+        <div class="app__copy">
+          <h2 id="app-title" class="app__title display">Your trusted network, <span class="hl">always with you.</span></h2>
+          <p class="lead app__lead">Meet verified entrepreneurs, view business trust scores and carry your Trulinq identity wherever business happens.</p>
+          <ul class="app__points">
+            <li><span class="app__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg></span><span><b>Verified on the go</b>Your identity and trust score in one place.</span></li>
+            <li><span class="app__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span><b>Members only</b>A private network built around real people.</span></li>
+          </ul>
+          <p class="app__fine">Mobile app coming soon. iPhone 18 Pro Max concept visual. Final app appearance may vary.</p>
+        </div>
+        <figure class="app__stage" data-app>
+          <div class="phone" role="img" aria-label="A concept of the Trulinq app on iPhone: a member’s verified profile and trust score, verified members to discover, the rooms, and your own stamp.">
+            <span class="phone__key phone__key--action"></span><span class="phone__key phone__key--up"></span><span class="phone__key phone__key--down"></span><span class="phone__key phone__key--side"></span><span class="phone__key phone__key--camera"></span>
+            <div class="phone__glass">
+              <div class="phone__screen paper" aria-hidden="true">
+                <span class="phone__island"></span>
+                <div class="phone__status"><span>9:41</span><span class="phone__sys"><svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12"><path d="M8 11.2 5.6 8.8a3.4 3.4 0 0 1 4.8 0z"/><path d="M3.2 6.4a6.8 6.8 0 0 1 9.6 0l-1.3 1.3a5 5 0 0 0-7 0z"/><path d="M.8 4a10.2 10.2 0 0 1 14.4 0l-1.3 1.3a8.4 8.4 0 0 0-11.8 0z"/></svg><svg viewBox="0 0 27 12"><rect x=".5" y=".5" width="23" height="11" rx="3.2" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="20" height="8" rx="2"/><path d="M25 4.2v3.6c.8-.3 1.3-1 1.3-1.8s-.5-1.5-1.3-1.8z" opacity=".45"/></svg></span></div>
+                <div class="phone__bar">
+                  <svg class="wordmark phone__logo" viewBox="0 0 176 40"><use href="#tq-mark-dark" x="1" y="1" width="38" height="38"/><use href="#tq-word" class="wordmark__word"/></svg>
+                  <span class="phone__bell"><svg viewBox="0 0 24 24"><path d="M10.27 21a2 2 0 0 0 3.46 0"/><path d="M3.26 15.33A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.67C19.41 13.96 18 12.5 18 8A6 6 0 0 0 6 8c0 4.5-1.41 5.96-2.74 7.33"/></svg><i></i></span>
+                </div>
+                <div class="phone__views" data-phone-views></div>
+                <nav class="phone__tabs" data-phone-tabs>
+                  <button type="button" tabindex="-1" data-tab="home" class="is-active"><svg viewBox="0 0 24 24"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .71-1.53l7-6a2 2 0 0 1 2.58 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Home</button>
+                  <button type="button" tabindex="-1" data-tab="discover"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m16.24 7.76-1.8 5.41a2 2 0 0 1-1.27 1.27L7.76 16.24l1.8-5.41a2 2 0 0 1 1.27-1.27z"/></svg>Discover</button>
+                  <button type="button" tabindex="-1" data-tab="rooms"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Rooms</button>
+                  <button type="button" tabindex="-1" data-tab="profile"><svg viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</button>
+                </nav>
+                <span class="phone__home"></span>
+              </div>
+            </div>
+          </div>
+          <p class="scribble app__scribble" aria-hidden="true"><span class="scribble__text">coming soon</span><svg class="scribble__pen" style="--pen-w:4rem" viewBox="0 0 80 48"><path pathLength="1" d="M6 10c20-6 44 2 62 26"/><path pathLength="1" d="M55 35l13 2 1-13"/></svg></p>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ── In their own words ─────────────────────────────────── -->
+    <section class="panel panel--paper quotes" id="quotes" aria-labelledby="quotes-title">
+      <div class="quotes__inner">
+        <div class="quotes__head">
+          <h2 id="quotes-title" class="display">In their <span class="hl">own words.</span></h2>
+          <p class="quotes__note">Excerpts from the public profiles of verified members.</p>
+        </div>
+        <div class="quotes__grid" data-quotes></div>
+      </div>
+    </section>
+
+    <!-- ── FAQ ───────────────────────────────────────────────── -->
+    <section class="panel panel--mist faq" id="faq" aria-labelledby="faq-title">
+      <div class="faq__inner">
+        <div class="faq__side">
+          <h2 id="faq-title" class="display">Have questions?</h2>
+          <p class="faq__sub">Still unsure? <a class="link" href="/TruLinq/contact/">Contact us</a>. A person reads every message.</p>
+        </div>
+        <div class="acc faq__acc" data-single>
+          <div class="acc__item is-open">
+            <h3><button class="acc__btn" type="button"><span>What does the Trulinq Verified stamp actually mean?</span><span class="acc__plus" aria-hidden="true"></span></button></h3>
+            <div class="acc__panel"><div><p class="acc__body">We confirmed the person’s identity and the existence of their business at the time of review. It is not a guarantee of business performance, product quality, or the outcome of any deal. Use your own judgment and written contracts, and see <a class="link" href="/TruLinq/blog/how-to-check-if-a-business-is-legit/">how to check if a business is legit</a> before you pay anyone.</p></div></div>
+          </div>
+          <div class="acc__item">
+            <h3><button class="acc__btn" type="button"><span>How do I get an invitation code?</span><span class="acc__plus" aria-hidden="true"></span></button></h3>
+            <div class="acc__panel"><div><p class="acc__body">Every verified member has a code to share from their dashboard, so ask someone who knows your work. No one to ask? <a class="link" href="/TruLinq/contact/?topic=invite">Request an invitation</a> and a person replies, most within one business day.</p></div></div>
+          </div>
+          <div class="acc__item">
+            <h3><button class="acc__btn" type="button"><span>How long does verification take?</span><span class="acc__plus" aria-hidden="true"></span></button></h3>
+            <div class="acc__panel"><div><p class="acc__body">Most reviews finish within 2 business days once your documents are readable and complete. You can follow the status from your dashboard, and a reviewer signs off before the stamp is issued.</p></div></div>
+          </div>
+          <div class="acc__item">
+            <h3><button class="acc__btn" type="button"><span>Is my ID document public?</span><span class="acc__plus" aria-hidden="true"></span></button></h3>
+            <div class="acc__panel"><div><p class="acc__body">Never. ID documents, registration numbers and reviewer notes are readable only by you and the Trulinq review team. Your public profile shows only the business details you choose to publish.</p></div></div>
+          </div>
+          <div class="acc__item">
+            <h3><button class="acc__btn" type="button"><span>What if I am rejected?</span><span class="acc__plus" aria-hidden="true"></span></button></h3>
+            <div class="acc__panel"><div><p class="acc__body">You keep your free profile, get the reason in your dashboard, and can resubmit once the issue is fixed.</p></div></div>
+          </div>
+          <div class="acc__item">
+            <h3><button class="acc__btn" type="button"><span>Do I need to pay?</span><span class="acc__plus" aria-hidden="true"></span></button></h3>
+            <div class="acc__panel"><div><p class="acc__body">A free profile includes a basic identity check. The Verified Business stamp is $19 a month, billed yearly, and pays for real human review of documents and business registries. A free stamp would be a worthless stamp.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── The closing call (shared: partials/cta-seal.html, partials/cta-actions.html) ── -->
+    <section class="panel panel--blue cta" id="join" aria-labelledby="cta-title">
+      <!-- The big stamp of the closing call, pressed half off the sheet's edge. Shared by every page's closing call. -->
+<div class="cta__seal" aria-hidden="true"><span class="seal seal--xl"></span></div>
+
+      <div class="cta__inner">
+        <h2 id="cta-title" class="display">Claim your stamp.</h2>
+        <p class="cta__lead">The application takes a few minutes. Have your ID and your business registration number ready.</p>
+        <!-- The closing call's actions and proof, the same on every page: Get verified, and for anyone without a code,
+     Request an invitation; the real members who already carry the stamp (src/js/main.js puts their faces and names in);
+     and the three facts that answer the last doubts. -->
+<div class="btn-row cta__row">
+  <a class="btn btn--white btn--lg" href="/TruLinq/verify/"><span>Get verified</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
+  <a class="btn btn--ghost-light btn--lg" href="/TruLinq/contact/?topic=invite"><span>Request an invitation</span></a>
+</div>
+<div class="cta__proof">
+  <a class="cta__people" href="/TruLinq/directory/" data-cta-people><span class="cta__faces" aria-hidden="true" data-cta-faces></span><span data-cta-people-text>11 verified members, each checked by a person</span></a>
+  <ul class="cta__assure">
+    <li>From $19 a month</li>
+    <li>Your ID is never public</li>
+    <li>Reviewed by a person in 2 business days</li>
+  </ul>
+</div>
+
+      </div>
+    </section>
+
+  </main>
+  <footer class="footer bezel">
+  <div class="sheet">
+    <div class="footer__top">
+      <svg class="wordmark" viewBox="0 0 176 40" role="img" aria-label="Trulinq">
+        <use href="#tq-mark-dark" x="1" y="1" width="38" height="38"/>
+        <use href="#tq-word" class="wordmark__word"/>
+      </svg>
+      <p class="footer__place"><b>Made in Hilo, Hawaiʻi</b><span>Reviewed by people, not models</span></p>
+      <div class="footer__pitch">
+        <p>A trusted network for entrepreneurs, built around verified identities and verified businesses.</p>
+        <a class="btn btn--primary" href="/TruLinq/verify/"><span>Get verified</span><span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg></span></a>
+      </div>
+    </div>
+    <div class="footer__mid">
+      <nav class="footer__cols" aria-label="Footer">
+        <div>
+          <h2>Network</h2>
+          <a href="/TruLinq/directory/">Directory</a>
+          <a href="/TruLinq/match/">Match</a>
+          <a href="/TruLinq/rooms/">Rooms</a>
+          <a href="/TruLinq/feed/">Feed</a>
+        </div>
+        <div>
+          <h2>Stamp</h2>
+          <a href="/TruLinq/verify/">Get verified</a>
+          <a href="/TruLinq/pricing/">Pricing</a>
+          <a href="/TruLinq/trust/">Trust Centre</a>
+          <a href="/TruLinq/dashboard/">Dashboard</a>
+        </div>
+        <div>
+          <h2>Company</h2>
+          <a href="/TruLinq/contact/">Contact</a>
+          <a href="/TruLinq/privacy/">Privacy</a>
+          <a href="/TruLinq/terms/">Terms</a>
+          <a href="mailto:trust@trulinq.com">Report a fake</a>
+        </div>
+        <div>
+          <h2>Guides</h2>
+          <a href="/TruLinq/blog/how-to-check-if-a-business-is-legit/">Check a business</a>
+          <a href="/TruLinq/blog/how-to-tell-if-a-website-is-legit/">Check a website</a>
+          <a href="/TruLinq/blog/how-to-spot-a-fake-linkedin-profile/">Spot a fake profile</a>
+          <a href="/TruLinq/blog/business-email-compromise/">Stop invoice fraud</a>
+          <a href="/TruLinq/blog/how-to-find-out-who-owns-a-business/">Find a business owner</a>
+          <a href="/TruLinq/blog/what-is-kyc-and-kyb/">KYC and KYB explained</a>
+          <a href="/TruLinq/blog/">All guides</a>
+        </div>
+      </nav>
+      <div class="footer__news">
+        <h2>The verified dispatch</h2>
+        <p>One email a month about new members and changes to the network. Nothing else.</p>
+        <form class="footer__form" data-newsletter novalidate>
+          <label class="sr-only" for="news-email">Email address</label>
+          <input class="input" id="news-email" type="email" name="email" placeholder="you@yourbusiness.com" autocomplete="email" required>
+          <button class="btn btn--primary" type="submit"><span>Subscribe</span></button>
+          <p class="footer__form-msg" data-newsletter-msg aria-live="polite"></p>
+          <span class="scribble footer__note" aria-hidden="true"><span class="scribble__text">one a month, that’s all</span><svg class="scribble__pen" style="--pen-w:2.5rem" viewBox="0 0 80 48"><path pathLength="1" d="M8 44c14-4 30-16 44-36"/><path pathLength="1" d="M40 12l13-5 3 13"/></svg></span>
+        </form>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p>© 2026 Trulinq</p>
+      <div class="footer__legal">
+        <a href="/TruLinq/terms/">Terms</a>
+        <a href="/TruLinq/privacy/">Privacy</a>
+        <a href="/TruLinq/trust/">Trust Centre</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

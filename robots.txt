@@ -1,0 +1,6 @@
+# Trulinq: https://tru-linq.vercel.app
+User-agent: *
+Allow: /
+Disallow: /api/
+
+Sitemap: https://tru-linq.vercel.app/sitemap.xml
