@@ -1,0 +1,1 @@
+var e=[`Consulting`,`Direct sales/service`,`Energy`,`Marketing`,`Real Estate`,`Restaurant`,`Technology`];export{e as t};

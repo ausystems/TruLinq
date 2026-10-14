@@ -1,0 +1,1 @@
+import{t as e}from"./main-CFWv_hnv.js";import{t}from"./slip-stamp-CNzpFYUf.js";function n(){let e=document.querySelector(`[data-stamp-stage]`);if(!e||!e.getClientRects().length)return;let n=e.querySelector(`[data-slip]`);t(e,{desk:e.querySelector(`.pcast-hero__desk`),canvas:e.querySelector(`[data-stamp-canvas]`),slip:n,seal:n.querySelector(`[data-slip-seal]`)})}e(null,n);
