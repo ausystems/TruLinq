@@ -7,6 +7,7 @@ import { BILLING } from '../data/billing.js';
 import { MEMBERS } from '../data/members.js';
 import { POSTS } from '../data/feed.js';
 import { statsOf } from '../data/stats.js';
+import { PODCAST } from '../data/podcast.js';
 
 const STATS = statsOf(MEMBERS, POSTS);
 export const TOKENS = {
@@ -17,6 +18,7 @@ export const TOKENS = {
   'price.monthlyPerMonth': BILLING.monthlyPerMonth, 'price.monthlyPerYear': BILLING.monthlyPerYear,
   'price.yearlySaves': BILLING.yearlySaves, 'price.yearlyPerDay': BILLING.yearlyPerDay,
   ...Object.fromEntries(Object.entries(STATS).map(([k, v]) => [`stats.${k}`, String(v)])),
+  'podcast.name': PODCAST.name, 'podcast.handle': PODCAST.handle, 'podcast.user': PODCAST.user, 'podcast.url': PODCAST.url, 'podcast.format': PODCAST.format,
   year: String(new Date().getFullYear())
 };
 export const TOKEN_RE = /\{\{\s*([a-z]+(?:\.[a-zA-Z]+)*)\s*\}\}/g;

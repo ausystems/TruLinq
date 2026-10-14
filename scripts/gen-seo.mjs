@@ -36,7 +36,8 @@ const PAGES = [
   ['/trust/', ['trust/index.html']],
   ['/contact/', ['contact/index.html']],
   ['/privacy/', ['privacy/index.html', 'src/data/legal.js']],
-  ['/terms/', ['terms/index.html', 'src/data/legal.js']]
+  ['/terms/', ['terms/index.html', 'src/data/legal.js']],
+  ['/podcast/', ['podcast/index.html', 'src/data/podcast.js']]
 ];
 const entries = [
   ...PAGES.map(([path, files]) => ({ path, lastmod: lastChanged(files) })),
@@ -90,7 +91,7 @@ const describe = (file) => {
   const html = readFileSync(join(root, file), 'utf8');
   return fillShared((/<meta name="description" content="([^"]*)"/.exec(html) || [])[1] || '').replace(/&amp;/g, '&').replace(/&#39;/g, '\'').replace(/&quot;/g, '"');
 };
-const NAMES = { '/': 'Home', '/directory/': 'Directory', '/match/': 'Match', '/rooms/': 'Rooms', '/feed/': 'Feed', '/verify/': 'Get verified', '/pricing/': 'Pricing', '/trust/': 'Trust Centre', '/contact/': 'Contact', '/privacy/': 'Privacy policy', '/terms/': 'Terms of service' };
+const NAMES = { '/': 'Home', '/directory/': 'Directory', '/match/': 'Match', '/rooms/': 'Rooms', '/feed/': 'Feed', '/verify/': 'Get verified', '/pricing/': 'Pricing', '/trust/': 'Trust Centre', '/contact/': 'Contact', '/privacy/': 'Privacy policy', '/terms/': 'Terms of service', '/podcast/': 'The PEMF Podcast' };
 const llms = `# ${SITE.name}
 
 > ${SITE.name} is a network for entrepreneurs in which a person checks the identity and the business behind every member before the Trulinq Verified stamp appears on their profile. Made in ${SITE.place}.

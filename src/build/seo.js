@@ -9,6 +9,7 @@ import { SITE } from '../data/site.js';
 import { PLANS, CURRENCY } from '../data/billing.js';
 import { MEMBERS } from '../data/members.js';
 import { ARTICLES, BLOG, articlePath, plainTitle } from '../data/blog.js';
+import { PODCAST } from '../data/podcast.js';
 import { articleAt, readingOf, sourcesOf, ogImageOf } from './blog.js';
 
 const U = (p) => SITE.url + p;
@@ -29,7 +30,8 @@ export const PAGES = {
   '/contact/': { type: 'ContactPage', crumb: 'Contact' },
   '/privacy/': { type: 'WebPage', crumb: 'Privacy policy' },
   '/terms/': { type: 'WebPage', crumb: 'Terms of service' },
-  [BLOG.path]: { type: 'CollectionPage', crumb: 'Blog' }
+  [BLOG.path]: { type: 'CollectionPage', crumb: 'Blog' },
+  '/podcast/': { type: 'WebPage', crumb: 'Podcast', image: { path: '/podcast/og.png', alt: 'The PEMF Podcast, featured on Trulinq' } }
 };
 
 /* ── Reading the page ──────────────────────────────────────────── */
@@ -149,6 +151,12 @@ export function resolveFilm(html, base = '/') {
   return html.replaceAll(FILM.video, absolute(video, base)).replaceAll(FILM.poster, absolute(poster, base));
 }
 
+/* the featured podcast, as it publishes itself */
+const podcastSeries = () => ({
+  '@type': 'PodcastSeries', '@id': U('/podcast/#podcast'), name: PODCAST.name, description: PODCAST.description,
+  url: PODCAST.url, sameAs: [PODCAST.url], inLanguage: LANG
+});
+
 /* ── The page's graph ──────────────────────────────────────────── */
 function graph(path, { url, title, description, html, base, image }) {
   const nodes = [organization(), website()];
@@ -176,10 +184,12 @@ function graph(path, { url, title, description, html, base, image }) {
   if (path === '/directory/') extra.mainEntity = { '@type': 'ItemList', name: 'Trulinq Verified members', numberOfItems: MEMBERS.length, itemListElement: MEMBERS.map((x, i) => ({ '@type': 'ListItem', position: i + 1, name: x.name, url: U(`/members/${x.id}/`) })) };
   if (path === BLOG.path) extra.mainEntity = ref(BLOG_ID);
   if (path === '/pricing/') extra.mainEntity = ref(U('/pricing/#service'));
+  if (path === '/podcast/') extra.mainEntity = ref(U('/podcast/#podcast'));
   nodes.push(webPage(page.type, url, name, description, extra));
   if (path !== '/') nodes.push(breadcrumb(url, [{ name: page.crumb || name, item: url }]));
   if (path === BLOG.path) nodes.push(blogNode());
   if (path === '/pricing/') nodes.push(service());
+  if (path === '/podcast/') nodes.push(podcastSeries());
   if (path === '/') { const v = film(html, base); if (v) nodes.push(v); }
   return nodes;
 }
@@ -193,7 +203,9 @@ export function seoHead(html, { path, url, base = '/' }) {
   const description = decode(pick(html, /<meta\s+name="description"\s+content="([^"]*)"/) || '');
   const noindex = /<meta\s+name="robots"\s+content="[^"]*noindex/i.test(html);
   const article = articleAt(path);
-  const image = article ? { url: ogImageOf(article), width: 1200, height: 630, alt: plainTitle(article) } : DEFAULT_IMAGE;
+  const own = PAGES[path] && PAGES[path].image;
+  const image = article ? { url: ogImageOf(article), width: 1200, height: 630, alt: plainTitle(article) }
+    : own ? { url: U(own.path), width: 1200, height: 630, alt: own.alt } : DEFAULT_IMAGE;
   const meta = (kind, key, value) => `<meta ${kind}="${key}" content="${attr(value)}">`;
   const tags = [];
   const add = (kind, key, value) => { if (value != null && value !== '' && !has(html, key)) tags.push(meta(kind, key, value)); };

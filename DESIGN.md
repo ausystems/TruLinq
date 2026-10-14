@@ -3,7 +3,8 @@
 Trulinq is a verified entrepreneur network from Hilo, Hawaiʻi. "Everyone here is real." Members prove their identity
 and their business, a person on the review team signs off, and the profile carries the Trulinq Verified stamp and a
 300–850 Trulinq Score. Pages: home, directory, member profiles, match, rooms, feed, verify, pricing, trust centre,
-contact, privacy, terms, auth, dashboard, 404, and the blog (`/blog/`) with its guides.
+contact, privacy, terms, auth, dashboard, 404, the blog (`/blog/`) with its guides, and the featured podcast
+(`/podcast/`).
 
 The site is a Vite multi-page app with vanilla JS modules. GSAP core runs the few animations that mean something;
 Three.js draws only the rubber stamp. The members globe is a 2D canvas. Run `npm run dev` (port 5180, API on 5190).
@@ -122,7 +123,9 @@ premium product page: few elements per viewport, very large light type, generous
    On the homepage it presses twice: in the hero onto a real member's card, and under "Earn the stamp", where a
    smaller one, sized so its face matches the printed seal, comes down onto the sample card once the application
    reaches the third check. It squares up, presses, and the seal is printed with a ring of ink as the card takes the
-   weight and its status turns from "In review" to "Trulinq Verified"; then it lifts away. Its stage (`.how__press`)
+   weight and its status turns from "In review" to "Trulinq Verified"; then it lifts away. On the podcast page it presses
+   the seal onto the featured podcast's record, a slip on the desk with its sound drawn in ink, to say the team picked it;
+   the slip and the press are the same as the pricing plan's (`slipStamp()` in `src/js/slip-stamp.js`). Its stage (`.how__press`)
    is placed by script so the landing spot sits on the seal. `lift` raises it above its rest height so it can arrive
    and leave, `softShadow` gives it a navy blur on paper. Without WebGL the seal is simply stamped.
 10. **The loader.** The same one trulinqid.com plays, matched to its timings: on deep navy, a soft blue glow that

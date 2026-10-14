@@ -17,6 +17,7 @@ Membership is by invitation. Verified profiles show a 300 to 850 Trulinq Score b
 - [Contact](https://tru-linq.vercel.app/contact/): Contact Trulinq. A person reads every message, and most replies land within one business day. Verification help, fraud reports, privacy requests, enterprise.
 - [Privacy policy](https://tru-linq.vercel.app/privacy/): How Trulinq collects, uses, stores and deletes your data. Identity documents stay private, nothing is sold, and deleting your account takes one email.
 - [Terms of service](https://tru-linq.vercel.app/terms/): The Trulinq terms of service in plain language: accounts, verification, honest use, revocation, fees, content, liability and how changes are made.
+- [The PEMF Podcast](https://tru-linq.vercel.app/podcast/): The PEMF Podcast, featured on Trulinq: real conversations from a founder who is who he says he is. Follow its official Instagram for clips and updates.
 
 ## Guides
 

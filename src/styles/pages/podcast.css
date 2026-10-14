@@ -1,0 +1,96 @@
+@layer pages {
+  .pcast-hero__inner, .pcast-facts__inner, .pcast-why__inner, .pcast-follow__inner { position: relative; z-index: 1; max-width: var(--max); margin: 0 auto; padding: var(--sect-y) var(--gutter); }
+
+  /* ── The podcast, featured ───────────────────────────────────────
+     The ice head: the title set large with its last word in ink, the line from the live page, the way to the podcast
+     and the way in. Beside it, the podcast's record lies on the desk as a slip of paper, and the 3D stamp presses the
+     seal onto it as the page arrives (src/js/slip-stamp.js): the team picked it. */
+  .pcast-hero__inner { display: grid; gap: clamp(28px, 4vw, 56px); align-items: center; padding-top: clamp(48px, 6vw, 104px); padding-bottom: clamp(32px, 4vw, 64px); }
+  @media (min-width: 1024px) { .pcast-hero__inner { grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); } }
+  .pcast-hero h1 { font-size: clamp(3rem, 1.3rem + 5.2vw, 6.75rem); max-width: 8.4ch; }
+  .pcast-hero .lead { margin-top: 26px; max-width: 34ch; }
+  .pcast-hero__cta { gap: 12px 14px; margin-top: clamp(28px, 3.4vw, 40px); }
+  @media (max-width: 560px) { .pcast-hero__cta .btn { flex: 1 1 100%; justify-content: space-between; } }
+  .pcast-hero__pick { display: inline-flex; align-items: center; gap: 10px; margin-top: 24px; padding: 6px 16px 6px 6px; border-radius: var(--r-pill); background: var(--paper); box-shadow: var(--sh-chip); font-size: var(--fs-meta); font-weight: 500; color: var(--fg-2); }
+  .pcast-hero__pick .seal { --seal-size: 26px; }
+
+  .pcast-hero__stage { position: relative; width: min(100%, 540px); aspect-ratio: 1 / .96; margin-inline: auto; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .pcast-hero__desk { position: absolute; inset: 0; }
+  .pcast-hero__canvas { position: absolute; inset: 0; z-index: 2; display: block; width: 100%; height: 100%; pointer-events: none; }
+  @media (max-width: 1023px) { .pcast-hero__stage { width: min(100%, 440px); } }
+  @media (max-width: 1023px) { .pcast-hero__stage { margin-top: 14px; } }
+  /* a folded phone's cover screen has no room for the desk: the copy and the picked-by line say it all */
+  @media (max-width: 340px) { .pcast-hero__stage { display: none; } .pcast-hero__pick { border-radius: var(--r-well); align-items: flex-start; } .pcast-hero__pick .seal { margin-top: 1px; } }
+
+  /* the podcast's record: a slip of paper, its sound drawn in ink up to where it has played */
+  .pslip { position: absolute; left: 0; top: 0; z-index: 1; display: grid; gap: 12px; width: min(80%, 360px); padding: 20px 22px 18px; border-radius: 20px; background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%); box-shadow: 0 0 0 1px var(--line), var(--sh-lifted); visibility: hidden; transform-origin: 50% 50%; }
+  .pslip.is-placed { visibility: visible; }
+  .pslip__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--line-2); }
+  .pslip__logo { height: 22px; }
+  .pslip__tag { font-family: var(--f-mono); font-size: .75rem; color: var(--fg-mute); white-space: nowrap; }
+  .pslip__title { margin-top: 2px; font-size: 1.3125rem; font-weight: 500; letter-spacing: -.025em; line-height: 1.15; }
+  .pslip__wave { display: block; width: 74%; height: auto; margin: 2px 0; }
+  .pslip__wave rect, .pcast-follow__wave rect { fill: var(--ice-4); }
+  .pslip__wave .on, .pcast-follow__wave .on { fill: var(--blue-ink); }
+  .pslip__rows { display: grid; margin: 0; padding-right: 48px; }
+  .pslip__rows > div { display: grid; grid-template-columns: 5.6em minmax(0, 1fr); align-items: baseline; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: .8125rem; }
+  .pslip__rows > div:last-child { border-bottom: 0; }
+  .pslip__rows dt { color: var(--fg-soft); }
+  .pslip__rows dd { margin: 0; font-weight: 500; }
+  .pslip__seal { position: absolute; right: -24px; bottom: -24px; --seal-size: 80px; }
+  /* the narrowest phones: the record keeps its name, its sound and its channel; who picked it is said beside it */
+  @media (max-width: 374px) { .pslip__rows > div:last-child { display: none; } .pslip__rows { padding-right: 26px; } .pslip__rows > div { grid-template-columns: 4.4em minmax(0, 1fr); gap: 8px; } .pslip__tag { font-size: .6875rem; } }
+  @media (max-width: 480px) { .pslip { width: 80%; padding: 16px 18px 14px; gap: 10px; } .pslip__rows { padding-right: 36px; } .pslip__title { font-size: 1.125rem; } .pslip__seal { --seal-size: 66px; right: -18px; bottom: -18px; } }
+
+  /* ── Where it lives, what it is, who picked it ───────────────────
+     Three facts as one record: a navy rule opens it, hairlines divide it, each fact named in the record's voice. */
+  .pcast-facts__inner { padding-block: clamp(56px, 6.4vw, 104px); }
+  .pcast-facts__list { display: grid; margin: 0; border-top: 1.5px solid var(--fg); }
+  @media (min-width: 900px) { .pcast-facts__list { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .pcast-fact { display: grid; gap: 18px; align-content: start; padding: 28px 0 30px; }
+  @media (min-width: 900px) {
+    .pcast-fact { padding: 34px clamp(20px, 2.8vw, 44px) 8px; }
+    .pcast-fact:first-child { padding-left: 0; }
+    .pcast-fact:last-child { padding-right: 0; }
+    .pcast-fact + .pcast-fact { border-left: 1px solid var(--line); }
+  }
+  @media (max-width: 899px) { .pcast-fact + .pcast-fact { border-top: 1px solid var(--line); } }
+  .pcast-fact dt { display: flex; align-items: center; gap: 12px; font-family: var(--f-mono); font-size: var(--fs-meta); color: var(--fg-soft); }
+  .pcast-fact__icon { display: grid; place-items: center; flex: none; width: 46px; height: 46px; border-radius: 50%; background: var(--ice); color: var(--blue-ink); }
+  .pcast-fact__icon svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .pcast-fact__icon circle { fill: currentColor; stroke: none; }
+  .pcast-fact__icon--seal { background: none; }
+  .pcast-fact__icon--seal .seal { --seal-size: 46px; }
+  .pcast-fact dd { display: grid; gap: 10px; margin: 0; }
+  .pcast-fact dd b { font-size: clamp(1.375rem, 1.12rem + .8vw, 1.875rem); font-weight: 450; letter-spacing: -.032em; line-height: 1.12; color: var(--fg); overflow-wrap: anywhere; }
+  .pcast-fact dd span { max-width: 32ch; color: var(--fg-soft); }
+
+  /* ── Why this is here ───────────────────────────────────────────
+     The statement, on the passport navy: the title on the left, the two paragraphs from the live page on the right. */
+  .pcast-why__inner { display: grid; gap: clamp(28px, 4vw, 64px); }
+  @media (min-width: 1024px) { .pcast-why__inner { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: start; } }
+  .pcast-why h2 { font-size: var(--fs-1); max-width: 7ch; }
+  .pcast-why__copy { display: grid; gap: 1.1em; max-width: 46ch; font-size: var(--fs-lead); font-weight: 350; line-height: 1.6; letter-spacing: -.01em; color: var(--fg-soft); }
+  .pcast-why__copy p:first-child { color: var(--fg); }
+
+  /* ── Follow the conversation ────────────────────────────────────
+     The official channel as a record under a navy cover, its handle set at display size, with the disc pressed on the
+     cover's edge as the way there. */
+  .pcast-follow__inner { display: grid; gap: clamp(40px, 5vw, 80px); align-items: center; }
+  @media (min-width: 1024px) { .pcast-follow__inner { grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); } }
+  .pcast-follow h2 { font-size: var(--fs-2); max-width: 9ch; }
+  .pcast-follow .lead { margin-top: 18px; max-width: 32ch; }
+  .pcast-follow__copy .btn { margin-top: 30px; }
+  @media (max-width: 560px) { .pcast-follow__copy .btn { width: 100%; justify-content: space-between; } }
+  .pcast-follow__card { position: relative; }
+  .pcast-follow__sheet { container-type: inline-size; display: grid; gap: 14px; padding: clamp(30px, 4vw, 56px) clamp(24px, 3.6vw, 52px) clamp(28px, 3.6vw, 48px); }
+  .pcast-follow__label { font-family: var(--f-mono); font-size: var(--fs-meta); color: var(--fg-soft); }
+  @media (max-width: 1023px) { .pcast-follow__label { padding-right: calc(var(--disc, 112px) * .82); } }
+  .pcast-follow__handle { font-size: min(4.5rem, 12.4cqi); font-weight: 400; letter-spacing: -.055em; line-height: 1.04; color: var(--fg); white-space: nowrap; }
+  .pcast-follow__where { color: var(--fg-soft); }
+  .pcast-follow__wave { display: block; width: min(100%, 420px); height: auto; margin-top: 10px; }
+  .pcast-follow__disc { position: absolute; z-index: 4; top: calc(var(--bezel) * -1); right: clamp(18px, 3vw, 44px); transform: translateY(-50%); }
+  .pcast-follow__disc:hover { transform: translateY(calc(-50% - 2px)); }
+  @media (max-width: 1023px) { .pcast-follow__disc { --disc: 112px; } }
+  @media (max-width: 480px) { .pcast-follow__disc { --disc: 96px; right: 14px; } .pcast-follow__card { margin-top: 36px; } }
+}

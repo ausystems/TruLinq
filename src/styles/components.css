@@ -78,7 +78,8 @@
   @media (min-width: 1024px) { .nav__links { display: flex; } .nav__signin { display: inline-flex; } .nav__burger { display: none; } .nav__actions { margin-left: 0; } }
   @media (max-width: 1023px) { .nav__bar { gap: var(--s-4); } }
   /* the narrowest desktop widths: the links draw a little closer so the switch, Sign in and the button all fit */
-  @media (min-width: 1024px) and (max-width: 1180px) { .nav__bar { gap: 20px; } .nav__links { gap: 0; } .nav__links a { padding: 0 11px; } }
+  @media (min-width: 1024px) and (max-width: 1180px) { .nav__bar { gap: 20px; } .nav__links { gap: 0; } .nav__links a { padding: 0 9px; } }
+  @media (min-width: 1024px) and (max-width: 1099px) { .nav__bar { gap: 16px; } .nav__links a { padding: 0 7px; font-size: .875rem; } }
   /* the logo never gives way: on phones the button sheds its disc, then the bar tightens around the round controls, and
      on the narrowest the button leaves for the menu (and the hero), so the theme switch and the menu always fit */
   @media (max-width: 428px) { .nav__actions .btn { padding: 0 14px; } .nav__actions .btn .btn__icon { display: none; } }
